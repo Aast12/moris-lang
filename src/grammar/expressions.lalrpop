@@ -29,8 +29,6 @@ PipeOp: Operator = {
     "|>" => Operator::Pipe,
 };
 
-
-
 pub Expr: Box<Expr> = {
     Expr ExprOp LogicExpr => Box::new(Expr::Op(<>)),
     LogicExpr,
@@ -47,17 +45,32 @@ MathExpr: Box<Expr> = {
 };
 
 Term: Box<Expr> = {
-    Term FactorOp Item => Box::new(Expr::Op(<>)),
+    Term FactorOp Factor => Box::new(Expr::Op(<>)),
+    Factor,
+};
+
+Factor: Box<Expr> = {
+    Factor PipeOp PipeItem => Box::new(Expr::Op(<>)),
     Item,
+};
+
+PipeItem: Box<Expr> = {
+    "forward" <Id> => Box::new(Expr::Id(<>)),
+    Id => Box::new(Expr::Id(<>)),
 };
 
 Item: Box<Expr> = {
     Num => Box::new(Expr::Number(<>)),
+    Id => Box::new(Expr::Id(<>)),
     "(" <Expr> ")",
 };
 
 
 Num: i32 = {
     r"[0-9]+" => i32::from_str(<>).unwrap()
+};
+
+Id: String = {
+    r"[_a-zA-z]+[0-9_a-zA-z]*" => String::from(<>)
 };
 

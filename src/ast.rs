@@ -3,6 +3,7 @@ use std::fmt::{Debug, Error, Formatter};
 pub enum Expr {
     Number(i32),
     Op(Box<Expr>, Operator, Box<Expr>),
+    Id(String),
     Error,
 }
 
@@ -13,6 +14,7 @@ pub enum Operator {
     Add,
     Sub,
     Pipe,
+    ForwardPipe,
     And,
     Or,
     LessThan,
@@ -32,9 +34,10 @@ pub enum TypeConst {
 impl Debug for Expr {
     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
         use self::Expr::*;
-        match *self {
+        match &*self {
             Number(n) => write!(fmt, "{:?}", n),
             Op(ref l, op, ref r) => write!(fmt, "({:?} {:?} {:?})", l, op, r),
+            Id(s) => write!(fmt, "{}", s),
             Error => write!(fmt, "error"),
         }
     }
@@ -56,6 +59,7 @@ impl Debug for Operator {
             NotEq => write!(fmt, "!="),
             Eq => write!(fmt, "=="),
             Assign => write!(fmt, "="),
+            ForwardPipe =>  write!(fmt, "|> forward"),
         }
     }
 }
