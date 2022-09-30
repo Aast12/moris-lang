@@ -50,19 +50,20 @@ Term: Box<Expr> = {
 };
 
 Factor: Box<Expr> = {
-    Factor PipeOp PipeItem => Box::new(Expr::Op(<>)),
+    <factor:Factor> PipeOp "forward" <id:Id> => Box::new(Expr::Op(factor, Operator::ForwardPipe, id)),
+    Factor PipeOp Id => Box::new(Expr::Op(<>)),
     Item,
 };
 
 PipeItem: Box<Expr> = {
-    "forward" <Id> => Box::new(Expr::Id(<>)),
-    Id => Box::new(Expr::Id(<>)),
+    "forward" <Id>,
+    Id,
 };
 
 Item: Box<Expr> = {
     Num => Box::new(Expr::Number(<>)),
-    Id => Box::new(Expr::Id(<>)),
-    "(" <Expr> ")",
+    Id,
+    "(" <Expr> ")" => Box::new(Expr::ParenthOp(<>)),
 };
 
 
@@ -70,7 +71,7 @@ Num: i32 = {
     r"[0-9]+" => i32::from_str(<>).unwrap()
 };
 
-Id: String = {
-    r"[_a-zA-z]+[0-9_a-zA-z]*" => String::from(<>)
+Id: Box<Expr> = {
+    r"[_a-zA-z]+[0-9_a-zA-z]*" => Box::new(Expr::Id(String::from(<>)))
 };
 

@@ -4,6 +4,7 @@ pub enum Expr {
     Number(i32),
     Op(Box<Expr>, Operator, Box<Expr>),
     Id(String),
+    ParenthOp(Box<Expr>),
     Error,
 }
 
@@ -36,8 +37,9 @@ impl Debug for Expr {
         use self::Expr::*;
         match &*self {
             Number(n) => write!(fmt, "{:?}", n),
-            Op(ref l, op, ref r) => write!(fmt, "({:?} {:?} {:?})", l, op, r),
+            Op(ref l, op, ref r) => write!(fmt, "{:?} {:?} {:?}", l, op, r),
             Id(s) => write!(fmt, "{}", s),
+            ParenthOp(op) => write!(fmt, "({:?})", op),
             Error => write!(fmt, "error"),
         }
     }
