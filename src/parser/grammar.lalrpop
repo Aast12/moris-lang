@@ -1,12 +1,21 @@
 use std::str::FromStr;
-use crate::ast::{Expr, Operator};
+use crate::ast::{Expr, Operator, TypeConst};
 
 grammar;
 
 // Types
 
-Num: i32 = {
-    r"[0-9]+" => i32::from_str(<>).unwrap()
+Int: TypeConst = r"[0-9]+" => TypeConst::Int(i32::from_str(<>).unwrap());
+
+Float: TypeConst = <f: r"[0-9]+\.[0-9]+"> => TypeConst::Float(f.parse::<f32>().unwrap());
+
+Bool: TypeConst = {
+    "true" => TypeConst::Bool(true),
+    "false" => TypeConst::Bool(false)
+};
+
+Str: TypeConst = {
+    <s: r#""[^"]*""#> => TypeConst::String(String::from(&s[1..s.len()-1]))
 };
 
 Id: Box<Expr> = {
@@ -66,7 +75,9 @@ Factor: Box<Expr> = {
 };
 
 Item: Box<Expr> = {
-    Num => Box::new(Expr::Number(<>)),
+    Int => Box::new(Expr::Const(<>)),
+    Str => Box::new(Expr::Const(<>)),
+    Float => Box::new(Expr::Const(<>)),
     Id,
     "(" <Expr> ")" => Box::new(Expr::ParenthOp(<>)),
 };
