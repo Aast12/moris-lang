@@ -1,14 +1,15 @@
-use std::fmt::{Debug};
+use std::fmt::{Debug, Error, Formatter};
 
-#[derive(Debug)]
+// #[derive(Debug)]
 pub enum TypeConst {
     Bool(bool),
     Int(i32),
     Float(f32),
     String(String),
+    Vector(Vec<Box<Expr>>),
 }
 
-#[derive(Debug)]
+// #[derive(Debug)]
 pub enum Expr {
     Const(TypeConst),
     Op(Box<Expr>, Operator, Box<Expr>),
@@ -34,20 +35,31 @@ pub enum Operator {
     Assign,
 }
 
+impl Debug for TypeConst {
+    fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
+        use self::TypeConst::*;
+        match &*self {
+            Bool(value) => write!(fmt, "{:?}", value),
+            Int(value) => write!(fmt, "{:?}", value),
+            Float(value) => write!(fmt, "{:?}", value),
+            String(value) => write!(fmt, "{}", value),
+            Vector(value) => write!(fmt, "{:?}", value),
+        }
+    }
+}
 
-
-// impl Debug for Expr {
-//     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
-//         use self::Expr::*;
-//         match &*self {
-//             Const(n) => write!(fmt, "{:?}", n),
-//             Op(ref l, op, ref r) => write!(fmt, "{:?} {:?} {:?}", l, op, r),
-//             Id(s) => write!(fmt, "{}", s),
-//             ParenthOp(op) => write!(fmt, "({:?})", op),
-//             Error => write!(fmt, "error"),
-//         }
-//     }
-// }
+impl Debug for Expr {
+    fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
+        use self::Expr::*;
+        match &*self {
+            Const(n) => write!(fmt, "{:?}", n),
+            Op(ref l, op, ref r) => write!(fmt, "{:?} {:?} {:?}", l, op, r),
+            Id(s) => write!(fmt, "{}", s),
+            ParenthOp(op) => write!(fmt, "({:?})", op),
+            Error => write!(fmt, "error"),
+        }
+    }
+}
 
 // impl Debug for Operator {
 //     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
