@@ -18,7 +18,7 @@ pub enum Expr {
     Error,
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy)]
 pub enum Operator {
     Mul,
     Div,
@@ -61,23 +61,23 @@ impl Debug for Expr {
     }
 }
 
-// impl Debug for Operator {
-//     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
-//         use self::Operator::*;
-//         match *self {
-//             Mul => write!(fmt, "*"),
-//             Div => write!(fmt, "/"),
-//             Add => write!(fmt, "+"),
-//             Sub => write!(fmt, "-"),
-//             Pipe => write!(fmt, "|>"),
-//             And => write!(fmt, "&&"),
-//             Or => write!(fmt, "||"),
-//             LessThan => write!(fmt, "<"),
-//             GreaterThan => write!(fmt, ">"),
-//             NotEq => write!(fmt, "!="),
-//             Eq => write!(fmt, "=="),
-//             Assign => write!(fmt, "="),
-//             ForwardPipe =>  write!(fmt, "|> forward"),
-//         }
-//     }
-// }
+impl Debug for Operator {
+    fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
+        use self::Operator::*;
+        match *self {
+            Mul => write!(fmt, "*"),
+            Div => write!(fmt, "/"),
+            Add => write!(fmt, "+"),
+            Sub => write!(fmt, "-"),
+            Pipe => write!(fmt, "|>"),
+            And => write!(fmt, "&&"),
+            Or => write!(fmt, "||"),
+            LessThan => write!(fmt, "<"),
+            GreaterThan => write!(fmt, ">"),
+            NotEq => write!(fmt, "!="),
+            Eq => write!(fmt, "=="),
+            Assign => write!(fmt, "="),
+            ForwardPipe =>  write!(fmt, "|> forward"),
+        }
+    }
+}
