@@ -25,11 +25,11 @@ Float: TypeConst = <f: r"[0-9]+\.[0-9]+"> => TypeConst::Float(f.parse::<f32>().u
 Bool: TypeConst = {
     "true" => TypeConst::Bool(true),
     "false" => TypeConst::Bool(false)
-};
+}
 
 Str: TypeConst = {
     <s: r#""[^"]*""#> => TypeConst::String(String::from(&s[1..s.len() - 1]))
-};
+}
 
 Vector: TypeConst = "[" <Comma<Expr>> "]" => TypeConst::Vector(<>);
 
@@ -38,7 +38,7 @@ SimpleConst = {
     Str,
     Float,
     Bool
-};
+}
 
 Const = {
     SimpleConst,
@@ -47,35 +47,35 @@ Const = {
 
 Id: Box<Expr> = {
     ID => Box::new(Expr::Id(String::from(<>)))
-};
+}
 
 // Operators
 
 ExprOp: Operator = {
     "&&" => Operator::And,
     "||" => Operator::Or
-};
+}
 
 LogicOp: Operator = {
     "<" => Operator::LessThan,
     ">" => Operator::GreaterThan,
     "!=" => Operator::NotEq,
     "==" => Operator::Eq,
-};
+}
 
 MathOp: Operator = {
     "+" => Operator::Add,
     "-" => Operator::Sub,
-};
+}
 
 FactorOp: Operator = {
     "*" => Operator::Mul,
     "/" => Operator::Div,
-};
+}
 
 PipeOp: Operator = {
     "|>" => Operator::Pipe,
-};
+}
 
 // Expressions
 
@@ -89,7 +89,7 @@ pub Expr: Box<Expr> = Tier<ExprOp, LogicExpr>;
 LogicExpr: Box<Expr> = {
     MathExpr LogicOp MathExpr => Box::new(Expr::Op(<>)),
     MathExpr,
-};
+}
 
 MathExpr: Box<Expr> = Tier<MathOp, Term>;
 
@@ -99,13 +99,13 @@ Factor: Box<Expr> = {
     <factor:Factor> PipeOp "forward" <id:Id> => Box::new(Expr::Op(factor, Operator::ForwardPipe, id)),
     Factor PipeOp Id => Box::new(Expr::Op(<>)),
     Item,
-};
+}
 
 Item: Box<Expr> = {
     Id,
     Const => Box::new(Expr::Const(<>)),
     "(" <Expr> ")" => Box::new(Expr::ParenthOp(<>)),
-};
+}
 
 
 match {
