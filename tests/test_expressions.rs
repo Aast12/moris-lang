@@ -9,6 +9,7 @@ fn grammar_test() {
     let expr = moris_lang::grammar::expressions::ExprParser::new()
         .parse(&target)
         .unwrap();
+    
     assert_eq!(&format!("{:?}", expr), &target);
 
     // let expr = grammar::FactorParser::new().parse(&factor_target).unwrap();

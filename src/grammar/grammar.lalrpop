@@ -3,6 +3,18 @@ use crate::ast::{Expr, Operator};
 
 grammar;
 
+// Types
+
+Num: i32 = {
+    r"[0-9]+" => i32::from_str(<>).unwrap()
+};
+
+Id: Box<Expr> = {
+    r"[_a-zA-z]+[0-9_a-zA-z]*" => Box::new(Expr::Id(String::from(<>)))
+};
+
+// Operators
+
 ExprOp: Operator = {
     "&&" => Operator::And,
     "||" => Operator::Or
@@ -29,35 +41,28 @@ PipeOp: Operator = {
     "|>" => Operator::Pipe,
 };
 
-pub Expr: Box<Expr> = {
-    Expr ExprOp LogicExpr => Box::new(Expr::Op(<>)),
-    LogicExpr,
-};
+// Expressions
+
+Tier<Operator, NextTerm>: Box<Expr> = {
+    Tier<Operator, NextTerm> Operator NextTerm => Box::new(Expr::Op(<>)),
+    NextTerm
+}
+
+pub Expr: Box<Expr> = Tier<ExprOp, LogicExpr>;
 
 LogicExpr: Box<Expr> = {
     MathExpr LogicOp MathExpr => Box::new(Expr::Op(<>)),
     MathExpr,
 };
 
-MathExpr: Box<Expr> = {
-    MathExpr MathOp Term => Box::new(Expr::Op(<>)),
-    Term,
-};
+MathExpr: Box<Expr> = Tier<MathOp, Term>;
 
-Term: Box<Expr> = {
-    Term FactorOp Factor => Box::new(Expr::Op(<>)),
-    Factor,
-};
+Term: Box<Expr> = Tier<FactorOp, Factor>;
 
 Factor: Box<Expr> = {
     <factor:Factor> PipeOp "forward" <id:Id> => Box::new(Expr::Op(factor, Operator::ForwardPipe, id)),
     Factor PipeOp Id => Box::new(Expr::Op(<>)),
     Item,
-};
-
-PipeItem: Box<Expr> = {
-    "forward" <Id>,
-    Id,
 };
 
 Item: Box<Expr> = {
@@ -66,12 +71,4 @@ Item: Box<Expr> = {
     "(" <Expr> ")" => Box::new(Expr::ParenthOp(<>)),
 };
 
-
-Num: i32 = {
-    r"[0-9]+" => i32::from_str(<>).unwrap()
-};
-
-Id: Box<Expr> = {
-    r"[_a-zA-z]+[0-9_a-zA-z]*" => Box::new(Expr::Id(String::from(<>)))
-};
 
