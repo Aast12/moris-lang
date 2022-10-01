@@ -3,6 +3,19 @@ use crate::ast::{Expr, Operator, TypeConst};
 
 grammar;
 
+
+// Macros
+
+Comma<TItem>: Vec<TItem> = {
+    <mut vec: (<TItem> ",")*> <c: TItem?> => match c {
+        None => vec,
+        Some(c) => {
+            vec.push(c);
+            vec
+        }
+    }
+}
+
 // Types
 
 Int: TypeConst = NUMBER => TypeConst::Int(i32::from_str(<>).unwrap());
@@ -18,15 +31,7 @@ Str: TypeConst = {
     <s: r#""[^"]*""#> => TypeConst::String(String::from(&s[1..s.len() - 1]))
 };
 
-Vector: TypeConst = {
-    "[" <mut vec: (<Expr> ",")*> <c: Expr?> "]" => match c {
-        None => TypeConst::Vector(vec),
-        Some(c) => {
-            vec.push(c);
-            TypeConst::Vector(vec)
-        }
-    }
-}
+Vector: TypeConst = "[" <Comma<Expr>> "]" => TypeConst::Vector(<>);
 
 SimpleConst = {
     Int,

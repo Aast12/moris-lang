@@ -13,11 +13,12 @@ fn grammar_test() {
     let parser = ExprParser::new();
 
     // Constants
-
+    
     test_expr_eq(&parser, "54", "54");
     test_expr_eq(&parser, "54.3", "54.3");
     test_expr_eq(&parser, "true", "true");
     test_expr_eq(&parser, "[32, 34]", "[32, 34]");
+    test_expr_eq(&parser, "[[32, 34], [32, 34]]", "[[32, 34], [32, 34]]");
     test_expr_eq(&parser, r#""some string""#, "some string");
 
 
