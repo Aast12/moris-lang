@@ -1,4 +1,4 @@
-use moris_lang::{self, parser::grammar::{ExprParser, DimensionParser}, ast::Expr};
+use moris_lang::{self, parser::grammar::{ExprParser, DimensionParser, VarDeclarationParser}, ast::{Expr, Variable, Dimension}};
 
 fn test_expr_eq(parser: &ExprParser, in_str: &str, test_str: &str) {
     assert_eq!(&format!("{:?}", parser.parse(in_str).unwrap()), test_str);
@@ -14,8 +14,11 @@ fn grammar_test() {
 
     // Constants
 
-    let dimparser = DimensionParser::new().parse("[5][3 + 2]").unwrap();
-    assert_eq!(&format!("{:?}", dimparser), "2");
+    // let dimparser = DimensionParser::new().parse("[5][3 + 2]").unwrap();
+    // assert_eq!(&format!("{:?}", dimparser), "2");
+
+    let varparsed = VarDeclarationParser::new().parse("let myvar: int[2 * 6][7]").unwrap();
+    assert_eq!(&format!("{:?}", varparsed), "2");
     
     test_expr_eq(&parser, "54", "54");
     test_expr_eq(&parser, "54.3", "54.3");

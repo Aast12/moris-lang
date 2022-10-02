@@ -1,5 +1,5 @@
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension};
+use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable};
 
 grammar;
 
@@ -16,14 +16,16 @@ Comma<TItem>: Vec<TItem> = {
     }
 }
 
+Boxed<T>: Box<T> = T => Box::new(<>);
+
 // Types
 
 Type: DataType = {
-    "int" => DataType::Int,
-    "float" => DataType::Float,
-    "bool" => DataType::Bool,
-    "str" => DataType::String,
-    "DataFrame" => DataType::DataFrame,
+    INT => DataType::Int,
+    FLOAT => DataType::Float,
+    BOOl => DataType::Bool,
+    STR => DataType::String,
+    DATAFRAME => DataType::DataFrame,
 }
 
 FunctionType: DataType = {
@@ -58,8 +60,8 @@ Const = {
     VectorConst
 }
 
-Id: Box<Expr> = {
-    ID => Box::new(Expr::Id(String::from(<>)))
+Id: Expr = {
+    ID => Expr::Id(String::from(<>))
 }
 
 // Variables
@@ -74,13 +76,13 @@ pub Dimension: Dimension = {
     "[" <Expr> "]" => Dimension(1, vec![<>])
 }
 
-// VarDeclaration: = {
-//     "let" <id: Id> Type <dim: Dimension>? => {
-//         match dim {
-//             Some(dim) => 
-//         }
-//     }
-// }
+pub VarDeclaration: Variable = {
+    LET <id: ID> ":" <dtype: Type> <dim: Dimension?> => Variable {
+        id: String::from(id),
+        data_type: dtype,
+        dimension: dim.unwrap_or(Dimension(0, vec![])),
+    }
+}
 
 // Operators
 
@@ -129,22 +131,28 @@ MathExpr: Box<Expr> = Tier<MathOp, Term>;
 Term: Box<Expr> = Tier<FactorOp, Factor>;
 
 Factor: Box<Expr> = {
-    <factor:Factor> PipeOp "forward" <id:Id> => Box::new(Expr::Op(factor, Operator::ForwardPipe, id)),
-    Factor PipeOp Id => Box::new(Expr::Op(<>)),
+    <factor:Factor> PipeOp "forward" <id:Boxed<Id>> => Box::new(Expr::Op(factor, Operator::ForwardPipe, id)),
+    Factor PipeOp Boxed<Id> => Box::new(Expr::Op(<>)),
     Item,
 }
 
 Item: Box<Expr> = {
-    Id,
+    Boxed<Id>,
     Const => Box::new(Expr::Const(<>)),
     "(" <Expr> ")" => Box::new(Expr::ParenthOp(<>)),
 }
 
 
 match {
+    "int" => INT,
+    "float" => FLOAT,
+    "bool" => BOOl,
+    "str" => STR,
+    "DataFrame" => DATAFRAME,
+    "let" => LET,
+    r"[a-z_A-Z]+[0-9_a-zA-Z]*" => ID,
     r"[0-9]+" => NUMBER,
 } else {
-    r"[a-z_A-Z]+[0-9_a-zA-Z]*" => ID,
     _
 }
 

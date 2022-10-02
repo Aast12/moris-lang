@@ -21,9 +21,9 @@ pub struct Dimension(pub i8, pub Vec<Box<Expr>>);
 
 #[derive(Debug)]
 pub struct Variable {
-    id: String,
-    data_type: DataType,
-    dimension: Dimension
+    pub id: String,
+    pub data_type: DataType,
+    pub dimension: Dimension
 }
 
 // #[derive(Debug)]
