@@ -1,5 +1,14 @@
 use std::fmt::{Debug, Error, Formatter};
 
+pub enum DataType {
+    Int,
+    Float,
+    Bool,
+    String,
+    DataFrame,
+    Void
+}
+
 // #[derive(Debug)]
 pub enum TypeConst {
     Bool(bool),
@@ -77,7 +86,7 @@ impl Debug for Operator {
             NotEq => write!(fmt, "!="),
             Eq => write!(fmt, "=="),
             Assign => write!(fmt, "="),
-            ForwardPipe =>  write!(fmt, "|> forward"),
+            ForwardPipe => write!(fmt, "|> forward"),
         }
     }
 }

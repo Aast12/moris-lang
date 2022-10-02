@@ -1,5 +1,5 @@
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst};
+use crate::ast::{Expr, Operator, TypeConst, DataType};
 
 grammar;
 
@@ -18,6 +18,19 @@ Comma<TItem>: Vec<TItem> = {
 
 // Types
 
+Type = {
+    "int" => DataType::Int,
+    "float" => DataType::Float,
+    "bool" => DataType::Bool,
+    "str" => DataType::String,
+    "DataFrame" => DataType::DataFrame,
+}
+
+FunctionType = {
+    Type,
+    "void" => DataType::Void
+}
+
 Int: TypeConst = NUMBER => TypeConst::Int(i32::from_str(<>).unwrap());
 
 Float: TypeConst = <f: r"[0-9]+\.[0-9]+"> => TypeConst::Float(f.parse::<f32>().unwrap());
@@ -31,7 +44,7 @@ Str: TypeConst = {
     <s: r#""[^"]*""#> => TypeConst::String(String::from(&s[1..s.len() - 1]))
 }
 
-Vector: TypeConst = "[" <Comma<Expr>> "]" => TypeConst::Vector(<>);
+VectorConst: TypeConst = "[" <Comma<Expr>> "]" => TypeConst::Vector(<>);
 
 SimpleConst = {
     Int,
@@ -42,7 +55,7 @@ SimpleConst = {
 
 Const = {
     SimpleConst,
-    Vector
+    VectorConst
 }
 
 Id: Box<Expr> = {
