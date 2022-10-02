@@ -1,5 +1,5 @@
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst, DataType};
+use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension};
 
 grammar;
 
@@ -18,7 +18,7 @@ Comma<TItem>: Vec<TItem> = {
 
 // Types
 
-Type = {
+Type: DataType = {
     "int" => DataType::Int,
     "float" => DataType::Float,
     "bool" => DataType::Bool,
@@ -26,7 +26,7 @@ Type = {
     "DataFrame" => DataType::DataFrame,
 }
 
-FunctionType = {
+FunctionType: DataType = {
     Type,
     "void" => DataType::Void
 }
@@ -61,6 +61,26 @@ Const = {
 Id: Box<Expr> = {
     ID => Box::new(Expr::Id(String::from(<>)))
 }
+
+// Variables
+
+pub Indexing: Index = {
+    "[" <begin:Expr> ":" <end:Expr> "]" => Index::Range(begin, end),
+    "[" <idx:Expr> "]" => Index::Simple(idx)
+}
+
+pub Dimension: Dimension = {
+    "[" <a: Expr> "][" <b: Expr> "]" => Dimension(2, vec![a, b]),
+    "[" <Expr> "]" => Dimension(1, vec![<>])
+}
+
+// VarDeclaration: = {
+//     "let" <id: Id> Type <dim: Dimension>? => {
+//         match dim {
+//             Some(dim) => 
+//         }
+//     }
+// }
 
 // Operators
 

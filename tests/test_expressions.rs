@@ -1,4 +1,4 @@
-use moris_lang::{self, parser::grammar::ExprParser};
+use moris_lang::{self, parser::grammar::{ExprParser, DimensionParser}, ast::Expr};
 
 fn test_expr_eq(parser: &ExprParser, in_str: &str, test_str: &str) {
     assert_eq!(&format!("{:?}", parser.parse(in_str).unwrap()), test_str);
@@ -13,6 +13,9 @@ fn grammar_test() {
     let parser = ExprParser::new();
 
     // Constants
+
+    let dimparser = DimensionParser::new().parse("[5][3 + 2]").unwrap();
+    assert_eq!(&format!("{:?}", dimparser), "2");
     
     test_expr_eq(&parser, "54", "54");
     test_expr_eq(&parser, "54.3", "54.3");
@@ -20,7 +23,7 @@ fn grammar_test() {
     test_expr_eq(&parser, "[32, 34]", "[32, 34]");
     test_expr_eq(&parser, "[[32, 34], [32, 34]]", "[[32, 34], [32, 34]]");
     test_expr_eq(&parser, r#""some string""#, "some string");
-
+    
 
     // Pipes
     

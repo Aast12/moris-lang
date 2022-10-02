@@ -1,5 +1,5 @@
 use std::fmt::{Debug, Error, Formatter};
-
+#[derive(Debug)]
 pub enum DataType {
     Int,
     Float,
@@ -7,6 +7,23 @@ pub enum DataType {
     String,
     DataFrame,
     Void
+}
+
+#[derive(Debug)]
+pub enum Index {
+    Simple(Box<Expr>),
+    Range(Box<Expr>, Box<Expr>)
+}
+#[derive(Debug)]
+pub struct Dimension(pub i8, pub Vec<Box<Expr>>);
+    // dimensions: i8, // 0, 1, 2 dim limit
+    // shape: 
+
+#[derive(Debug)]
+pub struct Variable {
+    id: String,
+    data_type: DataType,
+    dimension: Dimension
 }
 
 // #[derive(Debug)]
