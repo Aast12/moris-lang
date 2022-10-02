@@ -27,6 +27,13 @@ pub struct Variable {
     pub value: Option<Box<Expr>>
 }
 
+
+#[derive(Debug)]
+pub struct VarRef {
+    pub id: String,
+    pub indexing: Option<Vec<Index>>
+}
+
 // #[derive(Debug)]
 pub enum TypeConst {
     Bool(bool),

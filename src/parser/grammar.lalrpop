@@ -1,5 +1,5 @@
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable};
+use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef};
 
 grammar;
 
@@ -60,20 +60,18 @@ Const = {
     VectorConst
 }
 
-Id: Expr = {
-    ID => Expr::Id(String::from(<>))
-}
+Id: Expr = ID => Expr::Id(String::from(<>));
 
 // Variables
 
 pub Indexing: Index = {
-    "[" <begin:Expr> ":" <end:Expr> "]" => Index::Range(begin, end),
-    "[" <idx:Expr> "]" => Index::Simple(idx)
+    <begin:Expr> ":" <end:Expr> => Index::Range(begin, end),
+    <idx:Expr> => Index::Simple(idx)
 }
 
 pub Dimension: Dimension = {
-    "[" <a: Expr> "][" <b: Expr> "]" => Dimension(2, vec![a, b]),
-    "[" <Expr> "]" => Dimension(1, vec![<>])
+    LBRACKET <a: Expr> RLBRACKET <b: Expr> RBRACKET => Dimension(2, vec![a, b]),
+    LBRACKET <Expr> RBRACKET => Dimension(1, vec![<>])
 }
 
 pub VarDeclaration: Variable = {
@@ -83,6 +81,18 @@ pub VarDeclaration: Variable = {
         dimension: dim.unwrap_or(Dimension(0, vec![])),
         value: value
     }
+}
+
+VarRefIndex: Vec<Index> = { // TODO Fix w custom tokenizer
+    LBRACKET <Indexing> RBRACKET  => vec![<>],
+    LBRACKET <a:Indexing> RLBRACKET <b:Indexing> RBRACKET => vec![<>]
+}
+
+pub VarReference: VarRef = {
+    <id: ID> <indexing: VarRefIndex?> => VarRef {
+        id: String::from(id),
+        indexing: indexing
+    } 
 }
 
 // Operators
@@ -154,6 +164,9 @@ match {
     "let" => LET,
     "true" => TRUE,
     "false" => FALSE,
+    "[" => LBRACKET,
+    "]" => RBRACKET,
+    "][" => RLBRACKET,
     r"[a-z_A-Z]+[0-9_a-zA-Z]*" => ID,
     r"[0-9]+" => NUMBER,
 } else {
