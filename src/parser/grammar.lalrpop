@@ -1,5 +1,5 @@
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, VarAssign};
+use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, VarAssign, FunctionParam, FunctionSignature};
 
 grammar;
 
@@ -158,6 +158,19 @@ Item: Box<Expr> = {
     LPAREN <Expr> RPAREN => Box::new(Expr::ParenthOp(<>)),
 }
 
+// Functions
+
+
+FuncParam: FunctionParam = <id: ID> COLON <dtype: Type> => FunctionParam(String::from(id), dtype);
+
+pub FunctionParams = Comma<FuncParam>;
+
+pub FnSignature: FunctionSignature = FN <id: CALL_ID> <params: FunctionParams> RPAREN COLON <dtype: Type> => FunctionSignature {
+    id:  String::from(&id[..id.len() - 1]),
+    data_type: dtype,
+    params: params
+};
+
 
 match {
     r#""[^"]*""# => STRING,
@@ -182,6 +195,7 @@ match {
     "let" => LET,
     "true" => TRUE,
     "false" => FALSE,
+    "fn" => FN,
     "(" => LPAREN,
     ")" => RPAREN,
     "[" => LBRACKET,

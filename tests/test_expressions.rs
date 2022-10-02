@@ -1,4 +1,4 @@
-use moris_lang::{self, parser::grammar::{ExprParser, DimensionParser, VarDeclarationParser, VarReferenceParser, VarAssignmentParser}, ast::{Expr, Variable, Dimension}};
+use moris_lang::{self, parser::grammar::{ExprParser, DimensionParser, VarDeclarationParser, VarReferenceParser, VarAssignmentParser, FunctionParamsParser, FnSignatureParser}, ast::{Expr, Variable, Dimension}};
 
 fn test_expr_eq(parser: &ExprParser, in_str: &str, test_str: &str) {
     parser.parse(in_str).unwrap();
@@ -26,7 +26,11 @@ fn grammar_test() {
     // assert_eq!(&format!("{:?}", dimparser), "2");
 
     // println!("{:?}", parser.parse(r#""5 * 2 && 5" * 45 "#).unwrap());
+    assert_eq!(&format!("{:?}", FnSignatureParser::new().parse("fn somefn(x: int, y: float): bool").unwrap()), "55");
     test_expr_eq(&parser, r#""5 * 2 && 5" * 45 "#, "54");
+    // test_expr_eq(FunctionParamsParser::new(), "x: int, y: float", "54");
+    assert_eq!(&format!("{:?}", FunctionParamsParser::new().parse("x: int, y: float").unwrap()), "55");
+    
 
     let varassignparser =VarAssignmentParser::new().parse("x[3] = 5313 * 12414 + 1234124 |> fb3 && false").unwrap();
     // assert_eq!(&format!("{:?}", varassignparser), "2");

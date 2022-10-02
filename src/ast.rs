@@ -71,6 +71,16 @@ pub enum Operator {
     Assign,
 }
 
+#[derive(Debug)]
+pub struct FunctionParam(pub String, pub DataType);
+
+#[derive(Debug)]
+pub struct FunctionSignature {
+    pub id: String,
+    pub data_type: DataType,
+    pub params: Vec<FunctionParam>
+}
+
 impl Debug for TypeConst {
     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
         use self::TypeConst::*;
