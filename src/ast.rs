@@ -50,7 +50,7 @@ pub enum Expr {
     Const(TypeConst),
     Op(Box<Expr>, Operator, Box<Expr>),
     ParenthOp(Box<Expr>),
-    Id(String),
+    Var(VarRef),
     Error,
 }
 
@@ -78,7 +78,7 @@ impl Debug for TypeConst {
             Bool(value) => write!(fmt, "{:?}", value),
             Int(value) => write!(fmt, "{:?}", value),
             Float(value) => write!(fmt, "{:?}", value),
-            String(value) => write!(fmt, "{}", value),
+            String(value) => write!(fmt, "{:?}", value),
             Vector(value) => write!(fmt, "{:?}", value),
         }
     }
@@ -90,7 +90,7 @@ impl Debug for Expr {
         match &*self {
             Const(n) => write!(fmt, "{:?}", n),
             Op(ref l, op, ref r) => write!(fmt, "{:?} {:?} {:?}", l, op, r),
-            Id(s) => write!(fmt, "{}", s),
+            Var(s) => write!(fmt, "{:?}", s),
             ParenthOp(op) => write!(fmt, "({:?})", op),
             Error => write!(fmt, "error"),
         }

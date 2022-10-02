@@ -7,7 +7,7 @@ grammar;
 // Macros
 
 Comma<TItem>: Vec<TItem> = {
-    <mut vec: (<TItem> ",")*> <c: TItem?> => match c {
+    <mut vec: (<TItem> COMMA)*> <c: TItem?> => match c {
         None => vec,
         Some(c) => {
             vec.push(c);
@@ -21,21 +21,21 @@ Boxed<T>: Box<T> = T => Box::new(<>);
 // Types
 
 Type: DataType = {
-    INT => DataType::Int,
-    FLOAT => DataType::Float,
-    BOOl => DataType::Bool,
-    STR => DataType::String,
-    DATAFRAME => DataType::DataFrame,
+    T_INT => DataType::Int,
+    T_FLOAT => DataType::Float,
+    T_BOOl => DataType::Bool,
+    T_STR => DataType::String,
+    T_DATAFRAME => DataType::DataFrame,
 }
 
 FunctionType: DataType = {
     Type,
-    VOID => DataType::Void
+    T_VOID => DataType::Void
 }
 
 Int: TypeConst = NUMBER => TypeConst::Int(i32::from_str(<>).unwrap());
 
-Float: TypeConst = <f: r"[0-9]+\.[0-9]+"> => TypeConst::Float(f.parse::<f32>().unwrap());
+Float: TypeConst = <f: FLOAT> => TypeConst::Float(f.parse::<f32>().unwrap());
 
 Bool: TypeConst = {
     TRUE => TypeConst::Bool(true),
@@ -43,10 +43,10 @@ Bool: TypeConst = {
 }
 
 Str: TypeConst = {
-    <s: r#""[^"]*""#> => TypeConst::String(String::from(&s[1..s.len() - 1]))
+    <s: STRING> => TypeConst::String(String::from(&s[1..s.len() - 1]))
 }
 
-VectorConst: TypeConst = "[" <Comma<Expr>> "]" => TypeConst::Vector(<>);
+VectorConst: TypeConst = LBRACKET <Comma<Expr>> RBRACKET => TypeConst::Vector(<>);
 
 SimpleConst = {
     Int,
@@ -60,12 +60,15 @@ Const = {
     VectorConst
 }
 
-Id: Expr = ID => Expr::Id(String::from(<>));
+Id: Expr = ID => Expr::Var(VarRef {
+    id: String::from(<>),
+    indexing: None
+});
 
 // Variables
 
 pub Indexing: Index = {
-    <begin:Expr> ":" <end:Expr> => Index::Range(begin, end),
+    <begin:Expr> COLON <end:Expr> => Index::Range(begin, end),
     <idx:Expr> => Index::Simple(idx)
 }
 
@@ -75,7 +78,7 @@ pub Dimension: Dimension = {
 }
 
 pub VarDeclaration: Variable = {
-    LET <id: ID> ":" <dtype: Type> <dim: Dimension?> <value: ("=" <Expr>)?> => Variable {
+    LET <id: ID> COLON <dtype: Type> <dim: Dimension?> <value: (ASSIGN <Expr>)?> => Variable {
         id: String::from(id),
         data_type: dtype,
         dimension: dim.unwrap_or(Dimension(0, vec![])),
@@ -83,7 +86,8 @@ pub VarDeclaration: Variable = {
     }
 }
 
-VarRefIndex: Vec<Index> = { // TODO Fix w custom tokenizer
+// TODO Fix w custom tokenizer, allow multiple dimensions and raise error on higher than two
+VarRefIndex: Vec<Index> = {
     LBRACKET <Indexing> RBRACKET  => vec![<>],
     LBRACKET <a:Indexing> RLBRACKET <b:Indexing> RBRACKET => vec![<>]
 }
@@ -101,30 +105,28 @@ pub VarAssignment: VarAssign = <var: VarReference> ASSIGN <exp: Expr> => VarAssi
 // Operators
 
 ExprOp: Operator = {
-    "&&" => Operator::And,
-    "||" => Operator::Or
+    AND => Operator::And,
+    OR => Operator::Or
 }
 
 LogicOp: Operator = {
-    "<" => Operator::LessThan,
-    ">" => Operator::GreaterThan,
-    "!=" => Operator::NotEq,
-    "==" => Operator::Eq,
+    LT => Operator::LessThan,
+    GT => Operator::GreaterThan,
+    NOTEQUAL => Operator::NotEq,
+    EQUAL => Operator::Eq,
 }
 
 MathOp: Operator = {
-    "+" => Operator::Add,
-    "-" => Operator::Sub,
+    ADD => Operator::Add,
+    SUB => Operator::Sub,
 }
 
 FactorOp: Operator = {
-    "*" => Operator::Mul,
-    "/" => Operator::Div,
+    MUL => Operator::Mul,
+    DIV => Operator::Div,
 }
 
-PipeOp: Operator = {
-    "|>" => Operator::Pipe,
-}
+PipeOp: Operator = PIPE => Operator::Pipe;
 
 // Expressions
 
@@ -145,33 +147,52 @@ MathExpr: Box<Expr> = Tier<MathOp, Term>;
 Term: Box<Expr> = Tier<FactorOp, Factor>;
 
 Factor: Box<Expr> = {
-    <factor:Factor> PipeOp "forward" <id:Boxed<Id>> => Box::new(Expr::Op(factor, Operator::ForwardPipe, id)),
+    <factor:Factor> PipeOp FORWARD <id:Boxed<Id>> => Box::new(Expr::Op(factor, Operator::ForwardPipe, id)),
     Factor PipeOp Boxed<Id> => Box::new(Expr::Op(<>)),
     Item,
 }
 
 Item: Box<Expr> = {
-    Boxed<Id>,
+    VarReference => Box::new(Expr::Var(<>)),
     Const => Box::new(Expr::Const(<>)),
-    "(" <Expr> ")" => Box::new(Expr::ParenthOp(<>)),
+    LPAREN <Expr> RPAREN => Box::new(Expr::ParenthOp(<>)),
 }
 
 
 match {
-    "int" => INT,
-    "float" => FLOAT,
-    "bool" => BOOl,
-    "str" => STR,
-    "DataFrame" => DATAFRAME,
-    "void" => VOID,
+    r#""[^"]*""# => STRING,
+    "&&" => AND,
+    "||" => OR,
+    "<" => LT,
+    ">" => GT,
+    "!=" => NOTEQUAL,
+    "==" => EQUAL,
+    "+" => ADD,
+    "-" => SUB,
+    "*" => MUL,
+    "/" => DIV,
+    "|>" => PIPE,
+    "forward" => FORWARD,
+    "int" => T_INT,
+    "float" => T_FLOAT,
+    "bool" => T_BOOl,
+    "str" => T_STR,
+    "DataFrame" => T_DATAFRAME,
+    "void" => T_VOID,
     "let" => LET,
     "true" => TRUE,
     "false" => FALSE,
+    "(" => LPAREN,
+    ")" => RPAREN,
     "[" => LBRACKET,
     "]" => RBRACKET,
     "][" => RLBRACKET,
     "=" => ASSIGN,
+    "," => COMMA,
+    ":" => COLON,
+    r"[a-z_A-Z]+[0-9_a-zA-Z]*\(" => CALL_ID,
     r"[a-z_A-Z]+[0-9_a-zA-Z]*" => ID,
+    r"[0-9]+\.[0-9]+" => FLOAT,
     r"[0-9]+" => NUMBER,
 } else {
     _

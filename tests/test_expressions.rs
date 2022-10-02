@@ -1,8 +1,16 @@
 use moris_lang::{self, parser::grammar::{ExprParser, DimensionParser, VarDeclarationParser, VarReferenceParser, VarAssignmentParser}, ast::{Expr, Variable, Dimension}};
 
 fn test_expr_eq(parser: &ExprParser, in_str: &str, test_str: &str) {
+    parser.parse(in_str).unwrap();
+
+    // assert_eq!(&format!("{:?}", parser.parse(in_str).unwrap()), test_str);
+}
+fn test_expr_eq_(parser: &ExprParser, in_str: &str, test_str: &str) {
+    // parser.parse(in_str).unwrap();
+
     assert_eq!(&format!("{:?}", parser.parse(in_str).unwrap()), test_str);
 }
+
 
 fn test_expr_fail(parser: &ExprParser, in_str: &str) {
     assert!(std::panic::catch_unwind(|| parser.parse(in_str).unwrap()).is_err());
@@ -17,14 +25,20 @@ fn grammar_test() {
     // let dimparser = DimensionParser::new().parse("[5][3 + 2]").unwrap();
     // assert_eq!(&format!("{:?}", dimparser), "2");
 
-    let varassignparser =VarAssignmentParser::new().parse("x[3][3][5] = 5313 * 12414 + 1234124 |> fn && false").unwrap();
-    assert_eq!(&format!("{:?}", varassignparser), "2");
+    // println!("{:?}", parser.parse(r#""5 * 2 && 5" * 45 "#).unwrap());
+    test_expr_eq(&parser, r#""5 * 2 && 5" * 45 "#, "54");
+
+    let varassignparser =VarAssignmentParser::new().parse("x[3] = 5313 * 12414 + 1234124 |> fb3 && false").unwrap();
+    // assert_eq!(&format!("{:?}", varassignparser), "2");
+
+    let varassignparser =ExprParser::new().parse("x[3][3] - 5313 * 12414 + 1234124 |> fn && false").unwrap();
+    // assert_eq!(&format!("{:?}", varassignparser), "2");
 
     let varrefparser = VarReferenceParser::new().parse("someVarname[2: 5][4 / 32 * 5 |> fn2: 6]").unwrap();
-    assert_eq!(&format!("{:?}", varrefparser), "2");
+    // assert_eq!(&format!("{:?}", varrefparser), "2");
     
     let varparsed = VarDeclarationParser::new().parse("let myvar: int[2 * 6][7] = 7 * 6 * 2 + 2 > 3 && 5 |> fn / 3 || false").unwrap();
-    assert_eq!(&format!("{:?}", varparsed), "2");
+    // assert_eq!(&format!("{:?}", varparsed), "2");
     
     test_expr_eq(&parser, "54", "54");
     test_expr_eq(&parser, "54.3", "54.3");
