@@ -30,7 +30,7 @@ Type: DataType = {
 
 FunctionType: DataType = {
     Type,
-    "void" => DataType::Void
+    VOID => DataType::Void
 }
 
 Int: TypeConst = NUMBER => TypeConst::Int(i32::from_str(<>).unwrap());
@@ -38,8 +38,8 @@ Int: TypeConst = NUMBER => TypeConst::Int(i32::from_str(<>).unwrap());
 Float: TypeConst = <f: r"[0-9]+\.[0-9]+"> => TypeConst::Float(f.parse::<f32>().unwrap());
 
 Bool: TypeConst = {
-    "true" => TypeConst::Bool(true),
-    "false" => TypeConst::Bool(false)
+    TRUE => TypeConst::Bool(true),
+    FALSE => TypeConst::Bool(false)
 }
 
 Str: TypeConst = {
@@ -77,10 +77,11 @@ pub Dimension: Dimension = {
 }
 
 pub VarDeclaration: Variable = {
-    LET <id: ID> ":" <dtype: Type> <dim: Dimension?> => Variable {
+    LET <id: ID> ":" <dtype: Type> <dim: Dimension?> <value: ("=" <Expr>)?> => Variable {
         id: String::from(id),
         data_type: dtype,
         dimension: dim.unwrap_or(Dimension(0, vec![])),
+        value: value
     }
 }
 
@@ -149,7 +150,10 @@ match {
     "bool" => BOOl,
     "str" => STR,
     "DataFrame" => DATAFRAME,
+    "void" => VOID,
     "let" => LET,
+    "true" => TRUE,
+    "false" => FALSE,
     r"[a-z_A-Z]+[0-9_a-zA-Z]*" => ID,
     r"[0-9]+" => NUMBER,
 } else {

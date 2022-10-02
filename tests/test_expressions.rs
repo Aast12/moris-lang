@@ -17,7 +17,7 @@ fn grammar_test() {
     // let dimparser = DimensionParser::new().parse("[5][3 + 2]").unwrap();
     // assert_eq!(&format!("{:?}", dimparser), "2");
 
-    let varparsed = VarDeclarationParser::new().parse("let myvar: int[2 * 6][7]").unwrap();
+    let varparsed = VarDeclarationParser::new().parse("let myvar: int[2 * 6][7] = 7 * 6 * 2 + 2 > 3 && 5 |> fn / 3 || false").unwrap();
     assert_eq!(&format!("{:?}", varparsed), "2");
     
     test_expr_eq(&parser, "54", "54");
