@@ -6,33 +6,35 @@ pub enum DataType {
     Bool,
     String,
     DataFrame,
-    Void
+    Void,
 }
 
 #[derive(Debug)]
 pub enum Index {
     Simple(Box<Expr>),
-    Range(Box<Expr>, Box<Expr>)
+    Range(Box<Expr>, Box<Expr>),
 }
 #[derive(Debug)]
 pub struct Dimension(pub i8, pub Vec<Box<Expr>>);
-    // dimensions: i8, // 0, 1, 2 dim limit
-    // shape: 
+// dimensions: i8, // 0, 1, 2 dim limit
+// shape:
 
 #[derive(Debug)]
 pub struct Variable {
     pub id: String,
     pub data_type: DataType,
     pub dimension: Dimension,
-    pub value: Option<Box<Expr>>
+    pub value: Option<Box<Expr>>,
 }
-
 
 #[derive(Debug)]
 pub struct VarRef {
     pub id: String,
-    pub indexing: Option<Vec<Index>>
+    pub indexing: Option<Vec<Index>>,
 }
+
+#[derive(Debug)]
+pub struct VarAssign(pub VarRef, pub Box<Expr>);
 
 // #[derive(Debug)]
 pub enum TypeConst {

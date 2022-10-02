@@ -1,4 +1,4 @@
-use moris_lang::{self, parser::grammar::{ExprParser, DimensionParser, VarDeclarationParser, VarReferenceParser}, ast::{Expr, Variable, Dimension}};
+use moris_lang::{self, parser::grammar::{ExprParser, DimensionParser, VarDeclarationParser, VarReferenceParser, VarAssignmentParser}, ast::{Expr, Variable, Dimension}};
 
 fn test_expr_eq(parser: &ExprParser, in_str: &str, test_str: &str) {
     assert_eq!(&format!("{:?}", parser.parse(in_str).unwrap()), test_str);
@@ -16,6 +16,9 @@ fn grammar_test() {
 
     // let dimparser = DimensionParser::new().parse("[5][3 + 2]").unwrap();
     // assert_eq!(&format!("{:?}", dimparser), "2");
+
+    let varassignparser =VarAssignmentParser::new().parse("x[3][3][5] = 5313 * 12414 + 1234124 |> fn && false").unwrap();
+    assert_eq!(&format!("{:?}", varassignparser), "2");
 
     let varrefparser = VarReferenceParser::new().parse("someVarname[2: 5][4 / 32 * 5 |> fn2: 6]").unwrap();
     assert_eq!(&format!("{:?}", varrefparser), "2");

@@ -1,5 +1,5 @@
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef};
+use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, VarAssign};
 
 grammar;
 
@@ -95,6 +95,9 @@ pub VarReference: VarRef = {
     } 
 }
 
+pub VarAssignment: VarAssign = <var: VarReference> ASSIGN <exp: Expr> => VarAssign(var, exp);
+
+
 // Operators
 
 ExprOp: Operator = {
@@ -167,6 +170,7 @@ match {
     "[" => LBRACKET,
     "]" => RBRACKET,
     "][" => RLBRACKET,
+    "=" => ASSIGN,
     r"[a-z_A-Z]+[0-9_a-zA-Z]*" => ID,
     r"[0-9]+" => NUMBER,
 } else {
