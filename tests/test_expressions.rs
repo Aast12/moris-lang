@@ -26,6 +26,8 @@ fn grammar_test() {
     // assert_eq!(&format!("{:?}", dimparser), "2");
     // format!("{:?}", StatementParser::new().parse(r#"x = 7;"#).unwrap());
     
+    assert_eq!(&format!("{:?}", StatementParser::new().parse(r#"someFn(5, x) + 5;"#).unwrap()), "55");
+    
     assert_eq!(&format!("{:?}", StatementParser::new().parse(r#"for(i in iter){
         if (2){
 

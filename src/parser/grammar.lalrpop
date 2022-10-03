@@ -157,12 +157,15 @@ Item: Box<Expr> = {
     VarReference => Box::new(Expr::Var(<>)),
     Const => Box::new(Expr::Const(<>)),
     LPAREN <Expr> RPAREN => Box::new(Expr::ParenthOp(<>)),
+    FunctionCall => Box::new(<>)
 }
 
 // Functions
 
 
 FuncParam: FunctionParam = <id: ID> COLON <dtype: Type> => FunctionParam(String::from(id), dtype);
+
+CallParams = Comma<Expr>;
 
 pub FunctionParams = Comma<FuncParam>;
 
@@ -178,6 +181,15 @@ FunctionItem: ast::Statement = {
 }
 
 FunctionBlock: ast::Block = LCBRACKET <statements: FunctionItem*> RCBRACKET => ast::Block(statements);
+
+Function: ast::Function = <signature: FnSignature> <block: FunctionBlock> => ast::Function {
+    signature: signature,
+    block: block
+};
+
+FunctionCall: Expr = <id: CALL_ID> <params: CallParams> RPAREN => 
+    Expr::FunctionCall(String::from(&id[..id.len() - 1]), params);
+
 
 pub Statement = {
     Condition,

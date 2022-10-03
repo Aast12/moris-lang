@@ -15,6 +15,7 @@ pub enum Index {
     Simple(Box<Expr>),
     Range(Box<Expr>, Box<Expr>),
 }
+
 #[derive(Debug)]
 pub struct Dimension(pub i8, pub Vec<Box<Expr>>);
 // dimensions: i8, // 0, 1, 2 dim limit
@@ -34,7 +35,7 @@ pub struct VarRef {
     pub indexing: Option<Vec<Index>>,
 }
 
-// #[derive(Debug)]
+#[derive(Debug)]
 pub enum TypeConst {
     Bool(bool),
     Int(i32),
@@ -43,16 +44,17 @@ pub enum TypeConst {
     Vector(Vec<Box<Expr>>),
 }
 
-// #[derive(Debug)]
+#[derive(Debug)]
 pub enum Expr {
     Const(TypeConst),
     Op(Box<Expr>, Operator, Box<Expr>),
     ParenthOp(Box<Expr>),
     Var(VarRef),
+    FunctionCall(String, Vec<Box<Expr>>),
     Error,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub enum Operator {
     Mul,
     Div,
@@ -79,6 +81,13 @@ pub struct FunctionSignature {
     pub params: Vec<FunctionParam>
 }
 
+
+#[derive(Debug)]
+pub struct Function {
+    pub signature: FunctionSignature,
+    pub block: Block
+}
+
 #[derive(Debug)]
 pub enum Statement {
     VarDeclaration(Variable),
@@ -87,55 +96,57 @@ pub enum Statement {
     If { condition: Box<Expr>, if_block: Block, else_block: Option<Block>},
     For { iterator_id: String, iterable: Box<Expr>, block: Block},
     While { condition: Box<Expr>, block: Block},
+    FunctionDeclaration(Function)
 }
 
 #[derive(Debug)]
 pub struct Block(pub Vec<Statement>);
 
 
-impl Debug for TypeConst {
-    fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
-        use self::TypeConst::*;
-        match &*self {
-            Bool(value) => write!(fmt, "{:?}", value),
-            Int(value) => write!(fmt, "{:?}", value),
-            Float(value) => write!(fmt, "{:?}", value),
-            String(value) => write!(fmt, "{:?}", value),
-            Vector(value) => write!(fmt, "{:?}", value),
-        }
-    }
-}
+// impl Debug for TypeConst {
+//     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
+//         use self::TypeConst::*;
+//         match &*self {
+//             Bool(value) => write!(fmt, "{:?}", value),
+//             Int(value) => write!(fmt, "{:?}", value),
+//             Float(value) => write!(fmt, "{:?}", value),
+//             String(value) => write!(fmt, "{:?}", value),
+//             Vector(value) => write!(fmt, "{:?}", value),
+//         }
+//     }
+// }
 
-impl Debug for Expr {
-    fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
-        use self::Expr::*;
-        match &*self {
-            Const(n) => write!(fmt, "{:?}", n),
-            Op(ref l, op, ref r) => write!(fmt, "{:?} {:?} {:?}", l, op, r),
-            Var(s) => write!(fmt, "{:?}", s),
-            ParenthOp(op) => write!(fmt, "({:?})", op),
-            Error => write!(fmt, "error"),
-        }
-    }
-}
+// impl Debug for Expr {
+//     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
+//         use self::Expr::*;
+//         match &*self {
+//             Const(n) => write!(fmt, "{:?}", n),
+//             Op(ref l, op, ref r) => write!(fmt, "{:?} {:?} {:?}", l, op, r),
+//             Var(s) => write!(fmt, "{:?}", s),
+//             ParenthOp(op) => write!(fmt, "({:?})", op),
+//             Error => write!(fmt, "error"),
+//             FunctionCall(id, params) => write!(fmt, "{:?}: {:?}", id, params),
+//         }
+//     }
+// }
 
-impl Debug for Operator {
-    fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
-        use self::Operator::*;
-        match *self {
-            Mul => write!(fmt, "*"),
-            Div => write!(fmt, "/"),
-            Add => write!(fmt, "+"),
-            Sub => write!(fmt, "-"),
-            Pipe => write!(fmt, "|>"),
-            And => write!(fmt, "&&"),
-            Or => write!(fmt, "||"),
-            LessThan => write!(fmt, "<"),
-            GreaterThan => write!(fmt, ">"),
-            NotEq => write!(fmt, "!="),
-            Eq => write!(fmt, "=="),
-            Assign => write!(fmt, "="),
-            ForwardPipe => write!(fmt, "|> forward"),
-        }
-    }
-}
+// impl Debug for Operator {
+//     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
+//         use self::Operator::*;
+//         match *self {
+//             Mul => write!(fmt, "*"),
+//             Div => write!(fmt, "/"),
+//             Add => write!(fmt, "+"),
+//             Sub => write!(fmt, "-"),
+//             Pipe => write!(fmt, "|>"),
+//             And => write!(fmt, "&&"),
+//             Or => write!(fmt, "||"),
+//             LessThan => write!(fmt, "<"),
+//             GreaterThan => write!(fmt, ">"),
+//             NotEq => write!(fmt, "!="),
+//             Eq => write!(fmt, "=="),
+//             Assign => write!(fmt, "="),
+//             ForwardPipe => write!(fmt, "|> forward"),
+//         }
+//     }
+// }
