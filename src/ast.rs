@@ -102,6 +102,9 @@ pub enum Statement {
 #[derive(Debug)]
 pub struct Block(pub Vec<Statement>);
 
+#[derive(Debug)]
+pub struct Program(pub Vec<Statement>);
+
 
 // impl Debug for TypeConst {
 //     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {

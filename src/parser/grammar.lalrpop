@@ -197,6 +197,12 @@ pub Statement = {
     LineStatement
 }
 
+pub GlobalStatement: ast::Statement = {
+    Function => ast::Statement::FunctionDeclaration(<>),
+    Statement,
+    VarDeclaration =>  ast::Statement::VarDeclaration(<>)
+}
+
 Block: ast::Block = {
     Statement => ast::Block(vec![<>]),
     StrictBlock
@@ -241,6 +247,7 @@ WhileLoop: ast::Statement = WHILE <condition: Expr> RPAREN <block: Block> =>
         block: block
     };
 
+pub Program: ast::Program = GlobalStatement* => ast::Program(<>);
 
 match {
     r#""[^"]*""# => STRING,

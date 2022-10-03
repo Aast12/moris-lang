@@ -1,4 +1,4 @@
-use moris_lang::{self, parser::grammar::{ExprParser, DimensionParser, VarDeclarationParser, VarReferenceParser, VarAssignmentParser, FunctionParamsParser, FnSignatureParser, StatementParser}, ast::{Expr, Variable, Dimension}};
+use moris_lang::{self, parser::grammar::{ExprParser, DimensionParser, VarDeclarationParser, VarReferenceParser, VarAssignmentParser, FunctionParamsParser, FnSignatureParser, StatementParser, GlobalStatementParser}, ast::{Expr, Variable, Dimension}};
 use moris_lang::ast;
 fn test_expr_eq(parser: &ExprParser, in_str: &str, test_str: &str) {
     parser.parse(in_str).unwrap();
@@ -25,7 +25,21 @@ fn grammar_test() {
     // let dimparser = DimensionParser::new().parse("[5][3 + 2]").unwrap();
     // assert_eq!(&format!("{:?}", dimparser), "2");
     // format!("{:?}", StatementParser::new().parse(r#"x = 7;"#).unwrap());
-    
+    format!("{:#?}", GlobalStatementParser::new().parse(r#"
+        fn myFunc(x: int, y: float): bool {
+            5;
+            callFn();
+            let x: int = 5;
+        }
+    "#).unwrap());
+
+    assert_eq!(&format!("{:#?}", GlobalStatementParser::new().parse(r#"
+        fn myFunc(x: int, y: float): bool {
+            5;
+            callFn();
+            let x: int = 5;
+        }
+    "#).unwrap()), "55");
     assert_eq!(&format!("{:?}", StatementParser::new().parse(r#"someFn(5, x) + 5;"#).unwrap()), "55");
     
     assert_eq!(&format!("{:?}", StatementParser::new().parse(r#"for(i in iter){
