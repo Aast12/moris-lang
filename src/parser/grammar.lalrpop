@@ -1,6 +1,6 @@
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
-use crate::ast;
+use crate::syntax::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+use crate::syntax;
 
 grammar;
 
@@ -100,7 +100,7 @@ VarReference: VarRef = {
     } 
 }
 
-VarAssignment: ast::Statement = <var: VarReference> ASSIGN <exp: Expr> => ast::Statement::VarAssign(var, exp);
+VarAssignment: syntax::Statement = <var: VarReference> ASSIGN <exp: Expr> => syntax::Statement::VarAssign(var, exp);
 
 
 // Operators
@@ -175,15 +175,15 @@ FnSignature: FunctionSignature = FN <id: CALL_ID> <params: FunctionParams> RPARE
     params: params
 };
 
-FunctionItem: ast::Statement = {
+FunctionItem: syntax::Statement = {
     Statement,
     ReturnStatement,
-    VarDeclaration => ast::Statement::VarDeclaration(<>),
+    VarDeclaration => syntax::Statement::VarDeclaration(<>),
 }
 
-FunctionBlock: ast::Block = LCBRACKET <statements: FunctionItem*> RCBRACKET => ast::Block(statements);
+FunctionBlock: syntax::Block = LCBRACKET <statements: FunctionItem*> RCBRACKET => syntax::Block(statements);
 
-Function: ast::Function = <signature: FnSignature> <block: FunctionBlock> => ast::Function {
+Function: syntax::Function = <signature: FnSignature> <block: FunctionBlock> => syntax::Function {
     signature: signature,
     block: block
 };
@@ -191,7 +191,7 @@ Function: ast::Function = <signature: FnSignature> <block: FunctionBlock> => ast
 FunctionCall: Expr = <id: CALL_ID> <params: CallParams> RPAREN => 
     Expr::FunctionCall(String::from(&id[..id.len() - 1]), params);
 
-ReturnStatement: ast::Statement = RETURN <Expr> SEMICOLON => ast::Statement::Return(<>);
+ReturnStatement: syntax::Statement = RETURN <Expr> SEMICOLON => syntax::Statement::Return(<>);
 
 Statement = {
     Condition,
@@ -199,57 +199,57 @@ Statement = {
     LineStatement
 }
 
-GlobalStatement: ast::Statement = {
-    Function => ast::Statement::FunctionDeclaration(<>),
+GlobalStatement: syntax::Statement = {
+    Function => syntax::Statement::FunctionDeclaration(<>),
     Statement,
-    VarDeclaration =>  ast::Statement::VarDeclaration(<>)
+    VarDeclaration =>  syntax::Statement::VarDeclaration(<>)
 }
 
-Block: ast::Block = {
-    Statement => ast::Block(vec![<>]),
+Block: syntax::Block = {
+    Statement => syntax::Block(vec![<>]),
     StrictBlock
 }
 
-LineStatement: ast::Statement = {
+LineStatement: syntax::Statement = {
     <VarAssignment> SEMICOLON,
-    <Expr> SEMICOLON => ast::Statement::Expression(<>)
+    <Expr> SEMICOLON => syntax::Statement::Expression(<>)
 }
 
-ElseBlock: ast::Block = {
-    Condition => ast::Block(vec![<>]),
+ElseBlock: syntax::Block = {
+    Condition => syntax::Block(vec![<>]),
     StrictBlock
 }
 
-Condition: ast::Statement = {
+Condition: syntax::Statement = {
     IF <condition: Expr> RPAREN <if_block: StrictBlock> <else_block: (ELSE <ElseBlock>)?> => 
-        ast::Statement::If {
+        syntax::Statement::If {
             condition: condition,
             if_block: if_block,
             else_block: else_block
         }
 }
 
-StrictBlock: ast::Block = LCBRACKET <statements: Statement*> RCBRACKET => ast::Block(statements);
+StrictBlock: syntax::Block = LCBRACKET <statements: Statement*> RCBRACKET => syntax::Block(statements);
 
 Loop = {
     ForLoop,
     WhileLoop
 }
 
-ForLoop: ast::Statement = FOR <id: ID> IN <iterable: Expr> RPAREN <block: Block> =>
-    ast::Statement::For {
+ForLoop: syntax::Statement = FOR <id: ID> IN <iterable: Expr> RPAREN <block: Block> =>
+    syntax::Statement::For {
         iterator_id: String::from(id),
         iterable: iterable,
         block: block
     };
 
-WhileLoop: ast::Statement = WHILE <condition: Expr> RPAREN <block: Block> =>
-    ast::Statement::While {
+WhileLoop: syntax::Statement = WHILE <condition: Expr> RPAREN <block: Block> =>
+    syntax::Statement::While {
         condition: condition,
         block: block
     };
 
-pub Program: ast::Program = GlobalStatement* => ast::Program(<>);
+pub Program: syntax::Program = GlobalStatement* => syntax::Program(<>);
 
 match {
     r#""[^"]*""# => STRING,

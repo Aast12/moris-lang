@@ -1,2 +1,2 @@
-pub mod ast;
+pub mod syntax;
 pub mod parser;

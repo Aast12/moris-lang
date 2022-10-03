@@ -1,8 +1,8 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 659473690ac88019d900d407149ef56202379eff9d6760b20f47bc4091392573
+// sha3: 861fc5f6a429a3055e437bbb54b3c56781d1da8383543809b9f6b3e5966ed77c
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
-use crate::ast;
+use crate::syntax::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+use crate::syntax;
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 #[allow(unused_imports)]
@@ -15,8 +15,8 @@ mod __parse__Program {
     #![allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens, clippy::all)]
 
     use std::str::FromStr;
-    use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
-    use crate::ast;
+    use crate::syntax::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+    use crate::syntax;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -33,23 +33,23 @@ mod __parse__Program {
         Variant3(FunctionParam),
         Variant4(alloc::vec::Vec<FunctionParam>),
         Variant5(core::option::Option<Box<Expr>>),
-        Variant6(ast::Block),
-        Variant7(core::option::Option<ast::Block>),
+        Variant6(syntax::Block),
+        Variant7(core::option::Option<syntax::Block>),
         Variant8(TypeConst),
         Variant9(Vec<Box<Expr>>),
         Variant10(Vec<FunctionParam>),
-        Variant11(ast::Statement),
+        Variant11(syntax::Statement),
         Variant12(Dimension),
         Variant13(core::option::Option<Dimension>),
         Variant14(Operator),
         Variant15(FunctionSignature),
         Variant16(core::option::Option<FunctionParam>),
-        Variant17(ast::Function),
+        Variant17(syntax::Function),
         Variant18(Expr),
-        Variant19(alloc::vec::Vec<ast::Statement>),
+        Variant19(alloc::vec::Vec<syntax::Statement>),
         Variant20(DataType),
         Variant21(Index),
-        Variant22(ast::Program),
+        Variant22(syntax::Program),
         Variant23(Variable),
         Variant24(Vec<Index>),
         Variant25(core::option::Option<Vec<Index>>),
@@ -954,7 +954,7 @@ mod __parse__Program {
         type Token = Token<'input>;
         type TokenIndex = usize;
         type Symbol = __Symbol<'input>;
-        type Success = ast::Program;
+        type Success = syntax::Program;
         type StateIndex = i16;
         type Action = i16;
         type ReduceIndex = i16;
@@ -1128,7 +1128,7 @@ mod __parse__Program {
         >(
             &self,
             input: &'input str,
-        ) -> Result<ast::Program, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
+        ) -> Result<syntax::Program, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
         {
             let mut __tokens = self.builder.matcher(input);
             __state_machine::Parser::drive(
@@ -1149,7 +1149,7 @@ mod __parse__Program {
         __states: &mut alloc::vec::Vec<i16>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input ())>,
-    ) -> Option<Result<ast::Program,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
+    ) -> Option<Result<syntax::Program,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
     {
         let (__pop_states, __nonterminal) = match __action {
             0 => {
@@ -1776,54 +1776,10 @@ mod __parse__Program {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, alloc::vec::Vec<ast::Statement>, usize)
+    ) -> (usize, alloc::vec::Vec<syntax::Statement>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant19(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant6<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ast::Block, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant17<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ast::Function, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant22<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ast::Program, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant22(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant11<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ast::Statement, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -1875,10 +1831,54 @@ mod __parse__Program {
       'input,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, core::option::Option<ast::Block>, usize)
+    ) -> (usize, core::option::Option<syntax::Block>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant6<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, syntax::Block, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant17<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, syntax::Function, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant22<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, syntax::Program, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant22(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant11<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, syntax::Statement, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -4440,8 +4440,8 @@ pub use self::__parse__Program::ProgramParser;
 mod __intern_token {
     #![allow(unused_imports)]
     use std::str::FromStr;
-    use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
-    use crate::ast;
+    use crate::syntax::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+    use crate::syntax;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -4506,8 +4506,8 @@ fn __action0<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Program, usize),
-) -> ast::Program
+    (_, __0, _): (usize, syntax::Program, usize),
+) -> syntax::Program
 {
     __0
 }
@@ -4862,9 +4862,9 @@ fn __action29<
     (_, var, _): (usize, VarRef, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, exp, _): (usize, Box<Expr>, usize),
-) -> ast::Statement
+) -> syntax::Statement
 {
-    ast::Statement::VarAssign(var, exp)
+    syntax::Statement::VarAssign(var, exp)
 }
 
 #[allow(unused_variables)]
@@ -5189,8 +5189,8 @@ fn __action57<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> ast::Statement
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> syntax::Statement
 {
     __0
 }
@@ -5200,8 +5200,8 @@ fn __action58<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> ast::Statement
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> syntax::Statement
 {
     __0
 }
@@ -5212,9 +5212,9 @@ fn __action59<
 >(
     input: &'input str,
     (_, __0, _): (usize, Variable, usize),
-) -> ast::Statement
+) -> syntax::Statement
 {
-    ast::Statement::VarDeclaration(__0)
+    syntax::Statement::VarDeclaration(__0)
 }
 
 #[allow(unused_variables)]
@@ -5223,11 +5223,11 @@ fn __action60<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, statements, _): (usize, alloc::vec::Vec<ast::Statement>, usize),
+    (_, statements, _): (usize, alloc::vec::Vec<syntax::Statement>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> ast::Block
+) -> syntax::Block
 {
-    ast::Block(statements)
+    syntax::Block(statements)
 }
 
 #[allow(unused_variables)]
@@ -5236,10 +5236,10 @@ fn __action61<
 >(
     input: &'input str,
     (_, signature, _): (usize, FunctionSignature, usize),
-    (_, block, _): (usize, ast::Block, usize),
-) -> ast::Function
+    (_, block, _): (usize, syntax::Block, usize),
+) -> syntax::Function
 {
-    ast::Function {
+    syntax::Function {
     signature: signature,
     block: block
 }
@@ -5266,9 +5266,9 @@ fn __action63<
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, Box<Expr>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> ast::Statement
+) -> syntax::Statement
 {
-    ast::Statement::Return(__0)
+    syntax::Statement::Return(__0)
 }
 
 #[allow(unused_variables)]
@@ -5276,8 +5276,8 @@ fn __action64<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> ast::Statement
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> syntax::Statement
 {
     __0
 }
@@ -5287,8 +5287,8 @@ fn __action65<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> ast::Statement
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> syntax::Statement
 {
     __0
 }
@@ -5298,8 +5298,8 @@ fn __action66<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> ast::Statement
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> syntax::Statement
 {
     __0
 }
@@ -5309,10 +5309,10 @@ fn __action67<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Function, usize),
-) -> ast::Statement
+    (_, __0, _): (usize, syntax::Function, usize),
+) -> syntax::Statement
 {
-    ast::Statement::FunctionDeclaration(__0)
+    syntax::Statement::FunctionDeclaration(__0)
 }
 
 #[allow(unused_variables)]
@@ -5320,8 +5320,8 @@ fn __action68<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> ast::Statement
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> syntax::Statement
 {
     __0
 }
@@ -5332,9 +5332,9 @@ fn __action69<
 >(
     input: &'input str,
     (_, __0, _): (usize, Variable, usize),
-) -> ast::Statement
+) -> syntax::Statement
 {
-    ast::Statement::VarDeclaration(__0)
+    syntax::Statement::VarDeclaration(__0)
 }
 
 #[allow(unused_variables)]
@@ -5342,10 +5342,10 @@ fn __action70<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> ast::Block
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> syntax::Block
 {
-    ast::Block(vec![__0])
+    syntax::Block(vec![__0])
 }
 
 #[allow(unused_variables)]
@@ -5353,8 +5353,8 @@ fn __action71<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Block, usize),
-) -> ast::Block
+    (_, __0, _): (usize, syntax::Block, usize),
+) -> syntax::Block
 {
     __0
 }
@@ -5364,9 +5364,9 @@ fn __action72<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
+    (_, __0, _): (usize, syntax::Statement, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> ast::Statement
+) -> syntax::Statement
 {
     __0
 }
@@ -5378,9 +5378,9 @@ fn __action73<
     input: &'input str,
     (_, __0, _): (usize, Box<Expr>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> ast::Statement
+) -> syntax::Statement
 {
-    ast::Statement::Expression(__0)
+    syntax::Statement::Expression(__0)
 }
 
 #[allow(unused_variables)]
@@ -5388,10 +5388,10 @@ fn __action74<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> ast::Block
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> syntax::Block
 {
-    ast::Block(vec![__0])
+    syntax::Block(vec![__0])
 }
 
 #[allow(unused_variables)]
@@ -5399,8 +5399,8 @@ fn __action75<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Block, usize),
-) -> ast::Block
+    (_, __0, _): (usize, syntax::Block, usize),
+) -> syntax::Block
 {
     __0
 }
@@ -5413,11 +5413,11 @@ fn __action76<
     (_, _, _): (usize, &'input str, usize),
     (_, condition, _): (usize, Box<Expr>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, if_block, _): (usize, ast::Block, usize),
-    (_, else_block, _): (usize, core::option::Option<ast::Block>, usize),
-) -> ast::Statement
+    (_, if_block, _): (usize, syntax::Block, usize),
+    (_, else_block, _): (usize, core::option::Option<syntax::Block>, usize),
+) -> syntax::Statement
 {
-    ast::Statement::If {
+    syntax::Statement::If {
             condition: condition,
             if_block: if_block,
             else_block: else_block
@@ -5430,11 +5430,11 @@ fn __action77<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, statements, _): (usize, alloc::vec::Vec<ast::Statement>, usize),
+    (_, statements, _): (usize, alloc::vec::Vec<syntax::Statement>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> ast::Block
+) -> syntax::Block
 {
-    ast::Block(statements)
+    syntax::Block(statements)
 }
 
 #[allow(unused_variables)]
@@ -5442,8 +5442,8 @@ fn __action78<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> ast::Statement
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> syntax::Statement
 {
     __0
 }
@@ -5453,8 +5453,8 @@ fn __action79<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> ast::Statement
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> syntax::Statement
 {
     __0
 }
@@ -5469,10 +5469,10 @@ fn __action80<
     (_, _, _): (usize, &'input str, usize),
     (_, iterable, _): (usize, Box<Expr>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, block, _): (usize, ast::Block, usize),
-) -> ast::Statement
+    (_, block, _): (usize, syntax::Block, usize),
+) -> syntax::Statement
 {
-    ast::Statement::For {
+    syntax::Statement::For {
         iterator_id: String::from(id),
         iterable: iterable,
         block: block
@@ -5487,10 +5487,10 @@ fn __action81<
     (_, _, _): (usize, &'input str, usize),
     (_, condition, _): (usize, Box<Expr>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, block, _): (usize, ast::Block, usize),
-) -> ast::Statement
+    (_, block, _): (usize, syntax::Block, usize),
+) -> syntax::Statement
 {
-    ast::Statement::While {
+    syntax::Statement::While {
         condition: condition,
         block: block
     }
@@ -5501,10 +5501,10 @@ fn __action82<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, alloc::vec::Vec<ast::Statement>, usize),
-) -> ast::Program
+    (_, __0, _): (usize, alloc::vec::Vec<syntax::Statement>, usize),
+) -> syntax::Program
 {
-    ast::Program(__0)
+    syntax::Program(__0)
 }
 
 #[allow(unused_variables)]
@@ -5514,7 +5514,7 @@ fn __action83<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> alloc::vec::Vec<ast::Statement>
+) -> alloc::vec::Vec<syntax::Statement>
 {
     alloc::vec![]
 }
@@ -5524,8 +5524,8 @@ fn __action84<
     'input,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<ast::Statement>, usize),
-) -> alloc::vec::Vec<ast::Statement>
+    (_, v, _): (usize, alloc::vec::Vec<syntax::Statement>, usize),
+) -> alloc::vec::Vec<syntax::Statement>
 {
     v
 }
@@ -5537,7 +5537,7 @@ fn __action85<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> alloc::vec::Vec<ast::Statement>
+) -> alloc::vec::Vec<syntax::Statement>
 {
     alloc::vec![]
 }
@@ -5547,8 +5547,8 @@ fn __action86<
     'input,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<ast::Statement>, usize),
-) -> alloc::vec::Vec<ast::Statement>
+    (_, v, _): (usize, alloc::vec::Vec<syntax::Statement>, usize),
+) -> alloc::vec::Vec<syntax::Statement>
 {
     v
 }
@@ -5558,8 +5558,8 @@ fn __action87<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Block, usize),
-) -> core::option::Option<ast::Block>
+    (_, __0, _): (usize, syntax::Block, usize),
+) -> core::option::Option<syntax::Block>
 {
     Some(__0)
 }
@@ -5571,7 +5571,7 @@ fn __action88<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> core::option::Option<ast::Block>
+) -> core::option::Option<syntax::Block>
 {
     None
 }
@@ -5582,8 +5582,8 @@ fn __action89<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, ast::Block, usize),
-) -> ast::Block
+    (_, __0, _): (usize, syntax::Block, usize),
+) -> syntax::Block
 {
     __0
 }
@@ -5595,7 +5595,7 @@ fn __action90<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> alloc::vec::Vec<ast::Statement>
+) -> alloc::vec::Vec<syntax::Statement>
 {
     alloc::vec![]
 }
@@ -5605,8 +5605,8 @@ fn __action91<
     'input,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<ast::Statement>, usize),
-) -> alloc::vec::Vec<ast::Statement>
+    (_, v, _): (usize, alloc::vec::Vec<syntax::Statement>, usize),
+) -> alloc::vec::Vec<syntax::Statement>
 {
     v
 }
@@ -5932,8 +5932,8 @@ fn __action118<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> alloc::vec::Vec<ast::Statement>
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> alloc::vec::Vec<syntax::Statement>
 {
     alloc::vec![__0]
 }
@@ -5943,9 +5943,9 @@ fn __action119<
     'input,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<ast::Statement>, usize),
-    (_, e, _): (usize, ast::Statement, usize),
-) -> alloc::vec::Vec<ast::Statement>
+    (_, v, _): (usize, alloc::vec::Vec<syntax::Statement>, usize),
+    (_, e, _): (usize, syntax::Statement, usize),
+) -> alloc::vec::Vec<syntax::Statement>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -5955,8 +5955,8 @@ fn __action120<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> alloc::vec::Vec<ast::Statement>
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> alloc::vec::Vec<syntax::Statement>
 {
     alloc::vec![__0]
 }
@@ -5966,9 +5966,9 @@ fn __action121<
     'input,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<ast::Statement>, usize),
-    (_, e, _): (usize, ast::Statement, usize),
-) -> alloc::vec::Vec<ast::Statement>
+    (_, v, _): (usize, alloc::vec::Vec<syntax::Statement>, usize),
+    (_, e, _): (usize, syntax::Statement, usize),
+) -> alloc::vec::Vec<syntax::Statement>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -5978,8 +5978,8 @@ fn __action122<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement, usize),
-) -> alloc::vec::Vec<ast::Statement>
+    (_, __0, _): (usize, syntax::Statement, usize),
+) -> alloc::vec::Vec<syntax::Statement>
 {
     alloc::vec![__0]
 }
@@ -5989,9 +5989,9 @@ fn __action123<
     'input,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<ast::Statement>, usize),
-    (_, e, _): (usize, ast::Statement, usize),
-) -> alloc::vec::Vec<ast::Statement>
+    (_, v, _): (usize, alloc::vec::Vec<syntax::Statement>, usize),
+    (_, e, _): (usize, syntax::Statement, usize),
+) -> alloc::vec::Vec<syntax::Statement>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -6327,8 +6327,8 @@ fn __action139<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, ast::Block, usize),
-) -> core::option::Option<ast::Block>
+    __1: (usize, syntax::Block, usize),
+) -> core::option::Option<syntax::Block>
 {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
@@ -6352,10 +6352,10 @@ fn __action140<
     __0: (usize, &'input str, usize),
     __1: (usize, Box<Expr>, usize),
     __2: (usize, &'input str, usize),
-    __3: (usize, ast::Block, usize),
+    __3: (usize, syntax::Block, usize),
     __4: (usize, &'input str, usize),
-    __5: (usize, ast::Block, usize),
-) -> ast::Statement
+    __5: (usize, syntax::Block, usize),
+) -> syntax::Statement
 {
     let __start0 = __4.0.clone();
     let __end0 = __5.2.clone();
@@ -6383,8 +6383,8 @@ fn __action141<
     __0: (usize, &'input str, usize),
     __1: (usize, Box<Expr>, usize),
     __2: (usize, &'input str, usize),
-    __3: (usize, ast::Block, usize),
-) -> ast::Statement
+    __3: (usize, syntax::Block, usize),
+) -> syntax::Statement
 {
     let __start0 = __3.2.clone();
     let __end0 = __3.2.clone();
@@ -6723,7 +6723,7 @@ fn __action154<
     input: &'input str,
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
-) -> ast::Block
+) -> syntax::Block
 {
     let __start0 = __0.2.clone();
     let __end0 = __1.0.clone();
@@ -6747,9 +6747,9 @@ fn __action155<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, alloc::vec::Vec<ast::Statement>, usize),
+    __1: (usize, alloc::vec::Vec<syntax::Statement>, usize),
     __2: (usize, &'input str, usize),
-) -> ast::Block
+) -> syntax::Block
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
@@ -6773,7 +6773,7 @@ fn __action156<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ast::Program
+) -> syntax::Program
 {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
@@ -6794,8 +6794,8 @@ fn __action157<
     'input,
 >(
     input: &'input str,
-    __0: (usize, alloc::vec::Vec<ast::Statement>, usize),
-) -> ast::Program
+    __0: (usize, alloc::vec::Vec<syntax::Statement>, usize),
+) -> syntax::Program
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
@@ -6817,7 +6817,7 @@ fn __action158<
     input: &'input str,
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
-) -> ast::Block
+) -> syntax::Block
 {
     let __start0 = __0.2.clone();
     let __end0 = __1.0.clone();
@@ -6841,9 +6841,9 @@ fn __action159<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, alloc::vec::Vec<ast::Statement>, usize),
+    __1: (usize, alloc::vec::Vec<syntax::Statement>, usize),
     __2: (usize, &'input str, usize),
-) -> ast::Block
+) -> syntax::Block
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
