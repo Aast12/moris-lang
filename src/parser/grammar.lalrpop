@@ -1,5 +1,6 @@
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, VarAssign, FunctionParam, FunctionSignature};
+use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+use crate::ast;
 
 grammar;
 
@@ -78,7 +79,7 @@ pub Dimension: Dimension = {
 }
 
 pub VarDeclaration: Variable = {
-    LET <id: ID> COLON <dtype: Type> <dim: Dimension?> <value: (ASSIGN <Expr>)?> => Variable {
+    LET <id: ID> COLON <dtype: Type> <dim: Dimension?> <value: (ASSIGN <Expr>)?> SEMICOLON => Variable {
         id: String::from(id),
         data_type: dtype,
         dimension: dim.unwrap_or(Dimension(0, vec![])),
@@ -99,7 +100,7 @@ pub VarReference: VarRef = {
     } 
 }
 
-pub VarAssignment: VarAssign = <var: VarReference> ASSIGN <exp: Expr> => VarAssign(var, exp);
+pub VarAssignment: ast::Statement = <var: VarReference> ASSIGN <exp: Expr> => ast::Statement::VarAssign(var, exp);
 
 
 // Operators
@@ -171,6 +172,63 @@ pub FnSignature: FunctionSignature = FN <id: CALL_ID> <params: FunctionParams> R
     params: params
 };
 
+FunctionItem: ast::Statement = {
+    Statement,
+    VarDeclaration => ast::Statement::VarDeclaration(<>),
+}
+
+FunctionBlock: ast::Block = LCBRACKET <statements: FunctionItem*> RCBRACKET => ast::Block(statements);
+
+pub Statement = {
+    Condition,
+    Loop,
+    LineStatement
+}
+
+Block: ast::Block = {
+    Statement => ast::Block(vec![<>]),
+    StrictBlock
+}
+
+LineStatement: ast::Statement = {
+    <VarAssignment> SEMICOLON,
+    <Expr> SEMICOLON => ast::Statement::Expression(<>)
+}
+
+ElseBlock: ast::Block = {
+    Condition => ast::Block(vec![<>]),
+    StrictBlock
+}
+
+Condition: ast::Statement = {
+    IF <condition: Expr> RPAREN <if_block: StrictBlock> <else_block: (ELSE <ElseBlock>)?> => 
+        ast::Statement::If {
+            condition: condition,
+            if_block: if_block,
+            else_block: else_block
+        }
+}
+
+StrictBlock: ast::Block = LCBRACKET <statements: Statement*> RCBRACKET => ast::Block(statements);
+
+Loop = {
+    ForLoop,
+    WhileLoop
+}
+
+ForLoop: ast::Statement = FOR <id: ID> IN <iterable: Expr> RPAREN <block: Block> =>
+    ast::Statement::For {
+        iterator_id: String::from(id),
+        iterable: iterable,
+        block: block
+    };
+
+WhileLoop: ast::Statement = WHILE <condition: Expr> RPAREN <block: Block> =>
+    ast::Statement::While {
+        condition: condition,
+        block: block
+    };
+
 
 match {
     r#""[^"]*""# => STRING,
@@ -196,19 +254,27 @@ match {
     "true" => TRUE,
     "false" => FALSE,
     "fn" => FN,
+    r"for\s*\(" => FOR, // TODO Fix joint ( w/ custom tokenizer
+    r"while\s*\(" => WHILE,
+    "in" => IN,
     "(" => LPAREN,
     ")" => RPAREN,
+    r"if\s*\(" => IF,
+    "else" => ELSE,
+    "{" => LCBRACKET,
+    "}" => RCBRACKET,
     "[" => LBRACKET,
     "]" => RBRACKET,
     "][" => RLBRACKET,
     "=" => ASSIGN,
     "," => COMMA,
     ":" => COLON,
-    r"[a-z_A-Z]+[0-9_a-zA-Z]*\(" => CALL_ID,
+    ";" => SEMICOLON,
     r"[a-z_A-Z]+[0-9_a-zA-Z]*" => ID,
     r"[0-9]+\.[0-9]+" => FLOAT,
     r"[0-9]+" => NUMBER,
 } else {
+    r"[a-z_A-Z]+[0-9_a-zA-Z]*\(" => CALL_ID,
     _
 }
 

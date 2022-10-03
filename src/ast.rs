@@ -1,4 +1,5 @@
 use std::fmt::{Debug, Error, Formatter};
+
 #[derive(Debug)]
 pub enum DataType {
     Int,
@@ -32,9 +33,6 @@ pub struct VarRef {
     pub id: String,
     pub indexing: Option<Vec<Index>>,
 }
-
-#[derive(Debug)]
-pub struct VarAssign(pub VarRef, pub Box<Expr>);
 
 // #[derive(Debug)]
 pub enum TypeConst {
@@ -80,6 +78,20 @@ pub struct FunctionSignature {
     pub data_type: DataType,
     pub params: Vec<FunctionParam>
 }
+
+#[derive(Debug)]
+pub enum Statement {
+    VarDeclaration(Variable),
+    VarAssign(VarRef, Box<Expr>),
+    Expression(Box<Expr>),
+    If { condition: Box<Expr>, if_block: Block, else_block: Option<Block>},
+    For { iterator_id: String, iterable: Box<Expr>, block: Block},
+    While { condition: Box<Expr>, block: Block},
+}
+
+#[derive(Debug)]
+pub struct Block(pub Vec<Statement>);
+
 
 impl Debug for TypeConst {
     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
