@@ -68,17 +68,17 @@ Id: Expr = ID => Expr::Var(VarRef {
 
 // Variables
 
-pub Indexing: Index = {
+Indexing: Index = {
     <begin:Expr> COLON <end:Expr> => Index::Range(begin, end),
     <idx:Expr> => Index::Simple(idx)
 }
 
-pub Dimension: Dimension = {
+Dimension: Dimension = {
     LBRACKET <a: Expr> RLBRACKET <b: Expr> RBRACKET => Dimension(2, vec![a, b]),
     LBRACKET <Expr> RBRACKET => Dimension(1, vec![<>])
 }
 
-pub VarDeclaration: Variable = {
+VarDeclaration: Variable = {
     LET <id: ID> COLON <dtype: Type> <dim: Dimension?> <value: (ASSIGN <Expr>)?> SEMICOLON => Variable {
         id: String::from(id),
         data_type: dtype,
@@ -93,14 +93,14 @@ VarRefIndex: Vec<Index> = {
     LBRACKET <a:Indexing> RLBRACKET <b:Indexing> RBRACKET => vec![<>]
 }
 
-pub VarReference: VarRef = {
+VarReference: VarRef = {
     <id: ID> <indexing: VarRefIndex?> => VarRef {
         id: String::from(id),
         indexing: indexing
     } 
 }
 
-pub VarAssignment: ast::Statement = <var: VarReference> ASSIGN <exp: Expr> => ast::Statement::VarAssign(var, exp);
+VarAssignment: ast::Statement = <var: VarReference> ASSIGN <exp: Expr> => ast::Statement::VarAssign(var, exp);
 
 
 // Operators
@@ -136,7 +136,7 @@ Tier<Operator, NextTerm>: Box<Expr> = {
     NextTerm
 }
 
-pub Expr: Box<Expr> = Tier<ExprOp, LogicExpr>;
+Expr: Box<Expr> = Tier<ExprOp, LogicExpr>;
 
 LogicExpr: Box<Expr> = {
     MathExpr LogicOp MathExpr => Box::new(Expr::Op(<>)),
@@ -167,9 +167,9 @@ FuncParam: FunctionParam = <id: ID> COLON <dtype: Type> => FunctionParam(String:
 
 CallParams = Comma<Expr>;
 
-pub FunctionParams = Comma<FuncParam>;
+FunctionParams = Comma<FuncParam>;
 
-pub FnSignature: FunctionSignature = FN <id: CALL_ID> <params: FunctionParams> RPAREN COLON <dtype: Type> => FunctionSignature {
+FnSignature: FunctionSignature = FN <id: CALL_ID> <params: FunctionParams> RPAREN COLON <dtype: Type> => FunctionSignature {
     id:  String::from(&id[..id.len() - 1]),
     data_type: dtype,
     params: params
@@ -177,6 +177,7 @@ pub FnSignature: FunctionSignature = FN <id: CALL_ID> <params: FunctionParams> R
 
 FunctionItem: ast::Statement = {
     Statement,
+    ReturnStatement,
     VarDeclaration => ast::Statement::VarDeclaration(<>),
 }
 
@@ -190,14 +191,15 @@ Function: ast::Function = <signature: FnSignature> <block: FunctionBlock> => ast
 FunctionCall: Expr = <id: CALL_ID> <params: CallParams> RPAREN => 
     Expr::FunctionCall(String::from(&id[..id.len() - 1]), params);
 
+ReturnStatement: ast::Statement = RETURN <Expr> SEMICOLON => ast::Statement::Return(<>);
 
-pub Statement = {
+Statement = {
     Condition,
     Loop,
     LineStatement
 }
 
-pub GlobalStatement: ast::Statement = {
+GlobalStatement: ast::Statement = {
     Function => ast::Statement::FunctionDeclaration(<>),
     Statement,
     VarDeclaration =>  ast::Statement::VarDeclaration(<>)
@@ -273,6 +275,7 @@ match {
     "true" => TRUE,
     "false" => FALSE,
     "fn" => FN,
+    "return" => RETURN,
     r"for\s*\(" => FOR, // TODO Fix joint ( w/ custom tokenizer
     r"while\s*\(" => WHILE,
     "in" => IN,

@@ -11,6 +11,7 @@ fn main() {
             5;
             callFn();
             let x: int = 5;
+            return x;
         }
 
         let x: float;

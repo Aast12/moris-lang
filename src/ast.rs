@@ -96,7 +96,8 @@ pub enum Statement {
     If { condition: Box<Expr>, if_block: Block, else_block: Option<Block>},
     For { iterator_id: String, iterable: Box<Expr>, block: Block},
     While { condition: Box<Expr>, block: Block},
-    FunctionDeclaration(Function)
+    FunctionDeclaration(Function),
+    Return(Box<Expr>),
 }
 
 #[derive(Debug)]
