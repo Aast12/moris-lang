@@ -1,5 +1,5 @@
-use moris_lang::{self, parser::grammar::{ExprParser, DimensionParser, VarDeclarationParser, VarReferenceParser, VarAssignmentParser, FunctionParamsParser, FnSignatureParser, StatementParser, GlobalStatementParser}, ast::{Expr, Variable, Dimension}};
-use moris_lang::ast;
+use moris_lang::{self, parser::grammar::{ExprParser, DimensionParser, VarDeclarationParser, VarReferenceParser, VarAssignmentParser, FunctionParamsParser, FnSignatureParser, StatementParser, GlobalStatementParser}, syntax::{Expr, Variable, Dimension}};
+use moris_lang::syntax;
 fn test_expr_eq(parser: &ExprParser, in_str: &str, test_str: &str) {
     parser.parse(in_str).unwrap();
 
@@ -19,7 +19,7 @@ fn test_expr_fail(parser: &ExprParser, in_str: &str) {
 #[test]
 fn grammar_test() {
     let parser = ExprParser::new();
-    let x = ast::TypeConst::Bool(false);
+    let x = syntax::TypeConst::Bool(false);
     // Constants
 
     // let dimparser = DimensionParser::new().parse("[5][3 + 2]").unwrap();
