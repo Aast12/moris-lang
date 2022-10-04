@@ -20,7 +20,7 @@ fn test_program() {
         let x:int = readNumber();
 
         fn fibonacci(x: int): int {
-            if (x == 0 || x == 1) {
+            if (x == 0||x == 1) {
                 return 1;
             }
 
@@ -34,6 +34,7 @@ fn test_program() {
 
 #[test]
 fn test_expressions() {
+
     expect_success("5 + 2 - 3 * (5 + 10) / 3;");
     expect_success("5 + 2- 3 *(5 + 10)/ 3;");
     expect_success("5 |> fn2;");
@@ -164,11 +165,34 @@ fn test_for() {
     expect_success("for(it in iterable) {}");
 
 
+    expect_fail("for (it in iterable) {
+        let x:int = 2;
+    }");
     expect_fail("in + 2;");
-    expect_fail("in + 2;");
+    expect_fail("for + 2;");
     expect_fail("for(it in iterable){
         let x:int = 3;
     }");
     expect_fail("for(let it in iterable){}");
     expect_fail("for(it initerable){}");
+}
+
+
+#[test]
+fn test_while() {
+    expect_success("while (x == 2) it = it + 1;");
+    expect_success("while (true) {
+        x = x + 2;
+    }");
+    expect_success("while(a && b && c){
+        it = it + 1;    
+    }");
+    expect_success("while(a || b) {}");
+
+
+    expect_fail("while (true) {
+        let x:int = 2;
+    }");
+    expect_fail("while + 2;");
+    expect_fail("while(let x:int = 1){}");
 }
