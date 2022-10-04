@@ -15,6 +15,24 @@ fn expect_success(in_str: &str) {
 }
 
 #[test]
+fn test_program() {
+    expect_success("
+        let x:int = readNumber();
+
+        fn fibonacci(x: int): int {
+            if (x == 0 || x == 1) {
+                return 1;
+            }
+
+            return fibonacci(x - 1) + fibonacci(x - 2);
+        }
+
+        print(fibonacci(x));
+    ");
+
+}
+
+#[test]
 fn test_expressions() {
     expect_success("5 + 2 - 3 * (5 + 10) / 3;");
     expect_success("5 + 2- 3 *(5 + 10)/ 3;");

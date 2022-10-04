@@ -177,7 +177,6 @@ FnSignature: FunctionSignature = FN <id: CALL_ID> <params: FunctionParams> RPARE
 
 FunctionItem: syntax::Statement = {
     Statement,
-    ReturnStatement,
     VarDeclaration => syntax::Statement::VarDeclaration(<>),
 }
 
@@ -196,7 +195,8 @@ ReturnStatement: syntax::Statement = RETURN <Expr> SEMICOLON => syntax::Statemen
 Statement = {
     Condition,
     Loop,
-    LineStatement
+    ReturnStatement,
+    LineStatement,
 }
 
 GlobalStatement: syntax::Statement = {
