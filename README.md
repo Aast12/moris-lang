@@ -22,6 +22,7 @@
 Por hacer / Siguientes pasos:
 
 - Documentación de sintaxis (diagramas).
-- Pruebas unitarias para la sintaxis.
+- Mejorar pruebas para la sintaxis, actualmente solo hay pruebas para validar si un programa es válido.
 - Agregar `continue` y `break`.
+- Operador `NOT`.
 - Implementación de acciones en reconocimiento de sintaxis.
