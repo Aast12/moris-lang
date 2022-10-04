@@ -1,4 +1,6 @@
-# Moris
+# Moris Lang
+
+**Autor:** Andrés Alam Sánchez Torres (A00824854)
 
 ## Status
 
