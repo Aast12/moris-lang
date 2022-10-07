@@ -1,7 +1,7 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 1c8fdd532ae711b8e7db57ae70480282f83856216e2cd49861024c7a188b1d85
+// sha3: be46a9f5a45c8f20ad7fb87b05f3d1f25a3e2995122d59e543de19f9bf3b0160
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+use crate::ast::{Expr, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
 use crate::ast;
 use crate::ast::types;
 #[allow(unused_extern_crates)]
@@ -16,7 +16,7 @@ mod __parse__Program {
     #![allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens, clippy::all)]
 
     use std::str::FromStr;
-    use crate::ast::{Expr, Operator, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+    use crate::ast::{Expr, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
     use crate::ast;
     use crate::ast::types;
     #[allow(unused_extern_crates)]
@@ -43,7 +43,7 @@ mod __parse__Program {
         Variant11(ast::Statement),
         Variant12(Dimension),
         Variant13(core::option::Option<Dimension>),
-        Variant14(Operator),
+        Variant14(types::Operator),
         Variant15(FunctionSignature),
         Variant16(core::option::Option<FunctionParam>),
         Variant17(ast::Function),
@@ -1670,17 +1670,6 @@ mod __parse__Program {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant14<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Operator, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant14(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
     fn __pop_Variant8<
       'input,
     >(
@@ -1887,6 +1876,17 @@ mod __parse__Program {
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant20(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant14<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, types::Operator, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant14(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -4448,7 +4448,7 @@ pub use self::__parse__Program::ProgramParser;
 mod __intern_token {
     #![allow(unused_imports)]
     use std::str::FromStr;
-    use crate::ast::{Expr, Operator, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+    use crate::ast::{Expr, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
     use crate::ast;
     use crate::ast::types;
     #[allow(unused_extern_crates)]
@@ -4885,9 +4885,9 @@ fn __action30<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Operator
+) -> types::Operator
 {
-    Operator::And
+    types::Operator::And
 }
 
 #[allow(unused_variables)]
@@ -4896,9 +4896,9 @@ fn __action31<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Operator
+) -> types::Operator
 {
-    Operator::Or
+    types::Operator::Or
 }
 
 #[allow(unused_variables)]
@@ -4907,9 +4907,9 @@ fn __action32<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Operator
+) -> types::Operator
 {
-    Operator::LessThan
+    types::Operator::LessThan
 }
 
 #[allow(unused_variables)]
@@ -4918,9 +4918,9 @@ fn __action33<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Operator
+) -> types::Operator
 {
-    Operator::GreaterThan
+    types::Operator::GreaterThan
 }
 
 #[allow(unused_variables)]
@@ -4929,9 +4929,9 @@ fn __action34<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Operator
+) -> types::Operator
 {
-    Operator::NotEq
+    types::Operator::NotEq
 }
 
 #[allow(unused_variables)]
@@ -4940,9 +4940,9 @@ fn __action35<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Operator
+) -> types::Operator
 {
-    Operator::Eq
+    types::Operator::Eq
 }
 
 #[allow(unused_variables)]
@@ -4951,9 +4951,9 @@ fn __action36<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Operator
+) -> types::Operator
 {
-    Operator::Add
+    types::Operator::Add
 }
 
 #[allow(unused_variables)]
@@ -4962,9 +4962,9 @@ fn __action37<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Operator
+) -> types::Operator
 {
-    Operator::Sub
+    types::Operator::Sub
 }
 
 #[allow(unused_variables)]
@@ -4973,9 +4973,9 @@ fn __action38<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Operator
+) -> types::Operator
 {
-    Operator::Mul
+    types::Operator::Mul
 }
 
 #[allow(unused_variables)]
@@ -4984,9 +4984,9 @@ fn __action39<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Operator
+) -> types::Operator
 {
-    Operator::Div
+    types::Operator::Div
 }
 
 #[allow(unused_variables)]
@@ -4995,9 +4995,9 @@ fn __action40<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Operator
+) -> types::Operator
 {
-    Operator::Pipe
+    types::Operator::Pipe
 }
 
 #[allow(unused_variables)]
@@ -5017,7 +5017,7 @@ fn __action42<
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expr>, usize),
-    (_, __1, _): (usize, Operator, usize),
+    (_, __1, _): (usize, types::Operator, usize),
     (_, __2, _): (usize, Box<Expr>, usize),
 ) -> Box<Expr>
 {
@@ -5063,12 +5063,12 @@ fn __action46<
 >(
     input: &'input str,
     (_, factor, _): (usize, Box<Expr>, usize),
-    (_, _, _): (usize, Operator, usize),
+    (_, _, _): (usize, types::Operator, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, id, _): (usize, Box<Expr>, usize),
 ) -> Box<Expr>
 {
-    Box::new(Expr::Op(factor, Operator::ForwardPipe, id))
+    Box::new(Expr::Op(factor, types::Operator::ForwardPipe, id))
 }
 
 #[allow(unused_variables)]
@@ -5077,7 +5077,7 @@ fn __action47<
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expr>, usize),
-    (_, __1, _): (usize, Operator, usize),
+    (_, __1, _): (usize, types::Operator, usize),
     (_, __2, _): (usize, Box<Expr>, usize),
 ) -> Box<Expr>
 {
@@ -5658,7 +5658,7 @@ fn __action94<
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expr>, usize),
-    (_, __1, _): (usize, Operator, usize),
+    (_, __1, _): (usize, types::Operator, usize),
     (_, __2, _): (usize, Box<Expr>, usize),
 ) -> Box<Expr>
 {
@@ -5682,7 +5682,7 @@ fn __action96<
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expr>, usize),
-    (_, __1, _): (usize, Operator, usize),
+    (_, __1, _): (usize, types::Operator, usize),
     (_, __2, _): (usize, Box<Expr>, usize),
 ) -> Box<Expr>
 {
@@ -5706,7 +5706,7 @@ fn __action98<
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expr>, usize),
-    (_, __1, _): (usize, Operator, usize),
+    (_, __1, _): (usize, types::Operator, usize),
     (_, __2, _): (usize, Box<Expr>, usize),
 ) -> Box<Expr>
 {

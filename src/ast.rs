@@ -5,7 +5,6 @@ pub mod types;
 
 use std::fmt::{Debug, Error, Formatter};
 
-
 #[derive(Debug)]
 pub enum Index {
     Simple(Box<Expr>),
@@ -43,28 +42,11 @@ pub enum TypeConst {
 #[derive(Debug)]
 pub enum Expr {
     Const(TypeConst),
-    Op(Box<Expr>, Operator, Box<Expr>),
+    Op(Box<Expr>, types::Operator, Box<Expr>),
     ParenthOp(Box<Expr>),
     Var(VarRef),
     FunctionCall(String, Vec<Box<Expr>>),
     Error,
-}
-
-#[derive(Clone, Copy, Debug)]
-pub enum Operator {
-    Mul,
-    Div,
-    Add,
-    Sub,
-    Pipe,
-    ForwardPipe,
-    And,
-    Or,
-    LessThan,
-    GreaterThan,
-    NotEq,
-    Eq,
-    Assign,
 }
 
 #[derive(Debug)]
@@ -139,9 +121,9 @@ pub struct Program(pub Vec<Statement>);
 //     }
 // }
 
-// impl Debug for Operator {
+// impl Debug for types::Operator {
 //     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
-//         use self::Operator::*;
+//         use self::types::Operator::*;
 //         match *self {
 //             Mul => write!(fmt, "*"),
 //             Div => write!(fmt, "/"),

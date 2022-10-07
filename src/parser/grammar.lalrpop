@@ -1,5 +1,5 @@
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+use crate::ast::{Expr, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
 use crate::ast;
 use crate::ast::types;
 
@@ -106,34 +106,34 @@ VarAssignment: ast::Statement = <var: VarReference> ASSIGN <exp: Expr> => ast::S
 
 // Operators
 
-ExprOp: Operator = {
-    AND => Operator::And,
-    OR => Operator::Or
+ExprOp: types::Operator = {
+    AND => types::Operator::And,
+    OR => types::Operator::Or
 }
 
-LogicOp: Operator = {
-    LT => Operator::LessThan,
-    GT => Operator::GreaterThan,
-    NOTEQUAL => Operator::NotEq,
-    EQUAL => Operator::Eq,
+LogicOp: types::Operator = {
+    LT => types::Operator::LessThan,
+    GT => types::Operator::GreaterThan,
+    NOTEQUAL => types::Operator::NotEq,
+    EQUAL => types::Operator::Eq,
 }
 
-MathOp: Operator = {
-    ADD => Operator::Add,
-    SUB => Operator::Sub,
+MathOp: types::Operator = {
+    ADD => types::Operator::Add,
+    SUB => types::Operator::Sub,
 }
 
-FactorOp: Operator = {
-    MUL => Operator::Mul,
-    DIV => Operator::Div,
+FactorOp: types::Operator = {
+    MUL => types::Operator::Mul,
+    DIV => types::Operator::Div,
 }
 
-PipeOp: Operator = PIPE => Operator::Pipe;
+PipeOp: types::Operator = PIPE => types::Operator::Pipe;
 
 // Expressions
 
-Tier<Operator, NextTerm>: Box<Expr> = {
-    Tier<Operator, NextTerm> Operator NextTerm => Box::new(Expr::Op(<>)),
+Tier<Op, NextTerm>: Box<Expr> = {
+    Tier<Op, NextTerm> Op NextTerm => Box::new(Expr::Op(<>)),
     NextTerm
 }
 
@@ -149,7 +149,7 @@ MathExpr: Box<Expr> = Tier<MathOp, Term>;
 Term: Box<Expr> = Tier<FactorOp, Factor>;
 
 Factor: Box<Expr> = {
-    <factor:Factor> PipeOp FORWARD <id:Boxed<Id>> => Box::new(Expr::Op(factor, Operator::ForwardPipe, id)),
+    <factor:Factor> PipeOp FORWARD <id:Boxed<Id>> => Box::new(Expr::Op(factor, types::Operator::ForwardPipe, id)),
     Factor PipeOp Boxed<Id> => Box::new(Expr::Op(<>)),
     Item,
 }
