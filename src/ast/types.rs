@@ -25,7 +25,7 @@ pub enum DataType {
     String,
     DataFrame,
     Void,
-    Function(Box<ast::FunctionSignature>),
+    Function(Box<FunctionSignature>),
 }
 
 #[derive(Debug)]
@@ -34,4 +34,11 @@ pub struct Variable {
     pub data_type: DataType,
     pub dimension: ast::Dimension,
     pub value: Option<Box<ast::Expr>>,
+}
+
+#[derive(Debug)]
+pub struct FunctionSignature {
+    pub id: String,
+    pub data_type: DataType,
+    pub params: Vec<ast::FunctionParam>,
 }

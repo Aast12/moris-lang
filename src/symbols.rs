@@ -4,7 +4,7 @@ use moris_lang::ast;
 
 pub enum Symbol {
     Variable(ast::types::Variable),
-    Function(ast::FunctionSignature),
+    Function(ast::types::FunctionSignature),
 }
 
 pub struct SymbolTable<'parent> {

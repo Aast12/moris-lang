@@ -43,15 +43,8 @@ pub enum Expr {
 pub struct FunctionParam(pub String, pub types::DataType);
 
 #[derive(Debug)]
-pub struct FunctionSignature {
-    pub id: String,
-    pub data_type: types::DataType,
-    pub params: Vec<FunctionParam>,
-}
-
-#[derive(Debug)]
 pub struct Function {
-    pub signature: FunctionSignature,
+    pub signature: types::FunctionSignature,
     pub block: Block,
 }
 

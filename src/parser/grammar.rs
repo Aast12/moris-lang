@@ -1,7 +1,7 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: c4f61243cbaf09f7375a1bfe553109c4d91f490b59bb218c8e93738a8e3bc5ee
+// sha3: 8f8f4fd5bf211e0d543166d1b03d24e7072eebf37a741c8e7e2ddd4828fdacdd
 use std::str::FromStr;
-use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, FunctionSignature};
+use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
 use crate::ast;
 use crate::ast::types;
 #[allow(unused_extern_crates)]
@@ -16,7 +16,7 @@ mod __parse__Program {
     #![allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens, clippy::all)]
 
     use std::str::FromStr;
-    use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, FunctionSignature};
+    use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
     use crate::ast;
     use crate::ast::types;
     #[allow(unused_extern_crates)]
@@ -44,7 +44,7 @@ mod __parse__Program {
         Variant12(Dimension),
         Variant13(core::option::Option<Dimension>),
         Variant14(types::Operator),
-        Variant15(FunctionSignature),
+        Variant15(types::FunctionSignature),
         Variant16(core::option::Option<FunctionParam>),
         Variant17(ast::Function),
         Variant18(Expr),
@@ -1648,17 +1648,6 @@ mod __parse__Program {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant15<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, FunctionSignature, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
     fn __pop_Variant21<
       'input,
     >(
@@ -1865,6 +1854,17 @@ mod __parse__Program {
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant20(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant15<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, types::FunctionSignature, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -4448,7 +4448,7 @@ pub use self::__parse__Program::ProgramParser;
 mod __intern_token {
     #![allow(unused_imports)]
     use std::str::FromStr;
-    use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, FunctionSignature};
+    use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
     use crate::ast;
     use crate::ast::types;
     #[allow(unused_extern_crates)]
@@ -5187,9 +5187,9 @@ fn __action56<
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, dtype, _): (usize, types::DataType, usize),
-) -> FunctionSignature
+) -> types::FunctionSignature
 {
-    FunctionSignature {
+    types::FunctionSignature {
     id:  String::from(&id[..id.len() - 1]),
     data_type: dtype,
     params: params
@@ -5236,7 +5236,7 @@ fn __action60<
     'input,
 >(
     input: &'input str,
-    (_, signature, _): (usize, FunctionSignature, usize),
+    (_, signature, _): (usize, types::FunctionSignature, usize),
     (_, block, _): (usize, ast::Block, usize),
 ) -> ast::Function
 {
