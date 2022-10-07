@@ -27,3 +27,11 @@ pub enum DataType {
     Void,
     Function(Box<ast::FunctionSignature>),
 }
+
+#[derive(Debug)]
+pub struct Variable {
+    pub id: String,
+    pub data_type: DataType,
+    pub dimension: ast::Dimension,
+    pub value: Option<Box<ast::Expr>>,
+}

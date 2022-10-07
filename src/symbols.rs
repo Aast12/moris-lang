@@ -1,9 +1,9 @@
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
 use moris_lang::ast;
 
 pub enum Symbol {
-    Variable(ast::Variable),
+    Variable(ast::types::Variable),
     Function(ast::FunctionSignature),
 }
 
@@ -57,7 +57,7 @@ mod tests {
     #[test]
     fn insert_symbol() {
         let mut table = SymbolTable::new();
-        let sym = Symbol::Variable(ast::Variable {
+        let sym = Symbol::Variable(ast::types::Variable {
             data_type: ast::types::DataType::Bool,
             id: String::from("is_cond"),
             dimension: ast::Dimension(0, vec![]),

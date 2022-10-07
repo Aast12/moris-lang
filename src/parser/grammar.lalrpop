@@ -1,5 +1,5 @@
 use std::str::FromStr;
-use crate::ast::{Expr, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, FunctionSignature};
 use crate::ast;
 use crate::ast::types;
 
@@ -79,8 +79,8 @@ Dimension: Dimension = {
     LBRACKET <Expr> RBRACKET => Dimension(1, vec![<>])
 }
 
-VarDeclaration: Variable = {
-    LET <id: ID> COLON <dtype: Type> <dim: Dimension?> <value: (ASSIGN <Expr>)?> SEMICOLON => Variable {
+VarDeclaration: types::Variable = {
+    LET <id: ID> COLON <dtype: Type> <dim: Dimension?> <value: (ASSIGN <Expr>)?> SEMICOLON => types::Variable {
         id: String::from(id),
         data_type: dtype,
         dimension: dim.unwrap_or(Dimension(0, vec![])),

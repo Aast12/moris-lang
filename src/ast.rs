@@ -12,17 +12,7 @@ pub enum Index {
 }
 
 #[derive(Debug)]
-pub struct Dimension(pub i8, pub Vec<Box<Expr>>);
-// dimensions: i8, // 0, 1, 2 dim limit
-// shape:
-
-#[derive(Debug)]
-pub struct Variable {
-    pub id: String,
-    pub data_type: types::DataType,
-    pub dimension: Dimension,
-    pub value: Option<Box<Expr>>,
-}
+pub struct Dimension(pub i8, pub Vec<Box<Expr>>); // dimensions number, dimension sizes
 
 #[derive(Debug)]
 pub struct VarRef {
@@ -67,7 +57,7 @@ pub struct Function {
 
 #[derive(Debug)]
 pub enum Statement {
-    VarDeclaration(Variable),
+    VarDeclaration(types::Variable),
     VarAssign(VarRef, Box<Expr>),
     Expression(Box<Expr>),
     If {

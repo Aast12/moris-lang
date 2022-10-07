@@ -1,7 +1,7 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: be46a9f5a45c8f20ad7fb87b05f3d1f25a3e2995122d59e543de19f9bf3b0160
+// sha3: c4f61243cbaf09f7375a1bfe553109c4d91f490b59bb218c8e93738a8e3bc5ee
 use std::str::FromStr;
-use crate::ast::{Expr, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, FunctionSignature};
 use crate::ast;
 use crate::ast::types;
 #[allow(unused_extern_crates)]
@@ -16,7 +16,7 @@ mod __parse__Program {
     #![allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens, clippy::all)]
 
     use std::str::FromStr;
-    use crate::ast::{Expr, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+    use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, FunctionSignature};
     use crate::ast;
     use crate::ast::types;
     #[allow(unused_extern_crates)]
@@ -52,7 +52,7 @@ mod __parse__Program {
         Variant20(types::DataType),
         Variant21(Index),
         Variant22(ast::Program),
-        Variant23(Variable),
+        Variant23(types::Variable),
         Variant24(Vec<Index>),
         Variant25(core::option::Option<Vec<Index>>),
         Variant26(VarRef),
@@ -1692,17 +1692,6 @@ mod __parse__Program {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant23<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Variable, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant23(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
     fn __pop_Variant9<
       'input,
     >(
@@ -1887,6 +1876,17 @@ mod __parse__Program {
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant14(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant23<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, types::Variable, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant23(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -4448,7 +4448,7 @@ pub use self::__parse__Program::ProgramParser;
 mod __intern_token {
     #![allow(unused_imports)]
     use std::str::FromStr;
-    use crate::ast::{Expr, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+    use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, FunctionSignature};
     use crate::ast;
     use crate::ast::types;
     #[allow(unused_extern_crates)]
@@ -4813,9 +4813,9 @@ fn __action25<
     (_, dim, _): (usize, core::option::Option<Dimension>, usize),
     (_, value, _): (usize, core::option::Option<Box<Expr>>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Variable
+) -> types::Variable
 {
-    Variable {
+    types::Variable {
         id: String::from(id),
         data_type: dtype,
         dimension: dim.unwrap_or(Dimension(0, vec![])),
@@ -5212,7 +5212,7 @@ fn __action58<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Variable, usize),
+    (_, __0, _): (usize, types::Variable, usize),
 ) -> ast::Statement
 {
     ast::Statement::VarDeclaration(__0)
@@ -5343,7 +5343,7 @@ fn __action69<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Variable, usize),
+    (_, __0, _): (usize, types::Variable, usize),
 ) -> ast::Statement
 {
     ast::Statement::VarDeclaration(__0)
@@ -6278,7 +6278,7 @@ fn __action137<
     __5: (usize, &'input str, usize),
     __6: (usize, Box<Expr>, usize),
     __7: (usize, &'input str, usize),
-) -> Variable
+) -> types::Variable
 {
     let __start0 = __5.0.clone();
     let __end0 = __6.2.clone();
@@ -6311,7 +6311,7 @@ fn __action138<
     __3: (usize, types::DataType, usize),
     __4: (usize, core::option::Option<Dimension>, usize),
     __5: (usize, &'input str, usize),
-) -> Variable
+) -> types::Variable
 {
     let __start0 = __4.2.clone();
     let __end0 = __5.0.clone();
@@ -6429,7 +6429,7 @@ fn __action142<
     __5: (usize, &'input str, usize),
     __6: (usize, Box<Expr>, usize),
     __7: (usize, &'input str, usize),
-) -> Variable
+) -> types::Variable
 {
     let __start0 = __4.0.clone();
     let __end0 = __4.2.clone();
@@ -6463,7 +6463,7 @@ fn __action143<
     __4: (usize, &'input str, usize),
     __5: (usize, Box<Expr>, usize),
     __6: (usize, &'input str, usize),
-) -> Variable
+) -> types::Variable
 {
     let __start0 = __3.2.clone();
     let __end0 = __4.0.clone();
@@ -6497,7 +6497,7 @@ fn __action144<
     __3: (usize, types::DataType, usize),
     __4: (usize, Dimension, usize),
     __5: (usize, &'input str, usize),
-) -> Variable
+) -> types::Variable
 {
     let __start0 = __4.0.clone();
     let __end0 = __4.2.clone();
@@ -6527,7 +6527,7 @@ fn __action145<
     __2: (usize, &'input str, usize),
     __3: (usize, types::DataType, usize),
     __4: (usize, &'input str, usize),
-) -> Variable
+) -> types::Variable
 {
     let __start0 = __3.2.clone();
     let __end0 = __4.0.clone();
