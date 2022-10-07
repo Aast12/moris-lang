@@ -1,8 +1,9 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: f4eb320d314b15082b4b3b4a00c0722bc481cfb14a6edcd0c5d0ad739a7d0183
+// sha3: 1c8fdd532ae711b8e7db57ae70480282f83856216e2cd49861024c7a188b1d85
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+use crate::ast::{Expr, Operator, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
 use crate::ast;
+use crate::ast::types;
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 #[allow(unused_imports)]
@@ -15,8 +16,9 @@ mod __parse__Program {
     #![allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens, clippy::all)]
 
     use std::str::FromStr;
-    use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+    use crate::ast::{Expr, Operator, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
     use crate::ast;
+    use crate::ast::types;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -47,7 +49,7 @@ mod __parse__Program {
         Variant17(ast::Function),
         Variant18(Expr),
         Variant19(alloc::vec::Vec<ast::Statement>),
-        Variant20(DataType),
+        Variant20(types::DataType),
         Variant21(Index),
         Variant22(ast::Program),
         Variant23(Variable),
@@ -1613,17 +1615,6 @@ mod __parse__Program {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant20<
-      'input,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, DataType, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant20(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
     fn __pop_Variant12<
       'input,
     >(
@@ -1885,6 +1876,17 @@ mod __parse__Program {
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant20<
+      'input,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, types::DataType, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant20(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -4446,8 +4448,9 @@ pub use self::__parse__Program::ProgramParser;
 mod __intern_token {
     #![allow(unused_imports)]
     use std::str::FromStr;
-    use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+    use crate::ast::{Expr, Operator, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
     use crate::ast;
+    use crate::ast::types;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -4527,9 +4530,9 @@ fn __action1<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> DataType
+) -> types::DataType
 {
-    DataType::Int
+    types::DataType::Int
 }
 
 #[allow(unused_variables)]
@@ -4538,9 +4541,9 @@ fn __action2<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> DataType
+) -> types::DataType
 {
-    DataType::Float
+    types::DataType::Float
 }
 
 #[allow(unused_variables)]
@@ -4549,9 +4552,9 @@ fn __action3<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> DataType
+) -> types::DataType
 {
-    DataType::Bool
+    types::DataType::Bool
 }
 
 #[allow(unused_variables)]
@@ -4560,9 +4563,9 @@ fn __action4<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> DataType
+) -> types::DataType
 {
-    DataType::String
+    types::DataType::String
 }
 
 #[allow(unused_variables)]
@@ -4571,9 +4574,9 @@ fn __action5<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> DataType
+) -> types::DataType
 {
-    DataType::DataFrame
+    types::DataType::DataFrame
 }
 
 #[allow(unused_variables)]
@@ -4581,8 +4584,8 @@ fn __action6<
     'input,
 >(
     input: &'input str,
-    (_, __0, _): (usize, DataType, usize),
-) -> DataType
+    (_, __0, _): (usize, types::DataType, usize),
+) -> types::DataType
 {
     __0
 }
@@ -4593,9 +4596,9 @@ fn __action7<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> DataType
+) -> types::DataType
 {
-    DataType::Void
+    types::DataType::Void
 }
 
 #[allow(unused_variables)]
@@ -4806,7 +4809,7 @@ fn __action25<
     (_, _, _): (usize, &'input str, usize),
     (_, id, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, dtype, _): (usize, DataType, usize),
+    (_, dtype, _): (usize, types::DataType, usize),
     (_, dim, _): (usize, core::option::Option<Dimension>, usize),
     (_, value, _): (usize, core::option::Option<Box<Expr>>, usize),
     (_, _, _): (usize, &'input str, usize),
@@ -5145,7 +5148,7 @@ fn __action53<
     input: &'input str,
     (_, id, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, dtype, _): (usize, DataType, usize),
+    (_, dtype, _): (usize, types::DataType, usize),
 ) -> FunctionParam
 {
     FunctionParam(String::from(id), dtype)
@@ -5183,7 +5186,7 @@ fn __action56<
     (_, params, _): (usize, Vec<FunctionParam>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, dtype, _): (usize, DataType, usize),
+    (_, dtype, _): (usize, types::DataType, usize),
 ) -> FunctionSignature
 {
     FunctionSignature {
@@ -6270,7 +6273,7 @@ fn __action137<
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
     __2: (usize, &'input str, usize),
-    __3: (usize, DataType, usize),
+    __3: (usize, types::DataType, usize),
     __4: (usize, core::option::Option<Dimension>, usize),
     __5: (usize, &'input str, usize),
     __6: (usize, Box<Expr>, usize),
@@ -6305,7 +6308,7 @@ fn __action138<
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
     __2: (usize, &'input str, usize),
-    __3: (usize, DataType, usize),
+    __3: (usize, types::DataType, usize),
     __4: (usize, core::option::Option<Dimension>, usize),
     __5: (usize, &'input str, usize),
 ) -> Variable
@@ -6421,7 +6424,7 @@ fn __action142<
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
     __2: (usize, &'input str, usize),
-    __3: (usize, DataType, usize),
+    __3: (usize, types::DataType, usize),
     __4: (usize, Dimension, usize),
     __5: (usize, &'input str, usize),
     __6: (usize, Box<Expr>, usize),
@@ -6456,7 +6459,7 @@ fn __action143<
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
     __2: (usize, &'input str, usize),
-    __3: (usize, DataType, usize),
+    __3: (usize, types::DataType, usize),
     __4: (usize, &'input str, usize),
     __5: (usize, Box<Expr>, usize),
     __6: (usize, &'input str, usize),
@@ -6491,7 +6494,7 @@ fn __action144<
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
     __2: (usize, &'input str, usize),
-    __3: (usize, DataType, usize),
+    __3: (usize, types::DataType, usize),
     __4: (usize, Dimension, usize),
     __5: (usize, &'input str, usize),
 ) -> Variable
@@ -6522,7 +6525,7 @@ fn __action145<
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
     __2: (usize, &'input str, usize),
-    __3: (usize, DataType, usize),
+    __3: (usize, types::DataType, usize),
     __4: (usize, &'input str, usize),
 ) -> Variable
 {

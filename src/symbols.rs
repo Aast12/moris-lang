@@ -58,7 +58,7 @@ mod tests {
     fn insert_symbol() {
         let mut table = SymbolTable::new();
         let sym = Symbol::Variable(ast::Variable {
-            data_type: ast::DataType::Bool,
+            data_type: ast::types::DataType::Bool,
             id: String::from("is_cond"),
             dimension: ast::Dimension(0, vec![]),
             value: None,

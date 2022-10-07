@@ -1,19 +1,10 @@
 pub mod expressions;
 pub mod node;
 pub mod quadruples;
+pub mod types;
 
 use std::fmt::{Debug, Error, Formatter};
 
-#[derive(Debug)]
-pub enum DataType {
-    Int,
-    Float,
-    Bool,
-    String,
-    DataFrame,
-    Void,
-    Function(Box<FunctionSignature>),
-}
 
 #[derive(Debug)]
 pub enum Index {
@@ -29,7 +20,7 @@ pub struct Dimension(pub i8, pub Vec<Box<Expr>>);
 #[derive(Debug)]
 pub struct Variable {
     pub id: String,
-    pub data_type: DataType,
+    pub data_type: types::DataType,
     pub dimension: Dimension,
     pub value: Option<Box<Expr>>,
 }
@@ -77,12 +68,12 @@ pub enum Operator {
 }
 
 #[derive(Debug)]
-pub struct FunctionParam(pub String, pub DataType);
+pub struct FunctionParam(pub String, pub types::DataType);
 
 #[derive(Debug)]
 pub struct FunctionSignature {
     pub id: String,
-    pub data_type: DataType,
+    pub data_type: types::DataType,
     pub params: Vec<FunctionParam>,
 }
 

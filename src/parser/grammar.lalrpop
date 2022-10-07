@@ -1,6 +1,7 @@
 use std::str::FromStr;
-use crate::ast::{Expr, Operator, TypeConst, DataType, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
+use crate::ast::{Expr, Operator, TypeConst, Index, Dimension, Variable, VarRef, FunctionParam, FunctionSignature};
 use crate::ast;
+use crate::ast::types;
 
 grammar;
 
@@ -21,17 +22,17 @@ Boxed<T>: Box<T> = T => Box::new(<>);
 
 // Types
 
-Type: DataType = {
-    T_INT => DataType::Int,
-    T_FLOAT => DataType::Float,
-    T_BOOl => DataType::Bool,
-    T_STR => DataType::String,
-    T_DATAFRAME => DataType::DataFrame,
+Type: types::DataType = {
+    T_INT => types::DataType::Int,
+    T_FLOAT => types::DataType::Float,
+    T_BOOl => types::DataType::Bool,
+    T_STR => types::DataType::String,
+    T_DATAFRAME => types::DataType::DataFrame,
 }
 
-FunctionType: DataType = {
+FunctionType: types::DataType = {
     Type,
-    T_VOID => DataType::Void
+    T_VOID => types::DataType::Void
 }
 
 Int: TypeConst = NUMBER => TypeConst::Int(i32::from_str(<>).unwrap());
