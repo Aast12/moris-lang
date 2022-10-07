@@ -8,6 +8,7 @@ pub enum DataType {
     String,
     DataFrame,
     Void,
+    Function(Box<FunctionSignature>),
 }
 
 #[derive(Debug)]
@@ -78,14 +79,13 @@ pub struct FunctionParam(pub String, pub DataType);
 pub struct FunctionSignature {
     pub id: String,
     pub data_type: DataType,
-    pub params: Vec<FunctionParam>
+    pub params: Vec<FunctionParam>,
 }
-
 
 #[derive(Debug)]
 pub struct Function {
     pub signature: FunctionSignature,
-    pub block: Block
+    pub block: Block,
 }
 
 #[derive(Debug)]
@@ -93,9 +93,20 @@ pub enum Statement {
     VarDeclaration(Variable),
     VarAssign(VarRef, Box<Expr>),
     Expression(Box<Expr>),
-    If { condition: Box<Expr>, if_block: Block, else_block: Option<Block>},
-    For { iterator_id: String, iterable: Box<Expr>, block: Block},
-    While { condition: Box<Expr>, block: Block},
+    If {
+        condition: Box<Expr>,
+        if_block: Block,
+        else_block: Option<Block>,
+    },
+    For {
+        iterator_id: String,
+        iterable: Box<Expr>,
+        block: Block,
+    },
+    While {
+        condition: Box<Expr>,
+        block: Block,
+    },
     FunctionDeclaration(Function),
     Return(Box<Expr>),
 }
@@ -105,7 +116,6 @@ pub struct Block(pub Vec<Statement>);
 
 #[derive(Debug)]
 pub struct Program(pub Vec<Statement>);
-
 
 // impl Debug for TypeConst {
 //     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {

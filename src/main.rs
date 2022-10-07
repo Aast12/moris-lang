@@ -1,4 +1,5 @@
-pub mod syntax;
+pub mod ast;
+pub mod symbols;
 
 pub mod parser;
 
