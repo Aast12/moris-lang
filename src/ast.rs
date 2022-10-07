@@ -1,3 +1,7 @@
+pub mod expressions;
+pub mod node;
+pub mod quadruples;
+
 use std::fmt::{Debug, Error, Formatter};
 
 #[derive(Debug)]
