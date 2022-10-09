@@ -11,6 +11,12 @@ pub enum Expr {
     Error,
 }
 
+#[derive(Debug)]
+pub enum Index {
+    Simple(Box<ast::Expr>),
+    Range(Box<ast::Expr>, Box<ast::Expr>),
+}
+
 pub struct Operation {
 
 }

@@ -10,9 +10,9 @@ fn main() {
     use moris_lang::ast::{quadruples::Manager, expressions::id::Id, types::DataType};
 
     let m = Manager::new();
-    let mut id = Id::new("dx", DataType::Float);
+    let mut id = Id::new("dx", Some(DataType::Float));
     id.set_manager(&m);
-    let mut id2 = Id::new("dx2", DataType::Int);
+    let mut id2 = Id::new("dx2", Some(DataType::Int));
     id2.set_manager(&m);
 
 
