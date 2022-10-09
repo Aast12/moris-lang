@@ -4,6 +4,7 @@ pub mod quadruples;
 pub mod types;
 
 use std::fmt::{Debug, Error, Formatter};
+use crate::ast::expressions::Expr;
 
 #[derive(Debug)]
 pub enum Index {
@@ -27,16 +28,6 @@ pub enum TypeConst {
     Float(f32),
     String(String),
     Vector(Vec<Box<Expr>>),
-}
-
-#[derive(Debug)]
-pub enum Expr {
-    Const(TypeConst),
-    Op(Box<Expr>, types::Operator, Box<Expr>),
-    ParenthOp(Box<Expr>),
-    Var(VarRef),
-    FunctionCall(String, Vec<Box<Expr>>),
-    Error,
 }
 
 #[derive(Debug)]

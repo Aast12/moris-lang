@@ -1,10 +1,23 @@
+use moris_lang::ast::node::Node;
+
 pub mod ast;
 pub mod symbols;
 
 pub mod parser;
 
-#[cfg(not(test))]
+// #[cfg(not(test))]
 fn main() {
+    use moris_lang::ast::{quadruples::Manager, expressions::id::Id, types::DataType};
+
+    let m = Manager::new();
+    let mut id = Id::new("dx", DataType::Float);
+    id.set_manager(&m);
+    let mut id2 = Id::new("dx2", DataType::Int);
+    id2.set_manager(&m);
+
+
+    println!("{:#?}", id.reduce().dump());
+    
     // print!("{:#?}", parser::grammar::ProgramParser::new().parse("for + 5;").unwrap());
     print!(
         "{:#?}",

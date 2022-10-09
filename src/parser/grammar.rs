@@ -1,9 +1,10 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 8f8f4fd5bf211e0d543166d1b03d24e7072eebf37a741c8e7e2ddd4828fdacdd
+// sha3: 24d75cd38f80eefbea609c87275ecce558d62048ed5bdd873b4dd1e103d7b1b7
 use std::str::FromStr;
-use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
+use crate::ast::{TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
 use crate::ast;
 use crate::ast::types;
+use crate::ast::expressions::Expr;
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 #[allow(unused_imports)]
@@ -16,9 +17,10 @@ mod __parse__Program {
     #![allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens, clippy::all)]
 
     use std::str::FromStr;
-    use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
+    use crate::ast::{TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
     use crate::ast;
     use crate::ast::types;
+    use crate::ast::expressions::Expr;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -4448,9 +4450,10 @@ pub use self::__parse__Program::ProgramParser;
 mod __intern_token {
     #![allow(unused_imports)]
     use std::str::FromStr;
-    use crate::ast::{Expr, TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
+    use crate::ast::{TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
     use crate::ast;
     use crate::ast::types;
+    use crate::ast::expressions::Expr;
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
