@@ -72,7 +72,7 @@ Const = {
 Id: Expression<'m> = ID => 
     Expression::Access(Access::new(
         Id::new(<>, None),
-        None,
+        vec![],
     ));
 
 // Variables
@@ -102,16 +102,15 @@ VarRefIndex: Vec<Index<'m>> = {
     LBRACKET <a:Indexing> RLBRACKET <b:Indexing> RBRACKET => vec![<>]
 }
 
-VarReference: VarRef<'m> = {
+VarReference: Access<'m> = {
     <id: ID> <indexing: VarRefIndex?> => 
-        VarRef {
-            id: String::from(id),
-            indexing
-        } 
+        Access::new(
+            Id::new(id, None),
+            indexing.unwrap_or(vec![])
+        )
 }
 
 VarAssignment: ast::Statement<'m> = <var: VarReference> ASSIGN <exp: Expr> => ast::Statement::VarAssign(var, exp);
-
 
 // Operators
 
@@ -184,7 +183,7 @@ Factor: Box<Expression<'m>> = {
 }
 
 Item: Box<Expression<'m>> = {
-    VarReference => Box::new(Expression::VarRef(<>)),
+    VarReference => Box::new(Expression::Access(<>)),
     Const => Box::new(Expression::Const(<>)),
     LPAREN <Expr> RPAREN => <>,
     FunctionCall => Box::new(Expression::Call(<>))

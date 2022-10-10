@@ -5,7 +5,7 @@ pub mod types;
 
 use std::fmt::{Debug, Error, Formatter};
 
-use self::expressions::{Expression, Index};
+use self::expressions::{Expression, Index, id::Access};
 
 
 #[derive(Debug)]
@@ -38,7 +38,8 @@ pub struct Function<'m> {
 #[derive(Debug)]
 pub enum Statement<'m> {
     VarDeclaration(types::Variable<'m>),
-    VarAssign(VarRef<'m>, Box<Expression<'m>>),
+    // VarAssign(VarRef<'m>, Box<Expression<'m>>),
+    VarAssign(Access<'m>, Box<Expression<'m>>),
     Expression(Box<Expression<'m>>),
     If {
         condition: Box<Expression<'m>>,

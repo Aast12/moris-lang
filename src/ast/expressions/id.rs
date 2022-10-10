@@ -13,7 +13,7 @@ pub struct Id<'m> {
 pub struct Access<'m> {
     manager: Option<&'m ast::quadruples::Manager>,
     pub id: Id<'m>,
-    pub indexing: Option<Index<'m>>,
+    pub indexing: Vec<Index<'m>>,
 }
 
 impl<'m> Id<'m> {
@@ -45,7 +45,7 @@ impl<'m> ast::node::Leaf<'m> for Id<'m> {
 impl<'m> ast::expressions::ExpressionT<'m> for Id<'m> {}
 
 impl<'m> Access<'m> {
-    pub fn new(id: Id<'m>, indexing: Option<Index<'m>>) -> Self {
+    pub fn new(id: Id<'m>, indexing: Vec<Index<'m>>) -> Self {
         Access {
             manager: None,
             id,
@@ -58,7 +58,7 @@ impl<'m> ast::node::Node<'m> for Access<'m> {
     fn set_manager(&mut self, manager: &'m ast::quadruples::Manager) -> () {
         self.manager = Some(manager);
         self.id.set_manager(manager);
-        if let Some(indexing) = &mut self.indexing {
+        for indexing in self.indexing.iter_mut() {
             indexing.set_manager(manager);
         }
     }
@@ -101,13 +101,14 @@ mod tests {
 
         let mut access = Access::new(
             Id::new(vec_id_name, None),
-            Some(Index::Simple(Box::new(Expression::Id(test_location_id)))),
+            vec![Index::Simple(Box::new(Expression::Id(test_location_id)))],
         );
 
         access.set_manager(&manager);
 
         assert_eq!(access.id.id, vec_id_name);
-        if let Some(indexing) = access.indexing {
+        let indexing_fst = access.indexing.get(0);
+        if let Some(indexing) = indexing_fst {
             match indexing {
                 Index::Simple(expr) => {
                     if let Expression::Id(id) = expr.as_ref() {

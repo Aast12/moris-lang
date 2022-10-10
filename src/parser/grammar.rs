@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 5dbd55c5c926f1d2f9a0a8dfe1af01de95e6b4ae64671985c8b638e4f682d5b9
+// sha3: ebd7f8ae66bbaaa70086697c86d47b634747a90356c2d3eefcca190b086736e2
 use std::str::FromStr;
 use crate::ast::{Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
 use crate::ast;
@@ -70,7 +70,7 @@ mod __parse__Program {
         Variant24(types::Variable<'m>),
         Variant25(Vec<Index<'m>>),
         Variant26(core::option::Option<Vec<Index<'m>>>),
-        Variant27(VarRef<'m>),
+        Variant27(Access<'m>),
     }
     const __ACTION: &[i16] = &[
         // State 0
@@ -1597,6 +1597,18 @@ mod __parse__Program {
     fn __symbol_type_mismatch() -> ! {
         panic!("symbol type mismatch")
     }
+    fn __pop_Variant27<
+      'input,
+      'm,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+    ) -> (usize, Access<'m>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant27(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
     fn __pop_Variant1<
       'input,
       'm,
@@ -1666,18 +1678,6 @@ mod __parse__Program {
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant22(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant27<
-      'input,
-      'm,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, VarRef<'m>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant27(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -4881,7 +4881,7 @@ fn __action18<
 {
     Expression::Access(Access::new(
         Id::new(__0, None),
-        None,
+        vec![],
     ))
 }
 
@@ -5002,12 +5002,12 @@ fn __action26<
     input: &'input str,
     (_, id, _): (usize, &'input str, usize),
     (_, indexing, _): (usize, core::option::Option<Vec<Index<'m>>>, usize),
-) -> VarRef<'m>
+) -> Access<'m>
 {
-    VarRef {
-            id: String::from(id),
-            indexing
-        }
+    Access::new(
+            Id::new(id, None),
+            indexing.unwrap_or(vec![])
+        )
 }
 
 #[allow(unused_variables)]
@@ -5016,7 +5016,7 @@ fn __action27<
     'm,
 >(
     input: &'input str,
-    (_, var, _): (usize, VarRef<'m>, usize),
+    (_, var, _): (usize, Access<'m>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, exp, _): (usize, Box<Expression<'m>>, usize),
 ) -> ast::Statement<'m>
@@ -5277,10 +5277,10 @@ fn __action47<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, VarRef<'m>, usize),
+    (_, __0, _): (usize, Access<'m>, usize),
 ) -> Box<Expression<'m>>
 {
-    Box::new(Expression::VarRef(__0))
+    Box::new(Expression::Access(__0))
 }
 
 #[allow(unused_variables)]
@@ -7179,7 +7179,7 @@ fn __action158<
     input: &'input str,
     __0: (usize, &'input str, usize),
     __1: (usize, Vec<Index<'m>>, usize),
-) -> VarRef<'m>
+) -> Access<'m>
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
@@ -7202,7 +7202,7 @@ fn __action159<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-) -> VarRef<'m>
+) -> Access<'m>
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
