@@ -16,11 +16,21 @@ pub enum Expr {
 }
 
 #[derive(Debug)]
-pub enum Index {
-    Simple(Box<ast::Expr>),
-    Range(Box<ast::Expr>, Box<ast::Expr>),
+pub enum Index<T> {
+    Simple(Box<T>),
+    Range(Box<T>, Box<T>),
 }
 
 pub trait Expression<'m>: ast::node::Node<'m> {}
 
-// impl<'m> ast::node::Node<'m> for dyn Expression { }
+impl<'m, T: Expression<'m>> ast::node::Node<'m> for Index<T> {
+    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager) -> () {
+        match self {
+            Self::Simple(expr) => expr.set_manager(manager),
+            Self::Range(start_expr, end_expr) => {
+                start_expr.set_manager(manager);
+                end_expr.set_manager(manager);
+            }
+        }
+    }
+}
