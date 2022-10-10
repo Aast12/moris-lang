@@ -1,6 +1,4 @@
-use crate::ast;
-
-use super::Expression;
+use crate::ast::{self, types::DataType};
 
 #[derive(Debug)]
 pub enum TypeConst {
@@ -11,15 +9,27 @@ pub enum TypeConst {
     Vector(Vec<Box<ast::expressions::Expr>>),
 }
 
-pub struct Const<'m> {
-    manager: &'m ast::quadruples::Manager
+pub struct Const<'m, T> {
+    manager: Option<&'m ast::quadruples::Manager>,
+    pub value: T,
+    pub dtype: DataType,
 }
 
-impl<'m> ast::node::Node<'m> for Const<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager) -> () {
-        self.manager = manager;
+impl<'m, T> Const<'m, T> {
+    pub fn new(value: T, dtype: DataType) -> Self {
+        Const {
+            manager: None,
+            value,
+            dtype,
+        }
     }
-    
+}
+
+impl<'m, T> ast::node::Node<'m> for Const<'m, T> {
+    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager) -> () {
+        self.manager = Some(manager);
+    }
+
     fn generate(&self) -> () {
         todo!()
     }
@@ -29,5 +39,4 @@ impl<'m> ast::node::Node<'m> for Const<'m> {
     }
 }
 
-impl<'m> ast::expressions::Expression<'m> for Const<'m> {}
-
+impl<'m, T> ast::expressions::Expression<'m> for Const<'m, T> {}
