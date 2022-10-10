@@ -43,7 +43,7 @@ impl<'m> ast::node::Node<'m> for Operation<'m> {
         self.right.set_manager(manager);
     }
 
-    fn generate(&self) -> () {
+    fn generate(&mut self) -> () {
         todo!()
     }
 

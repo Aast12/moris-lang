@@ -49,7 +49,7 @@ impl<'m> node::Node<'m> for Expression<'m> {
         }
     }
 
-    fn generate(&self) -> () {
+    fn generate(&mut self) -> () {
         match self {
             Expression::Const(constant) => constant.generate(),
             Expression::Op(operation) => operation.generate(),
@@ -120,19 +120,23 @@ mod tests {
     // }
 
     #[test]
-    fn test_types() {
+    fn test_compatible_types() {
         let manager = Manager::new();
 
         let mut expr = Expression::Op(Operation::new(build_int(), Operator::Add, build_float()));
         expr.set_manager(&manager);
 
         assert_eq!(expr.data_type(), DataType::Float);
+    }
 
-        let mut expr2 = Expression::Op(Operation::new(build_string(), Operator::Add, build_float()));
-        expr2.set_manager(&manager);
+    #[test]
+    #[should_panic]
+    fn test_incompatible_types() {
+        let manager = Manager::new();
 
-        expr2.data_type();
+        let mut expr = Expression::Op(Operation::new(build_string(), Operator::Add, build_float()));
+        expr.set_manager(&manager);
 
-        println!()
+        expr.data_type();
     }
 }

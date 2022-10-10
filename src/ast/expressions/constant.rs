@@ -31,7 +31,7 @@ impl<'m> ast::node::Node<'m> for Const<'m> {
         self.manager = Some(manager);
     }
 
-    fn generate(&self) -> () {
+    fn generate(&mut self) -> () {
         todo!()
     }
 

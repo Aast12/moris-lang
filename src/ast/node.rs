@@ -6,7 +6,7 @@ pub trait Node<'m> {
         todo!()
     }
 
-    fn generate(&self) -> () {
+    fn generate(&mut self) -> () {
         todo!()
     }
 

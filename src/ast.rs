@@ -7,11 +7,26 @@ pub mod functions;
 
 use std::fmt::{Debug, Error, Formatter};
 
-use self::{expressions::{Expression, Index, id::Access}, statements::Block};
+use self::{expressions::{Expression, Index, id::Access}, statements::Block, node::Node, quadruples::Manager};
 
 
 #[derive(Debug)]
 pub struct Dimension<'m>(pub i8, pub Vec<Box<Expression<'m>>>); // dimensions number, dimension sizes
+
+
+impl<'m> Node<'m> for Dimension<'m> {
+    fn set_manager(&mut self, manager: &'m quadruples::Manager) -> () {
+        for dim in self.1.iter_mut() {
+            dim.set_manager(manager);
+        }
+    }
+
+    fn generate(&mut self) -> () {
+        for dim in self.1.iter_mut() {
+            dim.generate();
+        }
+    }
+}
 
 #[derive(Debug)]
 pub enum TypeConst<'m> {
