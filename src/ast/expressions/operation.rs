@@ -35,3 +35,17 @@ impl<'m, L: Expression<'m>, R: Expression<'m>> ast::node::Node<'m> for Operation
         todo!()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::ast::node::Node;
+    use crate::ast::quadruples::Manager;
+    use crate::ast::types::DataType;
+
+    #[test]
+    fn test_operation() {
+        let m = Manager::new();
+        
+    }
+}

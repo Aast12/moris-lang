@@ -41,6 +41,8 @@ impl<'m> ast::node::Leaf<'m> for Id<'m> {
     }
 }
 
+impl<'m> ast::expressions::Expression<'m> for Id<'m> {}
+
 impl<'m> Access<'m> {
     pub fn new(id: Id<'m>, indexing: ast::expressions::Index) -> Self {
         Access {
@@ -60,6 +62,8 @@ impl<'m> ast::node::Node<'m> for Access<'m> {
         todo!()
     }
 }
+
+impl<'m> ast::expressions::Expression<'m> for Access<'m> {}
 
 #[cfg(test)]
 mod tests {
