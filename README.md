@@ -4,6 +4,10 @@
 
 ## Status
 
+### Octubre 10, 2022
+
+- Definición de reglas semánticas. Clase que permite obtener el tipo resultado de todas las operaciones y alertar cuando hay un error de tipo.
+
 ### Octubre 3, 2022
 
 - Definición de la gramática del lenguaje
