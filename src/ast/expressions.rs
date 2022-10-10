@@ -1,9 +1,13 @@
 use crate::ast;
+
+use super::types;
+pub mod constant;
 pub mod id;
+pub mod operation;
 
 #[derive(Debug)]
 pub enum Expr {
-    Const(ast::TypeConst),
+    Const(constant::TypeConst),
     Op(Box<Expr>, ast::types::Operator, Box<Expr>),
     ParenthOp(Box<Expr>),
     Var(ast::VarRef),
@@ -17,7 +21,6 @@ pub enum Index {
     Range(Box<ast::Expr>, Box<ast::Expr>),
 }
 
-pub struct Operation {
+pub trait Expression<'m>: ast::node::Node<'m> {}
 
-}
-
+// impl<'m> ast::node::Node<'m> for dyn Expression { }

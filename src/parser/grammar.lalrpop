@@ -1,8 +1,9 @@
 use std::str::FromStr;
-use crate::ast::{TypeConst, Index, Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
+use crate::ast::{Index, Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
 use crate::ast;
 use crate::ast::types;
 use crate::ast::expressions::Expr;
+use crate::ast::expressions::constant::TypeConst;
 
 grammar;
 
