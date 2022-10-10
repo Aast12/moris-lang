@@ -1,11 +1,18 @@
 use std::str::FromStr;
-use crate::ast::{Index, Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
+use crate::ast::{Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
 use crate::ast;
 use crate::ast::types;
-use crate::ast::expressions::Expr;
+// use crate::ast::expressions::Expr;
+use crate::ast::expressions::{Expression, Index};
 use crate::ast::expressions::constant::TypeConst;
+use crate::ast::expressions::constant;
+use crate::ast::types::DataType;
+use crate::ast::expressions::operation;
+use crate::ast::expressions::id::{Access, Id};
+use crate::ast::expressions::call;
 
-grammar;
+
+grammar<'m>;
 
 
 // Macros
@@ -24,33 +31,31 @@ Boxed<T>: Box<T> = T => Box::new(<>);
 
 // Types
 
-Type: types::DataType = {
-    T_INT => types::DataType::Int,
-    T_FLOAT => types::DataType::Float,
-    T_BOOl => types::DataType::Bool,
-    T_STR => types::DataType::String,
-    T_DATAFRAME => types::DataType::DataFrame,
+Type: DataType = {
+    T_INT => DataType::Int,
+    T_FLOAT => DataType::Float,
+    T_BOOl => DataType::Bool,
+    T_STR => DataType::String,
+    T_DATAFRAME => DataType::DataFrame,
 }
 
-FunctionType: types::DataType = {
+FunctionType: DataType = {
     Type,
-    T_VOID => types::DataType::Void
+    T_VOID => DataType::Void
 }
 
-Int: TypeConst = NUMBER => TypeConst::Int(i32::from_str(<>).unwrap());
+Int: constant::Const<'m> = NUMBER => constant::Const::new(<>, DataType::Int);
 
-Float: TypeConst = <f: FLOAT> => TypeConst::Float(f.parse::<f32>().unwrap());
+Float: constant::Const<'m> = <f: FLOAT> => constant::Const::new(<>, DataType::Float);
 
-Bool: TypeConst = {
-    TRUE => TypeConst::Bool(true),
-    FALSE => TypeConst::Bool(false)
+Bool: constant::Const<'m> = {
+    TRUE => constant::Const::new(<>, DataType::Bool),
+    FALSE => constant::Const::new(<>, DataType::Bool)
 }
 
-Str: TypeConst = {
-    <s: STRING> => TypeConst::String(String::from(&s[1..s.len() - 1]))
-}
+Str: constant::Const<'m> = <s: STRING> => constant::Const::new(&s[1..s.len() - 1], DataType::String);
 
-VectorConst: TypeConst = LBRACKET <Comma<Expr>> RBRACKET => TypeConst::Vector(<>);
+// VectorConst: TypeConst = LBRACKET <Comma<Expr>> RBRACKET => TypeConst::Vector(<>);
 
 SimpleConst = {
     Int,
@@ -64,46 +69,48 @@ Const = {
     //VectorConst
 }
 
-Id: Expr = ID => Expr::Var(VarRef {
-    id: String::from(<>),
-    indexing: None
-});
+Id: Expression<'m> = ID => 
+    Expression::Access(Access::new(
+        Id::new(<>, None),
+        None,
+    ));
 
 // Variables
 
-Indexing: Index = {
+Indexing: Index<'m> = {
     <begin:Expr> COLON <end:Expr> => Index::Range(begin, end),
     <idx:Expr> => Index::Simple(idx)
 }
 
-Dimension: Dimension = {
+Dimension: Dimension<'m> = {
     LBRACKET <a: Expr> RLBRACKET <b: Expr> RBRACKET => Dimension(2, vec![a, b]),
     LBRACKET <Expr> RBRACKET => Dimension(1, vec![<>])
 }
 
-VarDeclaration: types::Variable = {
-    LET <id: ID> COLON <dtype: Type> <dim: Dimension?> <value: (ASSIGN <Expr>)?> SEMICOLON => types::Variable {
+VarDeclaration: types::Variable<'m> = {
+    LET <id: ID> COLON <data_type: Type> <dim: Dimension?> <value: (ASSIGN <Expr>)?> SEMICOLON => types::Variable {
         id: String::from(id),
-        data_type: dtype,
+        data_type,
         dimension: dim.unwrap_or(Dimension(0, vec![])),
-        value: value
+        value
     }
 }
 
 // TODO Fix w custom tokenizer, allow multiple dimensions and raise error on higher than two
-VarRefIndex: Vec<Index> = {
+VarRefIndex: Vec<Index<'m>> = {
     LBRACKET <Indexing> RBRACKET  => vec![<>],
     LBRACKET <a:Indexing> RLBRACKET <b:Indexing> RBRACKET => vec![<>]
 }
 
-VarReference: VarRef = {
-    <id: ID> <indexing: VarRefIndex?> => VarRef {
-        id: String::from(id),
-        indexing: indexing
-    } 
+VarReference: VarRef<'m> = {
+    <id: ID> <indexing: VarRefIndex?> => 
+        VarRef {
+            id: String::from(id),
+            indexing
+        } 
 }
 
-VarAssignment: ast::Statement = <var: VarReference> ASSIGN <exp: Expr> => ast::Statement::VarAssign(var, exp);
+VarAssignment: ast::Statement<'m> = <var: VarReference> ASSIGN <exp: Expr> => ast::Statement::VarAssign(var, exp);
 
 
 // Operators
@@ -134,33 +141,53 @@ PipeOp: types::Operator = PIPE => types::Operator::Pipe;
 
 // Expressions
 
-Tier<Op, NextTerm>: Box<Expr> = {
-    Tier<Op, NextTerm> Op NextTerm => Box::new(Expr::Op(<>)),
+Tier<Op, NextTerm>: Box<Expression<'m>> = {
+    Tier<Op, NextTerm> Op NextTerm => 
+        Box::new(
+            Expression::Op(
+                operation::Operation::new(<>)
+            )
+        ),
     NextTerm
 }
 
-Expr: Box<Expr> = Tier<ExprOp, LogicExpr>;
+Expr: Box<Expression<'m>> = Tier<ExprOp, LogicExpr>;
 
-LogicExpr: Box<Expr> = {
-    MathExpr LogicOp MathExpr => Box::new(Expr::Op(<>)),
+LogicExpr: Box<Expression<'m>> = {
+    MathExpr LogicOp MathExpr => 
+        Box::new(
+            Expression::Op(
+                operation::Operation::new(<>)
+            )
+        ),
     MathExpr,
 }
 
-MathExpr: Box<Expr> = Tier<MathOp, Term>;
+MathExpr: Box<Expression<'m>> = Tier<MathOp, Term>;
 
-Term: Box<Expr> = Tier<FactorOp, Factor>;
+Term: Box<Expression<'m>> = Tier<FactorOp, Factor>;
 
-Factor: Box<Expr> = {
-    <factor:Factor> PipeOp FORWARD <id:Boxed<Id>> => Box::new(Expr::Op(factor, types::Operator::ForwardPipe, id)),
-    Factor PipeOp Boxed<Id> => Box::new(Expr::Op(<>)),
+Factor: Box<Expression<'m>> = {
+    <factor:Factor> PipeOp FORWARD <id:Boxed<Id>> => 
+        Box::new(
+            Expression::Op(
+                operation::Operation::new(factor, types::Operator::ForwardPipe, id)
+            )
+        ),
+    Factor PipeOp Boxed<Id> => 
+        Box::new(
+            Expression::Op(
+                operation::Operation::new(<>)
+            )
+        ),
     Item,
 }
 
-Item: Box<Expr> = {
-    VarReference => Box::new(Expr::Var(<>)),
-    Const => Box::new(Expr::Const(<>)),
-    LPAREN <Expr> RPAREN => Box::new(Expr::ParenthOp(<>)),
-    FunctionCall => Box::new(<>)
+Item: Box<Expression<'m>> = {
+    VarReference => Box::new(Expression::VarRef(<>)),
+    Const => Box::new(Expression::Const(<>)),
+    LPAREN <Expr> RPAREN => <>,
+    FunctionCall => Box::new(Expression::Call(<>))
 }
 
 // Functions
@@ -178,22 +205,22 @@ FnSignature: types::FunctionSignature = FN <id: CALL_ID> <params: FunctionParams
     params: params
 };
 
-FunctionItem: ast::Statement = {
+FunctionItem: ast::Statement<'m> = {
     Statement,
     VarDeclaration => ast::Statement::VarDeclaration(<>),
 }
 
-FunctionBlock: ast::Block = LCBRACKET <statements: FunctionItem*> RCBRACKET => ast::Block(statements);
+FunctionBlock: ast::Block<'m> = LCBRACKET <statements: FunctionItem*> RCBRACKET => ast::Block(statements);
 
-Function: ast::Function = <signature: FnSignature> <block: FunctionBlock> => ast::Function {
+Function: ast::Function<'m> = <signature: FnSignature> <block: FunctionBlock> => ast::Function {
     signature: signature,
     block: block
 };
 
-FunctionCall: Expr = <id: CALL_ID> <params: CallParams> RPAREN => 
-    Expr::FunctionCall(String::from(&id[..id.len() - 1]), params);
+FunctionCall: call::Call<'m> = <id: CALL_ID> <params: CallParams> RPAREN => 
+        call::Call::new(&id[..id.len() - 1], params);
 
-ReturnStatement: ast::Statement = RETURN <Expr> SEMICOLON => ast::Statement::Return(<>);
+ReturnStatement: ast::Statement<'m> = RETURN <Expr> SEMICOLON => ast::Statement::Return(<>);
 
 Statement = {
     Condition,
@@ -202,28 +229,28 @@ Statement = {
     LineStatement,
 }
 
-GlobalStatement: ast::Statement = {
+GlobalStatement: ast::Statement<'m> = {
     Function => ast::Statement::FunctionDeclaration(<>),
     Statement,
     VarDeclaration =>  ast::Statement::VarDeclaration(<>)
 }
 
-Block: ast::Block = {
+Block: ast::Block<'m> = {
     Statement => ast::Block(vec![<>]),
     StrictBlock
 }
 
-LineStatement: ast::Statement = {
+LineStatement: ast::Statement<'m> = {
     <VarAssignment> SEMICOLON,
     <Expr> SEMICOLON => ast::Statement::Expression(<>)
 }
 
-ElseBlock: ast::Block = {
+ElseBlock: ast::Block<'m> = {
     Condition => ast::Block(vec![<>]),
     StrictBlock
 }
 
-Condition: ast::Statement = {
+Condition: ast::Statement<'m> = {
     IF <condition: Expr> RPAREN <if_block: StrictBlock> <else_block: (ELSE <ElseBlock>)?> => 
         ast::Statement::If {
             condition: condition,
@@ -232,27 +259,27 @@ Condition: ast::Statement = {
         }
 }
 
-StrictBlock: ast::Block = LCBRACKET <statements: Statement*> RCBRACKET => ast::Block(statements);
+StrictBlock: ast::Block<'m> = LCBRACKET <statements: Statement*> RCBRACKET => ast::Block(statements);
 
 Loop = {
     ForLoop,
     WhileLoop
 }
 
-ForLoop: ast::Statement = FOR <id: ID> IN <iterable: Expr> RPAREN <block: Block> =>
+ForLoop: ast::Statement<'m> = FOR <id: ID> IN <iterable: Expr> RPAREN <block: Block> =>
     ast::Statement::For {
         iterator_id: String::from(id),
         iterable: iterable,
         block: block
     };
 
-WhileLoop: ast::Statement = WHILE <condition: Expr> RPAREN <block: Block> =>
+WhileLoop: ast::Statement<'m> = WHILE <condition: Expr> RPAREN <block: Block> =>
     ast::Statement::While {
         condition: condition,
         block: block
     };
 
-pub Program: ast::Program = GlobalStatement* => ast::Program(<>);
+pub Program: ast::Program<'m> = GlobalStatement* => ast::Program(<>);
 
 match {
     r#""[^"]*""# => STRING,

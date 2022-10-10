@@ -6,7 +6,7 @@ pub enum TypeConst {
     Int(i32),
     Float(f32),
     String(String),
-    Vector(Vec<Box<ast::expressions::Expr>>),
+    // Vector(Vec<Box<ast::expressions::Expr>>),
 }
 
 #[derive(Debug)]

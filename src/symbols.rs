@@ -2,14 +2,14 @@ use std::collections::HashMap;
 
 use moris_lang::ast;
 
-pub enum Symbol {
-    Variable(ast::types::Variable),
+pub enum Symbol<'m> {
+    Variable(ast::types::Variable<'m>),
     Function(ast::types::FunctionSignature),
 }
 
 pub struct SymbolTable<'parent> {
     parent: Option<&'parent SymbolTable<'parent>>,
-    table: HashMap<String, Symbol>,
+    table: HashMap<String, Symbol<'parent>>,
 }
 
 impl<'parent> SymbolTable<'parent> {
@@ -20,7 +20,7 @@ impl<'parent> SymbolTable<'parent> {
         }
     }
 
-    pub fn set(&mut self, id: &str, sym: Symbol) {
+    pub fn set(&mut self, id: &str, sym: Symbol<'parent>) {
         if let Some(_) = self.table.get(id) {
             panic!("{} is already defined!", id);
         } else {

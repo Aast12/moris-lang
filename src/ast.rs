@@ -4,69 +4,65 @@ pub mod quadruples;
 pub mod types;
 
 use std::fmt::{Debug, Error, Formatter};
-use crate::ast::expressions::Expr;
+
+use self::expressions::{Expression, Index};
+
 
 #[derive(Debug)]
-pub enum Index {
-    Simple(Box<Expr>),
-    Range(Box<Expr>, Box<Expr>),
-}
+pub struct Dimension<'m>(pub i8, pub Vec<Box<Expression<'m>>>); // dimensions number, dimension sizes
 
 #[derive(Debug)]
-pub struct Dimension(pub i8, pub Vec<Box<Expr>>); // dimensions number, dimension sizes
-
-#[derive(Debug)]
-pub struct VarRef {
+pub struct VarRef<'m> {
     pub id: String,
-    pub indexing: Option<Vec<Index>>,
+    pub indexing: Option<Vec<Index<'m>>>,
 }
 
 #[derive(Debug)]
-pub enum TypeConst {
+pub enum TypeConst<'m> {
     Bool(bool),
     Int(i32),
     Float(f32),
     String(String),
-    Vector(Vec<Box<Expr>>),
+    Vector(Vec<Box<Expression<'m>>>),
 }
 
 #[derive(Debug)]
 pub struct FunctionParam(pub String, pub types::DataType);
 
 #[derive(Debug)]
-pub struct Function {
+pub struct Function<'m> {
     pub signature: types::FunctionSignature,
-    pub block: Block,
+    pub block: Block<'m>,
 }
 
 #[derive(Debug)]
-pub enum Statement {
-    VarDeclaration(types::Variable),
-    VarAssign(VarRef, Box<Expr>),
-    Expression(Box<Expr>),
+pub enum Statement<'m> {
+    VarDeclaration(types::Variable<'m>),
+    VarAssign(VarRef<'m>, Box<Expression<'m>>),
+    Expression(Box<Expression<'m>>),
     If {
-        condition: Box<Expr>,
-        if_block: Block,
-        else_block: Option<Block>,
+        condition: Box<Expression<'m>>,
+        if_block: Block<'m>,
+        else_block: Option<Block<'m>>,
     },
     For {
         iterator_id: String,
-        iterable: Box<Expr>,
-        block: Block,
+        iterable: Box<Expression<'m>>,
+        block: Block<'m>,
     },
     While {
-        condition: Box<Expr>,
-        block: Block,
+        condition: Box<Expression<'m>>,
+        block: Block<'m>,
     },
-    FunctionDeclaration(Function),
-    Return(Box<Expr>),
+    FunctionDeclaration(Function<'m>),
+    Return(Box<Expression<'m>>),
 }
 
 #[derive(Debug)]
-pub struct Block(pub Vec<Statement>);
+pub struct Block<'m>(pub Vec<Statement<'m>>);
 
 #[derive(Debug)]
-pub struct Program(pub Vec<Statement>);
+pub struct Program<'m>(pub Vec<Statement<'m>>);
 
 // impl Debug for TypeConst {
 //     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {

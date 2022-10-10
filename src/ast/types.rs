@@ -1,5 +1,7 @@
 use crate::ast;
 
+use super::expressions::Expression;
+
 #[derive(Clone, Copy, Debug)]
 pub enum Operator {
     Mul,
@@ -29,11 +31,11 @@ pub enum DataType {
 }
 
 #[derive(Debug)]
-pub struct Variable {
+pub struct Variable<'m> {
     pub id: String,
     pub data_type: DataType,
-    pub dimension: ast::Dimension,
-    pub value: Option<Box<ast::expressions::Expr>>,
+    pub dimension: ast::Dimension<'m>,
+    pub value: Option<Box<Expression<'m>>>,
 }
 
 #[derive(Debug)]
