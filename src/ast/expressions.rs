@@ -2,7 +2,7 @@ use crate::ast;
 
 use self::{constant::Const, operation::Operation, id::{Access, Id}, call::Call};
 
-use super::{types, node};
+use super::{types::{self, DataType}, node};
 pub mod constant;
 pub mod id;
 pub mod operation;
@@ -15,6 +15,18 @@ pub enum Expression<'m> {
     Access(Access<'m>),
     Id(Id<'m>),
     Call(Call<'m>)
+}
+
+impl<'m> Expression<'m> {
+    fn data_type(&self) -> DataType {
+        match &self {
+            Expression::Const(constant) => constant.dtype,
+            Expression::Op(operation) => todo!(),
+            Expression::Access(_) => todo!(),
+            Expression::Id(_) => todo!(),
+            Expression::Call(_) => todo!(),
+        }
+    }
 }
 
 impl<'m> node::Node<'m> for Expression<'m> {

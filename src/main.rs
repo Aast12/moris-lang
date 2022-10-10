@@ -2,8 +2,8 @@ use moris_lang::ast::node::Node;
 
 pub mod ast;
 pub mod symbols;
-
 pub mod parser;
+pub mod semantics;
 
 use moris_lang::parser::grammar::PProgramParser as Parser;
 // #[cfg(not(test))]

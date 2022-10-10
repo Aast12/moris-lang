@@ -1,4 +1,7 @@
-use crate::ast;
+use crate::{
+    ast::{self, types::DataType},
+    semantics::SemanticRules,
+};
 
 use super::{types, Expression, ExpressionT};
 
@@ -22,6 +25,14 @@ impl<'m> Operation<'m> {
             left,
             right,
         }
+    }
+
+    pub fn data_type(&self) -> DataType {
+        return SemanticRules::match_type(
+            self.operator,
+            self.left.data_type(),
+            self.right.data_type(),
+        );
     }
 }
 

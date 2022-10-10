@@ -19,7 +19,7 @@ pub enum Operator {
     Assign,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub enum DataType {
     Int,
     Float,
