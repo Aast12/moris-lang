@@ -1,16 +1,21 @@
 use crate::ast;
 
-use super::{types, Expression};
+use super::{types, Expression, ExpressionT};
 
-pub struct Operation<'m, L: Expression<'m>, R: Expression<'m>> {
+#[derive(Debug)]
+pub struct Operation<'m> {
     manager: Option<&'m ast::quadruples::Manager>,
     pub operator: types::Operator,
-    pub left: Box<L>,
-    pub right: Box<R>,
+    pub left: Box<Expression<'m>>,
+    pub right: Box<Expression<'m>>,
 }
 
-impl<'m, L: Expression<'m>, R: Expression<'m>> Operation<'m, L, R> {
-    pub fn new(left: Box<L>, operator: types::Operator, right: Box<R>) -> Self {
+impl<'m> Operation<'m> {
+    pub fn new(
+        left: Box<Expression<'m>>,
+        operator: types::Operator,
+        right: Box<Expression<'m>>,
+    ) -> Self {
         Operation {
             manager: None,
             operator,
@@ -20,7 +25,7 @@ impl<'m, L: Expression<'m>, R: Expression<'m>> Operation<'m, L, R> {
     }
 }
 
-impl<'m, L: Expression<'m>, R: Expression<'m>> ast::node::Node<'m> for Operation<'m, L, R> {
+impl<'m> ast::node::Node<'m> for Operation<'m> {
     fn set_manager(&mut self, manager: &'m ast::quadruples::Manager) -> () {
         self.manager = Some(manager);
         self.left.set_manager(manager);
@@ -36,6 +41,8 @@ impl<'m, L: Expression<'m>, R: Expression<'m>> ast::node::Node<'m> for Operation
     }
 }
 
+impl<'m> ExpressionT<'m> for Operation<'m> {}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -50,14 +57,26 @@ mod tests {
         let manager = Manager::new();
 
         let mut op = Operation::new(
-            Box::new(Id::new("left", None)),
+            Box::new(Expression::Id(Id::new("left", None))),
             types::Operator::Add,
-            Box::new(Const::new(54.0, types::DataType::Float)),
+            Box::new(Expression::Const(Const::new(
+                "54.0",
+                types::DataType::Float,
+            ))),
         );
 
         op.set_manager(&manager);
 
-        assert_eq!(op.left.id, "left");
-        assert_eq!(op.right.value, 54.0);
+        if let Expression::Id(left) = op.left.as_ref() {
+            assert_eq!(left.id, "left");
+        } else {
+            panic!()
+        }
+
+        if let Expression::Const(right) = op.right.as_ref() {
+            assert_eq!(right.value, "54.0");
+        } else {
+            panic!()
+        }
     }
 }

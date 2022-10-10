@@ -2,7 +2,7 @@ use crate::ast;
 use crate::ast::expressions::Index;
 use crate::ast::types;
 
-use super::Expression;
+use super::{Expression, ExpressionT};
 
 #[derive(Debug)]
 pub struct Id<'m> {
@@ -12,10 +12,10 @@ pub struct Id<'m> {
 }
 
 #[derive(Debug)]
-pub struct Access<'m, T: Expression<'m>> {
+pub struct Access<'m> {
     manager: Option<&'m ast::quadruples::Manager>,
     pub id: Id<'m>,
-    pub indexing: Index<T>,
+    pub indexing: Index<'m>,
 }
 
 impl<'m> Id<'m> {
@@ -44,10 +44,10 @@ impl<'m> ast::node::Leaf<'m> for Id<'m> {
     }
 }
 
-impl<'m> ast::expressions::Expression<'m> for Id<'m> {}
+impl<'m> ast::expressions::ExpressionT<'m> for Id<'m> {}
 
-impl<'m, T: Expression<'m>> Access<'m, T> {
-    pub fn new(id: Id<'m>, indexing: Index<T>) -> Self {
+impl<'m> Access<'m> {
+    pub fn new(id: Id<'m>, indexing: Index<'m>) -> Self {
         Access {
             manager: None,
             id,
@@ -56,7 +56,7 @@ impl<'m, T: Expression<'m>> Access<'m, T> {
     }
 }
 
-impl<'m, T: Expression<'m>> ast::node::Node<'m> for Access<'m, T> {
+impl<'m> ast::node::Node<'m> for Access<'m> {
     fn set_manager(&mut self, manager: &'m ast::quadruples::Manager) -> () {
         self.manager = Some(manager);
         self.id.set_manager(manager);
@@ -68,7 +68,7 @@ impl<'m, T: Expression<'m>> ast::node::Node<'m> for Access<'m, T> {
     }
 }
 
-impl<'m, T: Expression<'m>> ast::expressions::Expression<'m> for Access<'m, T> {}
+impl<'m> ast::expressions::ExpressionT<'m> for Access<'m> {}
 
 #[cfg(test)]
 mod tests {
@@ -100,19 +100,23 @@ mod tests {
 
         let mut access = Access::new(
             Id::new(vec_id_name, None),
-            Index::Simple(Box::new(test_location_id)),
+            Index::Simple(Box::new(Expression::Id(test_location_id))),
         );
 
         access.set_manager(&manager);
 
         assert_eq!(access.id.id, vec_id_name);
         match access.indexing {
-            Index::Simple(idx) => {
-                match idx.manager {
-                    Some(_) => (),
-                    None => panic!("Manager not propagated to index."),
+            Index::Simple(expr) => {
+                if let Expression::Id(id) = expr.as_ref() {
+                    match id.manager {
+                        Some(_) => (),
+                        None => panic!("Manager not propagated to index."),
+                    }
+                    assert_eq!(id.id, idx_id_name);
+                } else {
+                    panic!()
                 }
-                assert_eq!(idx.id, idx_id_name);
             }
             _ => panic!(),
         }
