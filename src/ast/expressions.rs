@@ -8,16 +8,6 @@ pub mod id;
 pub mod operation;
 pub mod call;
 
-// #[derive(Debug)]
-// pub enum Expr {
-//     Const(constant::TypeConst),
-//     Op(Box<Expr>, ast::types::Operator, Box<Expr>),
-//     ParenthOp(Box<Expr>),
-//     Var(ast::VarRef),
-//     FunctionCall(String, Vec<Box<Expr>>),
-//     Error,
-// }
-
 #[derive(Debug)]
 pub enum Expression<'m> {
     Const(Const<'m>),
@@ -36,7 +26,29 @@ impl<'m> node::Node<'m> for Expression<'m> {
             Expression::Access(access) => access.set_manager(manager),
             Expression::Id(id) => id.set_manager(manager),
             Expression::Call(call) => call.set_manager(manager),
-            _ => ()
+            _ => todo!()
+        }
+    }
+
+    fn generate(&self) -> () {
+        match self {
+            Expression::Const(constant) => constant.generate(), 
+            Expression::Op(operation) => operation.generate(), 
+            Expression::Access(access) => access.generate(), 
+            Expression::Id(id) => id.generate(), 
+            Expression::Call(call) => call.generate(), 
+            _ => todo!()
+        }
+    }
+
+    fn reduce(&self) -> &dyn node::Leaf {
+        match self {
+            Expression::Const(constant) => constant.reduce(),
+            Expression::Op(operation) => operation.reduce(),
+            Expression::Access(access) => access.reduce(),
+            Expression::Id(id) => id.reduce(),
+            Expression::Call(call) => call.reduce(),
+            _ => todo!()
         }
     }
 }

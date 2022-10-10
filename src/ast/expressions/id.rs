@@ -2,8 +2,6 @@ use crate::ast;
 use crate::ast::expressions::Index;
 use crate::ast::types;
 
-use super::{Expression, ExpressionT};
-
 #[derive(Debug)]
 pub struct Id<'m> {
     manager: Option<&'m ast::quadruples::Manager>,
@@ -75,6 +73,7 @@ impl<'m> ast::expressions::ExpressionT<'m> for Access<'m> {}
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::ast::expressions::Expression;
     use crate::ast::node::Node;
     use crate::ast::quadruples::Manager;
     use crate::ast::types::DataType;
