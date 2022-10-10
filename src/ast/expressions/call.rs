@@ -1,4 +1,4 @@
-use crate::ast;
+use crate::ast::{self, types::DataType};
 
 use super::Expression;
 
@@ -16,6 +16,10 @@ impl<'m> Call<'m> {
             id: String::from(id),
             params,
         }
+    }
+
+    pub fn data_type(&self) -> DataType {
+        todo!("Implement fn call data type")
     }
 }
 

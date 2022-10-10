@@ -19,7 +19,7 @@ pub enum Operator {
     Assign,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum DataType {
     Int,
     Float,
@@ -38,7 +38,7 @@ pub struct Variable<'m> {
     pub value: Option<Box<Expression<'m>>>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct FunctionSignature {
     pub id: String,
     pub data_type: DataType,
@@ -46,7 +46,7 @@ pub struct FunctionSignature {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct FunctionParam(pub String, pub DataType);
 
 #[derive(Debug)]

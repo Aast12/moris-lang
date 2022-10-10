@@ -1,6 +1,6 @@
 use crate::ast;
 use crate::ast::expressions::Index;
-use crate::ast::types;
+use crate::ast::types::{self, DataType};
 
 #[derive(Debug)]
 pub struct Id<'m> {
@@ -22,6 +22,13 @@ impl<'m> Id<'m> {
             manager: None,
             id: String::from(id),
             dtype,
+        }
+    }
+
+    pub fn data_type(&self) -> DataType {
+        match &self.dtype {
+            Some(dtype) => dtype.clone(),
+            _ => todo!("Implement fetch id type"),
         }
     }
 }
@@ -51,6 +58,10 @@ impl<'m> Access<'m> {
             id,
             indexing,
         }
+    }
+
+    pub fn data_type(&self) -> DataType {
+        todo!("Implement access data type")
     }
 }
 

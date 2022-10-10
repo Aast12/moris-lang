@@ -6,12 +6,15 @@ pub mod parser;
 pub mod semantics;
 
 use moris_lang::parser::grammar::PProgramParser as Parser;
+
+
 // #[cfg(not(test))]
 fn main() {
     
     use moris_lang::ast::{quadruples::Manager, expressions::id::Id, types::DataType};
 
     let m = Manager::new();
+
     let mut id = Id::new("dx", Some(DataType::Float));
     id.set_manager(&m);
     let mut id2 = Id::new("dx2", Some(DataType::Int));
