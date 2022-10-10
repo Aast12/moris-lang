@@ -1,6 +1,8 @@
 use crate::ast;
 
-use super::{expressions::Expression, statements::Block, node::Node};
+use super::{
+    expressions::Expression, node::Node, quadruples::Manager, statements::Block, Dimension,
+};
 
 #[derive(Clone, Copy, Debug)]
 pub enum Operator {
@@ -32,15 +34,33 @@ pub enum DataType {
 
 #[derive(Debug)]
 pub struct Variable<'m> {
+    manager: Option<&'m Manager<'m>>,
     pub id: String,
     pub data_type: DataType,
     pub dimension: ast::Dimension<'m>,
     pub value: Option<Box<Expression<'m>>>,
 }
 
-impl<'m> Node<'m> for Variable<'m> {
-    fn set_manager(&mut self, _: &'m ast::quadruples::Manager) -> () {
+impl<'m> Variable<'m> {
+    pub fn new(
+        id: String,
+        data_type: DataType,
+        dimension: Dimension<'m>,
+        value: Option<Box<Expression<'m>>>,
+    ) -> Variable<'m> {
+        Variable {
+            manager: None,
+            id,
+            data_type,
+            dimension,
+            value,
+        }
+    }
+}
 
+impl<'m> Node<'m> for Variable<'m> {
+    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
+        self.manager = Some(&manager);
     }
 
     fn generate(&mut self) -> () {
@@ -58,7 +78,6 @@ pub struct FunctionSignature {
     pub data_type: DataType,
     pub params: Vec<FunctionParam>,
 }
-
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct FunctionParam(pub String, pub DataType);

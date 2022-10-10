@@ -38,7 +38,7 @@ impl<'m> Expression<'m> {
 }
 
 impl<'m> node::Node<'m> for Expression<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager) -> () {
+    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
         match self {
             Expression::Const(constant) => constant.set_manager(manager),
             Expression::Op(operation) => operation.set_manager(manager),
@@ -81,7 +81,7 @@ pub enum Index<'m> {
 pub trait ExpressionT<'m>: ast::node::Node<'m> {}
 
 impl<'m> ast::node::Node<'m> for Index<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager) -> () {
+    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
         match self {
             Self::Simple(expr) => expr.set_manager(manager),
             Self::Range(start_expr, end_expr) => {

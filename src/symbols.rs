@@ -1,12 +1,15 @@
 use std::collections::HashMap;
 
-use moris_lang::ast;
+use crate::ast;
 
+
+#[derive(Debug)]
 pub enum Symbol<'m> {
     Variable(ast::types::Variable<'m>),
     Function(ast::types::FunctionSignature),
 }
 
+#[derive(Debug)]
 pub struct SymbolTable<'parent> {
     parent: Option<&'parent SymbolTable<'parent>>,
     table: HashMap<String, Symbol<'parent>>,
@@ -52,17 +55,19 @@ impl<'parent> Default for SymbolTable<'parent> {
 
 #[cfg(test)]
 mod tests {
+    use crate::ast::types::Variable;
+
     use super::*;
 
     #[test]
     fn insert_symbol() {
         let mut table = SymbolTable::new();
-        let sym = Symbol::Variable(ast::types::Variable {
-            data_type: ast::types::DataType::Bool,
-            id: String::from("is_cond"),
-            dimension: ast::Dimension(0, vec![]),
-            value: None,
-        });
+        let sym = Symbol::Variable(Variable::new(
+            String::from("is_cond"),
+            ast::types::DataType::Bool,
+            ast::Dimension(0, vec![]),
+            None
+        ));
 
         table.set("is_cond", sym);
         match table.get("is_cond") {

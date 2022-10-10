@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 73bcfccdb151d1e0d2878d297ed7575bd90dd737ee0cbd0f6aacdae8fb25b18f
+// sha3: 1949c8cb4f1f8e871947e7ce4e91e39c0df1a15b10df22351d7dbded31bc8a51
 use std::str::FromStr;
 use crate::ast::{Dimension};
 use crate::ast::types::{DataType, Function, FunctionParam, Operator, Variable, FunctionSignature};
@@ -4950,12 +4950,12 @@ fn __action23<
     (_, _, _): (usize, &'input str, usize),
 ) -> Variable<'m>
 {
-    Variable {
-        id: String::from(id),
+    Variable::new(
+        String::from(id),
         data_type,
-        dimension: dim.unwrap_or(Dimension(0, vec![])),
+        dim.unwrap_or(Dimension(0, vec![])),
         value
-    }
+    )
 }
 
 #[allow(unused_variables)]

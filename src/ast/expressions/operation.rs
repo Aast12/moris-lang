@@ -7,7 +7,7 @@ use super::{types, Expression, ExpressionT};
 
 #[derive(Debug)]
 pub struct Operation<'m> {
-    manager: Option<&'m ast::quadruples::Manager>,
+    manager: Option<&'m ast::quadruples::Manager<'m>>,
     pub operator: types::Operator,
     pub left: Box<Expression<'m>>,
     pub right: Box<Expression<'m>>,
@@ -37,14 +37,14 @@ impl<'m> Operation<'m> {
 }
 
 impl<'m> ast::node::Node<'m> for Operation<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager) -> () {
+    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
         self.manager = Some(manager);
         self.left.set_manager(manager);
         self.right.set_manager(manager);
     }
 
     fn generate(&mut self) -> () {
-        todo!()
+        
     }
 
     fn reduce(&self) -> &dyn ast::node::Leaf {

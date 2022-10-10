@@ -91,12 +91,12 @@ PDimension: Dimension<'m> = {
 }
 
 PVarDeclaration: Variable<'m> = {
-    LET <id: ID> COLON <data_type: PType> <dim: PDimension?> <value: (ASSIGN <PExpr>)?> SEMICOLON => Variable {
-        id: String::from(id),
+    LET <id: ID> COLON <data_type: PType> <dim: PDimension?> <value: (ASSIGN <PExpr>)?> SEMICOLON => Variable::new(
+        String::from(id),
         data_type,
-        dimension: dim.unwrap_or(Dimension(0, vec![])),
+        dim.unwrap_or(Dimension(0, vec![])),
         value
-    }
+    )
 }
 
 // TODO Fix w custom tokenizer, allow multiple dimensions and raise error on higher than two

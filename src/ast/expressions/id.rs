@@ -4,14 +4,14 @@ use crate::ast::types::{self, DataType};
 
 #[derive(Debug)]
 pub struct Id<'m> {
-    manager: Option<&'m ast::quadruples::Manager>,
+    manager: Option<&'m ast::quadruples::Manager<'m>>,
     pub id: String,
     pub dtype: Option<types::DataType>,
 }
 
 #[derive(Debug)]
 pub struct Access<'m> {
-    manager: Option<&'m ast::quadruples::Manager>,
+    manager: Option<&'m ast::quadruples::Manager<'m>>,
     pub id: Id<'m>,
     pub indexing: Vec<Index<'m>>,
 }
@@ -34,7 +34,7 @@ impl<'m> Id<'m> {
 }
 
 impl<'m> ast::node::Node<'m> for Id<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager) -> () {
+    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
         self.manager = Some(manager);
     }
 
@@ -66,7 +66,7 @@ impl<'m> Access<'m> {
 }
 
 impl<'m> ast::node::Node<'m> for Access<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager) -> () {
+    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
         self.manager = Some(manager);
         self.id.set_manager(manager);
         for indexing in self.indexing.iter_mut() {
@@ -75,7 +75,7 @@ impl<'m> ast::node::Node<'m> for Access<'m> {
     }
 
     fn reduce(&self) -> &dyn ast::node::Leaf {
-        todo!()
+        todo!();
     }
 }
 

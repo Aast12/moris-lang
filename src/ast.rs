@@ -4,6 +4,7 @@ pub mod quadruples;
 pub mod types;
 pub mod statements;
 pub mod functions;
+pub mod temp;
 
 use std::fmt::{Debug, Error, Formatter};
 
