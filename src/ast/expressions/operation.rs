@@ -39,13 +39,25 @@ impl<'m, L: Expression<'m>, R: Expression<'m>> ast::node::Node<'m> for Operation
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ast::node::Node;
-    use crate::ast::quadruples::Manager;
-    use crate::ast::types::DataType;
+    use crate::ast::{
+        expressions::{constant::Const, id::Id},
+        node::Node,
+        quadruples::Manager,
+    };
 
     #[test]
     fn test_operation() {
-        let m = Manager::new();
-        
+        let manager = Manager::new();
+
+        let mut op = Operation::new(
+            Box::new(Id::new("left", None)),
+            types::Operator::Add,
+            Box::new(Const::new(54.0, types::DataType::Float)),
+        );
+
+        op.set_manager(&manager);
+
+        assert_eq!(op.left.id, "left");
+        assert_eq!(op.right.value, 54.0);
     }
 }

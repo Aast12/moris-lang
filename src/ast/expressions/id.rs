@@ -76,7 +76,6 @@ mod tests {
     use crate::ast::node::Node;
     use crate::ast::quadruples::Manager;
     use crate::ast::types::DataType;
-    use crate::ast::expressions::constant::Const;
 
     #[test]
     fn test_id() {

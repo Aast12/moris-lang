@@ -2,7 +2,7 @@ use crate::ast::quadruples;
 
 /// Represents the node of an Abstract Syntax Tree
 pub trait Node<'m> {
-    fn set_manager(&mut self, manager: &'m quadruples::Manager) -> () {
+    fn set_manager(&mut self, _: &'m quadruples::Manager) -> () {
         todo!()
     }
 
