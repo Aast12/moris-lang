@@ -99,20 +99,6 @@ mod tests {
 
         let test_location_id = Id::new(idx_id_name, Some(DataType::Int));
 
-
-        let regi = Manager::new();
-        let mut access_ = Access::new(
-            Id::new("testVec2", None),
-            Index::Simple(Box::new(Const::new(3, DataType::Int)))
-        );
-
-        access_.set_manager(&regi);
-
-
-        if let Index::Simple(indexing) = access_.indexing {
-            assert_eq!(indexing.value, 3);
-        }
-
         let mut access = Access::new(
             Id::new(vec_id_name, None),
             Index::Simple(Box::new(test_location_id)),

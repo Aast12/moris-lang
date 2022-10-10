@@ -40,3 +40,21 @@ impl<'m, T> ast::node::Node<'m> for Const<'m, T> {
 }
 
 impl<'m, T> ast::expressions::Expression<'m> for Const<'m, T> {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::ast::{quadruples::Manager, node::Node};
+
+    #[test]
+    fn test_const() {
+        let regi = Manager::new();
+        
+        let mut constant = Const::new(3, DataType::Int);
+
+        constant.set_manager(&regi);
+
+        assert_eq!(constant.value, 3);
+        assert!(constant.manager.is_some());
+    }
+}
