@@ -61,7 +61,7 @@ SimpleConst = {
 
 Const = {
     SimpleConst,
-    VectorConst
+    //VectorConst
 }
 
 Id: Expr = ID => Expr::Var(VarRef {
