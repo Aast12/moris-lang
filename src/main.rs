@@ -5,8 +5,10 @@ pub mod symbols;
 
 pub mod parser;
 
+use moris_lang::parser::grammar::PProgramParser as Parser;
 // #[cfg(not(test))]
 fn main() {
+    
     use moris_lang::ast::{quadruples::Manager, expressions::id::Id, types::DataType};
 
     let m = Manager::new();
@@ -18,10 +20,10 @@ fn main() {
 
     println!("{:#?}", id.reduce().dump());
     
-    // print!("{:#?}", parser::grammar::ProgramParser::new().parse("for + 5;").unwrap());
+    // print!("{:#?}", Parser::new().parse("for + 5;").unwrap());
     print!(
         "{:#?}",
-        parser::grammar::ProgramParser::new()
+        Parser::new()
             .parse(
                 "if(x == 2){
         x = 3;
@@ -37,7 +39,7 @@ fn main() {
 
     println!(
         "{:#?}",
-        parser::grammar::ProgramParser::new()
+        Parser::new()
             .parse(
                 r#"
         fn myFunc(x: int, y: float): bool {
@@ -56,7 +58,7 @@ fn main() {
 
     println!(
         "{:#?}",
-        parser::grammar::ProgramParser::new()
+        Parser::new()
             .parse(
                 r#"
         fn myFunc(x: int, y: float): bool {
@@ -82,7 +84,7 @@ fn main() {
 
     println!(
         "{:#?}",
-        parser::grammar::ProgramParser::new()
+        Parser::new()
             .parse(
                 r#"
         let x: int = 2;
@@ -93,7 +95,7 @@ fn main() {
 
     println!(
         "{:#?}",
-        parser::grammar::ProgramParser::new()
+        Parser::new()
             .parse(
                 r#"
         if (x) {
@@ -106,7 +108,7 @@ fn main() {
 
     println!(
         "{:#?}",
-        parser::grammar::ProgramParser::new()
+        Parser::new()
             .parse(
                 r#"
         fn myFunc(x: int, y: float): bool {

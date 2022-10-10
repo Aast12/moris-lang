@@ -2,7 +2,7 @@ use crate::ast;
 
 use self::{constant::Const, operation::Operation, id::{Access, Id}, call::Call};
 
-use super::{types, node, VarRef};
+use super::{types, node};
 pub mod constant;
 pub mod id;
 pub mod operation;
@@ -13,7 +13,6 @@ pub enum Expression<'m> {
     Const(Const<'m>),
     Op(Operation<'m>),
     Access(Access<'m>),
-    VarRef(VarRef<'m>), // TODO: Replace w Access & Id
     Id(Id<'m>),
     Call(Call<'m>)
 }

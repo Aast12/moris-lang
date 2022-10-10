@@ -1,16 +1,14 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: ebd7f8ae66bbaaa70086697c86d47b634747a90356c2d3eefcca190b086736e2
+// sha3: 73bcfccdb151d1e0d2878d297ed7575bd90dd737ee0cbd0f6aacdae8fb25b18f
 use std::str::FromStr;
-use crate::ast::{Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
-use crate::ast;
-use crate::ast::types;
+use crate::ast::{Dimension};
+use crate::ast::types::{DataType, Function, FunctionParam, Operator, Variable, FunctionSignature};
 use crate::ast::expressions::{Expression, Index};
-use crate::ast::expressions::constant::TypeConst;
-use crate::ast::expressions::constant;
-use crate::ast::types::DataType;
-use crate::ast::expressions::operation;
+use crate::ast::expressions::constant::{Const, TypeConst};
 use crate::ast::expressions::id::{Access, Id};
-use crate::ast::expressions::call;
+use crate::ast::expressions::operation::Operation;
+use crate::ast::expressions::call::Call;
+use crate::ast::statements::{Block, Program, Statement};
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 #[allow(unused_imports)]
@@ -19,20 +17,18 @@ extern crate core;
 extern crate alloc;
 
 #[cfg_attr(rustfmt, rustfmt_skip)]
-mod __parse__Program {
+mod __parse__PProgram {
     #![allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens, clippy::all)]
 
     use std::str::FromStr;
-    use crate::ast::{Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
-    use crate::ast;
-    use crate::ast::types;
+    use crate::ast::{Dimension};
+    use crate::ast::types::{DataType, Function, FunctionParam, Operator, Variable, FunctionSignature};
     use crate::ast::expressions::{Expression, Index};
-    use crate::ast::expressions::constant::TypeConst;
-    use crate::ast::expressions::constant;
-    use crate::ast::types::DataType;
-    use crate::ast::expressions::operation;
+    use crate::ast::expressions::constant::{Const, TypeConst};
     use crate::ast::expressions::id::{Access, Id};
-    use crate::ast::expressions::call;
+    use crate::ast::expressions::operation::Operation;
+    use crate::ast::expressions::call::Call;
+    use crate::ast::statements::{Block, Program, Statement};
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -49,25 +45,25 @@ mod __parse__Program {
         Variant3(FunctionParam),
         Variant4(alloc::vec::Vec<FunctionParam>),
         Variant5(core::option::Option<Box<Expression<'m>>>),
-        Variant6(ast::Block<'m>),
-        Variant7(core::option::Option<ast::Block<'m>>),
-        Variant8(constant::Const<'m>),
+        Variant6(Block<'m>),
+        Variant7(core::option::Option<Block<'m>>),
+        Variant8(Const<'m>),
         Variant9(Vec<Box<Expression<'m>>>),
         Variant10(Vec<FunctionParam>),
-        Variant11(ast::Statement<'m>),
+        Variant11(Statement<'m>),
         Variant12(Dimension<'m>),
         Variant13(core::option::Option<Dimension<'m>>),
-        Variant14(types::Operator),
-        Variant15(types::FunctionSignature),
+        Variant14(Operator),
+        Variant15(FunctionSignature),
         Variant16(core::option::Option<FunctionParam>),
-        Variant17(ast::Function<'m>),
-        Variant18(call::Call<'m>),
-        Variant19(alloc::vec::Vec<ast::Statement<'m>>),
+        Variant17(Function<'m>),
+        Variant18(Call<'m>),
+        Variant19(alloc::vec::Vec<Statement<'m>>),
         Variant20(DataType),
         Variant21(Expression<'m>),
         Variant22(Index<'m>),
-        Variant23(ast::Program<'m>),
-        Variant24(types::Variable<'m>),
+        Variant23(Program<'m>),
+        Variant24(Variable<'m>),
         Variant25(Vec<Index<'m>>),
         Variant26(core::option::Option<Vec<Index<'m>>>),
         Variant27(Access<'m>),
@@ -954,7 +950,7 @@ mod __parse__Program {
         type Token = Token<'input>;
         type TokenIndex = usize;
         type Symbol = __Symbol<'input, 'm>;
-        type Success = ast::Program<'m>;
+        type Success = Program<'m>;
         type StateIndex = i16;
         type Action = i16;
         type ReduceIndex = i16;
@@ -1113,15 +1109,15 @@ mod __parse__Program {
             _ => unreachable!(),
         }
     }
-    pub struct ProgramParser {
+    pub struct PProgramParser {
         builder: __lalrpop_util::lexer::MatcherBuilder,
         _priv: (),
     }
 
-    impl ProgramParser {
-        pub fn new() -> ProgramParser {
+    impl PProgramParser {
+        pub fn new() -> PProgramParser {
             let __builder = super::__intern_token::new_builder();
-            ProgramParser {
+            PProgramParser {
                 builder: __builder,
                 _priv: (),
             }
@@ -1134,7 +1130,7 @@ mod __parse__Program {
         >(
             &self,
             input: &'input str,
-        ) -> Result<ast::Program<'m>, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
+        ) -> Result<Program<'m>, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
         {
             let mut __tokens = self.builder.matcher(input);
             __state_machine::Parser::drive(
@@ -1156,7 +1152,7 @@ mod __parse__Program {
         __states: &mut alloc::vec::Vec<i16>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
-    ) -> Option<Result<ast::Program<'m>,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
+    ) -> Option<Result<Program<'m>,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
     {
         let (__pop_states, __nonterminal) = match __action {
             0 => {
@@ -1577,7 +1573,7 @@ mod __parse__Program {
                 __reduce138(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
             }
             139 => {
-                // __Program = Program => ActionFn(0);
+                // __PProgram = PProgram => ActionFn(0);
                 let __sym0 = __pop_Variant23(__symbols);
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -1609,6 +1605,18 @@ mod __parse__Program {
             _ => __symbol_type_mismatch()
         }
     }
+    fn __pop_Variant6<
+      'input,
+      'm,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+    ) -> (usize, Block<'m>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
     fn __pop_Variant1<
       'input,
       'm,
@@ -1618,6 +1626,30 @@ mod __parse__Program {
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant1(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant18<
+      'input,
+      'm,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+    ) -> (usize, Call<'m>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant8<
+      'input,
+      'm,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+    ) -> (usize, Const<'m>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -1657,6 +1689,18 @@ mod __parse__Program {
             _ => __symbol_type_mismatch()
         }
     }
+    fn __pop_Variant17<
+      'input,
+      'm,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+    ) -> (usize, Function<'m>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
     fn __pop_Variant3<
       'input,
       'm,
@@ -1669,6 +1713,18 @@ mod __parse__Program {
             _ => __symbol_type_mismatch()
         }
     }
+    fn __pop_Variant15<
+      'input,
+      'm,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+    ) -> (usize, FunctionSignature, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
     fn __pop_Variant22<
       'input,
       'm,
@@ -1678,6 +1734,54 @@ mod __parse__Program {
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant22(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant14<
+      'input,
+      'm,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+    ) -> (usize, Operator, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant14(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant23<
+      'input,
+      'm,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+    ) -> (usize, Program<'m>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant23(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant11<
+      'input,
+      'm,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+    ) -> (usize, Statement<'m>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
+            _ => __symbol_type_mismatch()
+        }
+    }
+    fn __pop_Variant24<
+      'input,
+      'm,
+    >(
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+    ) -> (usize, Variable<'m>, usize)
+     {
+        match __symbols.pop() {
+            Some((__l, __Symbol::Variant24(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -1746,82 +1850,22 @@ mod __parse__Program {
       'm,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, alloc::vec::Vec<ast::Statement<'m>>, usize)
+    ) -> (usize, alloc::vec::Vec<Statement<'m>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant19(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant6<
+    fn __pop_Variant7<
       'input,
       'm,
     >(
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, ast::Block<'m>, usize)
+    ) -> (usize, core::option::Option<Block<'m>>, usize)
      {
         match __symbols.pop() {
-            Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant17<
-      'input,
-      'm,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, ast::Function<'m>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant23<
-      'input,
-      'm,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, ast::Program<'m>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant23(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant11<
-      'input,
-      'm,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, ast::Statement<'m>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant18<
-      'input,
-      'm,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, call::Call<'m>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant8<
-      'input,
-      'm,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, constant::Const<'m>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
+            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
             _ => __symbol_type_mismatch()
         }
     }
@@ -1873,54 +1917,6 @@ mod __parse__Program {
             _ => __symbol_type_mismatch()
         }
     }
-    fn __pop_Variant7<
-      'input,
-      'm,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, core::option::Option<ast::Block<'m>>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant15<
-      'input,
-      'm,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, types::FunctionSignature, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant15(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant14<
-      'input,
-      'm,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, types::Operator, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant14(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
-    fn __pop_Variant24<
-      'input,
-      'm,
-    >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, types::Variable<'m>, usize)
-     {
-        match __symbols.pop() {
-            Some((__l, __Symbol::Variant24(__v), __r)) => (__l, __v, __r),
-            _ => __symbol_type_mismatch()
-        }
-    }
     fn __pop_Variant0<
       'input,
       'm,
@@ -1943,7 +1939,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (<Expr> COMMA) = Expr, COMMA => ActionFn(110);
+        // (<PExpr> COMMA) = PExpr, COMMA => ActionFn(110);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
@@ -1963,7 +1959,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (<Expr> COMMA)* =  => ActionFn(108);
+        // (<PExpr> COMMA)* =  => ActionFn(108);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action108::<>(input, &__start, &__end);
@@ -1980,7 +1976,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (<Expr> COMMA)* = (<Expr> COMMA)+ => ActionFn(109);
+        // (<PExpr> COMMA)* = (<PExpr> COMMA)+ => ActionFn(109);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -1998,7 +1994,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (<Expr> COMMA)+ = Expr, COMMA => ActionFn(126);
+        // (<PExpr> COMMA)+ = PExpr, COMMA => ActionFn(126);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
@@ -2018,7 +2014,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (<Expr> COMMA)+ = (<Expr> COMMA)+, Expr, COMMA => ActionFn(127);
+        // (<PExpr> COMMA)+ = (<PExpr> COMMA)+, PExpr, COMMA => ActionFn(127);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant1(__symbols);
@@ -2039,7 +2035,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (<FuncParam> COMMA) = FuncParam, COMMA => ActionFn(115);
+        // (<PFuncParam> COMMA) = PFuncParam, COMMA => ActionFn(115);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant3(__symbols);
@@ -2059,7 +2055,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (<FuncParam> COMMA)* =  => ActionFn(113);
+        // (<PFuncParam> COMMA)* =  => ActionFn(113);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action113::<>(input, &__start, &__end);
@@ -2076,7 +2072,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (<FuncParam> COMMA)* = (<FuncParam> COMMA)+ => ActionFn(114);
+        // (<PFuncParam> COMMA)* = (<PFuncParam> COMMA)+ => ActionFn(114);
         let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2094,7 +2090,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (<FuncParam> COMMA)+ = FuncParam, COMMA => ActionFn(130);
+        // (<PFuncParam> COMMA)+ = PFuncParam, COMMA => ActionFn(130);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant3(__symbols);
@@ -2114,7 +2110,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (<FuncParam> COMMA)+ = (<FuncParam> COMMA)+, FuncParam, COMMA => ActionFn(131);
+        // (<PFuncParam> COMMA)+ = (<PFuncParam> COMMA)+, PFuncParam, COMMA => ActionFn(131);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant3(__symbols);
@@ -2135,7 +2131,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (ASSIGN <Expr>) = ASSIGN, Expr => ActionFn(103);
+        // (ASSIGN <PExpr>) = ASSIGN, PExpr => ActionFn(103);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
@@ -2155,7 +2151,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (ASSIGN <Expr>)? = ASSIGN, Expr => ActionFn(134);
+        // (ASSIGN <PExpr>)? = ASSIGN, PExpr => ActionFn(134);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
@@ -2175,7 +2171,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (ASSIGN <Expr>)? =  => ActionFn(102);
+        // (ASSIGN <PExpr>)? =  => ActionFn(102);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action102::<>(input, &__start, &__end);
@@ -2192,7 +2188,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (ELSE <ElseBlock>) = ELSE, ElseBlock => ActionFn(87);
+        // (ELSE <PElseBlock>) = ELSE, PElseBlock => ActionFn(87);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant6(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
@@ -2212,7 +2208,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (ELSE <ElseBlock>)? = ELSE, ElseBlock => ActionFn(137);
+        // (ELSE <PElseBlock>)? = ELSE, PElseBlock => ActionFn(137);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant6(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
@@ -2232,7 +2228,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // (ELSE <ElseBlock>)? =  => ActionFn(86);
+        // (ELSE <PElseBlock>)? =  => ActionFn(86);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action86::<>(input, &__start, &__end);
@@ -2249,7 +2245,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Block = Statement => ActionFn(68);
+        // PBlock = PStatement => ActionFn(68);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2267,7 +2263,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Block = StrictBlock => ActionFn(69);
+        // PBlock = PStrictBlock => ActionFn(69);
         let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2285,7 +2281,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Bool = TRUE => ActionFn(10);
+        // PBool = TRUE => ActionFn(10);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2303,7 +2299,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Bool = FALSE => ActionFn(11);
+        // PBool = FALSE => ActionFn(11);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2321,7 +2317,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Boxed<Id> = Id => ActionFn(92);
+        // PBoxed<PId> = PId => ActionFn(92);
         let __sym0 = __pop_Variant21(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2339,7 +2335,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // CallParams = Comma<Expr> => ActionFn(52);
+        // PCallParams = PComma<PExpr> => ActionFn(52);
         let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2357,7 +2353,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Comma<Expr> = Expr => ActionFn(144);
+        // PComma<PExpr> = PExpr => ActionFn(144);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2375,7 +2371,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Comma<Expr> =  => ActionFn(145);
+        // PComma<PExpr> =  => ActionFn(145);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action145::<>(input, &__start, &__end);
@@ -2392,7 +2388,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Comma<Expr> = (<Expr> COMMA)+, Expr => ActionFn(146);
+        // PComma<PExpr> = (<PExpr> COMMA)+, PExpr => ActionFn(146);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant2(__symbols);
@@ -2412,7 +2408,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Comma<Expr> = (<Expr> COMMA)+ => ActionFn(147);
+        // PComma<PExpr> = (<PExpr> COMMA)+ => ActionFn(147);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2430,7 +2426,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Comma<FuncParam> = FuncParam => ActionFn(148);
+        // PComma<PFuncParam> = PFuncParam => ActionFn(148);
         let __sym0 = __pop_Variant3(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2448,7 +2444,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Comma<FuncParam> =  => ActionFn(149);
+        // PComma<PFuncParam> =  => ActionFn(149);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action149::<>(input, &__start, &__end);
@@ -2465,7 +2461,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Comma<FuncParam> = (<FuncParam> COMMA)+, FuncParam => ActionFn(150);
+        // PComma<PFuncParam> = (<PFuncParam> COMMA)+, PFuncParam => ActionFn(150);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant3(__symbols);
         let __sym0 = __pop_Variant4(__symbols);
@@ -2485,7 +2481,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Comma<FuncParam> = (<FuncParam> COMMA)+ => ActionFn(151);
+        // PComma<PFuncParam> = (<PFuncParam> COMMA)+ => ActionFn(151);
         let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2503,7 +2499,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Condition = IF, Expr, RPAREN, StrictBlock, ELSE, ElseBlock => ActionFn(138);
+        // PCondition = IF, PExpr, RPAREN, PStrictBlock, ELSE, PElseBlock => ActionFn(138);
         assert!(__symbols.len() >= 6);
         let __sym5 = __pop_Variant6(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
@@ -2527,7 +2523,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Condition = IF, Expr, RPAREN, StrictBlock => ActionFn(139);
+        // PCondition = IF, PExpr, RPAREN, PStrictBlock => ActionFn(139);
         assert!(__symbols.len() >= 4);
         let __sym3 = __pop_Variant6(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
@@ -2549,7 +2545,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Const = SimpleConst => ActionFn(17);
+        // PConst = PSimpleConst => ActionFn(17);
         let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2567,7 +2563,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Dimension = LBRACKET, Expr, RLBRACKET, Expr, RBRACKET => ActionFn(21);
+        // PDimension = LBRACKET, PExpr, RLBRACKET, PExpr, RBRACKET => ActionFn(21);
         assert!(__symbols.len() >= 5);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant1(__symbols);
@@ -2590,7 +2586,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Dimension = LBRACKET, Expr, RBRACKET => ActionFn(22);
+        // PDimension = LBRACKET, PExpr, RBRACKET => ActionFn(22);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant1(__symbols);
@@ -2611,7 +2607,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Dimension? = Dimension => ActionFn(104);
+        // PDimension? = PDimension => ActionFn(104);
         let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2629,7 +2625,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Dimension? =  => ActionFn(105);
+        // PDimension? =  => ActionFn(105);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action105::<>(input, &__start, &__end);
@@ -2646,7 +2642,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // ElseBlock = Condition => ActionFn(72);
+        // PElseBlock = PCondition => ActionFn(72);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2664,7 +2660,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // ElseBlock = StrictBlock => ActionFn(73);
+        // PElseBlock = PStrictBlock => ActionFn(73);
         let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2682,7 +2678,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Expr = Tier<ExprOp, LogicExpr> => ActionFn(39);
+        // PExpr = PTier<PExprOp, PLogicExpr> => ActionFn(39);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2700,7 +2696,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Expr? = Expr => ActionFn(106);
+        // PExpr? = PExpr => ActionFn(106);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2718,7 +2714,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Expr? =  => ActionFn(107);
+        // PExpr? =  => ActionFn(107);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action107::<>(input, &__start, &__end);
@@ -2735,7 +2731,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // ExprOp = AND => ActionFn(28);
+        // PExprOp = AND => ActionFn(28);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2753,7 +2749,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // ExprOp = OR => ActionFn(29);
+        // PExprOp = OR => ActionFn(29);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2771,7 +2767,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Factor = Factor, PipeOp, FORWARD, Boxed<Id> => ActionFn(44);
+        // PFactor = PFactor, PPipeOp, FORWARD, PBoxed<PId> => ActionFn(44);
         assert!(__symbols.len() >= 4);
         let __sym3 = __pop_Variant1(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
@@ -2793,7 +2789,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Factor = Factor, PipeOp, Boxed<Id> => ActionFn(45);
+        // PFactor = PFactor, PPipeOp, PBoxed<PId> => ActionFn(45);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant1(__symbols);
         let __sym1 = __pop_Variant14(__symbols);
@@ -2814,7 +2810,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Factor = Item => ActionFn(46);
+        // PFactor = PItem => ActionFn(46);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2832,7 +2828,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FactorOp = MUL => ActionFn(36);
+        // PFactorOp = MUL => ActionFn(36);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2850,7 +2846,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FactorOp = DIV => ActionFn(37);
+        // PFactorOp = DIV => ActionFn(37);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2868,7 +2864,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Float = FLOAT => ActionFn(9);
+        // PFloat = FLOAT => ActionFn(9);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2886,7 +2882,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FnSignature = FN, CALL_ID, FunctionParams, RPAREN, COLON, Type => ActionFn(54);
+        // PFnSignature = FN, CALL_ID, PFunctionParams, RPAREN, COLON, PType => ActionFn(54);
         assert!(__symbols.len() >= 6);
         let __sym5 = __pop_Variant20(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
@@ -2910,7 +2906,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // ForLoop = FOR, ID, IN, Expr, RPAREN, Block => ActionFn(78);
+        // PForLoop = FOR, ID, IN, PExpr, RPAREN, PBlock => ActionFn(78);
         assert!(__symbols.len() >= 6);
         let __sym5 = __pop_Variant6(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
@@ -2934,7 +2930,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FuncParam = ID, COLON, Type => ActionFn(51);
+        // PFuncParam = ID, COLON, PType => ActionFn(51);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant20(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
@@ -2955,7 +2951,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FuncParam? = FuncParam => ActionFn(111);
+        // PFuncParam? = PFuncParam => ActionFn(111);
         let __sym0 = __pop_Variant3(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -2973,7 +2969,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FuncParam? =  => ActionFn(112);
+        // PFuncParam? =  => ActionFn(112);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action112::<>(input, &__start, &__end);
@@ -2990,7 +2986,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Function = FnSignature, FunctionBlock => ActionFn(58);
+        // PFunction = PFnSignature, PFunctionBlock => ActionFn(58);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant6(__symbols);
         let __sym0 = __pop_Variant15(__symbols);
@@ -3010,7 +3006,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FunctionBlock = LCBRACKET, RCBRACKET => ActionFn(152);
+        // PFunctionBlock = LCBRACKET, RCBRACKET => ActionFn(152);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
@@ -3030,7 +3026,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FunctionBlock = LCBRACKET, FunctionItem+, RCBRACKET => ActionFn(153);
+        // PFunctionBlock = LCBRACKET, PFunctionItem+, RCBRACKET => ActionFn(153);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant19(__symbols);
@@ -3051,7 +3047,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FunctionCall = CALL_ID, CallParams, RPAREN => ActionFn(59);
+        // PFunctionCall = CALL_ID, PCallParams, RPAREN => ActionFn(59);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant9(__symbols);
@@ -3072,7 +3068,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FunctionItem = Statement => ActionFn(55);
+        // PFunctionItem = PStatement => ActionFn(55);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3090,7 +3086,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FunctionItem = VarDeclaration => ActionFn(56);
+        // PFunctionItem = PVarDeclaration => ActionFn(56);
         let __sym0 = __pop_Variant24(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3108,7 +3104,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FunctionItem* =  => ActionFn(88);
+        // PFunctionItem* =  => ActionFn(88);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action88::<>(input, &__start, &__end);
@@ -3125,7 +3121,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FunctionItem* = FunctionItem+ => ActionFn(89);
+        // PFunctionItem* = PFunctionItem+ => ActionFn(89);
         let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3143,7 +3139,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FunctionItem+ = FunctionItem => ActionFn(116);
+        // PFunctionItem+ = PFunctionItem => ActionFn(116);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3161,7 +3157,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FunctionItem+ = FunctionItem+, FunctionItem => ActionFn(117);
+        // PFunctionItem+ = PFunctionItem+, PFunctionItem => ActionFn(117);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant11(__symbols);
         let __sym0 = __pop_Variant19(__symbols);
@@ -3181,7 +3177,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FunctionParams = Comma<FuncParam> => ActionFn(53);
+        // PFunctionParams = PComma<PFuncParam> => ActionFn(53);
         let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3199,7 +3195,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FunctionType = Type => ActionFn(6);
+        // PFunctionType = PType => ActionFn(6);
         let __sym0 = __pop_Variant20(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3217,7 +3213,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // FunctionType = T_VOID => ActionFn(7);
+        // PFunctionType = T_VOID => ActionFn(7);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3235,7 +3231,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // GlobalStatement = Function => ActionFn(65);
+        // PGlobalStatement = PFunction => ActionFn(65);
         let __sym0 = __pop_Variant17(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3253,7 +3249,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // GlobalStatement = Statement => ActionFn(66);
+        // PGlobalStatement = PStatement => ActionFn(66);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3271,7 +3267,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // GlobalStatement = VarDeclaration => ActionFn(67);
+        // PGlobalStatement = PVarDeclaration => ActionFn(67);
         let __sym0 = __pop_Variant24(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3289,7 +3285,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // GlobalStatement* =  => ActionFn(81);
+        // PGlobalStatement* =  => ActionFn(81);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action81::<>(input, &__start, &__end);
@@ -3306,7 +3302,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // GlobalStatement* = GlobalStatement+ => ActionFn(82);
+        // PGlobalStatement* = PGlobalStatement+ => ActionFn(82);
         let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3324,7 +3320,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // GlobalStatement+ = GlobalStatement => ActionFn(120);
+        // PGlobalStatement+ = PGlobalStatement => ActionFn(120);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3342,7 +3338,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // GlobalStatement+ = GlobalStatement+, GlobalStatement => ActionFn(121);
+        // PGlobalStatement+ = PGlobalStatement+, PGlobalStatement => ActionFn(121);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant11(__symbols);
         let __sym0 = __pop_Variant19(__symbols);
@@ -3362,7 +3358,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Id = ID => ActionFn(18);
+        // PId = ID => ActionFn(18);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3380,7 +3376,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Indexing = Expr, COLON, Expr => ActionFn(19);
+        // PIndexing = PExpr, COLON, PExpr => ActionFn(19);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant1(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
@@ -3401,7 +3397,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Indexing = Expr => ActionFn(20);
+        // PIndexing = PExpr => ActionFn(20);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3419,7 +3415,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Int = NUMBER => ActionFn(8);
+        // PInt = NUMBER => ActionFn(8);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3437,7 +3433,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Item = VarReference => ActionFn(47);
+        // PItem = PVarReference => ActionFn(47);
         let __sym0 = __pop_Variant27(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3455,7 +3451,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Item = Const => ActionFn(48);
+        // PItem = PConst => ActionFn(48);
         let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3473,7 +3469,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Item = LPAREN, Expr, RPAREN => ActionFn(49);
+        // PItem = LPAREN, PExpr, RPAREN => ActionFn(49);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant1(__symbols);
@@ -3494,7 +3490,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Item = FunctionCall => ActionFn(50);
+        // PItem = PFunctionCall => ActionFn(50);
         let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3512,7 +3508,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // LineStatement = VarAssignment, SEMICOLON => ActionFn(70);
+        // PLineStatement = PVarAssignment, SEMICOLON => ActionFn(70);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant11(__symbols);
@@ -3532,7 +3528,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // LineStatement = Expr, SEMICOLON => ActionFn(71);
+        // PLineStatement = PExpr, SEMICOLON => ActionFn(71);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
@@ -3552,7 +3548,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // LogicExpr = MathExpr, LogicOp, MathExpr => ActionFn(40);
+        // PLogicExpr = PMathExpr, PLogicOp, PMathExpr => ActionFn(40);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant1(__symbols);
         let __sym1 = __pop_Variant14(__symbols);
@@ -3573,7 +3569,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // LogicExpr = MathExpr => ActionFn(41);
+        // PLogicExpr = PMathExpr => ActionFn(41);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3591,7 +3587,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // LogicOp = LT => ActionFn(30);
+        // PLogicOp = LT => ActionFn(30);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3609,7 +3605,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // LogicOp = GT => ActionFn(31);
+        // PLogicOp = GT => ActionFn(31);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3627,7 +3623,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // LogicOp = NOTEQUAL => ActionFn(32);
+        // PLogicOp = NOTEQUAL => ActionFn(32);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3645,7 +3641,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // LogicOp = EQUAL => ActionFn(33);
+        // PLogicOp = EQUAL => ActionFn(33);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3663,7 +3659,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Loop = ForLoop => ActionFn(76);
+        // PLoop = PForLoop => ActionFn(76);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3681,7 +3677,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Loop = WhileLoop => ActionFn(77);
+        // PLoop = PWhileLoop => ActionFn(77);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3699,7 +3695,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // MathExpr = Tier<MathOp, Term> => ActionFn(42);
+        // PMathExpr = PTier<PMathOp, PTerm> => ActionFn(42);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3717,7 +3713,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // MathOp = ADD => ActionFn(34);
+        // PMathOp = ADD => ActionFn(34);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3735,7 +3731,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // MathOp = SUB => ActionFn(35);
+        // PMathOp = SUB => ActionFn(35);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3753,7 +3749,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // PipeOp = PIPE => ActionFn(38);
+        // PPipeOp = PIPE => ActionFn(38);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3771,7 +3767,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Program =  => ActionFn(154);
+        // PProgram =  => ActionFn(154);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action154::<>(input, &__start, &__end);
@@ -3788,7 +3784,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Program = GlobalStatement+ => ActionFn(155);
+        // PProgram = PGlobalStatement+ => ActionFn(155);
         let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3806,7 +3802,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // ReturnStatement = RETURN, Expr, SEMICOLON => ActionFn(60);
+        // PReturnStatement = RETURN, PExpr, SEMICOLON => ActionFn(60);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant1(__symbols);
@@ -3827,7 +3823,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // SimpleConst = Int => ActionFn(13);
+        // PSimpleConst = PInt => ActionFn(13);
         let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3845,7 +3841,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // SimpleConst = Str => ActionFn(14);
+        // PSimpleConst = PStr => ActionFn(14);
         let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3863,7 +3859,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // SimpleConst = Float => ActionFn(15);
+        // PSimpleConst = PFloat => ActionFn(15);
         let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3881,7 +3877,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // SimpleConst = Bool => ActionFn(16);
+        // PSimpleConst = PBool => ActionFn(16);
         let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3899,7 +3895,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Statement = Condition => ActionFn(61);
+        // PStatement = PCondition => ActionFn(61);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3917,7 +3913,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Statement = Loop => ActionFn(62);
+        // PStatement = PLoop => ActionFn(62);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3935,7 +3931,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Statement = ReturnStatement => ActionFn(63);
+        // PStatement = PReturnStatement => ActionFn(63);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3953,7 +3949,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Statement = LineStatement => ActionFn(64);
+        // PStatement = PLineStatement => ActionFn(64);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -3971,7 +3967,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Statement* =  => ActionFn(83);
+        // PStatement* =  => ActionFn(83);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action83::<>(input, &__start, &__end);
@@ -3988,7 +3984,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Statement* = Statement+ => ActionFn(84);
+        // PStatement* = PStatement+ => ActionFn(84);
         let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4006,7 +4002,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Statement+ = Statement => ActionFn(118);
+        // PStatement+ = PStatement => ActionFn(118);
         let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4024,7 +4020,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Statement+ = Statement+, Statement => ActionFn(119);
+        // PStatement+ = PStatement+, PStatement => ActionFn(119);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant11(__symbols);
         let __sym0 = __pop_Variant19(__symbols);
@@ -4044,7 +4040,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Str = STRING => ActionFn(12);
+        // PStr = STRING => ActionFn(12);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4062,7 +4058,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // StrictBlock = LCBRACKET, RCBRACKET => ActionFn(156);
+        // PStrictBlock = LCBRACKET, RCBRACKET => ActionFn(156);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
@@ -4082,7 +4078,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // StrictBlock = LCBRACKET, Statement+, RCBRACKET => ActionFn(157);
+        // PStrictBlock = LCBRACKET, PStatement+, RCBRACKET => ActionFn(157);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant19(__symbols);
@@ -4103,7 +4099,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Term = Tier<FactorOp, Factor> => ActionFn(43);
+        // PTerm = PTier<PFactorOp, PFactor> => ActionFn(43);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4121,7 +4117,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Tier<ExprOp, LogicExpr> = Tier<ExprOp, LogicExpr>, ExprOp, LogicExpr => ActionFn(97);
+        // PTier<PExprOp, PLogicExpr> = PTier<PExprOp, PLogicExpr>, PExprOp, PLogicExpr => ActionFn(97);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant1(__symbols);
         let __sym1 = __pop_Variant14(__symbols);
@@ -4142,7 +4138,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Tier<ExprOp, LogicExpr> = LogicExpr => ActionFn(98);
+        // PTier<PExprOp, PLogicExpr> = PLogicExpr => ActionFn(98);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4160,7 +4156,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Tier<FactorOp, Factor> = Tier<FactorOp, Factor>, FactorOp, Factor => ActionFn(93);
+        // PTier<PFactorOp, PFactor> = PTier<PFactorOp, PFactor>, PFactorOp, PFactor => ActionFn(93);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant1(__symbols);
         let __sym1 = __pop_Variant14(__symbols);
@@ -4181,7 +4177,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Tier<FactorOp, Factor> = Factor => ActionFn(94);
+        // PTier<PFactorOp, PFactor> = PFactor => ActionFn(94);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4199,7 +4195,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Tier<MathOp, Term> = Tier<MathOp, Term>, MathOp, Term => ActionFn(95);
+        // PTier<PMathOp, PTerm> = PTier<PMathOp, PTerm>, PMathOp, PTerm => ActionFn(95);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant1(__symbols);
         let __sym1 = __pop_Variant14(__symbols);
@@ -4220,7 +4216,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Tier<MathOp, Term> = Term => ActionFn(96);
+        // PTier<PMathOp, PTerm> = PTerm => ActionFn(96);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4238,7 +4234,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Type = T_INT => ActionFn(1);
+        // PType = T_INT => ActionFn(1);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4256,7 +4252,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Type = T_FLOAT => ActionFn(2);
+        // PType = T_FLOAT => ActionFn(2);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4274,7 +4270,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Type = T_BOOl => ActionFn(3);
+        // PType = T_BOOl => ActionFn(3);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4292,7 +4288,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Type = T_STR => ActionFn(4);
+        // PType = T_STR => ActionFn(4);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4310,7 +4306,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // Type = T_DATAFRAME => ActionFn(5);
+        // PType = T_DATAFRAME => ActionFn(5);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4328,7 +4324,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // VarAssignment = VarReference, ASSIGN, Expr => ActionFn(27);
+        // PVarAssignment = PVarReference, ASSIGN, PExpr => ActionFn(27);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant1(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
@@ -4349,7 +4345,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // VarDeclaration = LET, ID, COLON, Type, Dimension, ASSIGN, Expr, SEMICOLON => ActionFn(140);
+        // PVarDeclaration = LET, ID, COLON, PType, PDimension, ASSIGN, PExpr, SEMICOLON => ActionFn(140);
         assert!(__symbols.len() >= 8);
         let __sym7 = __pop_Variant0(__symbols);
         let __sym6 = __pop_Variant1(__symbols);
@@ -4375,7 +4371,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // VarDeclaration = LET, ID, COLON, Type, ASSIGN, Expr, SEMICOLON => ActionFn(141);
+        // PVarDeclaration = LET, ID, COLON, PType, ASSIGN, PExpr, SEMICOLON => ActionFn(141);
         assert!(__symbols.len() >= 7);
         let __sym6 = __pop_Variant0(__symbols);
         let __sym5 = __pop_Variant1(__symbols);
@@ -4400,7 +4396,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // VarDeclaration = LET, ID, COLON, Type, Dimension, SEMICOLON => ActionFn(142);
+        // PVarDeclaration = LET, ID, COLON, PType, PDimension, SEMICOLON => ActionFn(142);
         assert!(__symbols.len() >= 6);
         let __sym5 = __pop_Variant0(__symbols);
         let __sym4 = __pop_Variant12(__symbols);
@@ -4424,7 +4420,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // VarDeclaration = LET, ID, COLON, Type, SEMICOLON => ActionFn(143);
+        // PVarDeclaration = LET, ID, COLON, PType, SEMICOLON => ActionFn(143);
         assert!(__symbols.len() >= 5);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant20(__symbols);
@@ -4447,7 +4443,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // VarRefIndex = LBRACKET, Indexing, RBRACKET => ActionFn(24);
+        // PVarRefIndex = LBRACKET, PIndexing, RBRACKET => ActionFn(24);
         assert!(__symbols.len() >= 3);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant22(__symbols);
@@ -4468,7 +4464,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // VarRefIndex = LBRACKET, Indexing, RLBRACKET, Indexing, RBRACKET => ActionFn(25);
+        // PVarRefIndex = LBRACKET, PIndexing, RLBRACKET, PIndexing, RBRACKET => ActionFn(25);
         assert!(__symbols.len() >= 5);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant22(__symbols);
@@ -4491,7 +4487,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // VarRefIndex? = VarRefIndex => ActionFn(99);
+        // PVarRefIndex? = PVarRefIndex => ActionFn(99);
         let __sym0 = __pop_Variant25(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4509,7 +4505,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // VarRefIndex? =  => ActionFn(100);
+        // PVarRefIndex? =  => ActionFn(100);
         let __start = __lookahead_start.cloned().or_else(|| __symbols.last().map(|s| s.2.clone())).unwrap_or_default();
         let __end = __start.clone();
         let __nt = super::__action100::<>(input, &__start, &__end);
@@ -4526,7 +4522,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // VarReference = ID, VarRefIndex => ActionFn(158);
+        // PVarReference = ID, PVarRefIndex => ActionFn(158);
         assert!(__symbols.len() >= 2);
         let __sym1 = __pop_Variant25(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
@@ -4546,7 +4542,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // VarReference = ID => ActionFn(159);
+        // PVarReference = ID => ActionFn(159);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
@@ -4564,7 +4560,7 @@ mod __parse__Program {
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
-        // WhileLoop = WHILE, Expr, RPAREN, Block => ActionFn(79);
+        // PWhileLoop = WHILE, PExpr, RPAREN, PBlock => ActionFn(79);
         assert!(__symbols.len() >= 4);
         let __sym3 = __pop_Variant6(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
@@ -4577,21 +4573,19 @@ mod __parse__Program {
         (4, 71)
     }
 }
-pub use self::__parse__Program::ProgramParser;
+pub use self::__parse__PProgram::PProgramParser;
 #[cfg_attr(rustfmt, rustfmt_skip)]
 mod __intern_token {
     #![allow(unused_imports)]
     use std::str::FromStr;
-    use crate::ast::{Dimension, types::Variable, VarRef, FunctionParam, types::FunctionSignature};
-    use crate::ast;
-    use crate::ast::types;
+    use crate::ast::{Dimension};
+    use crate::ast::types::{DataType, Function, FunctionParam, Operator, Variable, FunctionSignature};
     use crate::ast::expressions::{Expression, Index};
-    use crate::ast::expressions::constant::TypeConst;
-    use crate::ast::expressions::constant;
-    use crate::ast::types::DataType;
-    use crate::ast::expressions::operation;
+    use crate::ast::expressions::constant::{Const, TypeConst};
     use crate::ast::expressions::id::{Access, Id};
-    use crate::ast::expressions::call;
+    use crate::ast::expressions::operation::Operation;
+    use crate::ast::expressions::call::Call;
+    use crate::ast::statements::{Block, Program, Statement};
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -4660,8 +4654,8 @@ fn __action0<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Program<'m>, usize),
-) -> ast::Program<'m>
+    (_, __0, _): (usize, Program<'m>, usize),
+) -> Program<'m>
 {
     __0
 }
@@ -4757,9 +4751,9 @@ fn __action8<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> constant::Const<'m>
+) -> Const<'m>
 {
-    constant::Const::new(__0, DataType::Int)
+    Const::new(__0, DataType::Int)
 }
 
 #[allow(unused_variables)]
@@ -4769,9 +4763,9 @@ fn __action9<
 >(
     input: &'input str,
     (_, f, _): (usize, &'input str, usize),
-) -> constant::Const<'m>
+) -> Const<'m>
 {
-    constant::Const::new(f, DataType::Float)
+    Const::new(f, DataType::Float)
 }
 
 #[allow(unused_variables)]
@@ -4781,9 +4775,9 @@ fn __action10<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> constant::Const<'m>
+) -> Const<'m>
 {
-    constant::Const::new(__0, DataType::Bool)
+    Const::new(__0, DataType::Bool)
 }
 
 #[allow(unused_variables)]
@@ -4793,9 +4787,9 @@ fn __action11<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> constant::Const<'m>
+) -> Const<'m>
 {
-    constant::Const::new(__0, DataType::Bool)
+    Const::new(__0, DataType::Bool)
 }
 
 #[allow(unused_variables)]
@@ -4805,9 +4799,9 @@ fn __action12<
 >(
     input: &'input str,
     (_, s, _): (usize, &'input str, usize),
-) -> constant::Const<'m>
+) -> Const<'m>
 {
-    constant::Const::new(&s[1..s.len() - 1], DataType::String)
+    Const::new(&s[1..s.len() - 1], DataType::String)
 }
 
 #[allow(unused_variables)]
@@ -4816,8 +4810,8 @@ fn __action13<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, constant::Const<'m>, usize),
-) -> constant::Const<'m>
+    (_, __0, _): (usize, Const<'m>, usize),
+) -> Const<'m>
 {
     __0
 }
@@ -4828,8 +4822,8 @@ fn __action14<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, constant::Const<'m>, usize),
-) -> constant::Const<'m>
+    (_, __0, _): (usize, Const<'m>, usize),
+) -> Const<'m>
 {
     __0
 }
@@ -4840,8 +4834,8 @@ fn __action15<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, constant::Const<'m>, usize),
-) -> constant::Const<'m>
+    (_, __0, _): (usize, Const<'m>, usize),
+) -> Const<'m>
 {
     __0
 }
@@ -4852,8 +4846,8 @@ fn __action16<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, constant::Const<'m>, usize),
-) -> constant::Const<'m>
+    (_, __0, _): (usize, Const<'m>, usize),
+) -> Const<'m>
 {
     __0
 }
@@ -4864,8 +4858,8 @@ fn __action17<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, constant::Const<'m>, usize),
-) -> constant::Const<'m>
+    (_, __0, _): (usize, Const<'m>, usize),
+) -> Const<'m>
 {
     __0
 }
@@ -4954,9 +4948,9 @@ fn __action23<
     (_, dim, _): (usize, core::option::Option<Dimension<'m>>, usize),
     (_, value, _): (usize, core::option::Option<Box<Expression<'m>>>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> types::Variable<'m>
+) -> Variable<'m>
 {
-    types::Variable {
+    Variable {
         id: String::from(id),
         data_type,
         dimension: dim.unwrap_or(Dimension(0, vec![])),
@@ -5019,9 +5013,9 @@ fn __action27<
     (_, var, _): (usize, Access<'m>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, exp, _): (usize, Box<Expression<'m>>, usize),
-) -> ast::Statement<'m>
+) -> Statement<'m>
 {
-    ast::Statement::VarAssign(var, exp)
+    Statement::VarAssign(var, exp)
 }
 
 #[allow(unused_variables)]
@@ -5031,9 +5025,9 @@ fn __action28<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> types::Operator
+) -> Operator
 {
-    types::Operator::And
+    Operator::And
 }
 
 #[allow(unused_variables)]
@@ -5043,9 +5037,9 @@ fn __action29<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> types::Operator
+) -> Operator
 {
-    types::Operator::Or
+    Operator::Or
 }
 
 #[allow(unused_variables)]
@@ -5055,9 +5049,9 @@ fn __action30<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> types::Operator
+) -> Operator
 {
-    types::Operator::LessThan
+    Operator::LessThan
 }
 
 #[allow(unused_variables)]
@@ -5067,9 +5061,9 @@ fn __action31<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> types::Operator
+) -> Operator
 {
-    types::Operator::GreaterThan
+    Operator::GreaterThan
 }
 
 #[allow(unused_variables)]
@@ -5079,9 +5073,9 @@ fn __action32<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> types::Operator
+) -> Operator
 {
-    types::Operator::NotEq
+    Operator::NotEq
 }
 
 #[allow(unused_variables)]
@@ -5091,9 +5085,9 @@ fn __action33<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> types::Operator
+) -> Operator
 {
-    types::Operator::Eq
+    Operator::Eq
 }
 
 #[allow(unused_variables)]
@@ -5103,9 +5097,9 @@ fn __action34<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> types::Operator
+) -> Operator
 {
-    types::Operator::Add
+    Operator::Add
 }
 
 #[allow(unused_variables)]
@@ -5115,9 +5109,9 @@ fn __action35<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> types::Operator
+) -> Operator
 {
-    types::Operator::Sub
+    Operator::Sub
 }
 
 #[allow(unused_variables)]
@@ -5127,9 +5121,9 @@ fn __action36<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> types::Operator
+) -> Operator
 {
-    types::Operator::Mul
+    Operator::Mul
 }
 
 #[allow(unused_variables)]
@@ -5139,9 +5133,9 @@ fn __action37<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> types::Operator
+) -> Operator
 {
-    types::Operator::Div
+    Operator::Div
 }
 
 #[allow(unused_variables)]
@@ -5151,9 +5145,9 @@ fn __action38<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> types::Operator
+) -> Operator
 {
-    types::Operator::Pipe
+    Operator::Pipe
 }
 
 #[allow(unused_variables)]
@@ -5175,13 +5169,13 @@ fn __action40<
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression<'m>>, usize),
-    (_, __1, _): (usize, types::Operator, usize),
+    (_, __1, _): (usize, Operator, usize),
     (_, __2, _): (usize, Box<Expression<'m>>, usize),
 ) -> Box<Expression<'m>>
 {
     Box::new(
             Expression::Op(
-                operation::Operation::new(__0, __1, __2)
+                Operation::new(__0, __1, __2)
             )
         )
 }
@@ -5229,14 +5223,14 @@ fn __action44<
 >(
     input: &'input str,
     (_, factor, _): (usize, Box<Expression<'m>>, usize),
-    (_, _, _): (usize, types::Operator, usize),
+    (_, _, _): (usize, Operator, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, id, _): (usize, Box<Expression<'m>>, usize),
 ) -> Box<Expression<'m>>
 {
     Box::new(
             Expression::Op(
-                operation::Operation::new(factor, types::Operator::ForwardPipe, id)
+                Operation::new(factor, Operator::ForwardPipe, id)
             )
         )
 }
@@ -5248,13 +5242,13 @@ fn __action45<
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression<'m>>, usize),
-    (_, __1, _): (usize, types::Operator, usize),
+    (_, __1, _): (usize, Operator, usize),
     (_, __2, _): (usize, Box<Expression<'m>>, usize),
 ) -> Box<Expression<'m>>
 {
     Box::new(
             Expression::Op(
-                operation::Operation::new(__0, __1, __2)
+                Operation::new(__0, __1, __2)
             )
         )
 }
@@ -5289,7 +5283,7 @@ fn __action48<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, constant::Const<'m>, usize),
+    (_, __0, _): (usize, Const<'m>, usize),
 ) -> Box<Expression<'m>>
 {
     Box::new(Expression::Const(__0))
@@ -5315,7 +5309,7 @@ fn __action50<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, call::Call<'m>, usize),
+    (_, __0, _): (usize, Call<'m>, usize),
 ) -> Box<Expression<'m>>
 {
     Box::new(Expression::Call(__0))
@@ -5371,9 +5365,9 @@ fn __action54<
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, dtype, _): (usize, DataType, usize),
-) -> types::FunctionSignature
+) -> FunctionSignature
 {
-    types::FunctionSignature {
+    FunctionSignature {
     id:  String::from(&id[..id.len() - 1]),
     data_type: dtype,
     params: params
@@ -5386,8 +5380,8 @@ fn __action55<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> ast::Statement<'m>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> Statement<'m>
 {
     __0
 }
@@ -5398,10 +5392,10 @@ fn __action56<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, types::Variable<'m>, usize),
-) -> ast::Statement<'m>
+    (_, __0, _): (usize, Variable<'m>, usize),
+) -> Statement<'m>
 {
-    ast::Statement::VarDeclaration(__0)
+    Statement::VarDeclaration(__0)
 }
 
 #[allow(unused_variables)]
@@ -5411,11 +5405,11 @@ fn __action57<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, statements, _): (usize, alloc::vec::Vec<ast::Statement<'m>>, usize),
+    (_, statements, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> ast::Block<'m>
+) -> Block<'m>
 {
-    ast::Block(statements)
+    Block(statements)
 }
 
 #[allow(unused_variables)]
@@ -5424,11 +5418,11 @@ fn __action58<
     'm,
 >(
     input: &'input str,
-    (_, signature, _): (usize, types::FunctionSignature, usize),
-    (_, block, _): (usize, ast::Block<'m>, usize),
-) -> ast::Function<'m>
+    (_, signature, _): (usize, FunctionSignature, usize),
+    (_, block, _): (usize, Block<'m>, usize),
+) -> Function<'m>
 {
-    ast::Function {
+    Function {
     signature: signature,
     block: block
 }
@@ -5443,9 +5437,9 @@ fn __action59<
     (_, id, _): (usize, &'input str, usize),
     (_, params, _): (usize, Vec<Box<Expression<'m>>>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> call::Call<'m>
+) -> Call<'m>
 {
-    call::Call::new(&id[..id.len() - 1], params)
+    Call::new(&id[..id.len() - 1], params)
 }
 
 #[allow(unused_variables)]
@@ -5457,9 +5451,9 @@ fn __action60<
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, Box<Expression<'m>>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> ast::Statement<'m>
+) -> Statement<'m>
 {
-    ast::Statement::Return(__0)
+    Statement::Return(__0)
 }
 
 #[allow(unused_variables)]
@@ -5468,8 +5462,8 @@ fn __action61<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> ast::Statement<'m>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> Statement<'m>
 {
     __0
 }
@@ -5480,8 +5474,8 @@ fn __action62<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> ast::Statement<'m>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> Statement<'m>
 {
     __0
 }
@@ -5492,8 +5486,8 @@ fn __action63<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> ast::Statement<'m>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> Statement<'m>
 {
     __0
 }
@@ -5504,8 +5498,8 @@ fn __action64<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> ast::Statement<'m>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> Statement<'m>
 {
     __0
 }
@@ -5516,10 +5510,10 @@ fn __action65<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Function<'m>, usize),
-) -> ast::Statement<'m>
+    (_, __0, _): (usize, Function<'m>, usize),
+) -> Statement<'m>
 {
-    ast::Statement::FunctionDeclaration(__0)
+    Statement::FunctionDeclaration(__0)
 }
 
 #[allow(unused_variables)]
@@ -5528,8 +5522,8 @@ fn __action66<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> ast::Statement<'m>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> Statement<'m>
 {
     __0
 }
@@ -5540,10 +5534,10 @@ fn __action67<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, types::Variable<'m>, usize),
-) -> ast::Statement<'m>
+    (_, __0, _): (usize, Variable<'m>, usize),
+) -> Statement<'m>
 {
-    ast::Statement::VarDeclaration(__0)
+    Statement::VarDeclaration(__0)
 }
 
 #[allow(unused_variables)]
@@ -5552,10 +5546,10 @@ fn __action68<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> ast::Block<'m>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> Block<'m>
 {
-    ast::Block(vec![__0])
+    Block(vec![__0])
 }
 
 #[allow(unused_variables)]
@@ -5564,8 +5558,8 @@ fn __action69<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Block<'m>, usize),
-) -> ast::Block<'m>
+    (_, __0, _): (usize, Block<'m>, usize),
+) -> Block<'m>
 {
     __0
 }
@@ -5576,9 +5570,9 @@ fn __action70<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
+    (_, __0, _): (usize, Statement<'m>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> ast::Statement<'m>
+) -> Statement<'m>
 {
     __0
 }
@@ -5591,9 +5585,9 @@ fn __action71<
     input: &'input str,
     (_, __0, _): (usize, Box<Expression<'m>>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> ast::Statement<'m>
+) -> Statement<'m>
 {
-    ast::Statement::Expression(__0)
+    Statement::Expression(__0)
 }
 
 #[allow(unused_variables)]
@@ -5602,10 +5596,10 @@ fn __action72<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> ast::Block<'m>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> Block<'m>
 {
-    ast::Block(vec![__0])
+    Block(vec![__0])
 }
 
 #[allow(unused_variables)]
@@ -5614,8 +5608,8 @@ fn __action73<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Block<'m>, usize),
-) -> ast::Block<'m>
+    (_, __0, _): (usize, Block<'m>, usize),
+) -> Block<'m>
 {
     __0
 }
@@ -5629,11 +5623,11 @@ fn __action74<
     (_, _, _): (usize, &'input str, usize),
     (_, condition, _): (usize, Box<Expression<'m>>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, if_block, _): (usize, ast::Block<'m>, usize),
-    (_, else_block, _): (usize, core::option::Option<ast::Block<'m>>, usize),
-) -> ast::Statement<'m>
+    (_, if_block, _): (usize, Block<'m>, usize),
+    (_, else_block, _): (usize, core::option::Option<Block<'m>>, usize),
+) -> Statement<'m>
 {
-    ast::Statement::If {
+    Statement::If {
             condition: condition,
             if_block: if_block,
             else_block: else_block
@@ -5647,11 +5641,11 @@ fn __action75<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, statements, _): (usize, alloc::vec::Vec<ast::Statement<'m>>, usize),
+    (_, statements, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> ast::Block<'m>
+) -> Block<'m>
 {
-    ast::Block(statements)
+    Block(statements)
 }
 
 #[allow(unused_variables)]
@@ -5660,8 +5654,8 @@ fn __action76<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> ast::Statement<'m>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> Statement<'m>
 {
     __0
 }
@@ -5672,8 +5666,8 @@ fn __action77<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> ast::Statement<'m>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> Statement<'m>
 {
     __0
 }
@@ -5689,10 +5683,10 @@ fn __action78<
     (_, _, _): (usize, &'input str, usize),
     (_, iterable, _): (usize, Box<Expression<'m>>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, block, _): (usize, ast::Block<'m>, usize),
-) -> ast::Statement<'m>
+    (_, block, _): (usize, Block<'m>, usize),
+) -> Statement<'m>
 {
-    ast::Statement::For {
+    Statement::For {
         iterator_id: String::from(id),
         iterable: iterable,
         block: block
@@ -5708,10 +5702,10 @@ fn __action79<
     (_, _, _): (usize, &'input str, usize),
     (_, condition, _): (usize, Box<Expression<'m>>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, block, _): (usize, ast::Block<'m>, usize),
-) -> ast::Statement<'m>
+    (_, block, _): (usize, Block<'m>, usize),
+) -> Statement<'m>
 {
-    ast::Statement::While {
+    Statement::While {
         condition: condition,
         block: block
     }
@@ -5723,10 +5717,10 @@ fn __action80<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, alloc::vec::Vec<ast::Statement<'m>>, usize),
-) -> ast::Program<'m>
+    (_, __0, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
+) -> Program<'m>
 {
-    ast::Program(__0)
+    Program(__0)
 }
 
 #[allow(unused_variables)]
@@ -5737,7 +5731,7 @@ fn __action81<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> alloc::vec::Vec<ast::Statement<'m>>
+) -> alloc::vec::Vec<Statement<'m>>
 {
     alloc::vec![]
 }
@@ -5748,8 +5742,8 @@ fn __action82<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<ast::Statement<'m>>, usize),
-) -> alloc::vec::Vec<ast::Statement<'m>>
+    (_, v, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
+) -> alloc::vec::Vec<Statement<'m>>
 {
     v
 }
@@ -5762,7 +5756,7 @@ fn __action83<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> alloc::vec::Vec<ast::Statement<'m>>
+) -> alloc::vec::Vec<Statement<'m>>
 {
     alloc::vec![]
 }
@@ -5773,8 +5767,8 @@ fn __action84<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<ast::Statement<'m>>, usize),
-) -> alloc::vec::Vec<ast::Statement<'m>>
+    (_, v, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
+) -> alloc::vec::Vec<Statement<'m>>
 {
     v
 }
@@ -5785,8 +5779,8 @@ fn __action85<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Block<'m>, usize),
-) -> core::option::Option<ast::Block<'m>>
+    (_, __0, _): (usize, Block<'m>, usize),
+) -> core::option::Option<Block<'m>>
 {
     Some(__0)
 }
@@ -5799,7 +5793,7 @@ fn __action86<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> core::option::Option<ast::Block<'m>>
+) -> core::option::Option<Block<'m>>
 {
     None
 }
@@ -5811,8 +5805,8 @@ fn __action87<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, ast::Block<'m>, usize),
-) -> ast::Block<'m>
+    (_, __0, _): (usize, Block<'m>, usize),
+) -> Block<'m>
 {
     __0
 }
@@ -5825,7 +5819,7 @@ fn __action88<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> alloc::vec::Vec<ast::Statement<'m>>
+) -> alloc::vec::Vec<Statement<'m>>
 {
     alloc::vec![]
 }
@@ -5836,8 +5830,8 @@ fn __action89<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<ast::Statement<'m>>, usize),
-) -> alloc::vec::Vec<ast::Statement<'m>>
+    (_, v, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
+) -> alloc::vec::Vec<Statement<'m>>
 {
     v
 }
@@ -5899,13 +5893,13 @@ fn __action93<
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression<'m>>, usize),
-    (_, __1, _): (usize, types::Operator, usize),
+    (_, __1, _): (usize, Operator, usize),
     (_, __2, _): (usize, Box<Expression<'m>>, usize),
 ) -> Box<Expression<'m>>
 {
     Box::new(
             Expression::Op(
-                operation::Operation::new(__0, __1, __2)
+                Operation::new(__0, __1, __2)
             )
         )
 }
@@ -5929,13 +5923,13 @@ fn __action95<
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression<'m>>, usize),
-    (_, __1, _): (usize, types::Operator, usize),
+    (_, __1, _): (usize, Operator, usize),
     (_, __2, _): (usize, Box<Expression<'m>>, usize),
 ) -> Box<Expression<'m>>
 {
     Box::new(
             Expression::Op(
-                operation::Operation::new(__0, __1, __2)
+                Operation::new(__0, __1, __2)
             )
         )
 }
@@ -5959,13 +5953,13 @@ fn __action97<
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression<'m>>, usize),
-    (_, __1, _): (usize, types::Operator, usize),
+    (_, __1, _): (usize, Operator, usize),
     (_, __2, _): (usize, Box<Expression<'m>>, usize),
 ) -> Box<Expression<'m>>
 {
     Box::new(
             Expression::Op(
-                operation::Operation::new(__0, __1, __2)
+                Operation::new(__0, __1, __2)
             )
         )
 }
@@ -6202,8 +6196,8 @@ fn __action116<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> alloc::vec::Vec<ast::Statement<'m>>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> alloc::vec::Vec<Statement<'m>>
 {
     alloc::vec![__0]
 }
@@ -6214,9 +6208,9 @@ fn __action117<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<ast::Statement<'m>>, usize),
-    (_, e, _): (usize, ast::Statement<'m>, usize),
-) -> alloc::vec::Vec<ast::Statement<'m>>
+    (_, v, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
+    (_, e, _): (usize, Statement<'m>, usize),
+) -> alloc::vec::Vec<Statement<'m>>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -6227,8 +6221,8 @@ fn __action118<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> alloc::vec::Vec<ast::Statement<'m>>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> alloc::vec::Vec<Statement<'m>>
 {
     alloc::vec![__0]
 }
@@ -6239,9 +6233,9 @@ fn __action119<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<ast::Statement<'m>>, usize),
-    (_, e, _): (usize, ast::Statement<'m>, usize),
-) -> alloc::vec::Vec<ast::Statement<'m>>
+    (_, v, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
+    (_, e, _): (usize, Statement<'m>, usize),
+) -> alloc::vec::Vec<Statement<'m>>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -6252,8 +6246,8 @@ fn __action120<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, ast::Statement<'m>, usize),
-) -> alloc::vec::Vec<ast::Statement<'m>>
+    (_, __0, _): (usize, Statement<'m>, usize),
+) -> alloc::vec::Vec<Statement<'m>>
 {
     alloc::vec![__0]
 }
@@ -6264,9 +6258,9 @@ fn __action121<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<ast::Statement<'m>>, usize),
-    (_, e, _): (usize, ast::Statement<'m>, usize),
-) -> alloc::vec::Vec<ast::Statement<'m>>
+    (_, v, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
+    (_, e, _): (usize, Statement<'m>, usize),
+) -> alloc::vec::Vec<Statement<'m>>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -6555,7 +6549,7 @@ fn __action135<
     __5: (usize, &'input str, usize),
     __6: (usize, Box<Expression<'m>>, usize),
     __7: (usize, &'input str, usize),
-) -> types::Variable<'m>
+) -> Variable<'m>
 {
     let __start0 = __5.0.clone();
     let __end0 = __6.2.clone();
@@ -6589,7 +6583,7 @@ fn __action136<
     __3: (usize, DataType, usize),
     __4: (usize, core::option::Option<Dimension<'m>>, usize),
     __5: (usize, &'input str, usize),
-) -> types::Variable<'m>
+) -> Variable<'m>
 {
     let __start0 = __4.2.clone();
     let __end0 = __5.0.clone();
@@ -6618,8 +6612,8 @@ fn __action137<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, ast::Block<'m>, usize),
-) -> core::option::Option<ast::Block<'m>>
+    __1: (usize, Block<'m>, usize),
+) -> core::option::Option<Block<'m>>
 {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
@@ -6644,10 +6638,10 @@ fn __action138<
     __0: (usize, &'input str, usize),
     __1: (usize, Box<Expression<'m>>, usize),
     __2: (usize, &'input str, usize),
-    __3: (usize, ast::Block<'m>, usize),
+    __3: (usize, Block<'m>, usize),
     __4: (usize, &'input str, usize),
-    __5: (usize, ast::Block<'m>, usize),
-) -> ast::Statement<'m>
+    __5: (usize, Block<'m>, usize),
+) -> Statement<'m>
 {
     let __start0 = __4.0.clone();
     let __end0 = __5.2.clone();
@@ -6676,8 +6670,8 @@ fn __action139<
     __0: (usize, &'input str, usize),
     __1: (usize, Box<Expression<'m>>, usize),
     __2: (usize, &'input str, usize),
-    __3: (usize, ast::Block<'m>, usize),
-) -> ast::Statement<'m>
+    __3: (usize, Block<'m>, usize),
+) -> Statement<'m>
 {
     let __start0 = __3.2.clone();
     let __end0 = __3.2.clone();
@@ -6711,7 +6705,7 @@ fn __action140<
     __5: (usize, &'input str, usize),
     __6: (usize, Box<Expression<'m>>, usize),
     __7: (usize, &'input str, usize),
-) -> types::Variable<'m>
+) -> Variable<'m>
 {
     let __start0 = __4.0.clone();
     let __end0 = __4.2.clone();
@@ -6746,7 +6740,7 @@ fn __action141<
     __4: (usize, &'input str, usize),
     __5: (usize, Box<Expression<'m>>, usize),
     __6: (usize, &'input str, usize),
-) -> types::Variable<'m>
+) -> Variable<'m>
 {
     let __start0 = __3.2.clone();
     let __end0 = __4.0.clone();
@@ -6781,7 +6775,7 @@ fn __action142<
     __3: (usize, DataType, usize),
     __4: (usize, Dimension<'m>, usize),
     __5: (usize, &'input str, usize),
-) -> types::Variable<'m>
+) -> Variable<'m>
 {
     let __start0 = __4.0.clone();
     let __end0 = __4.2.clone();
@@ -6812,7 +6806,7 @@ fn __action143<
     __2: (usize, &'input str, usize),
     __3: (usize, DataType, usize),
     __4: (usize, &'input str, usize),
-) -> types::Variable<'m>
+) -> Variable<'m>
 {
     let __start0 = __3.2.clone();
     let __end0 = __4.0.clone();
@@ -7029,7 +7023,7 @@ fn __action152<
     input: &'input str,
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
-) -> ast::Block<'m>
+) -> Block<'m>
 {
     let __start0 = __0.2.clone();
     let __end0 = __1.0.clone();
@@ -7054,9 +7048,9 @@ fn __action153<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, alloc::vec::Vec<ast::Statement<'m>>, usize),
+    __1: (usize, alloc::vec::Vec<Statement<'m>>, usize),
     __2: (usize, &'input str, usize),
-) -> ast::Block<'m>
+) -> Block<'m>
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
@@ -7081,7 +7075,7 @@ fn __action154<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ast::Program<'m>
+) -> Program<'m>
 {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
@@ -7103,8 +7097,8 @@ fn __action155<
     'm,
 >(
     input: &'input str,
-    __0: (usize, alloc::vec::Vec<ast::Statement<'m>>, usize),
-) -> ast::Program<'m>
+    __0: (usize, alloc::vec::Vec<Statement<'m>>, usize),
+) -> Program<'m>
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
@@ -7127,7 +7121,7 @@ fn __action156<
     input: &'input str,
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
-) -> ast::Block<'m>
+) -> Block<'m>
 {
     let __start0 = __0.2.clone();
     let __end0 = __1.0.clone();
@@ -7152,9 +7146,9 @@ fn __action157<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, alloc::vec::Vec<ast::Statement<'m>>, usize),
+    __1: (usize, alloc::vec::Vec<Statement<'m>>, usize),
     __2: (usize, &'input str, usize),
-) -> ast::Block<'m>
+) -> Block<'m>
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();

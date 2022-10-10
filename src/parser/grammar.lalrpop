@@ -1,14 +1,18 @@
 use std::str::FromStr;
-use crate::ast::{Dimension, types::Variable, FunctionParam, types::FunctionSignature};
-use crate::ast;
-use crate::ast::types;
+use crate::ast::{Dimension};
+
+
+use crate::ast::types::{DataType, Function, FunctionParam, Operator, Variable, FunctionSignature};
+
 use crate::ast::expressions::{Expression, Index};
-use crate::ast::expressions::constant::TypeConst;
-use crate::ast::expressions::constant;
-use crate::ast::types::DataType;
-use crate::ast::expressions::operation;
+
+
+use crate::ast::expressions::constant::{Const, TypeConst};
+
 use crate::ast::expressions::id::{Access, Id};
-use crate::ast::expressions::call;
+use crate::ast::expressions::operation::Operation;
+use crate::ast::expressions::call::Call;
+use crate::ast::statements::{Block, Program, Statement};
 
 
 grammar<'m>;
@@ -43,18 +47,18 @@ PFunctionType: DataType = {
     T_VOID => DataType::Void
 }
 
-PInt: constant::Const<'m> = NUMBER => constant::Const::new(<>, DataType::Int);
+PInt: Const<'m> = NUMBER => Const::new(<>, DataType::Int);
 
-PFloat: constant::Const<'m> = <f: FLOAT> => constant::Const::new(<>, DataType::Float);
+PFloat: Const<'m> = <f: FLOAT> => Const::new(<>, DataType::Float);
 
-PBool: constant::Const<'m> = {
-    TRUE => constant::Const::new(<>, DataType::Bool),
-    FALSE => constant::Const::new(<>, DataType::Bool)
+PBool: Const<'m> = {
+    TRUE => Const::new(<>, DataType::Bool),
+    FALSE => Const::new(<>, DataType::Bool)
 }
 
-PStr: constant::Const<'m> = <s: STRING> => constant::Const::new(&s[1..s.len() - 1], DataType::String);
+PStr: Const<'m> = <s: STRING> => Const::new(&s[1..s.len() - 1], DataType::String);
 
-// PVectorConst: TypeConst = LBRACKET <PComma<Expr>> RBRACKET => TypeConst::Vector(<>);
+// PVectorConst: TypeConst = LBRACKET <PComma<PExpr>> RBRACKET => TypeConst::Vector(<>);
 
 PSimpleConst = {
     PInt,
@@ -77,17 +81,17 @@ PId: Expression<'m> = ID =>
 // Variables
 
 PIndexing: Index<'m> = {
-    <begin:Expr> COLON <end:Expr> => Index::Range(begin, end),
-    <idx:Expr> => Index::Simple(idx)
+    <begin:PExpr> COLON <end:PExpr> => Index::Range(begin, end),
+    <idx:PExpr> => Index::Simple(idx)
 }
 
 PDimension: Dimension<'m> = {
-    LBRACKET <a: Expr> RLBRACKET <b: Expr> RBRACKET => Dimension(2, vec![a, b]),
-    LBRACKET <Expr> RBRACKET => Dimension(1, vec![<>])
+    LBRACKET <a: PExpr> RLBRACKET <b: PExpr> RBRACKET => Dimension(2, vec![a, b]),
+    LBRACKET <PExpr> RBRACKET => Dimension(1, vec![<>])
 }
 
-PVarDeclaration: types::Variable<'m> = {
-    LET <id: ID> COLON <data_type: PType> <dim: PDimension?> <value: (ASSIGN <Expr>)?> SEMICOLON => types::Variable {
+PVarDeclaration: Variable<'m> = {
+    LET <id: ID> COLON <data_type: PType> <dim: PDimension?> <value: (ASSIGN <PExpr>)?> SEMICOLON => Variable {
         id: String::from(id),
         data_type,
         dimension: dim.unwrap_or(Dimension(0, vec![])),
@@ -109,33 +113,33 @@ PVarReference: Access<'m> = {
         )
 }
 
-PVarAssignment: ast::Statement<'m> = <var: PVarReference> ASSIGN <exp: Expr> => ast::Statement::VarAssign(var, exp);
+PVarAssignment: Statement<'m> = <var: PVarReference> ASSIGN <exp: PExpr> => Statement::VarAssign(var, exp);
 
 // Operators
 
-PExprOp: types::Operator = {
-    AND => types::Operator::And,
-    OR => types::Operator::Or
+PExprOp: Operator = {
+    AND => Operator::And,
+    OR => Operator::Or
 }
 
-PLogicOp: types::Operator = {
-    LT => types::Operator::LessThan,
-    GT => types::Operator::GreaterThan,
-    NOTEQUAL => types::Operator::NotEq,
-    EQUAL => types::Operator::Eq,
+PLogicOp: Operator = {
+    LT => Operator::LessThan,
+    GT => Operator::GreaterThan,
+    NOTEQUAL => Operator::NotEq,
+    EQUAL => Operator::Eq,
 }
 
-PMathOp: types::Operator = {
-    ADD => types::Operator::Add,
-    SUB => types::Operator::Sub,
+PMathOp: Operator = {
+    ADD => Operator::Add,
+    SUB => Operator::Sub,
 }
 
-PFactorOp: types::Operator = {
-    MUL => types::Operator::Mul,
-    DIV => types::Operator::Div,
+PFactorOp: Operator = {
+    MUL => Operator::Mul,
+    DIV => Operator::Div,
 }
 
-PPipeOp: types::Operator = PIPE => types::Operator::Pipe;
+PPipeOp: Operator = PIPE => Operator::Pipe;
 
 // Expressions
 
@@ -143,7 +147,7 @@ PTier<Op, NextTerm>: Box<Expression<'m>> = {
     PTier<Op, NextTerm> Op NextTerm => 
         Box::new(
             Expression::Op(
-                operation::Operation::new(<>)
+                Operation::new(<>)
             )
         ),
     NextTerm
@@ -155,7 +159,7 @@ PLogicExpr: Box<Expression<'m>> = {
     PMathExpr PLogicOp PMathExpr => 
         Box::new(
             Expression::Op(
-                operation::Operation::new(<>)
+                Operation::new(<>)
             )
         ),
     PMathExpr,
@@ -169,13 +173,13 @@ PFactor: Box<Expression<'m>> = {
     <factor:PFactor> PPipeOp FORWARD <id:PBoxed<PId>> => 
         Box::new(
             Expression::Op(
-                operation::Operation::new(factor, types::Operator::ForwardPipe, id)
+                Operation::new(factor, Operator::ForwardPipe, id)
             )
         ),
     PFactor PPipeOp PBoxed<PId> => 
         Box::new(
             Expression::Op(
-                operation::Operation::new(<>)
+                Operation::new(<>)
             )
         ),
     PItem,
@@ -197,28 +201,28 @@ PCallParams = PComma<PExpr>;
 
 PFunctionParams = PComma<PFuncParam>;
 
-PFnSignature: types::FunctionSignature = FN <id: CALL_ID> <params: PFunctionParams> RPAREN COLON <dtype: PType> => types::FunctionSignature {
+PFnSignature: FunctionSignature = FN <id: CALL_ID> <params: PFunctionParams> RPAREN COLON <dtype: PType> => FunctionSignature {
     id:  String::from(&id[..id.len() - 1]),
     data_type: dtype,
     params: params
 };
 
-PFunctionItem: ast::Statement<'m> = {
+PFunctionItem: Statement<'m> = {
     PStatement,
-    PVarDeclaration => ast::Statement::VarDeclaration(<>),
+    PVarDeclaration => Statement::VarDeclaration(<>),
 }
 
-PFunctionBlock: ast::Block<'m> = LCBRACKET <statements: PFunctionItem*> RCBRACKET => ast::Block(statements);
+PFunctionBlock: Block<'m> = LCBRACKET <statements: PFunctionItem*> RCBRACKET => Block(statements);
 
-PFunction: ast::Function<'m> = <signature: PFnSignature> <block: PFunctionBlock> => ast::Function {
+PFunction: Function<'m> = <signature: PFnSignature> <block: PFunctionBlock> => Function {
     signature: signature,
     block: block
 };
 
-PFunctionCall: call::Call<'m> = <id: CALL_ID> <params: PCallParams> RPAREN => 
-        call::Call::new(&id[..id.len() - 1], params);
+PFunctionCall: Call<'m> = <id: CALL_ID> <params: PCallParams> RPAREN => 
+        Call::new(&id[..id.len() - 1], params);
 
-PReturnStatement: ast::Statement<'m> = RETURN <PExpr> SEMICOLON => ast::Statement::Return(<>);
+PReturnStatement: Statement<'m> = RETURN <PExpr> SEMICOLON => Statement::Return(<>);
 
 PStatement = {
     PCondition,
@@ -227,57 +231,57 @@ PStatement = {
     PLineStatement,
 }
 
-PGlobalStatement: ast::Statement<'m> = {
-    PFunction => ast::Statement::FunctionDeclaration(<>),
+PGlobalStatement: Statement<'m> = {
+    PFunction => Statement::FunctionDeclaration(<>),
     PStatement,
-    PVarDeclaration =>  ast::Statement::VarDeclaration(<>)
+    PVarDeclaration =>  Statement::VarDeclaration(<>)
 }
 
-PBlock: ast::Block<'m> = {
-    PStatement => ast::Block(vec![<>]),
+PBlock: Block<'m> = {
+    PStatement => Block(vec![<>]),
     PStrictBlock
 }
 
-PLineStatement: ast::Statement<'m> = {
+PLineStatement: Statement<'m> = {
     <PVarAssignment> SEMICOLON,
-    <PExpr> SEMICOLON => ast::Statement::Expression(<>)
+    <PExpr> SEMICOLON => Statement::Expression(<>)
 }
 
-PElseBlock: ast::Block<'m> = {
-    PCondition => ast::Block(vec![<>]),
+PElseBlock: Block<'m> = {
+    PCondition => Block(vec![<>]),
     PStrictBlock
 }
 
-PCondition: ast::Statement<'m> = {
+PCondition: Statement<'m> = {
     IF <condition: PExpr> RPAREN <if_block: PStrictBlock> <else_block: (ELSE <PElseBlock>)?> => 
-        ast::Statement::If {
+        Statement::If {
             condition: condition,
             if_block: if_block,
             else_block: else_block
         }
 }
 
-PStrictBlock: ast::Block<'m> = LCBRACKET <statements: PStatement*> RCBRACKET => ast::Block(statements);
+PStrictBlock: Block<'m> = LCBRACKET <statements: PStatement*> RCBRACKET => Block(statements);
 
 PLoop = {
     PForLoop,
     PWhileLoop
 }
 
-PForLoop: ast::Statement<'m> = FOR <id: ID> IN <iterable: PExpr> RPAREN <block: PBlock> =>
-    ast::Statement::For {
+PForLoop: Statement<'m> = FOR <id: ID> IN <iterable: PExpr> RPAREN <block: PBlock> =>
+    Statement::For {
         iterator_id: String::from(id),
         iterable: iterable,
         block: block
     };
 
-PWhileLoop: ast::Statement<'m> = WHILE <condition: PExpr> RPAREN <block: PBlock> =>
-    ast::Statement::While {
+PWhileLoop: Statement<'m> = WHILE <condition: PExpr> RPAREN <block: PBlock> =>
+    Statement::While {
         condition: condition,
         block: block
     };
 
-pub PProgram: ast::Program<'m> = PGlobalStatement* => ast::Program(<>);
+pub PProgram: Program<'m> = PGlobalStatement* => Program(<>);
 
 match {
     r#""[^"]*""# => STRING,

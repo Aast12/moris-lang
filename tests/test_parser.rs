@@ -1,7 +1,7 @@
 use moris_lang::parser;
 
-fn get_parser() -> parser::grammar::ProgramParser {
-    parser::grammar::ProgramParser::new()
+fn get_parser() -> parser::grammar::PProgramParser {
+    parser::grammar::PProgramParser::new()
 }
 
 fn expect_fail(in_str: &str) {

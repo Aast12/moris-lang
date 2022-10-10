@@ -1,6 +1,6 @@
 use crate::ast;
 
-use super::expressions::Expression;
+use super::{expressions::Expression, statements::Block};
 
 #[derive(Clone, Copy, Debug)]
 pub enum Operator {
@@ -42,5 +42,15 @@ pub struct Variable<'m> {
 pub struct FunctionSignature {
     pub id: String,
     pub data_type: DataType,
-    pub params: Vec<ast::FunctionParam>,
+    pub params: Vec<FunctionParam>,
+}
+
+
+#[derive(Debug)]
+pub struct FunctionParam(pub String, pub DataType);
+
+#[derive(Debug)]
+pub struct Function<'m> {
+    pub signature: FunctionSignature,
+    pub block: Block<'m>,
 }
