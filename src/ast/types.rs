@@ -29,7 +29,7 @@ pub enum DataType {
     String,
     DataFrame,
     Void,
-    Function(Box<FunctionSignature>),
+    Function(Box<DataType>),
 }
 
 #[derive(Debug)]

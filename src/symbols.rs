@@ -1,7 +1,6 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, hash::Hash};
 
-use crate::ast;
-
+use crate::ast::{self, types::DataType};
 
 #[derive(Debug)]
 pub enum Symbol<'m> {
@@ -66,7 +65,7 @@ mod tests {
             String::from("is_cond"),
             ast::types::DataType::Bool,
             ast::Dimension(0, vec![]),
-            None
+            None,
         ));
 
         table.set("is_cond", sym);

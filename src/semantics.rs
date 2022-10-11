@@ -27,7 +27,7 @@ impl SemanticRules {
 
     fn pipe_match_r(left: DataType, right: DataType) -> DataType {
         match right {
-            DataType::Function(func) => DataType::from(func.data_type),
+            DataType::Function(func) => *func.clone(),
             _ => Self::fail(left, right)
         }
     }
