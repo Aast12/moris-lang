@@ -1,6 +1,7 @@
 use moris_lang::ast::node::Node;
 
 pub mod ast;
+pub mod env;
 pub mod parser;
 pub mod semantics;
 pub mod symbols;
@@ -18,9 +19,24 @@ fn main() {
     let mut id2 = Id::new("dx2", Some(DataType::Int));
     id2.set_manager(&m);
 
-    println!("{:#?}", id.reduce().dump());
+    // println!("{:#?}", id.reduce().dump());
 
     // print!("{:#?}", Parser::new().parse("for + 5;").unwrap());
+    let test_program = Parser::new().parse("
+    let x: int = 5;
+
+    fn main(y: bool): float {
+        let y: float = 7;
+
+        return x  + 2 - 3 * y / \"str\";
+    }
+    "); 
+
+    let mut program_node = test_program.unwrap();
+    print!("{:#?}", program_node);
+    // program_node.generate();
+    // print!("{:#?}", program_nodse);
+    return ();
     print!(
         "{:#?}",
         Parser::new()
@@ -36,6 +52,8 @@ fn main() {
             )
             .unwrap()
     );
+
+    
 
     println!(
         "{:#?}",

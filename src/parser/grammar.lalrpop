@@ -214,10 +214,7 @@ PFunctionItem: Statement<'m> = {
 
 PFunctionBlock: Block<'m> = LCBRACKET <statements: PFunctionItem*> RCBRACKET => Block(statements);
 
-PFunction: Function<'m> = <signature: PFnSignature> <block: PFunctionBlock> => Function {
-    signature: signature,
-    block: block
-};
+PFunction: Function<'m> = <signature: PFnSignature> <block: PFunctionBlock> => Function::new(<>);
 
 PFunctionCall: Call<'m> = <id: CALL_ID> <params: PCallParams> RPAREN => 
         Call::new(&id[..id.len() - 1], params);

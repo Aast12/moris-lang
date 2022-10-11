@@ -24,6 +24,7 @@ pub struct EnvEntry {
     pub symbols: HashMap<String, SymbolEntry>,
 }
 
+#[derive(Debug)]
 pub struct Environment {
     pub current_env: String,
     pub entries: HashMap<String, EnvEntry>,

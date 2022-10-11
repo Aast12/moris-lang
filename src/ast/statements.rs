@@ -2,7 +2,10 @@ use std::fmt::{Debug, Error, Formatter};
 
 use crate::ast::expressions::{id::Access, Expression, Index};
 
-use super::{types::{self, Function}, node::Node};
+use super::{
+    node::Node,
+    types::{self, Function}, quadruples::Manager,
+};
 
 #[derive(Debug)]
 pub enum Statement<'m> {
@@ -28,36 +31,73 @@ pub enum Statement<'m> {
 }
 
 impl<'m> Node<'m> for Statement<'m> {
-    fn set_manager(&mut self, manager: &'m super::quadruples::Manager) -> () {
+    fn set_manager(&mut self, manager: &'m mut Manager) -> () {
         match self {
             Statement::VarDeclaration(var) => var.set_manager(manager),
             Statement::VarAssign(access, value) => {
                 access.set_manager(manager);
                 value.set_manager(manager);
-            },
+            }
             Statement::Expression(expr) => expr.set_manager(manager),
-            Statement::If { condition, if_block, else_block } => {
+            Statement::If {
+                condition,
+                if_block,
+                else_block,
+            } => {
                 condition.set_manager(manager);
                 if_block.set_manager(manager);
                 if let Some(block) = else_block {
                     block.set_manager(manager);
-                }    
-            },
-            Statement::For { iterator_id, iterable, block } => {
+                }
+            }
+            Statement::For {
+                iterator_id: _,
+                iterable,
+                block,
+            } => {
                 iterable.set_manager(manager);
                 block.set_manager(manager);
-            },
+            }
             Statement::While { condition, block } => {
                 condition.set_manager(manager);
                 block.set_manager(manager);
-            },
-            Statement::FunctionDeclaration(func) => func.block.set_manager(manager),
+            }
+            Statement::FunctionDeclaration(func) => func.set_manager(manager),
             Statement::Return(stmt) => stmt.set_manager(manager),
         }
     }
 
     fn generate(&mut self) -> () {
-        todo!()
+        match self {
+            Statement::VarDeclaration(var) => var.generate(),
+            Statement::VarAssign(access, value) => {
+                access.generate();
+                value.generate();
+            }
+            Statement::Expression(exp) => exp.generate(),
+            Statement::If {
+                condition,
+                if_block,
+                else_block,
+            } => {
+                todo!("For Statement generate");
+                condition.generate();
+                if_block.generate();
+                if let Some(block) = else_block {
+                    block.generate();
+                }
+            }
+            Statement::For {
+                iterator_id,
+                iterable,
+                block,
+            } => {
+                todo!("For Statement generate");
+            }
+            Statement::While { condition, block } => todo!("While Loop generate"),
+            Statement::FunctionDeclaration(func) => {}
+            Statement::Return(_) => todo!(),
+        }
     }
 
     fn reduce(&self) -> &dyn super::node::Leaf {
@@ -69,7 +109,7 @@ impl<'m> Node<'m> for Statement<'m> {
 pub struct Block<'m>(pub Vec<Statement<'m>>);
 
 impl<'m> Node<'m> for Block<'m> {
-    fn set_manager(&mut self, manager: &'m super::quadruples::Manager) -> () {
+    fn set_manager(&mut self, manager: &'m mut Manager) -> () {
         for stmt in self.0.iter_mut() {
             stmt.set_manager(manager);
         }
@@ -80,7 +120,7 @@ impl<'m> Node<'m> for Block<'m> {
 pub struct Program<'m>(pub Vec<Statement<'m>>);
 
 impl<'m> Node<'m> for Program<'m> {
-    fn set_manager(&mut self, manager: &'m super::quadruples::Manager) -> () {
+    fn set_manager(&mut self, manager: &'m mut Manager) -> () {
         for stmt in self.0.iter_mut() {
             stmt.set_manager(manager);
         }

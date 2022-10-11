@@ -1,3 +1,5 @@
+use std::borrow::BorrowMut;
+
 use crate::ast;
 
 use super::{
@@ -34,7 +36,7 @@ pub enum DataType {
 
 #[derive(Debug)]
 pub struct Variable<'m> {
-    manager: Option<&'m Manager<'m>>,
+    manager: Option<&'m mut Manager>,
     pub id: String,
     pub data_type: DataType,
     pub dimension: ast::Dimension<'m>,
@@ -59,13 +61,11 @@ impl<'m> Variable<'m> {
 }
 
 impl<'m> Node<'m> for Variable<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
-        self.manager = Some(&manager);
+    fn set_manager(&mut self, manager: &'m mut ast::quadruples::Manager) -> () {
+        self.manager = Some(manager);
     }
 
-    fn generate(&mut self) -> () {
-        
-    }
+    fn generate(&mut self) -> () {}
 
     fn reduce(&self) -> &dyn ast::node::Leaf {
         todo!()
@@ -84,6 +84,36 @@ pub struct FunctionParam(pub String, pub DataType);
 
 #[derive(Debug)]
 pub struct Function<'m> {
+    manager: Option<&'m mut Manager>,
     pub signature: FunctionSignature,
     pub block: Block<'m>,
+}
+
+impl<'m> Function<'m> {
+    pub fn new(signature: FunctionSignature, block: Block<'m>) -> Function {
+        Function {
+            manager: None,
+            signature,
+            block,
+        }
+    }
+}
+
+impl<'m> Node<'m> for Function<'m> {
+    fn set_manager(&mut self, manager: &'m mut ast::quadruples::Manager) -> () {
+        self.manager = Some(manager);
+        self.block.set_manager(manager);
+    }
+
+    fn generate(&mut self) -> () {
+        if let Some(manager) = self.manager {
+            manager
+                .get_env()
+                .from_function(self.signature.id.clone(), self.signature.clone(), false);
+        }
+    }
+
+    fn reduce(&self) -> &dyn ast::node::Leaf {
+        todo!("Function reduce!");
+    }
 }
