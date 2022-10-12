@@ -47,16 +47,16 @@ PFunctionType: DataType = {
     T_VOID => DataType::Void
 }
 
-PInt: Const<'m> = NUMBER => Const::new(<>, DataType::Int);
+PInt: Const = NUMBER => Const::new(<>, DataType::Int);
 
-PFloat: Const<'m> = <f: FLOAT> => Const::new(<>, DataType::Float);
+PFloat: Const = <f: FLOAT> => Const::new(<>, DataType::Float);
 
-PBool: Const<'m> = {
+PBool: Const = {
     TRUE => Const::new(<>, DataType::Bool),
     FALSE => Const::new(<>, DataType::Bool)
 }
 
-PStr: Const<'m> = <s: STRING> => Const::new(&s[1..s.len() - 1], DataType::String);
+PStr: Const = <s: STRING> => Const::new(&s[1..s.len() - 1], DataType::String);
 
 // PVectorConst: TypeConst = LBRACKET <PComma<PExpr>> RBRACKET => TypeConst::Vector(<>);
 
@@ -72,7 +72,7 @@ PConst = {
     //PVectorConst
 }
 
-PId: Expression<'m> = ID => 
+PId: Expression = ID => 
     Expression::Access(Access::new(
         Id::new(<>, None),
         vec![],
@@ -80,17 +80,17 @@ PId: Expression<'m> = ID =>
 
 // Variables
 
-PIndexing: Index<'m> = {
+PIndexing: Index = {
     <begin:PExpr> COLON <end:PExpr> => Index::Range(begin, end),
     <idx:PExpr> => Index::Simple(idx)
 }
 
-PDimension: Dimension<'m> = {
+PDimension: Dimension = {
     LBRACKET <a: PExpr> RLBRACKET <b: PExpr> RBRACKET => Dimension(2, vec![a, b]),
     LBRACKET <PExpr> RBRACKET => Dimension(1, vec![<>])
 }
 
-PVarDeclaration: Variable<'m> = {
+PVarDeclaration: Variable = {
     LET <id: ID> COLON <data_type: PType> <dim: PDimension?> <value: (ASSIGN <PExpr>)?> SEMICOLON => Variable::new(
         String::from(id),
         data_type,
@@ -100,12 +100,12 @@ PVarDeclaration: Variable<'m> = {
 }
 
 // TODO Fix w custom tokenizer, allow multiple dimensions and raise error on higher than two
-PVarRefIndex: Vec<Index<'m>> = {
+PVarRefIndex: Vec<Index> = {
     LBRACKET <PIndexing> RBRACKET  => vec![<>],
     LBRACKET <a:PIndexing> RLBRACKET <b:PIndexing> RBRACKET => vec![<>]
 }
 
-PVarReference: Access<'m> = {
+PVarReference: Access = {
     <id: ID> <indexing: PVarRefIndex?> => 
         Access::new(
             Id::new(id, None),
@@ -113,7 +113,7 @@ PVarReference: Access<'m> = {
         )
 }
 
-PVarAssignment: Statement<'m> = <var: PVarReference> ASSIGN <exp: PExpr> => Statement::VarAssign(var, exp);
+PVarAssignment: Statement = <var: PVarReference> ASSIGN <exp: PExpr> => Statement::VarAssign(var, exp);
 
 // Operators
 
@@ -143,7 +143,7 @@ PPipeOp: Operator = PIPE => Operator::Pipe;
 
 // Expressions
 
-PTier<Op, NextTerm>: Box<Expression<'m>> = {
+PTier<Op, NextTerm>: Box<Expression> = {
     PTier<Op, NextTerm> Op NextTerm => 
         Box::new(
             Expression::Op(
@@ -153,9 +153,9 @@ PTier<Op, NextTerm>: Box<Expression<'m>> = {
     NextTerm
 }
 
-PExpr: Box<Expression<'m>> = PTier<PExprOp, PLogicExpr>;
+PExpr: Box<Expression> = PTier<PExprOp, PLogicExpr>;
 
-PLogicExpr: Box<Expression<'m>> = {
+PLogicExpr: Box<Expression> = {
     PMathExpr PLogicOp PMathExpr => 
         Box::new(
             Expression::Op(
@@ -165,11 +165,11 @@ PLogicExpr: Box<Expression<'m>> = {
     PMathExpr,
 }
 
-PMathExpr: Box<Expression<'m>> = PTier<PMathOp, PTerm>;
+PMathExpr: Box<Expression> = PTier<PMathOp, PTerm>;
 
-PTerm: Box<Expression<'m>> = PTier<PFactorOp, PFactor>;
+PTerm: Box<Expression> = PTier<PFactorOp, PFactor>;
 
-PFactor: Box<Expression<'m>> = {
+PFactor: Box<Expression> = {
     <factor:PFactor> PPipeOp FORWARD <id:PBoxed<PId>> => 
         Box::new(
             Expression::Op(
@@ -185,7 +185,7 @@ PFactor: Box<Expression<'m>> = {
     PItem,
 }
 
-PItem: Box<Expression<'m>> = {
+PItem: Box<Expression> = {
     PVarReference => Box::new(Expression::Access(<>)),
     PConst => Box::new(Expression::Const(<>)),
     LPAREN <PExpr> RPAREN => <>,
@@ -207,19 +207,19 @@ PFnSignature: FunctionSignature = FN <id: CALL_ID> <params: PFunctionParams> RPA
     params: params
 };
 
-PFunctionItem: Statement<'m> = {
+PFunctionItem: Statement = {
     PStatement,
     PVarDeclaration => Statement::VarDeclaration(<>),
 }
 
-PFunctionBlock: Block<'m> = LCBRACKET <statements: PFunctionItem*> RCBRACKET => Block(statements);
+PFunctionBlock: Block = LCBRACKET <statements: PFunctionItem*> RCBRACKET => Block(statements);
 
-PFunction: Function<'m> = <signature: PFnSignature> <block: PFunctionBlock> => Function::new(<>);
+PFunction: Function = <signature: PFnSignature> <block: PFunctionBlock> => Function::new(<>);
 
-PFunctionCall: Call<'m> = <id: CALL_ID> <params: PCallParams> RPAREN => 
+PFunctionCall: Call = <id: CALL_ID> <params: PCallParams> RPAREN => 
         Call::new(&id[..id.len() - 1], params);
 
-PReturnStatement: Statement<'m> = RETURN <PExpr> SEMICOLON => Statement::Return(<>);
+PReturnStatement: Statement = RETURN <PExpr> SEMICOLON => Statement::Return(<>);
 
 PStatement = {
     PCondition,
@@ -228,28 +228,28 @@ PStatement = {
     PLineStatement,
 }
 
-PGlobalStatement: Statement<'m> = {
+PGlobalStatement: Statement = {
     PFunction => Statement::FunctionDeclaration(<>),
     PStatement,
     PVarDeclaration =>  Statement::VarDeclaration(<>)
 }
 
-PBlock: Block<'m> = {
+PBlock: Block = {
     PStatement => Block(vec![<>]),
     PStrictBlock
 }
 
-PLineStatement: Statement<'m> = {
+PLineStatement: Statement = {
     <PVarAssignment> SEMICOLON,
     <PExpr> SEMICOLON => Statement::Expression(<>)
 }
 
-PElseBlock: Block<'m> = {
+PElseBlock: Block = {
     PCondition => Block(vec![<>]),
     PStrictBlock
 }
 
-PCondition: Statement<'m> = {
+PCondition: Statement = {
     IF <condition: PExpr> RPAREN <if_block: PStrictBlock> <else_block: (ELSE <PElseBlock>)?> => 
         Statement::If {
             condition: condition,
@@ -258,27 +258,27 @@ PCondition: Statement<'m> = {
         }
 }
 
-PStrictBlock: Block<'m> = LCBRACKET <statements: PStatement*> RCBRACKET => Block(statements);
+PStrictBlock: Block = LCBRACKET <statements: PStatement*> RCBRACKET => Block(statements);
 
 PLoop = {
     PForLoop,
     PWhileLoop
 }
 
-PForLoop: Statement<'m> = FOR <id: ID> IN <iterable: PExpr> RPAREN <block: PBlock> =>
+PForLoop: Statement = FOR <id: ID> IN <iterable: PExpr> RPAREN <block: PBlock> =>
     Statement::For {
         iterator_id: String::from(id),
         iterable: iterable,
         block: block
     };
 
-PWhileLoop: Statement<'m> = WHILE <condition: PExpr> RPAREN <block: PBlock> =>
+PWhileLoop: Statement = WHILE <condition: PExpr> RPAREN <block: PBlock> =>
     Statement::While {
         condition: condition,
         block: block
     };
 
-pub PProgram: Program<'m> = PGlobalStatement* => Program(<>);
+pub PProgram: Program = PGlobalStatement* => Program(<>);
 
 match {
     r#""[^"]*""# => STRING,

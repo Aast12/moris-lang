@@ -1,4 +1,4 @@
-use crate::ast::{self, types::DataType, node::Leaf, quadruples::Manager};
+use crate::ast::{self, node::Leaf, quadruples::Manager, types::DataType};
 
 #[derive(Debug)]
 pub enum TypeConst {
@@ -10,29 +10,23 @@ pub enum TypeConst {
 }
 
 #[derive(Debug)]
-pub struct Const<'m> {
-    manager: Option<&'m Manager>,
+pub struct Const {
     pub value: String,
     pub dtype: DataType,
 }
 
-impl<'m> Const<'m> {
+impl Const {
     pub fn new(value: &str, dtype: DataType) -> Self {
         Const {
-            manager: None,
             value: String::from(value),
             dtype,
         }
     }
 }
 
-impl<'m> ast::node::Node<'m> for Const<'m> {
-    fn set_manager(&mut self, manager: &'m Manager) -> () {
-        self.manager = Some(manager);
-    }
-
+impl<'m> ast::node::Node<'m> for Const {
     fn generate(&mut self) -> () {
-
+        todo!("Const generate");
     }
 
     fn reduce(&self) -> String {
@@ -40,9 +34,9 @@ impl<'m> ast::node::Node<'m> for Const<'m> {
     }
 }
 
-impl<'m> ast::expressions::ExpressionT<'m> for Const<'m> {}
+impl<'m> ast::expressions::ExpressionT<'m> for Const {}
 
-impl<'m> Leaf<'m> for Const<'m> {
+impl<'m> Leaf<'m> for Const {
     fn dump(&self) -> String {
         return self.value.clone();
     }
@@ -51,17 +45,11 @@ impl<'m> Leaf<'m> for Const<'m> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ast::{quadruples::Manager, node::Node};
 
     #[test]
     fn test_const() {
-        let regi = Manager::new();
-        
-        let mut constant = Const::new("3", DataType::Int);
-
-        constant.set_manager(&regi);
+        let constant = Const::new("3", DataType::Int);
 
         assert_eq!(constant.value, "3");
-        assert!(constant.manager.is_some());
     }
 }

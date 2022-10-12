@@ -1,27 +1,19 @@
 pub mod expressions;
+pub mod functions;
 pub mod node;
 pub mod quadruples;
-pub mod types;
 pub mod statements;
-pub mod functions;
 pub mod temp;
+pub mod types;
 
-use std::fmt::{Debug, Error, Formatter};
+use std::fmt::Debug;
 
-use self::{expressions::{Expression, Index, id::Access}, statements::Block, node::Node, quadruples::Manager};
-
+use self::{expressions::Expression, node::Node};
 
 #[derive(Debug)]
-pub struct Dimension<'m>(pub i8, pub Vec<Box<Expression<'m>>>); // dimensions number, dimension sizes
+pub struct Dimension(pub i8, pub Vec<Box<Expression>>); // dimensions number, dimension sizes
 
-
-impl<'m> Node<'m> for Dimension<'m> {
-    fn set_manager(&mut self, manager: &'m quadruples::Manager) -> () {
-        for dim in self.1.iter_mut() {
-            dim.set_manager(manager);
-        }
-    }
-
+impl<'m> Node<'m> for Dimension {
     fn generate(&mut self) -> () {
         for dim in self.1.iter_mut() {
             dim.generate();
@@ -30,12 +22,12 @@ impl<'m> Node<'m> for Dimension<'m> {
 }
 
 #[derive(Debug)]
-pub enum TypeConst<'m> {
+pub enum TypeConst {
     Bool(bool),
     Int(i32),
     Float(f32),
     String(String),
-    Vector(Vec<Box<Expression<'m>>>),
+    Vector(Vec<Box<Expression>>),
 }
 
 // impl Debug for TypeConst {

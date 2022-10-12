@@ -9,7 +9,7 @@ use self::{
 
 use super::{
     node,
-    types::{self, DataType}, quadruples::Manager,
+    types::{self, DataType},
 };
 pub mod call;
 pub mod constant;
@@ -17,15 +17,15 @@ pub mod id;
 pub mod operation;
 
 #[derive(Debug)]
-pub enum Expression<'m> {
-    Const(Const<'m>),
-    Op(Operation<'m>),
-    Access(Access<'m>),
-    Id(Id<'m>),
-    Call(Call<'m>),
+pub enum Expression {
+    Const(Const),
+    Op(Operation),
+    Access(Access),
+    Id(Id),
+    Call(Call),
 }
 
-impl<'m> Expression<'m> {
+impl<'m> Expression {
     fn data_type(&self) -> DataType {
         match &self {
             Expression::Const(constant) => constant.dtype.clone(),
@@ -37,18 +37,7 @@ impl<'m> Expression<'m> {
     }
 }
 
-impl<'m> node::Node<'m> for Expression<'m> {
-    fn set_manager(&mut self, manager: &'m Manager) -> () {
-        match self {
-            Expression::Const(constant) => constant.set_manager(manager),
-            Expression::Op(operation) => operation.set_manager(manager),
-            Expression::Access(access) => access.set_manager(manager),
-            Expression::Id(id) => id.set_manager(manager),
-            Expression::Call(call) => call.set_manager(manager),
-            _ => todo!(),
-        }
-    }
-
+impl<'m> node::Node<'m> for Expression {
     fn generate(&mut self) -> () {
         match self {
             Expression::Const(constant) => constant.generate(),
@@ -73,24 +62,14 @@ impl<'m> node::Node<'m> for Expression<'m> {
 }
 
 #[derive(Debug)]
-pub enum Index<'m> {
-    Simple(Box<Expression<'m>>),
-    Range(Box<Expression<'m>>, Box<Expression<'m>>),
+pub enum Index {
+    Simple(Box<Expression>),
+    Range(Box<Expression>, Box<Expression>),
 }
 
 pub trait ExpressionT<'m>: ast::node::Node<'m> {}
 
-impl<'m> ast::node::Node<'m> for Index<'m> {
-    fn set_manager(&mut self, manager: &'m Manager) -> () {
-        match self {
-            Self::Simple(expr) => expr.set_manager(manager),
-            Self::Range(start_expr, end_expr) => {
-                start_expr.set_manager(manager);
-                end_expr.set_manager(manager);
-            }
-        }
-    }
-}
+impl<'m> ast::node::Node<'m> for Index {}
 
 #[cfg(test)]
 mod tests {
@@ -102,15 +81,15 @@ mod tests {
 
     use super::{constant::Const, operation::Operation, Expression};
 
-    fn build_int<'m>() -> Box<Expression<'m>> {
+    fn build_int<'m>() -> Box<Expression> {
         Box::new(Expression::Const(Const::new("5", DataType::Int)))
     }
 
-    fn build_float<'m>() -> Box<Expression<'m>> {
+    fn build_float<'m>() -> Box<Expression> {
         Box::new(Expression::Const(Const::new("5.0", DataType::Float)))
     }
 
-    fn build_string<'m>() -> Box<Expression<'m>> {
+    fn build_string<'m>() -> Box<Expression> {
         Box::new(Expression::Const(Const::new("str", DataType::String)))
     }
 
@@ -121,10 +100,7 @@ mod tests {
 
     #[test]
     fn test_compatible_types() {
-        let manager = Manager::new();
-
-        let mut expr = Expression::Op(Operation::new(build_int(), Operator::Add, build_float()));
-        expr.set_manager(&manager);
+        let expr = Expression::Op(Operation::new(build_int(), Operator::Add, build_float()));
 
         assert_eq!(expr.data_type(), DataType::Float);
     }
@@ -132,10 +108,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_incompatible_types() {
-        let manager = Manager::new();
-
-        let mut expr = Expression::Op(Operation::new(build_string(), Operator::Add, build_float()));
-        expr.set_manager(&manager);
+        let expr = Expression::Op(Operation::new(build_string(), Operator::Add, build_float()));
 
         expr.data_type();
     }

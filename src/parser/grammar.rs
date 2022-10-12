@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 7ba5f1d7d6cf543f30e343aed9cc37f339eedffdbfbb94023b5b5ec1eeef2e55
+// sha3: f077b4dcc2750738d0be8e7789e07d10d1d6e22b34504a30a4b458df19799f3e
 use std::str::FromStr;
 use crate::ast::{Dimension};
 use crate::ast::types::{DataType, Function, FunctionParam, Operator, Variable, FunctionSignature};
@@ -37,36 +37,36 @@ mod __parse__PProgram {
     extern crate alloc;
     use self::__lalrpop_util::lexer::Token;
     #[allow(dead_code)]
-    pub(crate) enum __Symbol<'input, 'm>
+    pub(crate) enum __Symbol<'input>
      {
         Variant0(&'input str),
-        Variant1(Box<Expression<'m>>),
-        Variant2(alloc::vec::Vec<Box<Expression<'m>>>),
+        Variant1(Box<Expression>),
+        Variant2(alloc::vec::Vec<Box<Expression>>),
         Variant3(FunctionParam),
         Variant4(alloc::vec::Vec<FunctionParam>),
-        Variant5(core::option::Option<Box<Expression<'m>>>),
-        Variant6(Block<'m>),
-        Variant7(core::option::Option<Block<'m>>),
-        Variant8(Const<'m>),
-        Variant9(Vec<Box<Expression<'m>>>),
+        Variant5(core::option::Option<Box<Expression>>),
+        Variant6(Block),
+        Variant7(core::option::Option<Block>),
+        Variant8(Const),
+        Variant9(Vec<Box<Expression>>),
         Variant10(Vec<FunctionParam>),
-        Variant11(Statement<'m>),
-        Variant12(Dimension<'m>),
-        Variant13(core::option::Option<Dimension<'m>>),
+        Variant11(Statement),
+        Variant12(Dimension),
+        Variant13(core::option::Option<Dimension>),
         Variant14(Operator),
         Variant15(FunctionSignature),
         Variant16(core::option::Option<FunctionParam>),
-        Variant17(Function<'m>),
-        Variant18(Call<'m>),
-        Variant19(alloc::vec::Vec<Statement<'m>>),
+        Variant17(Function),
+        Variant18(Call),
+        Variant19(alloc::vec::Vec<Statement>),
         Variant20(DataType),
-        Variant21(Expression<'m>),
-        Variant22(Index<'m>),
-        Variant23(Program<'m>),
-        Variant24(Variable<'m>),
-        Variant25(Vec<Index<'m>>),
-        Variant26(core::option::Option<Vec<Index<'m>>>),
-        Variant27(Access<'m>),
+        Variant21(Expression),
+        Variant22(Index),
+        Variant23(Program),
+        Variant24(Variable),
+        Variant25(Vec<Index>),
+        Variant26(core::option::Option<Vec<Index>>),
+        Variant27(Access),
     }
     const __ACTION: &[i16] = &[
         // State 0
@@ -949,8 +949,8 @@ mod __parse__PProgram {
         type Error = &'static str;
         type Token = Token<'input>;
         type TokenIndex = usize;
-        type Symbol = __Symbol<'input, 'm>;
-        type Success = Program<'m>;
+        type Symbol = __Symbol<'input>;
+        type Success = Program;
         type StateIndex = i16;
         type Action = i16;
         type ReduceIndex = i16;
@@ -1099,7 +1099,7 @@ mod __parse__PProgram {
         __token_index: usize,
         __token: Token<'input>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
-    ) -> __Symbol<'input, 'm>
+    ) -> __Symbol<'input>
     {
         match __token_index {
             0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 => match __token {
@@ -1130,7 +1130,7 @@ mod __parse__PProgram {
         >(
             &self,
             input: &'input str,
-        ) -> Result<Program<'m>, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
+        ) -> Result<Program, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
         {
             let mut __tokens = self.builder.matcher(input);
             __state_machine::Parser::drive(
@@ -1150,9 +1150,9 @@ mod __parse__PProgram {
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut alloc::vec::Vec<i16>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
-    ) -> Option<Result<Program<'m>,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
+    ) -> Option<Result<Program,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
     {
         let (__pop_states, __nonterminal) = match __action {
             0 => {
@@ -1595,10 +1595,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant27<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Access<'m>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Access, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant27(__v), __r)) => (__l, __v, __r),
@@ -1607,10 +1606,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant6<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Block<'m>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Block, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant6(__v), __r)) => (__l, __v, __r),
@@ -1619,10 +1617,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant1<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Box<Expression<'m>>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Box<Expression>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant1(__v), __r)) => (__l, __v, __r),
@@ -1631,10 +1628,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant18<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Call<'m>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Call, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant18(__v), __r)) => (__l, __v, __r),
@@ -1643,10 +1639,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant8<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Const<'m>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Const, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant8(__v), __r)) => (__l, __v, __r),
@@ -1655,9 +1650,8 @@ mod __parse__PProgram {
     }
     fn __pop_Variant20<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, DataType, usize)
      {
         match __symbols.pop() {
@@ -1667,10 +1661,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant12<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Dimension<'m>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Dimension, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant12(__v), __r)) => (__l, __v, __r),
@@ -1679,10 +1672,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant21<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Expression<'m>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Expression, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant21(__v), __r)) => (__l, __v, __r),
@@ -1691,10 +1683,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant17<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Function<'m>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Function, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant17(__v), __r)) => (__l, __v, __r),
@@ -1703,9 +1694,8 @@ mod __parse__PProgram {
     }
     fn __pop_Variant3<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, FunctionParam, usize)
      {
         match __symbols.pop() {
@@ -1715,9 +1705,8 @@ mod __parse__PProgram {
     }
     fn __pop_Variant15<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, FunctionSignature, usize)
      {
         match __symbols.pop() {
@@ -1727,10 +1716,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant22<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Index<'m>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Index, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant22(__v), __r)) => (__l, __v, __r),
@@ -1739,9 +1727,8 @@ mod __parse__PProgram {
     }
     fn __pop_Variant14<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Operator, usize)
      {
         match __symbols.pop() {
@@ -1751,10 +1738,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant23<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Program<'m>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Program, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant23(__v), __r)) => (__l, __v, __r),
@@ -1763,10 +1749,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant11<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Statement<'m>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Statement, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant11(__v), __r)) => (__l, __v, __r),
@@ -1775,10 +1760,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant24<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Variable<'m>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Variable, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant24(__v), __r)) => (__l, __v, __r),
@@ -1787,10 +1771,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant9<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Vec<Box<Expression<'m>>>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Vec<Box<Expression>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant9(__v), __r)) => (__l, __v, __r),
@@ -1799,9 +1782,8 @@ mod __parse__PProgram {
     }
     fn __pop_Variant10<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, Vec<FunctionParam>, usize)
      {
         match __symbols.pop() {
@@ -1811,10 +1793,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant25<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, Vec<Index<'m>>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, Vec<Index>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant25(__v), __r)) => (__l, __v, __r),
@@ -1823,10 +1804,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant2<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, alloc::vec::Vec<Box<Expression<'m>>>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, alloc::vec::Vec<Box<Expression>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant2(__v), __r)) => (__l, __v, __r),
@@ -1835,9 +1815,8 @@ mod __parse__PProgram {
     }
     fn __pop_Variant4<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, alloc::vec::Vec<FunctionParam>, usize)
      {
         match __symbols.pop() {
@@ -1847,10 +1826,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant19<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, alloc::vec::Vec<Statement<'m>>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, alloc::vec::Vec<Statement>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant19(__v), __r)) => (__l, __v, __r),
@@ -1859,10 +1837,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant7<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, core::option::Option<Block<'m>>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, core::option::Option<Block>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant7(__v), __r)) => (__l, __v, __r),
@@ -1871,10 +1848,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant5<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, core::option::Option<Box<Expression<'m>>>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, core::option::Option<Box<Expression>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant5(__v), __r)) => (__l, __v, __r),
@@ -1883,10 +1859,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant13<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, core::option::Option<Dimension<'m>>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, core::option::Option<Dimension>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant13(__v), __r)) => (__l, __v, __r),
@@ -1895,9 +1870,8 @@ mod __parse__PProgram {
     }
     fn __pop_Variant16<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, core::option::Option<FunctionParam>, usize)
      {
         match __symbols.pop() {
@@ -1907,10 +1881,9 @@ mod __parse__PProgram {
     }
     fn __pop_Variant26<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
-    ) -> (usize, core::option::Option<Vec<Index<'m>>>, usize)
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
+    ) -> (usize, core::option::Option<Vec<Index>>, usize)
      {
         match __symbols.pop() {
             Some((__l, __Symbol::Variant26(__v), __r)) => (__l, __v, __r),
@@ -1919,9 +1892,8 @@ mod __parse__PProgram {
     }
     fn __pop_Variant0<
       'input,
-      'm,
     >(
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>
     ) -> (usize, &'input str, usize)
      {
         match __symbols.pop() {
@@ -1935,7 +1907,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -1955,7 +1927,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -1972,7 +1944,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -1990,7 +1962,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2010,7 +1982,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2031,7 +2003,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2051,7 +2023,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2068,7 +2040,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2086,7 +2058,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2106,7 +2078,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2127,7 +2099,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2147,7 +2119,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2167,7 +2139,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2184,7 +2156,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2204,7 +2176,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2224,7 +2196,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2241,7 +2213,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2259,7 +2231,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2277,7 +2249,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2295,7 +2267,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2313,7 +2285,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2331,7 +2303,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2349,7 +2321,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2367,7 +2339,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2384,7 +2356,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2404,7 +2376,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2422,7 +2394,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2440,7 +2412,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2457,7 +2429,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2477,7 +2449,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2495,7 +2467,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2519,7 +2491,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2541,7 +2513,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2559,7 +2531,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2582,7 +2554,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2603,7 +2575,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2621,7 +2593,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2638,7 +2610,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2656,7 +2628,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2674,7 +2646,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2692,7 +2664,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2710,7 +2682,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2727,7 +2699,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2745,7 +2717,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2763,7 +2735,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2785,7 +2757,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2806,7 +2778,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2824,7 +2796,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2842,7 +2814,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2860,7 +2832,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2878,7 +2850,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2902,7 +2874,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2926,7 +2898,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2947,7 +2919,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2965,7 +2937,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -2982,7 +2954,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3002,7 +2974,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3022,7 +2994,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3043,7 +3015,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3064,7 +3036,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3082,7 +3054,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3100,7 +3072,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3117,7 +3089,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3135,7 +3107,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3153,7 +3125,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3173,7 +3145,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3191,7 +3163,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3209,7 +3181,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3227,7 +3199,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3245,7 +3217,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3263,7 +3235,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3281,7 +3253,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3298,7 +3270,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3316,7 +3288,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3334,7 +3306,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3354,7 +3326,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3372,7 +3344,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3393,7 +3365,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3411,7 +3383,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3429,7 +3401,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3447,7 +3419,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3465,7 +3437,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3486,7 +3458,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3504,7 +3476,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3524,7 +3496,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3544,7 +3516,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3565,7 +3537,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3583,7 +3555,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3601,7 +3573,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3619,7 +3591,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3637,7 +3609,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3655,7 +3627,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3673,7 +3645,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3691,7 +3663,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3709,7 +3681,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3727,7 +3699,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3745,7 +3717,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3763,7 +3735,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3780,7 +3752,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3798,7 +3770,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3819,7 +3791,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3837,7 +3809,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3855,7 +3827,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3873,7 +3845,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3891,7 +3863,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3909,7 +3881,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3927,7 +3899,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3945,7 +3917,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3963,7 +3935,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3980,7 +3952,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -3998,7 +3970,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4016,7 +3988,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4036,7 +4008,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4054,7 +4026,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4074,7 +4046,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4095,7 +4067,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4113,7 +4085,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4134,7 +4106,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4152,7 +4124,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4173,7 +4145,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4191,7 +4163,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4212,7 +4184,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4230,7 +4202,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4248,7 +4220,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4266,7 +4238,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4284,7 +4256,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4302,7 +4274,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4320,7 +4292,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4341,7 +4313,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4367,7 +4339,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4392,7 +4364,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4416,7 +4388,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4439,7 +4411,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4460,7 +4432,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4483,7 +4455,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4501,7 +4473,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4518,7 +4490,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4538,7 +4510,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4556,7 +4528,7 @@ mod __parse__PProgram {
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
-        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input, 'm>,usize)>,
+        __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
         _: core::marker::PhantomData<(&'input (), &'m ())>,
     ) -> (usize, usize)
     {
@@ -4654,8 +4626,8 @@ fn __action0<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Program<'m>, usize),
-) -> Program<'m>
+    (_, __0, _): (usize, Program, usize),
+) -> Program
 {
     __0
 }
@@ -4751,7 +4723,7 @@ fn __action8<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Const<'m>
+) -> Const
 {
     Const::new(__0, DataType::Int)
 }
@@ -4763,7 +4735,7 @@ fn __action9<
 >(
     input: &'input str,
     (_, f, _): (usize, &'input str, usize),
-) -> Const<'m>
+) -> Const
 {
     Const::new(f, DataType::Float)
 }
@@ -4775,7 +4747,7 @@ fn __action10<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Const<'m>
+) -> Const
 {
     Const::new(__0, DataType::Bool)
 }
@@ -4787,7 +4759,7 @@ fn __action11<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Const<'m>
+) -> Const
 {
     Const::new(__0, DataType::Bool)
 }
@@ -4799,7 +4771,7 @@ fn __action12<
 >(
     input: &'input str,
     (_, s, _): (usize, &'input str, usize),
-) -> Const<'m>
+) -> Const
 {
     Const::new(&s[1..s.len() - 1], DataType::String)
 }
@@ -4810,8 +4782,8 @@ fn __action13<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Const<'m>, usize),
-) -> Const<'m>
+    (_, __0, _): (usize, Const, usize),
+) -> Const
 {
     __0
 }
@@ -4822,8 +4794,8 @@ fn __action14<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Const<'m>, usize),
-) -> Const<'m>
+    (_, __0, _): (usize, Const, usize),
+) -> Const
 {
     __0
 }
@@ -4834,8 +4806,8 @@ fn __action15<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Const<'m>, usize),
-) -> Const<'m>
+    (_, __0, _): (usize, Const, usize),
+) -> Const
 {
     __0
 }
@@ -4846,8 +4818,8 @@ fn __action16<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Const<'m>, usize),
-) -> Const<'m>
+    (_, __0, _): (usize, Const, usize),
+) -> Const
 {
     __0
 }
@@ -4858,8 +4830,8 @@ fn __action17<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Const<'m>, usize),
-) -> Const<'m>
+    (_, __0, _): (usize, Const, usize),
+) -> Const
 {
     __0
 }
@@ -4871,7 +4843,7 @@ fn __action18<
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Expression<'m>
+) -> Expression
 {
     Expression::Access(Access::new(
         Id::new(__0, None),
@@ -4885,10 +4857,10 @@ fn __action19<
     'm,
 >(
     input: &'input str,
-    (_, begin, _): (usize, Box<Expression<'m>>, usize),
+    (_, begin, _): (usize, Box<Expression>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, end, _): (usize, Box<Expression<'m>>, usize),
-) -> Index<'m>
+    (_, end, _): (usize, Box<Expression>, usize),
+) -> Index
 {
     Index::Range(begin, end)
 }
@@ -4899,8 +4871,8 @@ fn __action20<
     'm,
 >(
     input: &'input str,
-    (_, idx, _): (usize, Box<Expression<'m>>, usize),
-) -> Index<'m>
+    (_, idx, _): (usize, Box<Expression>, usize),
+) -> Index
 {
     Index::Simple(idx)
 }
@@ -4912,11 +4884,11 @@ fn __action21<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, a, _): (usize, Box<Expression<'m>>, usize),
+    (_, a, _): (usize, Box<Expression>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, b, _): (usize, Box<Expression<'m>>, usize),
+    (_, b, _): (usize, Box<Expression>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Dimension<'m>
+) -> Dimension
 {
     Dimension(2, vec![a, b])
 }
@@ -4928,9 +4900,9 @@ fn __action22<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
+    (_, __0, _): (usize, Box<Expression>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Dimension<'m>
+) -> Dimension
 {
     Dimension(1, vec![__0])
 }
@@ -4945,10 +4917,10 @@ fn __action23<
     (_, id, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, data_type, _): (usize, DataType, usize),
-    (_, dim, _): (usize, core::option::Option<Dimension<'m>>, usize),
-    (_, value, _): (usize, core::option::Option<Box<Expression<'m>>>, usize),
+    (_, dim, _): (usize, core::option::Option<Dimension>, usize),
+    (_, value, _): (usize, core::option::Option<Box<Expression>>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Variable<'m>
+) -> Variable
 {
     Variable::new(
         String::from(id),
@@ -4965,9 +4937,9 @@ fn __action24<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, Index<'m>, usize),
+    (_, __0, _): (usize, Index, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Vec<Index<'m>>
+) -> Vec<Index>
 {
     vec![__0]
 }
@@ -4979,11 +4951,11 @@ fn __action25<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, a, _): (usize, Index<'m>, usize),
+    (_, a, _): (usize, Index, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, b, _): (usize, Index<'m>, usize),
+    (_, b, _): (usize, Index, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Vec<Index<'m>>
+) -> Vec<Index>
 {
     vec![a, b]
 }
@@ -4995,8 +4967,8 @@ fn __action26<
 >(
     input: &'input str,
     (_, id, _): (usize, &'input str, usize),
-    (_, indexing, _): (usize, core::option::Option<Vec<Index<'m>>>, usize),
-) -> Access<'m>
+    (_, indexing, _): (usize, core::option::Option<Vec<Index>>, usize),
+) -> Access
 {
     Access::new(
             Id::new(id, None),
@@ -5010,10 +4982,10 @@ fn __action27<
     'm,
 >(
     input: &'input str,
-    (_, var, _): (usize, Access<'m>, usize),
+    (_, var, _): (usize, Access, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, exp, _): (usize, Box<Expression<'m>>, usize),
-) -> Statement<'m>
+    (_, exp, _): (usize, Box<Expression>, usize),
+) -> Statement
 {
     Statement::VarAssign(var, exp)
 }
@@ -5156,8 +5128,8 @@ fn __action39<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     __0
 }
@@ -5168,10 +5140,10 @@ fn __action40<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
+    (_, __0, _): (usize, Box<Expression>, usize),
     (_, __1, _): (usize, Operator, usize),
-    (_, __2, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __2, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     Box::new(
             Expression::Op(
@@ -5186,8 +5158,8 @@ fn __action41<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     __0
 }
@@ -5198,8 +5170,8 @@ fn __action42<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     __0
 }
@@ -5210,8 +5182,8 @@ fn __action43<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     __0
 }
@@ -5222,11 +5194,11 @@ fn __action44<
     'm,
 >(
     input: &'input str,
-    (_, factor, _): (usize, Box<Expression<'m>>, usize),
+    (_, factor, _): (usize, Box<Expression>, usize),
     (_, _, _): (usize, Operator, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, id, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, id, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     Box::new(
             Expression::Op(
@@ -5241,10 +5213,10 @@ fn __action45<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
+    (_, __0, _): (usize, Box<Expression>, usize),
     (_, __1, _): (usize, Operator, usize),
-    (_, __2, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __2, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     Box::new(
             Expression::Op(
@@ -5259,8 +5231,8 @@ fn __action46<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     __0
 }
@@ -5271,8 +5243,8 @@ fn __action47<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Access<'m>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Access, usize),
+) -> Box<Expression>
 {
     Box::new(Expression::Access(__0))
 }
@@ -5283,8 +5255,8 @@ fn __action48<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Const<'m>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Const, usize),
+) -> Box<Expression>
 {
     Box::new(Expression::Const(__0))
 }
@@ -5296,9 +5268,9 @@ fn __action49<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
+    (_, __0, _): (usize, Box<Expression>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Box<Expression<'m>>
+) -> Box<Expression>
 {
     __0
 }
@@ -5309,8 +5281,8 @@ fn __action50<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Call<'m>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Call, usize),
+) -> Box<Expression>
 {
     Box::new(Expression::Call(__0))
 }
@@ -5335,8 +5307,8 @@ fn __action52<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Vec<Box<Expression<'m>>>, usize),
-) -> Vec<Box<Expression<'m>>>
+    (_, __0, _): (usize, Vec<Box<Expression>>, usize),
+) -> Vec<Box<Expression>>
 {
     __0
 }
@@ -5380,8 +5352,8 @@ fn __action55<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> Statement<'m>
+    (_, __0, _): (usize, Statement, usize),
+) -> Statement
 {
     __0
 }
@@ -5392,8 +5364,8 @@ fn __action56<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Variable<'m>, usize),
-) -> Statement<'m>
+    (_, __0, _): (usize, Variable, usize),
+) -> Statement
 {
     Statement::VarDeclaration(__0)
 }
@@ -5405,9 +5377,9 @@ fn __action57<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, statements, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
+    (_, statements, _): (usize, alloc::vec::Vec<Statement>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Block<'m>
+) -> Block
 {
     Block(statements)
 }
@@ -5419,8 +5391,8 @@ fn __action58<
 >(
     input: &'input str,
     (_, signature, _): (usize, FunctionSignature, usize),
-    (_, block, _): (usize, Block<'m>, usize),
-) -> Function<'m>
+    (_, block, _): (usize, Block, usize),
+) -> Function
 {
     Function::new(signature, block)
 }
@@ -5432,9 +5404,9 @@ fn __action59<
 >(
     input: &'input str,
     (_, id, _): (usize, &'input str, usize),
-    (_, params, _): (usize, Vec<Box<Expression<'m>>>, usize),
+    (_, params, _): (usize, Vec<Box<Expression>>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Call<'m>
+) -> Call
 {
     Call::new(&id[..id.len() - 1], params)
 }
@@ -5446,9 +5418,9 @@ fn __action60<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
+    (_, __0, _): (usize, Box<Expression>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Statement<'m>
+) -> Statement
 {
     Statement::Return(__0)
 }
@@ -5459,8 +5431,8 @@ fn __action61<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> Statement<'m>
+    (_, __0, _): (usize, Statement, usize),
+) -> Statement
 {
     __0
 }
@@ -5471,8 +5443,8 @@ fn __action62<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> Statement<'m>
+    (_, __0, _): (usize, Statement, usize),
+) -> Statement
 {
     __0
 }
@@ -5483,8 +5455,8 @@ fn __action63<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> Statement<'m>
+    (_, __0, _): (usize, Statement, usize),
+) -> Statement
 {
     __0
 }
@@ -5495,8 +5467,8 @@ fn __action64<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> Statement<'m>
+    (_, __0, _): (usize, Statement, usize),
+) -> Statement
 {
     __0
 }
@@ -5507,8 +5479,8 @@ fn __action65<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Function<'m>, usize),
-) -> Statement<'m>
+    (_, __0, _): (usize, Function, usize),
+) -> Statement
 {
     Statement::FunctionDeclaration(__0)
 }
@@ -5519,8 +5491,8 @@ fn __action66<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> Statement<'m>
+    (_, __0, _): (usize, Statement, usize),
+) -> Statement
 {
     __0
 }
@@ -5531,8 +5503,8 @@ fn __action67<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Variable<'m>, usize),
-) -> Statement<'m>
+    (_, __0, _): (usize, Variable, usize),
+) -> Statement
 {
     Statement::VarDeclaration(__0)
 }
@@ -5543,8 +5515,8 @@ fn __action68<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> Block<'m>
+    (_, __0, _): (usize, Statement, usize),
+) -> Block
 {
     Block(vec![__0])
 }
@@ -5555,8 +5527,8 @@ fn __action69<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Block<'m>, usize),
-) -> Block<'m>
+    (_, __0, _): (usize, Block, usize),
+) -> Block
 {
     __0
 }
@@ -5567,9 +5539,9 @@ fn __action70<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
+    (_, __0, _): (usize, Statement, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Statement<'m>
+) -> Statement
 {
     __0
 }
@@ -5580,9 +5552,9 @@ fn __action71<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
+    (_, __0, _): (usize, Box<Expression>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Statement<'m>
+) -> Statement
 {
     Statement::Expression(__0)
 }
@@ -5593,8 +5565,8 @@ fn __action72<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> Block<'m>
+    (_, __0, _): (usize, Statement, usize),
+) -> Block
 {
     Block(vec![__0])
 }
@@ -5605,8 +5577,8 @@ fn __action73<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Block<'m>, usize),
-) -> Block<'m>
+    (_, __0, _): (usize, Block, usize),
+) -> Block
 {
     __0
 }
@@ -5618,11 +5590,11 @@ fn __action74<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, condition, _): (usize, Box<Expression<'m>>, usize),
+    (_, condition, _): (usize, Box<Expression>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, if_block, _): (usize, Block<'m>, usize),
-    (_, else_block, _): (usize, core::option::Option<Block<'m>>, usize),
-) -> Statement<'m>
+    (_, if_block, _): (usize, Block, usize),
+    (_, else_block, _): (usize, core::option::Option<Block>, usize),
+) -> Statement
 {
     Statement::If {
             condition: condition,
@@ -5638,9 +5610,9 @@ fn __action75<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, statements, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
+    (_, statements, _): (usize, alloc::vec::Vec<Statement>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Block<'m>
+) -> Block
 {
     Block(statements)
 }
@@ -5651,8 +5623,8 @@ fn __action76<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> Statement<'m>
+    (_, __0, _): (usize, Statement, usize),
+) -> Statement
 {
     __0
 }
@@ -5663,8 +5635,8 @@ fn __action77<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> Statement<'m>
+    (_, __0, _): (usize, Statement, usize),
+) -> Statement
 {
     __0
 }
@@ -5678,10 +5650,10 @@ fn __action78<
     (_, _, _): (usize, &'input str, usize),
     (_, id, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, iterable, _): (usize, Box<Expression<'m>>, usize),
+    (_, iterable, _): (usize, Box<Expression>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, block, _): (usize, Block<'m>, usize),
-) -> Statement<'m>
+    (_, block, _): (usize, Block, usize),
+) -> Statement
 {
     Statement::For {
         iterator_id: String::from(id),
@@ -5697,10 +5669,10 @@ fn __action79<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, condition, _): (usize, Box<Expression<'m>>, usize),
+    (_, condition, _): (usize, Box<Expression>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, block, _): (usize, Block<'m>, usize),
-) -> Statement<'m>
+    (_, block, _): (usize, Block, usize),
+) -> Statement
 {
     Statement::While {
         condition: condition,
@@ -5714,8 +5686,8 @@ fn __action80<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
-) -> Program<'m>
+    (_, __0, _): (usize, alloc::vec::Vec<Statement>, usize),
+) -> Program
 {
     Program(__0)
 }
@@ -5728,7 +5700,7 @@ fn __action81<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> alloc::vec::Vec<Statement<'m>>
+) -> alloc::vec::Vec<Statement>
 {
     alloc::vec![]
 }
@@ -5739,8 +5711,8 @@ fn __action82<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
-) -> alloc::vec::Vec<Statement<'m>>
+    (_, v, _): (usize, alloc::vec::Vec<Statement>, usize),
+) -> alloc::vec::Vec<Statement>
 {
     v
 }
@@ -5753,7 +5725,7 @@ fn __action83<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> alloc::vec::Vec<Statement<'m>>
+) -> alloc::vec::Vec<Statement>
 {
     alloc::vec![]
 }
@@ -5764,8 +5736,8 @@ fn __action84<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
-) -> alloc::vec::Vec<Statement<'m>>
+    (_, v, _): (usize, alloc::vec::Vec<Statement>, usize),
+) -> alloc::vec::Vec<Statement>
 {
     v
 }
@@ -5776,8 +5748,8 @@ fn __action85<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Block<'m>, usize),
-) -> core::option::Option<Block<'m>>
+    (_, __0, _): (usize, Block, usize),
+) -> core::option::Option<Block>
 {
     Some(__0)
 }
@@ -5790,7 +5762,7 @@ fn __action86<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> core::option::Option<Block<'m>>
+) -> core::option::Option<Block>
 {
     None
 }
@@ -5802,8 +5774,8 @@ fn __action87<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, Block<'m>, usize),
-) -> Block<'m>
+    (_, __0, _): (usize, Block, usize),
+) -> Block
 {
     __0
 }
@@ -5816,7 +5788,7 @@ fn __action88<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> alloc::vec::Vec<Statement<'m>>
+) -> alloc::vec::Vec<Statement>
 {
     alloc::vec![]
 }
@@ -5827,8 +5799,8 @@ fn __action89<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
-) -> alloc::vec::Vec<Statement<'m>>
+    (_, v, _): (usize, alloc::vec::Vec<Statement>, usize),
+) -> alloc::vec::Vec<Statement>
 {
     v
 }
@@ -5858,9 +5830,9 @@ fn __action91<
     'm,
 >(
     input: &'input str,
-    (_, mut vec, _): (usize, alloc::vec::Vec<Box<Expression<'m>>>, usize),
-    (_, c, _): (usize, core::option::Option<Box<Expression<'m>>>, usize),
-) -> Vec<Box<Expression<'m>>>
+    (_, mut vec, _): (usize, alloc::vec::Vec<Box<Expression>>, usize),
+    (_, c, _): (usize, core::option::Option<Box<Expression>>, usize),
+) -> Vec<Box<Expression>>
 {
     match c {
         None => vec,
@@ -5877,8 +5849,8 @@ fn __action92<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Expression<'m>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Expression, usize),
+) -> Box<Expression>
 {
     Box::new(__0)
 }
@@ -5889,10 +5861,10 @@ fn __action93<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
+    (_, __0, _): (usize, Box<Expression>, usize),
     (_, __1, _): (usize, Operator, usize),
-    (_, __2, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __2, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     Box::new(
             Expression::Op(
@@ -5907,8 +5879,8 @@ fn __action94<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     __0
 }
@@ -5919,10 +5891,10 @@ fn __action95<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
+    (_, __0, _): (usize, Box<Expression>, usize),
     (_, __1, _): (usize, Operator, usize),
-    (_, __2, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __2, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     Box::new(
             Expression::Op(
@@ -5937,8 +5909,8 @@ fn __action96<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     __0
 }
@@ -5949,10 +5921,10 @@ fn __action97<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
+    (_, __0, _): (usize, Box<Expression>, usize),
     (_, __1, _): (usize, Operator, usize),
-    (_, __2, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __2, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     Box::new(
             Expression::Op(
@@ -5967,8 +5939,8 @@ fn __action98<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     __0
 }
@@ -5979,8 +5951,8 @@ fn __action99<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Vec<Index<'m>>, usize),
-) -> core::option::Option<Vec<Index<'m>>>
+    (_, __0, _): (usize, Vec<Index>, usize),
+) -> core::option::Option<Vec<Index>>
 {
     Some(__0)
 }
@@ -5993,7 +5965,7 @@ fn __action100<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> core::option::Option<Vec<Index<'m>>>
+) -> core::option::Option<Vec<Index>>
 {
     None
 }
@@ -6004,8 +5976,8 @@ fn __action101<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
-) -> core::option::Option<Box<Expression<'m>>>
+    (_, __0, _): (usize, Box<Expression>, usize),
+) -> core::option::Option<Box<Expression>>
 {
     Some(__0)
 }
@@ -6018,7 +5990,7 @@ fn __action102<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> core::option::Option<Box<Expression<'m>>>
+) -> core::option::Option<Box<Expression>>
 {
     None
 }
@@ -6030,8 +6002,8 @@ fn __action103<
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
-) -> Box<Expression<'m>>
+    (_, __0, _): (usize, Box<Expression>, usize),
+) -> Box<Expression>
 {
     __0
 }
@@ -6042,8 +6014,8 @@ fn __action104<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Dimension<'m>, usize),
-) -> core::option::Option<Dimension<'m>>
+    (_, __0, _): (usize, Dimension, usize),
+) -> core::option::Option<Dimension>
 {
     Some(__0)
 }
@@ -6056,7 +6028,7 @@ fn __action105<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> core::option::Option<Dimension<'m>>
+) -> core::option::Option<Dimension>
 {
     None
 }
@@ -6067,8 +6039,8 @@ fn __action106<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
-) -> core::option::Option<Box<Expression<'m>>>
+    (_, __0, _): (usize, Box<Expression>, usize),
+) -> core::option::Option<Box<Expression>>
 {
     Some(__0)
 }
@@ -6081,7 +6053,7 @@ fn __action107<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> core::option::Option<Box<Expression<'m>>>
+) -> core::option::Option<Box<Expression>>
 {
     None
 }
@@ -6094,7 +6066,7 @@ fn __action108<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> alloc::vec::Vec<Box<Expression<'m>>>
+) -> alloc::vec::Vec<Box<Expression>>
 {
     alloc::vec![]
 }
@@ -6105,8 +6077,8 @@ fn __action109<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Box<Expression<'m>>>, usize),
-) -> alloc::vec::Vec<Box<Expression<'m>>>
+    (_, v, _): (usize, alloc::vec::Vec<Box<Expression>>, usize),
+) -> alloc::vec::Vec<Box<Expression>>
 {
     v
 }
@@ -6117,9 +6089,9 @@ fn __action110<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
+    (_, __0, _): (usize, Box<Expression>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Box<Expression<'m>>
+) -> Box<Expression>
 {
     __0
 }
@@ -6193,8 +6165,8 @@ fn __action116<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> alloc::vec::Vec<Statement<'m>>
+    (_, __0, _): (usize, Statement, usize),
+) -> alloc::vec::Vec<Statement>
 {
     alloc::vec![__0]
 }
@@ -6205,9 +6177,9 @@ fn __action117<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
-    (_, e, _): (usize, Statement<'m>, usize),
-) -> alloc::vec::Vec<Statement<'m>>
+    (_, v, _): (usize, alloc::vec::Vec<Statement>, usize),
+    (_, e, _): (usize, Statement, usize),
+) -> alloc::vec::Vec<Statement>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -6218,8 +6190,8 @@ fn __action118<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> alloc::vec::Vec<Statement<'m>>
+    (_, __0, _): (usize, Statement, usize),
+) -> alloc::vec::Vec<Statement>
 {
     alloc::vec![__0]
 }
@@ -6230,9 +6202,9 @@ fn __action119<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
-    (_, e, _): (usize, Statement<'m>, usize),
-) -> alloc::vec::Vec<Statement<'m>>
+    (_, v, _): (usize, alloc::vec::Vec<Statement>, usize),
+    (_, e, _): (usize, Statement, usize),
+) -> alloc::vec::Vec<Statement>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -6243,8 +6215,8 @@ fn __action120<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Statement<'m>, usize),
-) -> alloc::vec::Vec<Statement<'m>>
+    (_, __0, _): (usize, Statement, usize),
+) -> alloc::vec::Vec<Statement>
 {
     alloc::vec![__0]
 }
@@ -6255,9 +6227,9 @@ fn __action121<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Statement<'m>>, usize),
-    (_, e, _): (usize, Statement<'m>, usize),
-) -> alloc::vec::Vec<Statement<'m>>
+    (_, v, _): (usize, alloc::vec::Vec<Statement>, usize),
+    (_, e, _): (usize, Statement, usize),
+) -> alloc::vec::Vec<Statement>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -6293,8 +6265,8 @@ fn __action124<
     'm,
 >(
     input: &'input str,
-    (_, __0, _): (usize, Box<Expression<'m>>, usize),
-) -> alloc::vec::Vec<Box<Expression<'m>>>
+    (_, __0, _): (usize, Box<Expression>, usize),
+) -> alloc::vec::Vec<Box<Expression>>
 {
     alloc::vec![__0]
 }
@@ -6305,9 +6277,9 @@ fn __action125<
     'm,
 >(
     input: &'input str,
-    (_, v, _): (usize, alloc::vec::Vec<Box<Expression<'m>>>, usize),
-    (_, e, _): (usize, Box<Expression<'m>>, usize),
-) -> alloc::vec::Vec<Box<Expression<'m>>>
+    (_, v, _): (usize, alloc::vec::Vec<Box<Expression>>, usize),
+    (_, e, _): (usize, Box<Expression>, usize),
+) -> alloc::vec::Vec<Box<Expression>>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -6318,9 +6290,9 @@ fn __action126<
     'm,
 >(
     input: &'input str,
-    __0: (usize, Box<Expression<'m>>, usize),
+    __0: (usize, Box<Expression>, usize),
     __1: (usize, &'input str, usize),
-) -> alloc::vec::Vec<Box<Expression<'m>>>
+) -> alloc::vec::Vec<Box<Expression>>
 {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
@@ -6342,10 +6314,10 @@ fn __action127<
     'm,
 >(
     input: &'input str,
-    __0: (usize, alloc::vec::Vec<Box<Expression<'m>>>, usize),
-    __1: (usize, Box<Expression<'m>>, usize),
+    __0: (usize, alloc::vec::Vec<Box<Expression>>, usize),
+    __1: (usize, Box<Expression>, usize),
     __2: (usize, &'input str, usize),
-) -> alloc::vec::Vec<Box<Expression<'m>>>
+) -> alloc::vec::Vec<Box<Expression>>
 {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
@@ -6368,8 +6340,8 @@ fn __action128<
     'm,
 >(
     input: &'input str,
-    __0: (usize, core::option::Option<Box<Expression<'m>>>, usize),
-) -> Vec<Box<Expression<'m>>>
+    __0: (usize, core::option::Option<Box<Expression>>, usize),
+) -> Vec<Box<Expression>>
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
@@ -6392,9 +6364,9 @@ fn __action129<
     'm,
 >(
     input: &'input str,
-    __0: (usize, alloc::vec::Vec<Box<Expression<'m>>>, usize),
-    __1: (usize, core::option::Option<Box<Expression<'m>>>, usize),
-) -> Vec<Box<Expression<'m>>>
+    __0: (usize, alloc::vec::Vec<Box<Expression>>, usize),
+    __1: (usize, core::option::Option<Box<Expression>>, usize),
+) -> Vec<Box<Expression>>
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
@@ -6515,8 +6487,8 @@ fn __action134<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, Box<Expression<'m>>, usize),
-) -> core::option::Option<Box<Expression<'m>>>
+    __1: (usize, Box<Expression>, usize),
+) -> core::option::Option<Box<Expression>>
 {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
@@ -6542,11 +6514,11 @@ fn __action135<
     __1: (usize, &'input str, usize),
     __2: (usize, &'input str, usize),
     __3: (usize, DataType, usize),
-    __4: (usize, core::option::Option<Dimension<'m>>, usize),
+    __4: (usize, core::option::Option<Dimension>, usize),
     __5: (usize, &'input str, usize),
-    __6: (usize, Box<Expression<'m>>, usize),
+    __6: (usize, Box<Expression>, usize),
     __7: (usize, &'input str, usize),
-) -> Variable<'m>
+) -> Variable
 {
     let __start0 = __5.0.clone();
     let __end0 = __6.2.clone();
@@ -6578,9 +6550,9 @@ fn __action136<
     __1: (usize, &'input str, usize),
     __2: (usize, &'input str, usize),
     __3: (usize, DataType, usize),
-    __4: (usize, core::option::Option<Dimension<'m>>, usize),
+    __4: (usize, core::option::Option<Dimension>, usize),
     __5: (usize, &'input str, usize),
-) -> Variable<'m>
+) -> Variable
 {
     let __start0 = __4.2.clone();
     let __end0 = __5.0.clone();
@@ -6609,8 +6581,8 @@ fn __action137<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, Block<'m>, usize),
-) -> core::option::Option<Block<'m>>
+    __1: (usize, Block, usize),
+) -> core::option::Option<Block>
 {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
@@ -6633,12 +6605,12 @@ fn __action138<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, Box<Expression<'m>>, usize),
+    __1: (usize, Box<Expression>, usize),
     __2: (usize, &'input str, usize),
-    __3: (usize, Block<'m>, usize),
+    __3: (usize, Block, usize),
     __4: (usize, &'input str, usize),
-    __5: (usize, Block<'m>, usize),
-) -> Statement<'m>
+    __5: (usize, Block, usize),
+) -> Statement
 {
     let __start0 = __4.0.clone();
     let __end0 = __5.2.clone();
@@ -6665,10 +6637,10 @@ fn __action139<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, Box<Expression<'m>>, usize),
+    __1: (usize, Box<Expression>, usize),
     __2: (usize, &'input str, usize),
-    __3: (usize, Block<'m>, usize),
-) -> Statement<'m>
+    __3: (usize, Block, usize),
+) -> Statement
 {
     let __start0 = __3.2.clone();
     let __end0 = __3.2.clone();
@@ -6698,11 +6670,11 @@ fn __action140<
     __1: (usize, &'input str, usize),
     __2: (usize, &'input str, usize),
     __3: (usize, DataType, usize),
-    __4: (usize, Dimension<'m>, usize),
+    __4: (usize, Dimension, usize),
     __5: (usize, &'input str, usize),
-    __6: (usize, Box<Expression<'m>>, usize),
+    __6: (usize, Box<Expression>, usize),
     __7: (usize, &'input str, usize),
-) -> Variable<'m>
+) -> Variable
 {
     let __start0 = __4.0.clone();
     let __end0 = __4.2.clone();
@@ -6735,9 +6707,9 @@ fn __action141<
     __2: (usize, &'input str, usize),
     __3: (usize, DataType, usize),
     __4: (usize, &'input str, usize),
-    __5: (usize, Box<Expression<'m>>, usize),
+    __5: (usize, Box<Expression>, usize),
     __6: (usize, &'input str, usize),
-) -> Variable<'m>
+) -> Variable
 {
     let __start0 = __3.2.clone();
     let __end0 = __4.0.clone();
@@ -6770,9 +6742,9 @@ fn __action142<
     __1: (usize, &'input str, usize),
     __2: (usize, &'input str, usize),
     __3: (usize, DataType, usize),
-    __4: (usize, Dimension<'m>, usize),
+    __4: (usize, Dimension, usize),
     __5: (usize, &'input str, usize),
-) -> Variable<'m>
+) -> Variable
 {
     let __start0 = __4.0.clone();
     let __end0 = __4.2.clone();
@@ -6803,7 +6775,7 @@ fn __action143<
     __2: (usize, &'input str, usize),
     __3: (usize, DataType, usize),
     __4: (usize, &'input str, usize),
-) -> Variable<'m>
+) -> Variable
 {
     let __start0 = __3.2.clone();
     let __end0 = __4.0.clone();
@@ -6830,8 +6802,8 @@ fn __action144<
     'm,
 >(
     input: &'input str,
-    __0: (usize, Box<Expression<'m>>, usize),
-) -> Vec<Box<Expression<'m>>>
+    __0: (usize, Box<Expression>, usize),
+) -> Vec<Box<Expression>>
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
@@ -6854,7 +6826,7 @@ fn __action145<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Vec<Box<Expression<'m>>>
+) -> Vec<Box<Expression>>
 {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
@@ -6876,9 +6848,9 @@ fn __action146<
     'm,
 >(
     input: &'input str,
-    __0: (usize, alloc::vec::Vec<Box<Expression<'m>>>, usize),
-    __1: (usize, Box<Expression<'m>>, usize),
-) -> Vec<Box<Expression<'m>>>
+    __0: (usize, alloc::vec::Vec<Box<Expression>>, usize),
+    __1: (usize, Box<Expression>, usize),
+) -> Vec<Box<Expression>>
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
@@ -6900,8 +6872,8 @@ fn __action147<
     'm,
 >(
     input: &'input str,
-    __0: (usize, alloc::vec::Vec<Box<Expression<'m>>>, usize),
-) -> Vec<Box<Expression<'m>>>
+    __0: (usize, alloc::vec::Vec<Box<Expression>>, usize),
+) -> Vec<Box<Expression>>
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
@@ -7020,7 +6992,7 @@ fn __action152<
     input: &'input str,
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
-) -> Block<'m>
+) -> Block
 {
     let __start0 = __0.2.clone();
     let __end0 = __1.0.clone();
@@ -7045,9 +7017,9 @@ fn __action153<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, alloc::vec::Vec<Statement<'m>>, usize),
+    __1: (usize, alloc::vec::Vec<Statement>, usize),
     __2: (usize, &'input str, usize),
-) -> Block<'m>
+) -> Block
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
@@ -7072,7 +7044,7 @@ fn __action154<
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Program<'m>
+) -> Program
 {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
@@ -7094,8 +7066,8 @@ fn __action155<
     'm,
 >(
     input: &'input str,
-    __0: (usize, alloc::vec::Vec<Statement<'m>>, usize),
-) -> Program<'m>
+    __0: (usize, alloc::vec::Vec<Statement>, usize),
+) -> Program
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
@@ -7118,7 +7090,7 @@ fn __action156<
     input: &'input str,
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
-) -> Block<'m>
+) -> Block
 {
     let __start0 = __0.2.clone();
     let __end0 = __1.0.clone();
@@ -7143,9 +7115,9 @@ fn __action157<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, alloc::vec::Vec<Statement<'m>>, usize),
+    __1: (usize, alloc::vec::Vec<Statement>, usize),
     __2: (usize, &'input str, usize),
-) -> Block<'m>
+) -> Block
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
@@ -7169,8 +7141,8 @@ fn __action158<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-    __1: (usize, Vec<Index<'m>>, usize),
-) -> Access<'m>
+    __1: (usize, Vec<Index>, usize),
+) -> Access
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
@@ -7193,7 +7165,7 @@ fn __action159<
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
-) -> Access<'m>
+) -> Access
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();

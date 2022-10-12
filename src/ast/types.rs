@@ -1,13 +1,5 @@
-use std::borrow::{Borrow, BorrowMut};
-
-use crate::ast;
-
 use super::{
-    expressions::Expression,
-    node::Node,
-    quadruples::{Manager, MANAGER},
-    statements::Block,
-    Dimension,
+    expressions::Expression, node::Node, quadruples::MANAGER, statements::Block, Dimension,
 };
 
 #[derive(Clone, Copy, Debug)]
@@ -59,23 +51,21 @@ pub enum DataType {
 }
 
 #[derive(Debug)]
-pub struct Variable<'m> {
-    manager: Option<&'m Manager>,
+pub struct Variable {
     pub id: String,
     pub data_type: DataType,
-    pub dimension: ast::Dimension<'m>,
-    pub value: Option<Box<Expression<'m>>>,
+    pub dimension: Dimension,
+    pub value: Option<Box<Expression>>,
 }
 
-impl<'m> Variable<'m> {
+impl<'m> Variable {
     pub fn new(
         id: String,
         data_type: DataType,
-        dimension: Dimension<'m>,
-        value: Option<Box<Expression<'m>>>,
-    ) -> Variable<'m> {
+        dimension: Dimension,
+        value: Option<Box<Expression>>,
+    ) -> Variable {
         Variable {
-            manager: None,
             id,
             data_type,
             dimension,
@@ -84,11 +74,7 @@ impl<'m> Variable<'m> {
     }
 }
 
-impl<'m> Node<'m> for Variable<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager) -> () {
-        self.manager = Some(manager);
-    }
-
+impl<'m> Node<'m> for Variable {
     fn generate(&mut self) -> () {
         MANAGER
             .lock()
@@ -113,28 +99,18 @@ pub struct FunctionSignature {
 pub struct FunctionParam(pub String, pub DataType);
 
 #[derive(Debug)]
-pub struct Function<'m> {
-    manager: Option<&'m Manager>,
+pub struct Function {
     pub signature: FunctionSignature,
-    pub block: Block<'m>,
+    pub block: Block,
 }
 
-impl<'m> Function<'m> {
-    pub fn new(signature: FunctionSignature, block: Block<'m>) -> Function {
-        Function {
-            manager: None,
-            signature,
-            block,
-        }
+impl<'m> Function {
+    pub fn new(signature: FunctionSignature, block: Block) -> Function {
+        Function { signature, block }
     }
 }
 
-impl<'m> Node<'m> for Function<'m> {
-    fn set_manager(&mut self, manager: &'m Manager) -> () {
-        self.manager = Some(manager);
-        self.block.set_manager(manager);
-    }
-
+impl<'m> Node<'m> for Function {
     fn generate(&mut self) -> () {
         {
             MANAGER.lock().unwrap().get_env().from_function(
@@ -145,12 +121,6 @@ impl<'m> Node<'m> for Function<'m> {
         }
 
         self.block.generate();
-        // if let Some(manager) = self.manager {
-        //     let mut m = *manager.borrow();
-        //     // manager
-        //     //     .get_env()
-        //     //     .from_function(self.signature.id.clone(), self.signature.clone(), false);
-        // }
     }
 
     fn reduce(&self) -> String {

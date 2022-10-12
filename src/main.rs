@@ -4,7 +4,6 @@ pub mod ast;
 pub mod env;
 pub mod parser;
 pub mod semantics;
-pub mod symbols;
 
 use moris_lang::ast::quadruples::MANAGER;
 use moris_lang::parser::grammar::PProgramParser as Parser;
@@ -13,13 +12,6 @@ use regex::Error;
 // #[cfg(not(test))]
 fn main() {
     use moris_lang::ast::{expressions::id::Id, quadruples::Manager, types::DataType};
-
-    let m = Manager::new();
-
-    let mut id = Id::new("dx", Some(DataType::Float));
-    id.set_manager(&m);
-    let mut id2 = Id::new("dx2", Some(DataType::Int));
-    id2.set_manager(&m);
 
     // println!("{:#?}", id.reduce().dump());
 

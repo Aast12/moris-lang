@@ -2,7 +2,6 @@ use crate::{
     ast::{
         self,
         quadruples::{Manager, Quadruple, MANAGER},
-        temp::Temp,
         types::DataType,
     },
     semantics::SemanticRules,
@@ -11,21 +10,19 @@ use crate::{
 use super::{types, Expression, ExpressionT};
 
 #[derive(Debug)]
-pub struct Operation<'m> {
-    manager: Option<&'m Manager>,
+pub struct Operation {
     pub operator: types::Operator,
-    pub left: Box<Expression<'m>>,
-    pub right: Box<Expression<'m>>,
+    pub left: Box<Expression>,
+    pub right: Box<Expression>,
 }
 
-impl<'m> Operation<'m> {
+impl<'m> Operation {
     pub fn new(
-        left: Box<Expression<'m>>,
+        left: Box<Expression>,
         operator: types::Operator,
-        right: Box<Expression<'m>>,
+        right: Box<Expression>,
     ) -> Self {
         Operation {
-            manager: None,
             operator,
             left,
             right,
@@ -41,13 +38,7 @@ impl<'m> Operation<'m> {
     }
 }
 
-impl<'m> ast::node::Node<'m> for Operation<'m> {
-    fn set_manager(&mut self, manager: &'m Manager) -> () {
-        self.manager = Some(manager);
-        self.left.set_manager(manager);
-        self.right.set_manager(manager);
-    }
-
+impl<'m> ast::node::Node<'m> for Operation {
     fn generate(&mut self) -> () {
         self.reduce();
     }
@@ -72,22 +63,16 @@ impl<'m> ast::node::Node<'m> for Operation<'m> {
     }
 }
 
-impl<'m> ExpressionT<'m> for Operation<'m> {}
+impl<'m> ExpressionT<'m> for Operation {}
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ast::{
-        expressions::{constant::Const, id::Id},
-        node::Node,
-        quadruples::Manager,
-    };
+    use crate::ast::expressions::{constant::Const, id::Id};
 
     #[test]
     fn test_operation() {
-        let manager = Manager::new();
-
-        let mut op = Operation::new(
+        let op = Operation::new(
             Box::new(Expression::Id(Id::new("left", None))),
             types::Operator::Add,
             Box::new(Expression::Const(Const::new(
@@ -95,8 +80,6 @@ mod tests {
                 types::DataType::Float,
             ))),
         );
-
-        op.set_manager(&manager);
 
         if let Expression::Id(left) = op.left.as_ref() {
             assert_eq!(left.id, "left");

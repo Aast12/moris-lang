@@ -1,26 +1,23 @@
 use crate::ast;
 use crate::ast::expressions::Index;
-use crate::ast::quadruples::{Manager, MANAGER};
+use crate::ast::quadruples::{MANAGER};
 use crate::ast::types::{self, DataType};
 
 #[derive(Debug)]
-pub struct Id<'m> {
-    manager: Option<&'m Manager>,
+pub struct Id {
     pub id: String,
     pub dtype: Option<types::DataType>,
 }
 
 #[derive(Debug)]
-pub struct Access<'m> {
-    manager: Option<&'m Manager>,
-    pub id: Id<'m>,
-    pub indexing: Vec<Index<'m>>,
+pub struct Access {
+    pub id: Id,
+    pub indexing: Vec<Index>,
 }
 
-impl<'m> Id<'m> {
+impl Id {
     pub fn new(id: &str, dtype: Option<types::DataType>) -> Self {
         Id {
-            manager: None,
             id: String::from(id),
             dtype,
         }
@@ -40,28 +37,23 @@ impl<'m> Id<'m> {
     }
 }
 
-impl<'m> ast::node::Node<'m> for Id<'m> {
-    fn set_manager(&mut self, manager: &'m Manager) -> () {
-        self.manager = Some(manager);
-    }
-
+impl<'m> ast::node::Node<'m> for Id {
     fn reduce(&self) -> String {
         return self.id.clone();
     }
 }
 
-impl<'m> ast::node::Leaf<'m> for Id<'m> {
+impl<'m> ast::node::Leaf<'m> for Id {
     fn dump(&self) -> String {
         return self.id.clone();
     }
 }
 
-impl<'m> ast::expressions::ExpressionT<'m> for Id<'m> {}
+impl<'m> ast::expressions::ExpressionT<'m> for Id {}
 
-impl<'m> Access<'m> {
-    pub fn new(id: Id<'m>, indexing: Vec<Index<'m>>) -> Self {
+impl Access {
+    pub fn new(id: Id, indexing: Vec<Index>) -> Self {
         Access {
-            manager: None,
             id,
             indexing,
         }
@@ -72,38 +64,27 @@ impl<'m> Access<'m> {
     }
 }
 
-impl<'m> ast::node::Node<'m> for Access<'m> {
-    fn set_manager(&mut self, manager: &'m Manager) -> () {
-        self.manager = Some(manager);
-        self.id.set_manager(manager);
-        for indexing in self.indexing.iter_mut() {
-            indexing.set_manager(manager);
-        }
-    }
-
+impl<'m> ast::node::Node<'m> for Access {
     fn reduce(&self) -> String {
         return self.id.id.clone();
     }
 }
 
-impl<'m> ast::expressions::ExpressionT<'m> for Access<'m> {}
+impl<'m> ast::expressions::ExpressionT<'m> for Access {}
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::ast::expressions::Expression;
     use crate::ast::node::Node;
-    use crate::ast::quadruples::Manager;
     use crate::ast::types::DataType;
 
     #[test]
     fn test_id() {
-        let manager = Manager::new();
         let test_ids = vec!["id1", "id2"];
 
         for id_name in test_ids {
-            let mut id = Id::new(&id_name, Some(DataType::Float));
-            id.set_manager(&manager);
+            let id = Id::new(&id_name, Some(DataType::Float));
 
             assert_eq!(id.reduce(), id_name);
         }
@@ -111,18 +92,15 @@ mod tests {
 
     #[test]
     fn test_access() {
-        let manager = Manager::new();
         let vec_id_name = "testVec";
         let idx_id_name = "vecIdx";
 
         let test_location_id = Id::new(idx_id_name, Some(DataType::Int));
 
-        let mut access = Access::new(
+        let access = Access::new(
             Id::new(vec_id_name, None),
             vec![Index::Simple(Box::new(Expression::Id(test_location_id)))],
         );
-
-        access.set_manager(&manager);
 
         assert_eq!(access.id.id, vec_id_name);
         let indexing_fst = access.indexing.get(0);
@@ -130,20 +108,12 @@ mod tests {
             match indexing {
                 Index::Simple(expr) => {
                     if let Expression::Id(id) = expr.as_ref() {
-                        match id.manager {
-                            Some(_) => (),
-                            None => panic!("Manager not propagated to index."),
-                        }
                         assert_eq!(id.id, idx_id_name);
                     } else {
                         panic!()
                     }
                 }
                 _ => panic!(),
-            }
-            match access.id.manager {
-                Some(_) => (),
-                None => panic!("Manager not propagated to id."),
             }
         }
     }

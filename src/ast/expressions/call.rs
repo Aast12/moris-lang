@@ -1,18 +1,16 @@
-use crate::ast::{self, types::DataType, quadruples::Manager};
+use crate::ast::{self, types::DataType};
 
 use super::Expression;
 
 #[derive(Debug)]
-pub struct Call<'m> {
-    manager: Option<&'m Manager>,
+pub struct Call {
     pub id: String,
-    pub params: Vec<Box<Expression<'m>>>,
+    pub params: Vec<Box<Expression>>,
 }
 
-impl<'m> Call<'m> {
-    pub fn new(id: &str, params: Vec<Box<Expression<'m>>>) -> Self {
+impl<'m> Call {
+    pub fn new(id: &str, params: Vec<Box<Expression>>) -> Self {
         Call {
-            manager: None,
             id: String::from(id),
             params,
         }
@@ -23,14 +21,7 @@ impl<'m> Call<'m> {
     }
 }
 
-impl<'m> ast::node::Node<'m> for Call<'m> {
-    fn set_manager(&mut self, manager: &'m Manager) -> () {
-        self.manager = Some(manager);
-        for param in self.params.iter_mut() {
-            param.set_manager(manager);
-        }
-    }
-
+impl<'m> ast::node::Node<'m> for Call {
     fn generate(&mut self) -> () {
         todo!()
     }
@@ -40,21 +31,18 @@ impl<'m> ast::node::Node<'m> for Call<'m> {
     }
 }
 
-impl<'m> ast::expressions::ExpressionT<'m> for Call<'m> {}
+impl<'m> ast::expressions::ExpressionT<'m> for Call {}
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::ast::expressions::*;
-    use crate::ast::node::Node;
-    use crate::ast::quadruples::Manager;
 
     #[test]
     fn test_function() {
-        let manager = Manager::new();
         let fn_name = "testFn";
 
-        let mut call = Call::new(
+        Call::new(
             fn_name,
             vec![
                 Box::new(Expression::Id(id::Id::new(fn_name, None))),
@@ -65,7 +53,5 @@ mod tests {
                 Box::new(Expression::Call(Call::new("arg", vec![]))),
             ],
         );
-
-        call.set_manager(&manager);
     }
 }
