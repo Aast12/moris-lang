@@ -1,9 +1,4 @@
-use std::fmt::format;
-
-use super::{
-    node::{Leaf, Node},
-    types::DataType,
-};
+use super::{node::Node, types::DataType};
 
 pub struct Temp {
     pub id: i32,
@@ -23,11 +18,5 @@ impl<'m> Node<'m> for Temp {
 
     fn reduce(&self) -> String {
         return format!("tmp{}", self.id.to_string());
-    }
-}
-
-impl<'m> Leaf<'m> for Temp {
-    fn dump(&self) -> String {
-        return format!("f{}", self.id.to_string());
     }
 }

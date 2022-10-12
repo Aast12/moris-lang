@@ -31,8 +31,6 @@ impl<'m> ast::node::Node<'m> for Call {
     }
 }
 
-impl<'m> ast::expressions::ExpressionT<'m> for Call {}
-
 #[cfg(test)]
 mod tests {
     use super::*;

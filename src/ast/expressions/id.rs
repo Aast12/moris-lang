@@ -1,6 +1,6 @@
 use crate::ast;
 use crate::ast::expressions::Index;
-use crate::ast::quadruples::{MANAGER};
+use crate::ast::quadruples::MANAGER;
 use crate::ast::types::{self, DataType};
 
 #[derive(Debug)]
@@ -43,20 +43,9 @@ impl<'m> ast::node::Node<'m> for Id {
     }
 }
 
-impl<'m> ast::node::Leaf<'m> for Id {
-    fn dump(&self) -> String {
-        return self.id.clone();
-    }
-}
-
-impl<'m> ast::expressions::ExpressionT<'m> for Id {}
-
 impl Access {
     pub fn new(id: Id, indexing: Vec<Index>) -> Self {
-        Access {
-            id,
-            indexing,
-        }
+        Access { id, indexing }
     }
 
     pub fn data_type(&self) -> DataType {
@@ -69,8 +58,6 @@ impl<'m> ast::node::Node<'m> for Access {
         return self.id.id.clone();
     }
 }
-
-impl<'m> ast::expressions::ExpressionT<'m> for Access {}
 
 #[cfg(test)]
 mod tests {

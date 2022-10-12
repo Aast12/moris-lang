@@ -1,4 +1,4 @@
-use std::fmt::{Debug};
+use std::fmt::Debug;
 
 use crate::ast::expressions::{id::Access, Expression};
 
@@ -40,25 +40,28 @@ impl<'m> Node<'m> for Statement {
             }
             Statement::Expression(exp) => exp.generate(),
             Statement::If {
-                condition,
-                if_block,
-                else_block,
+                condition: _,
+                if_block: _,
+                else_block: _,
             } => {
                 todo!("For Statement generate");
-                condition.generate();
-                if_block.generate();
-                if let Some(block) = else_block {
-                    block.generate();
-                }
+                // condition.generate();
+                // if_block.generate();
+                // if let Some(block) = else_block {
+                //     block.generate();
+                // }
             }
             Statement::For {
-                iterator_id,
-                iterable,
-                block,
+                iterator_id: _,
+                iterable: _,
+                block: _,
             } => {
                 todo!("For Statement generate");
             }
-            Statement::While { condition, block } => todo!("While Loop generate"),
+            Statement::While {
+                condition: _,
+                block: _,
+            } => todo!("While Loop generate"),
             Statement::FunctionDeclaration(func) => func.generate(),
             Statement::Return(ret) => ret.generate(),
         }

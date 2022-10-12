@@ -7,12 +7,9 @@ pub mod semantics;
 
 use moris_lang::ast::quadruples::MANAGER;
 use moris_lang::parser::grammar::PProgramParser as Parser;
-use regex::Error;
 
 // #[cfg(not(test))]
 fn main() {
-    use moris_lang::ast::{expressions::id::Id, quadruples::Manager, types::DataType};
-
     // println!("{:#?}", id.reduce().dump());
 
     // print!("{:#?}", Parser::new().parse("for + 5;").unwrap());
@@ -40,10 +37,8 @@ fn main() {
     }
     print!("{:#?}", m);
 
-    
     // program_node.generate();
     // print!("{:#?}", program_nodse);
-    return ();
     print!(
         "{:#?}",
         Parser::new()

@@ -1,4 +1,4 @@
-use crate::ast::{self, node::Leaf, quadruples::Manager, types::DataType};
+use crate::ast::{node::Node, types::DataType};
 
 #[derive(Debug)]
 pub enum TypeConst {
@@ -24,20 +24,12 @@ impl Const {
     }
 }
 
-impl<'m> ast::node::Node<'m> for Const {
+impl<'m> Node<'m> for Const {
     fn generate(&mut self) -> () {
         todo!("Const generate");
     }
 
     fn reduce(&self) -> String {
-        return self.value.clone();
-    }
-}
-
-impl<'m> ast::expressions::ExpressionT<'m> for Const {}
-
-impl<'m> Leaf<'m> for Const {
-    fn dump(&self) -> String {
         return self.value.clone();
     }
 }

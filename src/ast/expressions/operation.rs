@@ -1,13 +1,13 @@
 use crate::{
     ast::{
         self,
-        quadruples::{Manager, Quadruple, MANAGER},
+        quadruples::{Quadruple, MANAGER},
         types::DataType,
     },
     semantics::SemanticRules,
 };
 
-use super::{types, Expression, ExpressionT};
+use super::{types, Expression};
 
 #[derive(Debug)]
 pub struct Operation {
@@ -17,11 +17,7 @@ pub struct Operation {
 }
 
 impl<'m> Operation {
-    pub fn new(
-        left: Box<Expression>,
-        operator: types::Operator,
-        right: Box<Expression>,
-    ) -> Self {
+    pub fn new(left: Box<Expression>, operator: types::Operator, right: Box<Expression>) -> Self {
         Operation {
             operator,
             left,
@@ -62,8 +58,6 @@ impl<'m> ast::node::Node<'m> for Operation {
         return tmp.reduce();
     }
 }
-
-impl<'m> ExpressionT<'m> for Operation {}
 
 #[cfg(test)]
 mod tests {

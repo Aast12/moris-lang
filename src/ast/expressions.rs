@@ -45,7 +45,6 @@ impl<'m> node::Node<'m> for Expression {
             Expression::Access(access) => access.generate(),
             Expression::Id(id) => id.generate(),
             Expression::Call(call) => call.generate(),
-            _ => todo!(),
         }
     }
 
@@ -56,7 +55,6 @@ impl<'m> node::Node<'m> for Expression {
             Expression::Access(access) => access.reduce(),
             Expression::Id(id) => id.reduce(),
             Expression::Call(call) => call.reduce(),
-            _ => todo!(),
         }
     }
 }
@@ -67,17 +65,11 @@ pub enum Index {
     Range(Box<Expression>, Box<Expression>),
 }
 
-pub trait ExpressionT<'m>: ast::node::Node<'m> {}
-
 impl<'m> ast::node::Node<'m> for Index {}
 
 #[cfg(test)]
 mod tests {
-    use crate::ast::{
-        node::Node,
-        quadruples::Manager,
-        types::{DataType, Operator},
-    };
+    use crate::ast::types::{DataType, Operator};
 
     use super::{constant::Const, operation::Operation, Expression};
 
@@ -92,11 +84,6 @@ mod tests {
     fn build_string<'m>() -> Box<Expression> {
         Box::new(Expression::Const(Const::new("str", DataType::String)))
     }
-
-    // fn expect_fail(in_str: &str) {
-    //     let parser = get_parser();
-    //     assert!(std::panic::catch_unwind(|| parser.parse(in_str).unwrap()).is_err());
-    // }
 
     #[test]
     fn test_compatible_types() {
