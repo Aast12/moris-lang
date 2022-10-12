@@ -80,9 +80,9 @@ impl Environment {
         }
     }
 
-    pub fn add_var(&mut self, id: String, data_type: DataType) {
+    pub fn add_var(&mut self, id: &String, data_type: &DataType) {
         self.current_env_mut()
-            .add(SymbolEntry::new_var(id, data_type));
+            .add(SymbolEntry::new_var(id.clone(), data_type.clone()));
     }
 
     pub fn get_var(&self, id: &String) -> Option<&SymbolEntry> {

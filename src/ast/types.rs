@@ -136,13 +136,10 @@ impl Variable {
 
 impl<'m> Node<'m> for Variable {
     fn generate(&mut self) -> () {
-        {
-            MANAGER
-                .lock()
-                .unwrap()
-                .get_env()
-                .add_var(self.id.clone(), self.data_type.clone());
-        }
+        // Add variable to symbols table
+        let mut manager = MANAGER.lock().unwrap();
+        manager.get_env().add_var(&self.id, &self.data_type);
+        drop(manager);
 
         if let Some(value) = &self.value {
             let value_data_type = value.data_type();
@@ -155,10 +152,10 @@ impl<'m> Node<'m> for Variable {
 
             // Get temporal variable for assignment R-value
             let mut value_temp = value.reduce();
+            manager = MANAGER.lock().unwrap();
 
             if self.data_type != value_data_type {
                 // Emits type casting operation quadruple on r-value type mismatch
-                let mut manager = MANAGER.lock().unwrap();
                 let prev_value_temp = value_temp.clone();
                 value_temp = manager.new_temp(&self.data_type).reduce();
 
@@ -170,14 +167,14 @@ impl<'m> Node<'m> for Variable {
                 ))
             }
 
-            {
-                MANAGER.lock().unwrap().emit(Quadruple(
-                    String::from(Operator::Assign.to_string()),
-                    value_temp,
-                    String::new(),
-                    self.id.clone(),
-                ));
-            }
+            manager.emit(Quadruple(
+                String::from(Operator::Assign.to_string()),
+                value_temp,
+                String::new(),
+                self.id.clone(),
+            ));
+
+            drop(manager);
         }
     }
 
@@ -210,19 +207,16 @@ impl<'m> Function {
 
 impl<'m> Node<'m> for Function {
     fn generate(&mut self) -> () {
-        {
-            MANAGER.lock().unwrap().get_env().from_function(
-                &self.signature.id,
-                self.signature.clone(),
-                true,
-            );
-        }
+        let mut manager = MANAGER.lock().unwrap();
+
+        manager
+            .get_env()
+            .from_function(&self.signature.id, self.signature.clone(), true);
+        drop(manager);
 
         self.block.generate();
 
-        {
-            MANAGER.lock().unwrap().env.switch(&String::from("global"));
-        }
+        MANAGER.lock().unwrap().env.switch(&String::from("global"));
     }
 
     fn reduce(&self) -> String {

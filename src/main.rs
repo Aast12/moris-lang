@@ -23,17 +23,17 @@ fn main() {
         x = 6;
     } else {
         x = 9;
+        z = 4:
     }
 
-    fn main(y: bool): float {
-        let z: float = 7;
+    
+    let z: float = 7 * x + 3 / 2;
 
-        if (z == 7) {
-            y = false;
-        }
-
-        return x  + 2 - 3 * y * 3;
+    if (z == 7) {
+        y = false;
     }
+
+     
     ",
     );
 

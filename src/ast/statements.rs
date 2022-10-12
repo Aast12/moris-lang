@@ -49,14 +49,11 @@ impl<'m> Node<'m> for Statement {
                     access_data_type
                 );
 
-                println!("Assigning var value");
-
                 // Get temporal variable for assignment R-value
                 let mut value_temp = value.reduce();
 
                 if access_data_type != value_data_type {
                     // Emits type casting operation quadruple on r-value type mismatch
-                    println!("To emit type cast");
                     let mut manager = MANAGER.lock().unwrap();
                     let prev_value_temp = value_temp.clone();
                     value_temp = manager.new_temp(&access_data_type).reduce();
@@ -69,15 +66,15 @@ impl<'m> Node<'m> for Statement {
                     ))
                 }
 
-                {
-                    println!("To emit assign");
-                    MANAGER.lock().unwrap().emit(Quadruple(
-                        String::from(Operator::Assign.to_string()),
-                        value_temp,
-                        String::new(),
-                        access.id.id.clone(),
-                    ));
-                }
+                let mut manager = MANAGER.lock().unwrap();
+                manager.emit(Quadruple(
+                    String::from(Operator::Assign.to_string()),
+                    value_temp,
+                    String::new(),
+                    access.id.id.clone(),
+                ));
+
+                drop(manager);
             }
             Statement::Expression(exp) => exp.generate(),
             Statement::If {
@@ -87,60 +84,54 @@ impl<'m> Node<'m> for Statement {
             } => {
                 condition.generate();
 
-                let goto_false_id: usize; // Id of if-false goto quadruple
+                let mut manager = MANAGER.lock().unwrap();
+
                 let end_id: usize; // Id of goto end to skip else block
-                {
-                    println!("To emit goto False");
-                    // Generate goto if false
-                    let mut manager = MANAGER.lock().unwrap();
-                    goto_false_id = manager.get_next_id();
-                    manager.emit(Quadruple::new_empty());
-                }
+                                   // Id of if-false goto quadruple
+                let goto_false_id = manager.get_next_id();
+                // Generate goto if false
+                manager.emit(Quadruple::new_empty());
+
+                drop(manager);
 
                 if_block.generate();
 
                 if let Some(block) = else_block {
-                    println!("To emit ekse");
-                    let goto_end_id: usize;
-                    {
-                        let mut manager = MANAGER.lock().unwrap();
+                    manager = MANAGER.lock().unwrap();
 
-                        let goto_end_quad = Quadruple::new_empty();
-                        goto_end_id = manager.get_next_id();
-                        manager.emit(goto_end_quad);
+                    // Generate goto to skip else block
+                    let goto_end_id = manager.get_next_id();
+                    manager.emit(Quadruple::new_empty());
 
-                        let goto_false_jump = manager.get_next_id();
-                        manager.update_instruction(
-                            goto_false_id,
-                            Quadruple::new(
-                                "gotoFalse",
-                                "",
-                                "",
-                                goto_false_jump.to_string().as_str(),
-                            ),
-                        );
-                    }
+                    // Generate goto to skip to else block, if false
+                    let goto_false_jump = manager.get_next_id();
+                    manager.update_instruction(
+                        goto_false_id,
+                        Quadruple::new("gotoFalse", "", "", goto_false_jump.to_string().as_str()),
+                    );
+                    drop(manager);
 
                     block.generate();
 
-                    {
-                        let mut manager = MANAGER.lock().unwrap();
+                    manager = MANAGER.lock().unwrap();
 
-                        end_id = manager.get_next_id();
-
-                        manager.update_instruction(
-                            goto_end_id,
-                            Quadruple::new("goto", "", "", end_id.to_string().as_str()),
-                        );
-                    }
+                    // Update goto to skip else block
+                    end_id = manager.get_next_id();
+                    manager.update_instruction(
+                        goto_end_id,
+                        Quadruple::new("goto", "", "", end_id.to_string().as_str()),
+                    );
+                    drop(manager);
                 } else {
-                    println!("To emit end");
-                    let mut manager = MANAGER.lock().unwrap();
+                    manager = MANAGER.lock().unwrap();
+
+                    // Update goto to skip if false
                     end_id = manager.get_next_id();
                     manager.update_instruction(
                         goto_false_id,
                         Quadruple::new("gotoFalse", "", "", end_id.to_string().as_str()),
                     );
+                    drop(manager);
                 }
             }
             Statement::For {
