@@ -7,7 +7,6 @@ use super::{
     types::{Function, Variable},
 };
 
-#[derive(Debug)]
 pub enum Statement {
     VarDeclaration(Variable),
     VarAssign(Access, Box<Expression>),
@@ -69,6 +68,45 @@ impl<'m> Node<'m> for Statement {
 
     fn reduce(&self) -> String {
         todo!()
+    }
+}
+
+impl Debug for Statement {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Statement::VarDeclaration(var) => write!(fmt, "{:#?}", var),
+            Statement::VarAssign(access, expr) => write!(fmt, "{:#?} = \n {:#?}", access, expr),
+            Statement::Expression(expr) => write!(fmt, "{:#?}", expr),
+            Statement::If {
+                condition,
+                if_block,
+                else_block,
+            } => {
+                if let Some(block) = else_block {
+                    write!(
+                        fmt,
+                        "IF ({:#?}) {{\n {:#?}\n}} ELSE {{\n {:#?} \n}}",
+                        condition, if_block, block
+                    )
+                } else {
+                    write!(fmt, "IF ({:#?}) {{\n {:#?}\n}}", condition, if_block)
+                }
+            }
+            Statement::For {
+                iterator_id,
+                iterable,
+                block,
+            } => write!(
+                fmt,
+                "FOR ({:#?} IN {:#?}) {{\n {:#?}\n}}",
+                iterator_id, iterable, block
+            ),
+            Statement::While { condition, block } => {
+                write!(fmt, "WHILE ({:#?}) {{\n {:#?}\n}}", condition, block)
+            }
+            Statement::FunctionDeclaration(func) => write!(fmt, "{:#?}", func),
+            Statement::Return(stmt) => write!(fmt, "RETURN {:#?}", stmt),
+        }
     }
 }
 

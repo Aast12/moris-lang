@@ -1,5 +1,8 @@
 use lazy_static::lazy_static; // 1.4.0
-use std::sync::Mutex;
+use std::{
+    fmt::{Debug, Error, Formatter},
+    sync::Mutex,
+};
 
 // use crate::{moris_lang::environ::Environment, symbols::SymbolTable};
 use crate::env::Environment;
@@ -35,7 +38,7 @@ impl<'m> Manager {
     pub fn new_temp(&mut self, data_type: DataType) -> Temp {
         self.temp_counter += 1;
         let tmp = Temp::new(self.temp_counter - 1, data_type);
-        
+
         return tmp;
     }
 
@@ -45,5 +48,10 @@ impl<'m> Manager {
     }
 }
 
-#[derive(Debug)]
 pub struct Quadruple(pub String, pub String, pub String, pub String);
+
+impl Debug for Quadruple {
+    fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
+        return write!(fmt, "{}\t{}\t{}\t{}\t", self.0, self.1, self.2, self.3);
+    }
+}
