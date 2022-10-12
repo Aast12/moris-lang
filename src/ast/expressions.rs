@@ -26,7 +26,7 @@ pub enum Expression {
 }
 
 impl<'m> Expression {
-    fn data_type(&self) -> DataType {
+    pub fn data_type(&self) -> DataType {
         match &self {
             Expression::Const(constant) => constant.dtype.clone(),
             Expression::Op(operation) => operation.data_type(),

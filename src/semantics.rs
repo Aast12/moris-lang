@@ -22,13 +22,16 @@ impl SemanticRules {
     }
 
     fn fail(left: DataType, right: DataType) -> ! {
-        panic!("{}", format!("Types {:?} and {:?} are not compatible!", left, right));
+        panic!(
+            "{}",
+            format!("Types {:?} and {:?} are not compatible!", left, right)
+        );
     }
 
     fn pipe_match_r(left: DataType, right: DataType) -> DataType {
         match right {
             DataType::Function(func) => *func.clone(),
-            _ => Self::fail(left, right)
+            _ => Self::fail(left, right),
         }
     }
 
@@ -39,7 +42,7 @@ impl SemanticRules {
             DataType::Bool => Self::pipe_match_r(left, right),
             DataType::String => Self::pipe_match_r(left, right),
             DataType::DataFrame => Self::pipe_match_r(left, right),
-            _ => Self::fail(left, right)
+            _ => Self::fail(left, right),
         }
     }
 
@@ -49,32 +52,32 @@ impl SemanticRules {
                 DataType::Int => DataType::Int,
                 DataType::Float => DataType::Int,
                 DataType::Bool => DataType::Int,
-                _ => Self::fail(left, right)
+                _ => Self::fail(left, right),
             },
             DataType::Float => match right {
                 DataType::Int => DataType::Float,
                 DataType::Float => DataType::Float,
                 DataType::Bool => DataType::Float,
-                _ => Self::fail(left, right)
+                _ => Self::fail(left, right),
             },
             DataType::Bool => match right {
                 DataType::Int => DataType::Bool,
                 DataType::Float => DataType::Bool,
                 DataType::Bool => DataType::Bool,
-                _ => Self::fail(left, right)
+                _ => Self::fail(left, right),
             },
             DataType::String => match right {
                 DataType::String => DataType::String,
-                _ => Self::fail(left, right)
+                _ => Self::fail(left, right),
             },
             DataType::DataFrame => match right {
                 DataType::DataFrame => DataType::DataFrame,
-                _ => Self::fail(left, right)
+                _ => Self::fail(left, right),
             },
             _ => Self::fail(left, right),
         }
     }
-    
+
     fn comparison_match_r(left: DataType, right: DataType) -> DataType {
         match right {
             DataType::Int => DataType::Bool,
