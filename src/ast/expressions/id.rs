@@ -1,5 +1,6 @@
 use crate::ast;
 use crate::ast::expressions::Index;
+use crate::ast::node::Node;
 use crate::ast::quadruples::MANAGER;
 use crate::ast::types::{self, DataType};
 
@@ -48,14 +49,21 @@ impl Access {
         Access { id, indexing }
     }
 
-    pub fn data_type(&self) -> DataType {
-        todo!("Implement access data type")
+    pub fn data_type(&mut self) -> DataType {
+        return self.id.data_type();
     }
 }
 
-impl<'m> ast::node::Node<'m> for Access {
+impl<'m> Node<'m> for Access {
+    fn generate(&mut self) -> () {
+        todo!("Access generate not implemented");
+    }
+
     fn reduce(&self) -> String {
-        return self.id.id.clone();
+        if self.indexing.len() == 0 {
+            return self.id.id.clone();
+        }
+        todo!("Access reduce not implemented");
     }
 }
 

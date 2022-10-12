@@ -1,10 +1,10 @@
 /// Represents the node of an Abstract Syntax Tree
 pub trait Node<'m> {
     fn generate(&mut self) -> () {
-        todo!()
+        todo!("generate raw node");
     }
 
     fn reduce(&self) -> String {
-        todo!()
+        todo!("reduce raw node");
     }
 }

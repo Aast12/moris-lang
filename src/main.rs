@@ -18,9 +18,19 @@ fn main() {
     let x: int = 5;
     let z: int = 7 + 2 / x;
 
+    
+    if (z > 4) {
+        x = 6;
+    } else {
+        x = 9;
+    }
 
     fn main(y: bool): float {
         let z: float = 7;
+
+        if (z == 7) {
+            y = false;
+        }
 
         return x  + 2 - 3 * y * 3;
     }

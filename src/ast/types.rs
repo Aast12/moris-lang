@@ -182,7 +182,7 @@ impl<'m> Node<'m> for Variable {
     }
 
     fn reduce(&self) -> String {
-        todo!()
+        todo!("reduce variable");
     }
 }
 

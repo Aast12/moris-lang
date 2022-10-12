@@ -23,11 +23,11 @@ impl<'m> Call {
 
 impl<'m> ast::node::Node<'m> for Call {
     fn generate(&mut self) -> () {
-        todo!()
+        todo!("generate call");
     }
 
     fn reduce(&self) -> String {
-        todo!()
+        todo!("reduce call");
     }
 }
 
