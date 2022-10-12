@@ -35,9 +35,9 @@ impl<'m> Manager {
         return &mut self.env;
     }
 
-    pub fn new_temp(&mut self, data_type: DataType) -> Temp {
+    pub fn new_temp(&mut self, data_type: &DataType) -> Temp {
         self.temp_counter += 1;
-        let tmp = Temp::new(self.temp_counter - 1, data_type);
+        let tmp = Temp::new(self.temp_counter - 1, data_type.clone());
 
         return tmp;
     }

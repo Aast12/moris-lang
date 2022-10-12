@@ -46,7 +46,7 @@ impl<'m> ast::node::Node<'m> for Operation {
         let dt = self.data_type();
         let mut manager = MANAGER.lock().unwrap();
 
-        let tmp = manager.new_temp(dt);
+        let tmp = manager.new_temp(&dt);
 
         manager.emit(Quadruple(
             String::from(self.operator.to_string()),

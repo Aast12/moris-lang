@@ -16,12 +16,13 @@ fn main() {
     let test_program = Parser::new().parse(
         "
     let x: int = 5;
+    let z: int = 7 + 2 / x;
 
 
     fn main(y: bool): float {
         let y: float = 7;
 
-        return x  + 2 - 3 * y / 3;
+        return x  + 2 - 3 * y * 3;
     }
     ",
     );
@@ -36,7 +37,7 @@ fn main() {
         println!("{:#?}", quad);
     }
     print!("{:#?}", m);
-
+    return;
     // program_node.generate();
     // print!("{:#?}", program_nodse);
     print!(

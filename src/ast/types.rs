@@ -118,7 +118,7 @@ pub struct Variable {
     pub value: Option<Box<Expression>>,
 }
 
-impl<'m> Variable {
+impl Variable {
     pub fn new(
         id: String,
         data_type: DataType,
@@ -136,11 +136,49 @@ impl<'m> Variable {
 
 impl<'m> Node<'m> for Variable {
     fn generate(&mut self) -> () {
-        MANAGER
-            .lock()
-            .unwrap()
-            .get_env()
-            .add_var(self.id.clone(), self.data_type.clone());
+        {
+            MANAGER
+                .lock()
+                .unwrap()
+                .get_env()
+                .add_var(self.id.clone(), self.data_type.clone());
+        }
+
+        if let Some(value) = &self.value {
+            let value_data_type = value.data_type();
+            assert!(
+                DataType::equivalent(&self.data_type, &value_data_type).is_ok(),
+                "Data type {:?} cannot be assigned to a variable {:?}.",
+                value_data_type,
+                self.data_type
+            );
+
+            // Get temporal variable for assignment R-value
+            let mut value_temp = value.reduce();
+
+            if self.data_type != value_data_type {
+                // Emits type casting operation quadruple on r-value type mismatch
+                let mut manager = MANAGER.lock().unwrap();
+                let prev_value_temp = value_temp.clone();
+                value_temp = manager.new_temp(&self.data_type).reduce();
+
+                manager.emit(Quadruple(
+                    String::from(format!("{:?}", self.data_type)),
+                    prev_value_temp,
+                    String::new(),
+                    value_temp.clone(),
+                ))
+            }
+
+            {
+                MANAGER.lock().unwrap().emit(Quadruple(
+                    String::from(Operator::Assign.to_string()),
+                    value_temp,
+                    String::new(),
+                    self.id.clone(),
+                ));
+            }
+        }
     }
 
     fn reduce(&self) -> String {
