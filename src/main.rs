@@ -1,10 +1,5 @@
 use moris_lang::ast::node::Node;
 
-pub mod ast;
-pub mod env;
-pub mod parser;
-pub mod semantics;
-
 use moris_lang::ast::quadruples::MANAGER;
 use moris_lang::parser::grammar::PProgramParser as Parser;
 
@@ -32,6 +27,19 @@ fn main() {
     if (w == 7) {
         y = false;
     }
+    ",
+    );
+
+    let test_program = Parser::new().parse(
+        "
+    let x: int = 5;
+    let z: int = 7 + 2 / x;
+
+    while (x < 7 && x > 2) {
+        z = 8;
+        z = 9;
+    }
+    z = 10;
     ",
     );
 

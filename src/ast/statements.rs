@@ -141,10 +141,32 @@ impl<'m> Node<'m> for Statement {
             } => {
                 todo!("For Statement generate");
             }
-            Statement::While {
-                condition: _,
-                block: _,
-            } => todo!("While Loop generate"),
+            Statement::While { condition, block } => {
+                let mut manager = MANAGER.lock().unwrap();
+
+                let start_pos = manager.get_next_id();
+                drop(manager);
+
+                let condition_id = condition.reduce();
+
+                manager = MANAGER.lock().unwrap();
+
+                let goto_false_pos = manager.get_next_id();
+                manager.emit(Quadruple::new_empty());
+                drop(manager);
+
+                block.generate();
+
+                manager = MANAGER.lock().unwrap();
+
+                manager.emit(Quadruple::new("goto", "", "", &start_pos.to_string()));
+                
+                let end_pos = manager.get_next_id();
+                manager.update_instruction(
+                    goto_false_pos,
+                    Quadruple::new("gotoFalse", &condition_id, "", &end_pos.to_string()),
+                )
+            }
             Statement::FunctionDeclaration(func) => func.generate(),
             Statement::Return(ret) => ret.generate(),
         }
