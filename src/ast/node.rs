@@ -1,8 +1,8 @@
-use crate::ast::quadruples;
+use super::quadruples::Manager;
 
 /// Represents the node of an Abstract Syntax Tree
 pub trait Node<'m> {
-    fn set_manager(&mut self, _: &'m quadruples::Manager) -> () {
+    fn set_manager(&mut self, _: &'m Manager) -> () {
         todo!()
     }
 
@@ -10,7 +10,11 @@ pub trait Node<'m> {
         todo!()
     }
 
-    fn reduce(&self) -> &dyn Leaf {
+    fn reduce(&self) -> String {
+        todo!()
+    }
+
+    fn gen(&mut self, _: &'m mut Manager) -> &'m mut Manager {
         todo!()
     }
 }

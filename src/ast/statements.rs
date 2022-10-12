@@ -4,7 +4,8 @@ use crate::ast::expressions::{id::Access, Expression, Index};
 
 use super::{
     node::Node,
-    types::{self, Function}, quadruples::Manager,
+    quadruples::Manager,
+    types::{self, Function},
 };
 
 #[derive(Debug)]
@@ -31,7 +32,7 @@ pub enum Statement<'m> {
 }
 
 impl<'m> Node<'m> for Statement<'m> {
-    fn set_manager(&mut self, manager: &'m mut Manager) -> () {
+    fn set_manager(&mut self, manager: &'m Manager) -> () {
         match self {
             Statement::VarDeclaration(var) => var.set_manager(manager),
             Statement::VarAssign(access, value) => {
@@ -95,12 +96,12 @@ impl<'m> Node<'m> for Statement<'m> {
                 todo!("For Statement generate");
             }
             Statement::While { condition, block } => todo!("While Loop generate"),
-            Statement::FunctionDeclaration(func) => {}
-            Statement::Return(_) => todo!(),
+            Statement::FunctionDeclaration(func) => func.generate(),
+            Statement::Return(ret) => ret.generate(),
         }
     }
 
-    fn reduce(&self) -> &dyn super::node::Leaf {
+    fn reduce(&self) -> String {
         todo!()
     }
 }
@@ -109,9 +110,15 @@ impl<'m> Node<'m> for Statement<'m> {
 pub struct Block<'m>(pub Vec<Statement<'m>>);
 
 impl<'m> Node<'m> for Block<'m> {
-    fn set_manager(&mut self, manager: &'m mut Manager) -> () {
+    fn set_manager(&mut self, manager: &'m Manager) -> () {
         for stmt in self.0.iter_mut() {
             stmt.set_manager(manager);
+        }
+    }
+
+    fn generate(&mut self) -> () {
+        for stmt in self.0.iter_mut() {
+            stmt.generate();
         }
     }
 }
@@ -120,9 +127,15 @@ impl<'m> Node<'m> for Block<'m> {
 pub struct Program<'m>(pub Vec<Statement<'m>>);
 
 impl<'m> Node<'m> for Program<'m> {
-    fn set_manager(&mut self, manager: &'m mut Manager) -> () {
+    fn set_manager(&mut self, manager: &'m Manager) -> () {
         for stmt in self.0.iter_mut() {
             stmt.set_manager(manager);
+        }
+    }
+
+    fn generate(&mut self) -> () {
+        for stmt in self.0.iter_mut() {
+            stmt.generate();
         }
     }
 }

@@ -1,17 +1,18 @@
 use crate::ast;
 use crate::ast::expressions::Index;
+use crate::ast::quadruples::{Manager, MANAGER};
 use crate::ast::types::{self, DataType};
 
 #[derive(Debug)]
 pub struct Id<'m> {
-    manager: Option<&'m ast::quadruples::Manager<'m>>,
+    manager: Option<&'m Manager>,
     pub id: String,
     pub dtype: Option<types::DataType>,
 }
 
 #[derive(Debug)]
 pub struct Access<'m> {
-    manager: Option<&'m ast::quadruples::Manager<'m>>,
+    manager: Option<&'m Manager>,
     pub id: Id<'m>,
     pub indexing: Vec<Index<'m>>,
 }
@@ -28,18 +29,24 @@ impl<'m> Id<'m> {
     pub fn data_type(&self) -> DataType {
         match &self.dtype {
             Some(dtype) => dtype.clone(),
-            _ => todo!("Implement fetch id type"),
+            _ => {
+                let mut man = MANAGER.lock().unwrap();
+                if let Some(id) = man.get_env().get_var(self.id.clone()) {
+                    return id.data_type.clone();
+                }
+                panic!("id {} is not defined", self.id);
+            }
         }
     }
 }
 
 impl<'m> ast::node::Node<'m> for Id<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
+    fn set_manager(&mut self, manager: &'m Manager) -> () {
         self.manager = Some(manager);
     }
 
-    fn reduce(&self) -> &dyn ast::node::Leaf {
-        self
+    fn reduce(&self) -> String {
+        return self.id.clone();
     }
 }
 
@@ -66,7 +73,7 @@ impl<'m> Access<'m> {
 }
 
 impl<'m> ast::node::Node<'m> for Access<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
+    fn set_manager(&mut self, manager: &'m Manager) -> () {
         self.manager = Some(manager);
         self.id.set_manager(manager);
         for indexing in self.indexing.iter_mut() {
@@ -74,8 +81,8 @@ impl<'m> ast::node::Node<'m> for Access<'m> {
         }
     }
 
-    fn reduce(&self) -> &dyn ast::node::Leaf {
-        todo!();
+    fn reduce(&self) -> String {
+        return self.id.id.clone();
     }
 }
 
@@ -98,7 +105,7 @@ mod tests {
             let mut id = Id::new(&id_name, Some(DataType::Float));
             id.set_manager(&manager);
 
-            assert_eq!(id.reduce().dump(), id_name);
+            assert_eq!(id.reduce(), id_name);
         }
     }
 

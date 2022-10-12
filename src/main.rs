@@ -6,7 +6,9 @@ pub mod parser;
 pub mod semantics;
 pub mod symbols;
 
+use moris_lang::ast::quadruples::MANAGER;
 use moris_lang::parser::grammar::PProgramParser as Parser;
+use regex::Error;
 
 // #[cfg(not(test))]
 fn main() {
@@ -22,18 +24,31 @@ fn main() {
     // println!("{:#?}", id.reduce().dump());
 
     // print!("{:#?}", Parser::new().parse("for + 5;").unwrap());
-    let test_program = Parser::new().parse("
+    let test_program = Parser::new().parse(
+        "
     let x: int = 5;
+
 
     fn main(y: bool): float {
         let y: float = 7;
 
-        return x  + 2 - 3 * y / \"str\";
+        return x  + 2 - 3 * y / 3;
     }
-    "); 
+    ",
+    );
 
     let mut program_node = test_program.unwrap();
     print!("{:#?}", program_node);
+    program_node.generate();
+
+    let m = MANAGER.lock().unwrap();
+
+    for quad in m.quadruples.iter() {
+        println!("{:#?}", quad);
+    }
+    print!("{:#?}", m);
+
+    
     // program_node.generate();
     // print!("{:#?}", program_nodse);
     return ();
@@ -52,8 +67,6 @@ fn main() {
             )
             .unwrap()
     );
-
-    
 
     println!(
         "{:#?}",

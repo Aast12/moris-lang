@@ -1,5 +1,10 @@
 use crate::{
-    ast::{self, types::DataType},
+    ast::{
+        self,
+        quadruples::{Manager, Quadruple, MANAGER},
+        temp::Temp,
+        types::DataType,
+    },
     semantics::SemanticRules,
 };
 
@@ -7,7 +12,7 @@ use super::{types, Expression, ExpressionT};
 
 #[derive(Debug)]
 pub struct Operation<'m> {
-    manager: Option<&'m ast::quadruples::Manager<'m>>,
+    manager: Option<&'m Manager>,
     pub operator: types::Operator,
     pub left: Box<Expression<'m>>,
     pub right: Box<Expression<'m>>,
@@ -37,18 +42,33 @@ impl<'m> Operation<'m> {
 }
 
 impl<'m> ast::node::Node<'m> for Operation<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
+    fn set_manager(&mut self, manager: &'m Manager) -> () {
         self.manager = Some(manager);
         self.left.set_manager(manager);
         self.right.set_manager(manager);
     }
 
     fn generate(&mut self) -> () {
-        
+        self.reduce();
     }
 
-    fn reduce(&self) -> &dyn ast::node::Leaf {
-        todo!()
+    fn reduce(&self) -> String {
+        let left = self.left.reduce();
+        let right = self.right.reduce();
+
+        let dt = self.data_type();
+        let mut manager = MANAGER.lock().unwrap();
+
+        let tmp = manager.new_temp(dt);
+
+        manager.emit(Quadruple(
+            String::from(self.operator.to_string()),
+            left,
+            right,
+            tmp.reduce(),
+        ));
+
+        return tmp.reduce();
     }
 }
 

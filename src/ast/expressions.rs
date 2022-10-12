@@ -9,7 +9,7 @@ use self::{
 
 use super::{
     node,
-    types::{self, DataType},
+    types::{self, DataType}, quadruples::Manager,
 };
 pub mod call;
 pub mod constant;
@@ -38,7 +38,7 @@ impl<'m> Expression<'m> {
 }
 
 impl<'m> node::Node<'m> for Expression<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
+    fn set_manager(&mut self, manager: &'m Manager) -> () {
         match self {
             Expression::Const(constant) => constant.set_manager(manager),
             Expression::Op(operation) => operation.set_manager(manager),
@@ -60,7 +60,7 @@ impl<'m> node::Node<'m> for Expression<'m> {
         }
     }
 
-    fn reduce(&self) -> &dyn node::Leaf {
+    fn reduce(&self) -> String {
         match self {
             Expression::Const(constant) => constant.reduce(),
             Expression::Op(operation) => operation.reduce(),
@@ -81,7 +81,7 @@ pub enum Index<'m> {
 pub trait ExpressionT<'m>: ast::node::Node<'m> {}
 
 impl<'m> ast::node::Node<'m> for Index<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
+    fn set_manager(&mut self, manager: &'m Manager) -> () {
         match self {
             Self::Simple(expr) => expr.set_manager(manager),
             Self::Range(start_expr, end_expr) => {

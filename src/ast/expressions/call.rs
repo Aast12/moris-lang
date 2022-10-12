@@ -1,10 +1,10 @@
-use crate::ast::{self, types::DataType};
+use crate::ast::{self, types::DataType, quadruples::Manager};
 
 use super::Expression;
 
 #[derive(Debug)]
 pub struct Call<'m> {
-    manager: Option<&'m ast::quadruples::Manager<'m>>,
+    manager: Option<&'m Manager>,
     pub id: String,
     pub params: Vec<Box<Expression<'m>>>,
 }
@@ -24,7 +24,7 @@ impl<'m> Call<'m> {
 }
 
 impl<'m> ast::node::Node<'m> for Call<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
+    fn set_manager(&mut self, manager: &'m Manager) -> () {
         self.manager = Some(manager);
         for param in self.params.iter_mut() {
             param.set_manager(manager);
@@ -35,7 +35,7 @@ impl<'m> ast::node::Node<'m> for Call<'m> {
         todo!()
     }
 
-    fn reduce(&self) -> &dyn ast::node::Leaf {
+    fn reduce(&self) -> String {
         todo!()
     }
 }

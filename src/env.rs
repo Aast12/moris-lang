@@ -45,8 +45,15 @@ impl Environment {
         };
     }
 
-    fn current_env(&mut self) -> &mut EnvEntry {
+    fn current_env_mut(&mut self) -> &mut EnvEntry {
         if let Some(env) = self.entries.get_mut(&self.current_env) {
+            return env;
+        }
+        panic!("Current environment does not exist!");
+    }
+
+    fn current_env(&self) -> &EnvEntry {
+        if let Some(env) = self.entries.get(&self.current_env) {
             return env;
         }
         panic!("Current environment does not exist!");
@@ -72,7 +79,11 @@ impl Environment {
     }
 
     pub fn add_var(&mut self, id: String, data_type: DataType) {
-        self.current_env().add(SymbolEntry::new_var(id, data_type));
+        self.current_env_mut().add(SymbolEntry::new_var(id, data_type));
+    }
+
+    pub fn get_var(&self, id: String) -> Option<&SymbolEntry> {
+        return self.current_env().get(id);
     }
 }
 
@@ -108,11 +119,8 @@ impl EnvEntry {
         }
     }
 
-    pub fn get(&mut self, id: String) -> &SymbolEntry {
-        if let Some(ret) = self.symbols.get(&id) {
-            return ret;
-        }
-        panic!("{} is not defined!", id)
+    pub fn get(&self, id: String) -> Option<&SymbolEntry> {
+        return self.symbols.get(&id);
     }
 }
 

@@ -1,3 +1,5 @@
+use std::fmt::format;
+
 use super::{
     node::{Leaf, Node},
     types::DataType,
@@ -16,11 +18,11 @@ impl Temp {
 
 impl<'m> Node<'m> for Temp {
     fn generate(&mut self) -> () {
-        panic!()    
+        panic!()
     }
 
-    fn reduce(&self) -> &dyn Leaf {
-        return self
+    fn reduce(&self) -> String {
+        return format!("tmp{}", self.id.to_string());
     }
 }
 

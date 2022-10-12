@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 1949c8cb4f1f8e871947e7ce4e91e39c0df1a15b10df22351d7dbded31bc8a51
+// sha3: 7ba5f1d7d6cf543f30e343aed9cc37f339eedffdbfbb94023b5b5ec1eeef2e55
 use std::str::FromStr;
 use crate::ast::{Dimension};
 use crate::ast::types::{DataType, Function, FunctionParam, Operator, Variable, FunctionSignature};
@@ -5422,10 +5422,7 @@ fn __action58<
     (_, block, _): (usize, Block<'m>, usize),
 ) -> Function<'m>
 {
-    Function {
-    signature: signature,
-    block: block
-}
+    Function::new(signature, block)
 }
 
 #[allow(unused_variables)]

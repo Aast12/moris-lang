@@ -1,4 +1,4 @@
-use crate::ast::{self, types::DataType, node::Leaf};
+use crate::ast::{self, types::DataType, node::Leaf, quadruples::Manager};
 
 #[derive(Debug)]
 pub enum TypeConst {
@@ -11,7 +11,7 @@ pub enum TypeConst {
 
 #[derive(Debug)]
 pub struct Const<'m> {
-    manager: Option<&'m ast::quadruples::Manager<'m>>,
+    manager: Option<&'m Manager>,
     pub value: String,
     pub dtype: DataType,
 }
@@ -27,14 +27,16 @@ impl<'m> Const<'m> {
 }
 
 impl<'m> ast::node::Node<'m> for Const<'m> {
-    fn set_manager(&mut self, manager: &'m ast::quadruples::Manager<'m>) -> () {
+    fn set_manager(&mut self, manager: &'m Manager) -> () {
         self.manager = Some(manager);
     }
 
-    fn generate(&mut self) -> () {}
+    fn generate(&mut self) -> () {
 
-    fn reduce(&self) -> &dyn ast::node::Leaf {
-        return self;
+    }
+
+    fn reduce(&self) -> String {
+        return self.value.clone();
     }
 }
 
