@@ -28,7 +28,7 @@ impl Id {
             Some(dtype) => dtype.clone(),
             _ => {
                 let mut man = MANAGER.lock().unwrap();
-                if let Some(id) = man.get_env().get_var(self.id.clone()) {
+                if let Some(id) = man.get_env().get_var(&self.id) {
                     return id.data_type.clone();
                 }
                 panic!("id {} is not defined", self.id);

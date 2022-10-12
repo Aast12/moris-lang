@@ -19,6 +19,7 @@ pub struct SymbolEntry {
 
 #[derive(Debug)]
 pub struct EnvEntry {
+    is_global: bool,
     pub env_id: String,
     pub return_type: Option<DataType>,
     pub symbols: HashMap<String, SymbolEntry>,
@@ -37,6 +38,7 @@ impl Environment {
             entries: HashMap::from([(
                 String::from("global"),
                 EnvEntry {
+                    is_global: true,
                     env_id: String::from("global"),
                     return_type: None,
                     symbols: HashMap::new(),
@@ -59,37 +61,47 @@ impl Environment {
         panic!("Current environment does not exist!");
     }
 
-    pub fn switch(&mut self, id: String) {
-        if let Some(_) = self.entries.get(&id) {
-            self.current_env = id;
+    pub fn switch(&mut self, id: &String) {
+        if let Some(_) = self.entries.get(id) {
+            self.current_env = id.clone();
         } else {
             panic!("Environment {} does not exist!", id);
         }
     }
 
-    pub fn from_function(&mut self, id: String, func: FunctionSignature, switch: bool) {
-        if let Some(_) = self.entries.get(&id) {
+    pub fn from_function(&mut self, id: &String, func: FunctionSignature, switch: bool) {
+        if let Some(_) = self.entries.get(id) {
             panic!("Environment {} already exist!", id);
         }
         self.entries.insert(id.clone(), EnvEntry::from_func(func));
 
         if switch {
-            self.current_env = id;
+            self.current_env = id.clone();
         }
     }
 
     pub fn add_var(&mut self, id: String, data_type: DataType) {
-        self.current_env_mut().add(SymbolEntry::new_var(id, data_type));
+        self.current_env_mut()
+            .add(SymbolEntry::new_var(id, data_type));
     }
 
-    pub fn get_var(&self, id: String) -> Option<&SymbolEntry> {
-        return self.current_env().get(id);
+    pub fn get_var(&self, id: &String) -> Option<&SymbolEntry> {
+        if let Some(symbol) = self.current_env().get(id) {
+            return Some(symbol);
+        } else {
+            if !self.current_env().is_global {
+                return self.entries.get("global").unwrap().get(id);
+            }
+        }
+
+        return None;
     }
 }
 
 impl EnvEntry {
     pub fn new(env_id: String, return_type: Option<DataType>) -> EnvEntry {
         EnvEntry {
+            is_global: false,
             env_id,
             return_type,
             symbols: HashMap::new(),
@@ -106,6 +118,7 @@ impl EnvEntry {
         }
 
         EnvEntry {
+            is_global: false,
             env_id: func.id,
             return_type: Some(func.data_type),
             symbols,
@@ -119,8 +132,8 @@ impl EnvEntry {
         }
     }
 
-    pub fn get(&self, id: String) -> Option<&SymbolEntry> {
-        return self.symbols.get(&id);
+    pub fn get(&self, id: &String) -> Option<&SymbolEntry> {
+        return self.symbols.get(id);
     }
 }
 

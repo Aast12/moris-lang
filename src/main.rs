@@ -20,7 +20,7 @@ fn main() {
 
 
     fn main(y: bool): float {
-        let y: float = 7;
+        let z: float = 7;
 
         return x  + 2 - 3 * y * 3;
     }

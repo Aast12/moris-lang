@@ -212,13 +212,17 @@ impl<'m> Node<'m> for Function {
     fn generate(&mut self) -> () {
         {
             MANAGER.lock().unwrap().get_env().from_function(
-                self.signature.id.clone(),
+                &self.signature.id,
                 self.signature.clone(),
-                false,
+                true,
             );
         }
 
         self.block.generate();
+
+        {
+            MANAGER.lock().unwrap().env.switch(&String::from("global"));
+        }
     }
 
     fn reduce(&self) -> String {
