@@ -1,4 +1,6 @@
-use lazy_static::lazy_static; // 1.4.0
+use core::panic;
+use lazy_static::lazy_static;
+// 1.4.0
 use std::{
     fmt::{Debug, Error, Formatter},
     sync::Mutex,
@@ -46,9 +48,44 @@ impl<'m> Manager {
         self.quadruples.push(quadruple);
         self.instruction_counter += 1;
     }
+
+    pub fn get_next_id(&self) -> usize {
+        return self.quadruples.len();
+    }
+
+    pub fn update_instruction(&mut self, id: usize, quad: Quadruple) {
+        if let Some(local) = self.quadruples.get_mut(id) {
+            *local = quad;
+        }
+    }
 }
 
 pub struct Quadruple(pub String, pub String, pub String, pub String);
+
+impl Quadruple {
+    pub fn new(fst: &str, snd: &str, thrd: &str, fth: &str) -> Quadruple {
+        Quadruple(
+            String::from(fst),
+            String::from(snd),
+            String::from(thrd),
+            String::from(fth),
+        )
+    }
+
+    pub fn new_empty() -> Quadruple {
+        Quadruple(String::new(), String::new(), String::new(), String::new())
+    }
+
+    pub fn update(&mut self, item: usize, value: String) {
+        match item {
+            0 => self.0 = value,
+            1 => self.1 = value,
+            2 => self.2 = value,
+            3 => self.3 = value,
+            _ => panic!("Index {} out of quadruple bounds.", item),
+        }
+    }
+}
 
 impl Debug for Quadruple {
     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
