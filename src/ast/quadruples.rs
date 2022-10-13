@@ -65,7 +65,7 @@ pub struct GlobalManager {}
 impl GlobalManager {
     pub fn emit(quadruple: Quadruple) {
         if let Ok(mut manager) = MANAGER.try_lock() {
-            manager._emit(quadruple);
+            manager._emit(quadruple)
         } else {
             panic!("Manager lock could not be acquired!");
         }
@@ -73,7 +73,7 @@ impl GlobalManager {
 
     pub fn get_next_pos() -> usize {
         if let Ok(manager) = MANAGER.try_lock() {
-            return manager.get_next_id();
+            manager.get_next_id()
         } else {
             panic!("Manager lock could not be acquired!");
         }
@@ -90,6 +90,10 @@ impl Quadruple {
             String::from(thrd),
             String::from(fth),
         )
+    }
+
+    pub fn jump(instruction: &str, position: usize) -> Quadruple {
+        Quadruple::new(instruction, "", "", position.to_string().as_str())
     }
 
     pub fn new_empty() -> Quadruple {

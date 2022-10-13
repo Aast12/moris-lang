@@ -30,18 +30,18 @@ fn main() {
     ",
     );
 
-    let test_program = Parser::new().parse(
-        "
-    let x: int = 5;
-    let z: int = 7 + 2 / x;
+    // let test_program = Parser::new().parse(
+    //     "
+    // let x: int = 5;
+    // let z: int = 7 + 2 / x;
 
-    while (x < 7 && x > 2) {
-        z = 8;
-        z = 9;
-    }
-    z = 10;
-    ",
-    );
+    // while (x < 7 && x > 2) {
+    //     z = 8;
+    //     z = 9;
+    // }
+    // z = 10;
+    // ",
+    // );
 
     let mut program_node = test_program.unwrap();
     print!("{:#?}", program_node);

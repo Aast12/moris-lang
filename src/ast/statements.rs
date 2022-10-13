@@ -82,56 +82,38 @@ impl<'m> Node<'m> for Statement {
                 if_block,
                 else_block,
             } => {
+                // TODO: move to an if struct
+                // For If statements, the quadruples are generated as follows:
+                //  1. [condition instructions]
+                //  2. [goto if condition is false, jumps after 4.]
+                //  3. [if-block instruction]
+                //  4. [goto if condition was true, jumps after 5.]
+                //  5. [else-block instruction]
+
                 condition.generate();
 
-                let mut manager = MANAGER.lock().unwrap();
-
-                let end_id: usize; // Id of goto end to skip else block
-                                   // Id of if-false goto quadruple
-                let goto_false_id = manager.get_next_id();
-                // Generate goto if false
-                manager._emit(Quadruple::new_empty());
-
-                drop(manager);
+                // goto instruction to skip if-true block
+                let mut goto_if_false_quad = QuadrupleHold::new();
 
                 if_block.generate();
 
                 if let Some(block) = else_block {
-                    manager = MANAGER.lock().unwrap();
-
-                    // Generate goto to skip else block
-                    let goto_end_id = manager.get_next_id();
-                    manager._emit(Quadruple::new_empty());
+                    // goto instruction to skip else block if condition was true
+                    let mut goto_end_block = QuadrupleHold::new();
 
                     // Generate goto to skip to else block, if false
-                    let goto_false_jump = manager.get_next_id();
-                    manager.update_instruction(
-                        goto_false_id,
-                        Quadruple::new("gotoFalse", "", "", goto_false_jump.to_string().as_str()),
-                    );
-                    drop(manager);
+                    let goto_false_jump = GlobalManager::get_next_pos();
+                    goto_if_false_quad.release(Quadruple::jump("gotoFalse", goto_false_jump));
 
                     block.generate();
 
-                    manager = MANAGER.lock().unwrap();
-
                     // Update goto to skip else block
-                    end_id = manager.get_next_id();
-                    manager.update_instruction(
-                        goto_end_id,
-                        Quadruple::new("goto", "", "", end_id.to_string().as_str()),
-                    );
-                    drop(manager);
+                    let end_pos = GlobalManager::get_next_pos();
+                    goto_end_block.release(Quadruple::jump("goto", end_pos));
                 } else {
-                    manager = MANAGER.lock().unwrap();
-
                     // Update goto to skip if false
-                    end_id = manager.get_next_id();
-                    manager.update_instruction(
-                        goto_false_id,
-                        Quadruple::new("gotoFalse", "", "", end_id.to_string().as_str()),
-                    );
-                    drop(manager);
+                    let end_pos = GlobalManager::get_next_pos();
+                    goto_if_false_quad.release(Quadruple::jump("gotoFalse", end_pos));
                 }
             }
             Statement::For {
@@ -143,11 +125,11 @@ impl<'m> Node<'m> for Statement {
             }
             Statement::While { condition, block } => {
                 let start_pos = GlobalManager::get_next_pos();
-                
+
                 // Temporal storing condition value
                 let condition_id = condition.reduce();
 
-                // Goto instruction to exit the loop 
+                // Goto instruction to exit the loop
                 let mut goto_false_cond = QuadrupleHold::new();
 
                 block.generate();
