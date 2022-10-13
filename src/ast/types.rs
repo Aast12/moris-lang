@@ -1,7 +1,7 @@
 use super::{
     expressions::Expression,
     node::Node,
-    quadruples::{Quadruple, MANAGER},
+    quadruples::{Quadruple, GlobalManager},
     statements::Block,
     Dimension,
 };
@@ -137,12 +137,13 @@ impl Variable {
 impl<'m> Node<'m> for Variable {
     fn generate(&mut self) -> () {
         // Add variable to symbols table
-        let mut manager = MANAGER.lock().unwrap();
+        let mut manager = GlobalManager::get();
         manager.get_env().add_var(&self.id, &self.data_type);
         drop(manager);
 
         if let Some(value) = &self.value {
             let value_data_type = value.data_type();
+            // TODO: Refactor to use VarAssign
             assert!(
                 DataType::equivalent(&self.data_type, &value_data_type).is_ok(),
                 "Data type {:?} cannot be assigned to a variable {:?}.",
@@ -152,7 +153,7 @@ impl<'m> Node<'m> for Variable {
 
             // Get temporal variable for assignment R-value
             let mut value_temp = value.reduce();
-            manager = MANAGER.lock().unwrap();
+            manager = GlobalManager::get();
 
             if self.data_type != value_data_type {
                 // Emits type casting operation quadruple on r-value type mismatch
@@ -207,16 +208,17 @@ impl<'m> Function {
 
 impl<'m> Node<'m> for Function {
     fn generate(&mut self) -> () {
-        let mut manager = MANAGER.lock().unwrap();
+        let mut manager = GlobalManager::get();
 
         manager
             .get_env()
             .from_function(&self.signature.id, self.signature.clone(), true);
+        
         drop(manager);
 
         self.block.generate();
 
-        MANAGER.lock().unwrap().env.switch(&String::from("global"));
+        GlobalManager::get().env.switch(&String::from("global"));
     }
 
     fn reduce(&self) -> String {

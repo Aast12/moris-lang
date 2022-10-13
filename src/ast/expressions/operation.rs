@@ -1,7 +1,7 @@
 use crate::{
     ast::{
         self,
-        quadruples::{Quadruple, MANAGER},
+        quadruples::{Quadruple, MANAGER, GlobalManager},
         types::DataType,
     },
     semantics::SemanticRules,
@@ -44,7 +44,7 @@ impl<'m> ast::node::Node<'m> for Operation {
         let right = self.right.reduce();
 
         let dt = self.data_type();
-        let mut manager = MANAGER.lock().unwrap();
+        let mut manager = GlobalManager::get();
 
         let tmp = manager.new_temp(&dt);
 

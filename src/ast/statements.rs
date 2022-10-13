@@ -7,7 +7,7 @@ use crate::ast::{
 
 use super::{
     node::Node,
-    quadruples::{GlobalManager, Manager, Quadruple, QuadrupleHold, MANAGER},
+    quadruples::{GlobalManager, Quadruple, QuadrupleHold},
     types::{Function, Variable},
 };
 
@@ -54,7 +54,7 @@ impl<'m> Node<'m> for Statement {
 
                 if access_data_type != value_data_type {
                     // Emits type casting operation quadruple on r-value type mismatch
-                    let mut manager = MANAGER.lock().unwrap();
+                    let mut manager = GlobalManager::get();
                     let prev_value_temp = value_temp.clone();
                     value_temp = manager.new_temp(&access_data_type).reduce();
 
@@ -66,15 +66,12 @@ impl<'m> Node<'m> for Statement {
                     ))
                 }
 
-                let mut manager = MANAGER.lock().unwrap();
-                manager._emit(Quadruple(
+                GlobalManager::emit(Quadruple(
                     String::from(Operator::Assign.to_string()),
                     value_temp,
                     String::new(),
                     access.id.id.clone(),
                 ));
-
-                drop(manager);
             }
             Statement::Expression(exp) => exp.generate(),
             Statement::If {

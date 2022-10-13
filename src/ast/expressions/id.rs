@@ -1,7 +1,7 @@
 use crate::ast;
 use crate::ast::expressions::Index;
 use crate::ast::node::Node;
-use crate::ast::quadruples::MANAGER;
+use crate::ast::quadruples::GlobalManager;
 use crate::ast::types::{self, DataType};
 
 #[derive(Debug)]
@@ -28,7 +28,7 @@ impl Id {
         match &self.dtype {
             Some(dtype) => dtype.clone(),
             _ => {
-                let mut man = MANAGER.lock().unwrap();
+                let mut man = GlobalManager::get();
                 if let Some(id) = man.get_env().get_var(&self.id) {
                     return id.data_type.clone();
                 }

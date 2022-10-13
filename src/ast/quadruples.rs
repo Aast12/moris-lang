@@ -63,20 +63,20 @@ impl<'m> Manager {
 pub struct GlobalManager {}
 
 impl GlobalManager {
-    pub fn emit(quadruple: Quadruple) {
-        if let Ok(mut manager) = MANAGER.try_lock() {
-            manager._emit(quadruple)
+    pub fn get() -> MutexGuard<'static, Manager> {
+        if let Ok(manager) = MANAGER.try_lock() {
+            manager
         } else {
             panic!("Manager lock could not be acquired!");
         }
     }
 
+    pub fn emit(quadruple: Quadruple) {
+        Self::get()._emit(quadruple);
+    }
+
     pub fn get_next_pos() -> usize {
-        if let Ok(manager) = MANAGER.try_lock() {
-            manager.get_next_id()
-        } else {
-            panic!("Manager lock could not be acquired!");
-        }
+        Self::get().get_next_id()
     }
 }
 
