@@ -7,7 +7,7 @@ use crate::ast::{
 
 use super::{
     node::Node,
-    quadruples::{Quadruple, MANAGER},
+    quadruples::{GlobalManager, Manager, Quadruple, QuadrupleHold, MANAGER},
     types::{Function, Variable},
 };
 
@@ -58,7 +58,7 @@ impl<'m> Node<'m> for Statement {
                     let prev_value_temp = value_temp.clone();
                     value_temp = manager.new_temp(&access_data_type).reduce();
 
-                    manager.emit(Quadruple(
+                    manager._emit(Quadruple(
                         String::from(format!("{:?}", access_data_type)),
                         prev_value_temp,
                         String::new(),
@@ -67,7 +67,7 @@ impl<'m> Node<'m> for Statement {
                 }
 
                 let mut manager = MANAGER.lock().unwrap();
-                manager.emit(Quadruple(
+                manager._emit(Quadruple(
                     String::from(Operator::Assign.to_string()),
                     value_temp,
                     String::new(),
@@ -90,7 +90,7 @@ impl<'m> Node<'m> for Statement {
                                    // Id of if-false goto quadruple
                 let goto_false_id = manager.get_next_id();
                 // Generate goto if false
-                manager.emit(Quadruple::new_empty());
+                manager._emit(Quadruple::new_empty());
 
                 drop(manager);
 
@@ -101,7 +101,7 @@ impl<'m> Node<'m> for Statement {
 
                     // Generate goto to skip else block
                     let goto_end_id = manager.get_next_id();
-                    manager.emit(Quadruple::new_empty());
+                    manager._emit(Quadruple::new_empty());
 
                     // Generate goto to skip to else block, if false
                     let goto_false_jump = manager.get_next_id();
@@ -142,30 +142,28 @@ impl<'m> Node<'m> for Statement {
                 todo!("For Statement generate");
             }
             Statement::While { condition, block } => {
-                let mut manager = MANAGER.lock().unwrap();
-
-                let start_pos = manager.get_next_id();
-                drop(manager);
-
+                let start_pos = GlobalManager::get_next_pos();
+                
+                // Temporal storing condition value
                 let condition_id = condition.reduce();
 
-                manager = MANAGER.lock().unwrap();
-
-                let goto_false_pos = manager.get_next_id();
-                manager.emit(Quadruple::new_empty());
-                drop(manager);
+                // Goto instruction to exit the loop 
+                let mut goto_false_cond = QuadrupleHold::new();
 
                 block.generate();
 
-                manager = MANAGER.lock().unwrap();
+                // Emit instruction to return to condition evaluation
+                GlobalManager::emit(Quadruple::new("goto", "", "", &start_pos.to_string()));
 
-                manager.emit(Quadruple::new("goto", "", "", &start_pos.to_string()));
-                
-                let end_pos = manager.get_next_id();
-                manager.update_instruction(
-                    goto_false_pos,
-                    Quadruple::new("gotoFalse", &condition_id, "", &end_pos.to_string()),
-                )
+                let end_pos = GlobalManager::get_next_pos();
+
+                // Emit instruction to return to condition evaluation
+                goto_false_cond.release(Quadruple::new(
+                    "gotoFalse",
+                    &condition_id,
+                    "",
+                    &end_pos.to_string(),
+                ));
             }
             Statement::FunctionDeclaration(func) => func.generate(),
             Statement::Return(ret) => ret.generate(),

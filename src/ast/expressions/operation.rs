@@ -48,7 +48,7 @@ impl<'m> ast::node::Node<'m> for Operation {
 
         let tmp = manager.new_temp(&dt);
 
-        manager.emit(Quadruple(
+        manager._emit(Quadruple(
             String::from(self.operator.to_string()),
             left,
             right,

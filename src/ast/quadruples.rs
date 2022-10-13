@@ -3,7 +3,7 @@ use lazy_static::lazy_static;
 // 1.4.0
 use std::{
     fmt::{Debug, Error, Formatter},
-    sync::Mutex,
+    sync::{Mutex, MutexGuard},
 };
 
 // use crate::{moris_lang::environ::Environment, symbols::SymbolTable};
@@ -44,7 +44,7 @@ impl<'m> Manager {
         return tmp;
     }
 
-    pub fn emit(&mut self, quadruple: Quadruple) {
+    pub fn _emit(&mut self, quadruple: Quadruple) {
         self.quadruples.push(quadruple);
         self.instruction_counter += 1;
     }
@@ -56,6 +56,26 @@ impl<'m> Manager {
     pub fn update_instruction(&mut self, id: usize, quad: Quadruple) {
         if let Some(local) = self.quadruples.get_mut(id) {
             *local = quad;
+        }
+    }
+}
+
+pub struct GlobalManager {}
+
+impl GlobalManager {
+    pub fn emit(quadruple: Quadruple) {
+        if let Ok(mut manager) = MANAGER.try_lock() {
+            manager._emit(quadruple);
+        } else {
+            panic!("Manager lock could not be acquired!");
+        }
+    }
+
+    pub fn get_next_pos() -> usize {
+        if let Ok(manager) = MANAGER.try_lock() {
+            return manager.get_next_id();
+        } else {
+            panic!("Manager lock could not be acquired!");
         }
     }
 }
@@ -90,5 +110,31 @@ impl Quadruple {
 impl Debug for Quadruple {
     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
         return write!(fmt, "{}\t{}\t{}\t{}\t", self.0, self.1, self.2, self.3);
+    }
+}
+
+pub struct QuadrupleHold {
+    pub position: usize,
+}
+
+impl QuadrupleHold {
+    pub fn new() -> QuadrupleHold {
+        let position: usize;
+        if let Ok(mut manager) = MANAGER.try_lock() {
+            position = manager.get_next_id();
+            manager._emit(Quadruple::new_empty());
+        } else {
+            panic!("Manager lock could not be acquired!");
+        }
+
+        QuadrupleHold { position }
+    }
+
+    pub fn release(&mut self, value: Quadruple) {
+        if let Ok(mut manager) = MANAGER.try_lock() {
+            manager.update_instruction(self.position, value);
+        } else {
+            panic!("Manager lock could not be acquired!");
+        }
     }
 }
