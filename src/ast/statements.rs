@@ -31,6 +31,8 @@ pub enum Statement {
     },
     FunctionDeclaration(Function),
     Return(Box<Expression>),
+    Break,
+    Continue,
 }
 
 impl<'m> Node<'m> for Statement {
@@ -118,7 +120,7 @@ impl<'m> Node<'m> for Statement {
                 iterable: _,
                 block: _,
             } => {
-                todo!("For Statement generate");
+                // todo!("For Statement generate");
             }
             Statement::While { condition, block } => {
                 let start_pos = GlobalManager::get_next_pos();
@@ -146,6 +148,8 @@ impl<'m> Node<'m> for Statement {
             }
             Statement::FunctionDeclaration(func) => func.generate(),
             Statement::Return(ret) => ret.generate(),
+            Statement::Break => (),
+            Statement::Continue => (),
         }
     }
 
@@ -189,6 +193,8 @@ impl Debug for Statement {
             }
             Statement::FunctionDeclaration(func) => write!(fmt, "{:#?}", func),
             Statement::Return(stmt) => write!(fmt, "RETURN {:#?}", stmt),
+            Statement::Break => write!(fmt, "Break"),
+            Statement::Continue => write!(fmt, "Continue"),
         }
     }
 }

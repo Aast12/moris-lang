@@ -240,6 +240,8 @@ PBlock: Block = {
 }
 
 PLineStatement: Statement = {
+    BREAK SEMICOLON => Statement::Break,
+    CONTINUE SEMICOLON => Statement::Continue,
     <PVarAssignment> SEMICOLON,
     <PExpr> SEMICOLON => Statement::Expression(<>)
 }
@@ -287,6 +289,7 @@ match {
     "<" => LT,
     ">" => GT,
     "!=" => NOTEQUAL,
+    "!" => NOT,
     "==" => EQUAL,
     "+" => ADD,
     "-" => SUB,
@@ -305,6 +308,8 @@ match {
     "false" => FALSE,
     "fn" => FN,
     "return" => RETURN,
+    "continue" => CONTINUE,
+    "break" => BREAK,
     "for",
     r"for\s*\(" => FOR, // TODO Fix joint ( w/ custom tokenizer,
     "while",
