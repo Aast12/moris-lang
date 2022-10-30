@@ -169,6 +169,11 @@ PMathExpr: Box<Expression> = PTier<PMathOp, PTerm>;
 
 PTerm: Box<Expression> = PTier<PFactorOp, PFactor>;
 
+PUnaryOP = {
+    SUB,
+    NOT
+}
+
 PFactor: Box<Expression> = {
     <factor:PFactor> PPipeOp FORWARD <id:PBoxed<PId>> => 
         Box::new(
@@ -182,7 +187,14 @@ PFactor: Box<Expression> = {
                 Operation::new(<>)
             )
         ),
-    PItem,
+    <op: PUnaryOP?> <item:PItem> => match op {
+        None => item,
+        Some(op) => match &op[..] {
+            "!" => Box::new(Expression::Not(item)),
+            "-" => Box::new(Expression::Negative(item)),
+            _ => panic!()
+        }
+    },
 }
 
 PItem: Box<Expression> = {

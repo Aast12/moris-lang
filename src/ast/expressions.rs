@@ -23,6 +23,8 @@ pub enum Expression {
     Access(Access),
     Id(Id),
     Call(Call),
+    Not(Box<Expression>),
+    Negative(Box<Expression>),
 }
 
 impl<'m> Expression {
@@ -33,6 +35,8 @@ impl<'m> Expression {
             Expression::Access(access) => access.id.data_type(),
             Expression::Id(id) => id.data_type(),
             Expression::Call(call) => call.data_type(),
+            Expression::Not(_) => todo!(),
+            Expression::Negative(_) => todo!(),
         }
     }
 }
@@ -45,6 +49,8 @@ impl<'m> node::Node<'m> for Expression {
             Expression::Access(access) => access.generate(),
             Expression::Id(id) => id.generate(),
             Expression::Call(call) => call.generate(),
+            Expression::Not(_) => todo!(),
+            Expression::Negative(_) => todo!(),
         }
     }
 
@@ -55,6 +61,8 @@ impl<'m> node::Node<'m> for Expression {
             Expression::Access(access) => access.reduce(),
             Expression::Id(id) => id.reduce(),
             Expression::Call(call) => call.reduce(),
+            Expression::Not(_) => todo!(),
+            Expression::Negative(_) => todo!(),
         }
     }
 }
