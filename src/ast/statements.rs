@@ -92,7 +92,7 @@ impl<'m> Node<'m> for Statement {
                 //  4. [goto if condition was true, jumps after 5.]
                 //  5. [else-block instruction]
 
-                condition.generate();
+                let condition_id = condition.reduce();
 
                 // goto instruction to skip if-true block
                 let mut goto_if_false_quad = QuadrupleHold::new();
@@ -105,7 +105,11 @@ impl<'m> Node<'m> for Statement {
 
                     // Generate goto to skip to else block, if false
                     let goto_false_jump = GlobalManager::get_next_pos();
-                    goto_if_false_quad.release(Quadruple::jump("gotoFalse", goto_false_jump));
+                    goto_if_false_quad.release(Quadruple::jump_check(
+                        "gotoFalse",
+                        &condition_id,
+                        goto_false_jump,
+                    ));
 
                     block.generate();
 
@@ -115,7 +119,11 @@ impl<'m> Node<'m> for Statement {
                 } else {
                     // Update goto to skip if false
                     let end_pos = GlobalManager::get_next_pos();
-                    goto_if_false_quad.release(Quadruple::jump("gotoFalse", end_pos));
+                    goto_if_false_quad.release(Quadruple::jump_check(
+                        "gotoFalse",
+                        &condition_id,
+                        end_pos,
+                    ));
                 }
             }
             Statement::For {
@@ -159,16 +167,15 @@ impl<'m> Node<'m> for Statement {
                 block.generate();
 
                 // Emit instruction to return to condition evaluation
-                let to_start_pos_quadruple = Quadruple::new("goto", "", "", &start_pos.to_string());
+                let to_start_pos_quadruple = Quadruple::jump("goto", start_pos);
                 GlobalManager::emit(to_start_pos_quadruple.clone());
 
                 let end_pos = GlobalManager::get_next_pos();
 
-                let to_end_pos_quadruple =
-                    Quadruple::new("gotoFalse", &condition_id, "", &end_pos.to_string());
+                let to_end_pos_quadruple = Quadruple::jump("goto", end_pos);
 
                 // Emit instruction to return to condition evaluation
-                goto_false_cond.release(to_end_pos_quadruple.clone());
+                goto_false_cond.release(Quadruple::jump_check("gotoFalse", &condition_id, end_pos));
 
                 GlobalManager::resolve_context(&ExitStatement::Continue, to_start_pos_quadruple);
                 GlobalManager::resolve_context(&ExitStatement::Break, to_end_pos_quadruple);

@@ -104,7 +104,7 @@ impl GlobalManager {
                 quadruple.clone_into(to_update);
             }
         }
-        
+
         drop(instance);
         Self::clean_exit_stmt(stmt_type);
     }
@@ -134,6 +134,10 @@ impl Quadruple {
             String::from(thrd),
             String::from(fth),
         )
+    }
+
+    pub fn jump_check(instruction: &str, check: &str, position: usize) -> Quadruple {
+        Quadruple::new(instruction, check, "", position.to_string().as_str())
     }
 
     pub fn jump(instruction: &str, position: usize) -> Quadruple {
