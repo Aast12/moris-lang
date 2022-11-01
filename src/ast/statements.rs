@@ -1,8 +1,11 @@
 use std::fmt::Debug;
 
-use crate::ast::{
-    expressions::{id::Access, Expression},
-    types::{DataType, Operator},
+use crate::{
+    ast::{
+        expressions::{id::Access, Expression},
+        types::{DataType, Operator},
+    },
+    semantics::{ExitStatement, SemanticContext},
 };
 
 use super::{
@@ -60,7 +63,7 @@ impl<'m> Node<'m> for Statement {
                     let prev_value_temp = value_temp.clone();
                     value_temp = manager.new_temp(&access_data_type).reduce();
 
-                    manager._emit(Quadruple(
+                    manager.emit(Quadruple(
                         String::from(format!("{:?}", access_data_type)),
                         prev_value_temp,
                         String::new(),
@@ -116,11 +119,33 @@ impl<'m> Node<'m> for Statement {
                 }
             }
             Statement::For {
-                iterator_id: _,
-                iterable: _,
-                block: _,
+                iterator_id,
+                iterable,
+                block,
             } => {
-                // todo!("For Statement generate");
+                // let start_pos = GlobalManager::get_next_pos();
+
+                // let iterable_id = iterable.reduce();
+
+                // // Goto instruction to exit the loop
+                // let mut goto_false_cond = QuadrupleHold::new();
+
+                // block.generate();
+
+                // // Emit instruction to return to condition evaluation
+                // let to_start_pos_quadruple = Quadruple::new("goto", "", "", &start_pos.to_string());
+                // GlobalManager::emit(to_start_pos_quadruple.clone());
+
+                // let end_pos = GlobalManager::get_next_pos();
+
+                // let to_end_pos_quadruple =
+                //     Quadruple::new("gotoFalse", &condition_id, "", &end_pos.to_string());
+
+                // // Emit instruction to return to condition evaluation
+                // goto_false_cond.release(to_end_pos_quadruple.clone());
+
+                // GlobalManager::resolve_context(&ExitStatement::Continue, to_start_pos_quadruple);
+                // GlobalManager::resolve_context(&ExitStatement::Break, to_end_pos_quadruple);
             }
             Statement::While { condition, block } => {
                 let start_pos = GlobalManager::get_next_pos();
@@ -134,22 +159,27 @@ impl<'m> Node<'m> for Statement {
                 block.generate();
 
                 // Emit instruction to return to condition evaluation
-                GlobalManager::emit(Quadruple::new("goto", "", "", &start_pos.to_string()));
+                let to_start_pos_quadruple = Quadruple::new("goto", "", "", &start_pos.to_string());
+                GlobalManager::emit(to_start_pos_quadruple.clone());
 
                 let end_pos = GlobalManager::get_next_pos();
 
+                let to_end_pos_quadruple =
+                    Quadruple::new("gotoFalse", &condition_id, "", &end_pos.to_string());
+
                 // Emit instruction to return to condition evaluation
-                goto_false_cond.release(Quadruple::new(
-                    "gotoFalse",
-                    &condition_id,
-                    "",
-                    &end_pos.to_string(),
-                ));
+                goto_false_cond.release(to_end_pos_quadruple.clone());
+
+                GlobalManager::resolve_context(&ExitStatement::Continue, to_start_pos_quadruple);
+                GlobalManager::resolve_context(&ExitStatement::Break, to_end_pos_quadruple);
             }
             Statement::FunctionDeclaration(func) => func.generate(),
-            Statement::Return(ret) => ret.generate(),
-            Statement::Break => (),
-            Statement::Continue => (),
+            Statement::Return(ret) => {
+                ret.generate();
+                todo!("return statement")
+            }
+            Statement::Break => GlobalManager::prepare_exit_stmt(&ExitStatement::Break),
+            Statement::Continue => GlobalManager::prepare_exit_stmt(&ExitStatement::Continue),
         }
     }
 

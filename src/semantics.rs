@@ -1,5 +1,19 @@
 use crate::ast::types::{DataType, DataType::*, Operator, Operator::*};
 
+#[derive(Debug, Clone, Copy, Eq, Hash, PartialEq)]
+pub enum SemanticContext {
+    Global,
+    Function,
+    Loop,
+}
+
+#[derive(Debug, Clone, Copy, Eq, Hash, PartialEq)]
+pub enum ExitStatement {
+    Break,
+    Continue,
+    Return,
+}
+
 pub struct SemanticRules {}
 
 impl SemanticRules {

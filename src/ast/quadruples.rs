@@ -2,12 +2,17 @@ use core::panic;
 use lazy_static::lazy_static;
 // 1.4.0
 use std::{
+    collections::{HashMap, LinkedList},
     fmt::{Debug, Error, Formatter},
+    hash::Hash,
     sync::{Mutex, MutexGuard},
 };
 
 // use crate::{moris_lang::environ::Environment, symbols::SymbolTable};
-use crate::env::Environment;
+use crate::{
+    env::Environment,
+    semantics::{ExitStatement, SemanticContext, SemanticRules},
+};
 
 use super::{temp::Temp, types::DataType};
 
@@ -17,10 +22,11 @@ lazy_static! {
 
 #[derive(Debug)]
 pub struct Manager {
-    temp_counter: i32,
+    pub env: Environment,
     instruction_counter: i32,
     pub quadruples: Vec<Quadruple>,
-    pub env: Environment,
+    pub unresolved: HashMap<ExitStatement, Vec<usize>>,
+    temp_counter: i32,
 }
 
 impl<'m> Manager {
@@ -30,6 +36,7 @@ impl<'m> Manager {
             instruction_counter: 0,
             quadruples: vec![],
             env: Environment::new(),
+            unresolved: HashMap::new(),
         }
     }
 
@@ -44,7 +51,7 @@ impl<'m> Manager {
         return tmp;
     }
 
-    pub fn _emit(&mut self, quadruple: Quadruple) {
+    pub fn emit(&mut self, quadruple: Quadruple) {
         self.quadruples.push(quadruple);
         self.instruction_counter += 1;
     }
@@ -71,8 +78,44 @@ impl GlobalManager {
         }
     }
 
+    pub fn prepare_exit_stmt(stmt_type: &ExitStatement) {
+        let mut instance = Self::get();
+        let stmt_position = instance.get_next_id();
+        instance.emit(Quadruple::new_empty());
+
+        if let Some(context) = instance.unresolved.get_mut(&stmt_type) {
+            context.push(stmt_position);
+        } else {
+            instance.unresolved.insert(*stmt_type, vec![stmt_position]);
+        }
+    }
+
+    pub fn resolve_context(stmt_type: &ExitStatement, quadruple: Quadruple) {
+        let mut instance = Self::get();
+
+        let unresolved = instance
+            .unresolved
+            .get(stmt_type)
+            .unwrap_or(&vec![])
+            .clone();
+
+        for ref_quadruple in unresolved {
+            if let Some(to_update) = instance.quadruples.get_mut(ref_quadruple) {
+                quadruple.clone_into(to_update);
+            }
+        }
+        
+        drop(instance);
+        Self::clean_exit_stmt(stmt_type);
+    }
+
+    pub fn clean_exit_stmt(stmt_type: &ExitStatement) {
+        let mut instance = Self::get();
+        instance.unresolved.insert(*stmt_type, vec![]);
+    }
+
     pub fn emit(quadruple: Quadruple) {
-        Self::get()._emit(quadruple);
+        Self::get().emit(quadruple);
     }
 
     pub fn get_next_pos() -> usize {
@@ -80,6 +123,7 @@ impl GlobalManager {
     }
 }
 
+#[derive(Clone)]
 pub struct Quadruple(pub String, pub String, pub String, pub String);
 
 impl Quadruple {
@@ -98,6 +142,15 @@ impl Quadruple {
 
     pub fn new_empty() -> Quadruple {
         Quadruple(String::new(), String::new(), String::new(), String::new())
+    }
+
+    pub fn new_coded(key: &str) -> Quadruple {
+        Quadruple(
+            String::from(key),
+            String::new(),
+            String::new(),
+            String::new(),
+        )
     }
 
     pub fn update(&mut self, item: usize, value: String) {
@@ -126,7 +179,7 @@ impl QuadrupleHold {
         let position: usize;
         if let Ok(mut manager) = MANAGER.try_lock() {
             position = manager.get_next_id();
-            manager._emit(Quadruple::new_empty());
+            manager.emit(Quadruple::new_empty());
         } else {
             panic!("Manager lock could not be acquired!");
         }

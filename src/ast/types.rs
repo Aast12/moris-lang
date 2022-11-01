@@ -160,7 +160,7 @@ impl<'m> Node<'m> for Variable {
                 let prev_value_temp = value_temp.clone();
                 value_temp = manager.new_temp(&self.data_type).reduce();
 
-                manager._emit(Quadruple(
+                manager.emit(Quadruple(
                     String::from(format!("{:?}", self.data_type)),
                     prev_value_temp,
                     String::new(),
@@ -168,7 +168,7 @@ impl<'m> Node<'m> for Variable {
                 ))
             }
 
-            manager._emit(Quadruple(
+            manager.emit(Quadruple(
                 String::from(Operator::Assign.to_string()),
                 value_temp,
                 String::new(),

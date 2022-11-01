@@ -10,22 +10,13 @@ fn main() {
     // print!("{:#?}", Parser::new().parse("for + 5;").unwrap());
     let test_program = Parser::new().parse(
         "
-    let x: int = 5;
-    let z: int = 7 + 2 / x;
+    let z: int = 0;
 
-    
-    if (z > 4) {
-        x = 6;
-    } else {
-        x = 9;
-        z = 4;
-    }
-
-    let y: bool;
-    let w: float = 7 * x + 3 / 2;
-
-    if (w == 7) {
-        y = false;
+    for (x in y) {
+        if (!x > 2) {
+            continue;
+        }
+        z = z + -1;
     }
     ",
     );
@@ -45,7 +36,7 @@ fn main() {
 
     let mut program_node = test_program.unwrap();
     print!("{:#?}", program_node);
-    program_node.generate();
+    // program_node.generate();
 
     let m = MANAGER.lock().unwrap();
 
