@@ -1,3 +1,5 @@
+use crate::memory::{types::DataType, resolver::MemAddress};
+
 use super::{
     expressions::Expression,
     node::Node,
@@ -43,73 +45,6 @@ impl Operator {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum DataType {
-    Int,
-    Float,
-    Bool,
-    String,
-    DataFrame,
-    Void,
-    Function(Box<DataType>),
-}
-
-impl DataType {
-    fn hierarchy(dtype: &DataType) -> u8 {
-        match dtype {
-            DataType::Bool => 0,
-            DataType::Int => 1,
-            DataType::Float => 2,
-            DataType::String => 3,
-            DataType::DataFrame => 4,
-            DataType::Void => 5,
-            DataType::Function(_) => 6,
-        }
-    }
-
-    pub fn max(left: &DataType, right: &DataType) -> DataType {
-        if Self::hierarchy(&left) > Self::hierarchy(&right) {
-            left.clone()
-        } else {
-            right.clone()
-        }
-    }
-
-    pub fn equivalent(left: &DataType, right: &DataType) -> Result<DataType, ()> {
-        let ok_ret = Ok(Self::max(&left, &right));
-        match left {
-            DataType::Int => match right {
-                DataType::Int => ok_ret,
-                DataType::Float => ok_ret,
-                DataType::Bool => ok_ret,
-                _ => Err(()),
-            },
-            DataType::Float => match right {
-                DataType::Int => ok_ret,
-                DataType::Float => ok_ret,
-                DataType::Bool => ok_ret,
-                _ => Err(()),
-            },
-            DataType::Bool => match right {
-                DataType::Int => ok_ret,
-                DataType::Float => ok_ret,
-                DataType::Bool => ok_ret,
-                _ => Err(()),
-            },
-            DataType::String => match right {
-                DataType::String => ok_ret,
-                _ => Err(()),
-            },
-            DataType::DataFrame => match right {
-                DataType::DataFrame => ok_ret,
-                _ => Err(()),
-            },
-            DataType::Void => Err(()),
-            DataType::Function(func) => Self::equivalent(func, right),
-        }
-    }
-}
-
 #[derive(Debug)]
 pub struct Variable {
     pub id: String,
@@ -132,6 +67,15 @@ impl Variable {
             value,
         }
     }
+
+    // TODO: Refactor to use Id
+    pub fn address(&self) -> MemAddress {
+        if let Some(var_entry) = GlobalManager::get().get_env().get_var(&self.id) {
+            return var_entry.address;
+        } else {
+            panic!("Cannot find id {} in scope", self.id);
+        }
+    }
 }
 
 impl<'m> Node<'m> for Variable {
@@ -140,6 +84,8 @@ impl<'m> Node<'m> for Variable {
         let mut manager = GlobalManager::get();
         manager.get_env().add_var(&self.id, &self.data_type);
         drop(manager);
+
+        let self_address = self.address();
 
         if let Some(value) = &self.value {
             let value_data_type = value.data_type();
@@ -158,7 +104,7 @@ impl<'m> Node<'m> for Variable {
             if self.data_type != value_data_type {
                 // Emits type casting operation quadruple on r-value type mismatch
                 let prev_value_temp = value_temp.clone();
-                value_temp = manager.new_temp(&self.data_type).reduce();
+                value_temp = manager.new_temp_address(&self.data_type).to_string();
 
                 manager.emit(Quadruple(
                     String::from(format!("{:?}", self.data_type)),
@@ -172,7 +118,7 @@ impl<'m> Node<'m> for Variable {
                 String::from(Operator::Assign.to_string()),
                 value_temp,
                 String::new(),
-                self.id.clone(),
+                self_address.to_string(),
             ));
 
             drop(manager);

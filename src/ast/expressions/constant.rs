@@ -1,4 +1,4 @@
-use crate::ast::{node::Node, types::DataType};
+use crate::{ast::{node::Node}, memory::types::DataType};
 
 #[derive(Debug)]
 pub enum TypeConst {

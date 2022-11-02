@@ -1,4 +1,4 @@
-use crate::ast;
+use crate::{ast, memory::types::DataType};
 
 use self::{
     call::Call,
@@ -9,7 +9,7 @@ use self::{
 
 use super::{
     node,
-    types::{self, DataType},
+    types::{self},
 };
 pub mod call;
 pub mod constant;
@@ -77,7 +77,7 @@ impl<'m> ast::node::Node<'m> for Index {}
 
 #[cfg(test)]
 mod tests {
-    use crate::ast::types::{DataType, Operator};
+    use crate::{ast::types::{Operator}, memory::types::DataType};
 
     use super::{constant::Const, operation::Operation, Expression};
 

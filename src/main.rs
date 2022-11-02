@@ -1,23 +1,29 @@
 use moris_lang::ast::node::Node;
 
 use moris_lang::ast::quadruples::MANAGER;
+// use moris_lang::ast::types::DataType;
+use moris_lang::memory::resolver::{MemoryResolver, MemoryScope, SCOPE_OFFSETS, TYPE_OFFSETS};
+use moris_lang::memory::types::DataType;
 use moris_lang::parser::grammar::PProgramParser as Parser;
 
 // #[cfg(not(test))]
 fn main() {
-    // println!("{:#?}", id.reduce().dump());
-
-    // print!("{:#?}", Parser::new().parse("for + 5;").unwrap());
     let test_program = Parser::new().parse(
         "
     let z: int = 0;
+    let y: float = 7;
 
-    for (x in y) {
-        if (!x > 2) {
+    while (z < 10) {
+        z = z + 1;
+        y = y + 2;
+        if (z / 7 == 0) {
             continue;
         }
-        z = z + -1;
+        if (y / 7 == 0) {
+            break;
+        }
     }
+
     ",
     );
 
@@ -36,13 +42,18 @@ fn main() {
 
     let mut program_node = test_program.unwrap();
     print!("{:#?}", program_node);
-    // program_node.generate();
+
+    program_node.generate();
 
     let m = MANAGER.lock().unwrap();
 
+    let mut i = 0;
+    println!();
     for quad in m.quadruples.iter() {
-        println!("{:#?}", quad);
+        println!("{}: {:#?}", i, quad);
+        i += 1;
     }
+    println!();
     print!("{:#?}", m);
     return;
     // program_node.generate();

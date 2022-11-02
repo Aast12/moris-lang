@@ -2,7 +2,8 @@ use std::str::FromStr;
 use crate::ast::{Dimension};
 
 
-use crate::ast::types::{DataType, Function, FunctionParam, Operator, Variable, FunctionSignature};
+use crate::ast::types::{Function, FunctionParam, Operator, Variable, FunctionSignature};
+use crate::memory::types::DataType;
 
 use crate::ast::expressions::{Expression, Index};
 

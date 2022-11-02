@@ -3,9 +3,10 @@ use std::fmt::Debug;
 use crate::{
     ast::{
         expressions::{id::Access, Expression},
-        types::{DataType, Operator},
+        types::Operator,
     },
-    semantics::{ExitStatement, SemanticContext},
+    memory::types::DataType,
+    semantics::ExitStatement,
 };
 
 use super::{
@@ -61,7 +62,7 @@ impl<'m> Node<'m> for Statement {
                     // Emits type casting operation quadruple on r-value type mismatch
                     let mut manager = GlobalManager::get();
                     let prev_value_temp = value_temp.clone();
-                    value_temp = manager.new_temp(&access_data_type).reduce();
+                    value_temp = manager.new_temp_address(&access_data_type).to_string();
 
                     manager.emit(Quadruple(
                         String::from(format!("{:?}", access_data_type)),
@@ -75,7 +76,7 @@ impl<'m> Node<'m> for Statement {
                     String::from(Operator::Assign.to_string()),
                     value_temp,
                     String::new(),
-                    access.id.id.clone(),
+                    access.id.address().to_string(),
                 ));
             }
             Statement::Expression(exp) => exp.generate(),
@@ -133,7 +134,9 @@ impl<'m> Node<'m> for Statement {
             } => {
                 // let start_pos = GlobalManager::get_next_pos();
 
-                // let iterable_id = iterable.reduce();
+                // let iterable_item = iterable.reduce();
+                // // Temporal storing condition value
+                // let condition_id = condition.reduce();
 
                 // // Goto instruction to exit the loop
                 // let mut goto_false_cond = QuadrupleHold::new();
@@ -141,16 +144,15 @@ impl<'m> Node<'m> for Statement {
                 // block.generate();
 
                 // // Emit instruction to return to condition evaluation
-                // let to_start_pos_quadruple = Quadruple::new("goto", "", "", &start_pos.to_string());
+                // let to_start_pos_quadruple = Quadruple::jump("goto", start_pos);
                 // GlobalManager::emit(to_start_pos_quadruple.clone());
 
                 // let end_pos = GlobalManager::get_next_pos();
 
-                // let to_end_pos_quadruple =
-                //     Quadruple::new("gotoFalse", &condition_id, "", &end_pos.to_string());
+                // let to_end_pos_quadruple = Quadruple::jump("goto", end_pos);
 
                 // // Emit instruction to return to condition evaluation
-                // goto_false_cond.release(to_end_pos_quadruple.clone());
+                // goto_false_cond.release(Quadruple::jump_check("gotoFalse", &condition_id, end_pos));
 
                 // GlobalManager::resolve_context(&ExitStatement::Continue, to_start_pos_quadruple);
                 // GlobalManager::resolve_context(&ExitStatement::Break, to_end_pos_quadruple);

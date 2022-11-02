@@ -3,7 +3,6 @@ pub mod functions;
 pub mod node;
 pub mod quadruples;
 pub mod statements;
-pub mod temp;
 pub mod types;
 
 use std::fmt::Debug;

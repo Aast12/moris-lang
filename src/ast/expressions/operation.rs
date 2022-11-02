@@ -1,8 +1,7 @@
 use crate::{
     ast::{
         self,
-        quadruples::{Quadruple, MANAGER, GlobalManager},
-        types::DataType,
+        quadruples::{GlobalManager, Quadruple},
     },
     semantics::SemanticRules,
 };
@@ -25,7 +24,7 @@ impl<'m> Operation {
         }
     }
 
-    pub fn data_type(&self) -> DataType {
+    pub fn data_type(&self) -> crate::memory::types::DataType {
         return SemanticRules::match_type(
             self.operator,
             self.left.data_type(),
@@ -46,23 +45,23 @@ impl<'m> ast::node::Node<'m> for Operation {
         let dt = self.data_type();
         let mut manager = GlobalManager::get();
 
-        let tmp = manager.new_temp(&dt);
+        let tmp = manager.new_temp_address(&dt).to_string();
 
         manager.emit(Quadruple(
             String::from(self.operator.to_string()),
             left,
             right,
-            tmp.reduce(),
+            tmp.clone(),
         ));
 
-        return tmp.reduce();
+        return tmp;
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ast::expressions::{constant::Const, id::Id};
+    use crate::{ast::expressions::{constant::Const, id::Id}, memory::types::DataType};
 
     #[test]
     fn test_operation() {
@@ -71,7 +70,7 @@ mod tests {
             types::Operator::Add,
             Box::new(Expression::Const(Const::new(
                 "54.0",
-                types::DataType::Float,
+                DataType::Float,
             ))),
         );
 

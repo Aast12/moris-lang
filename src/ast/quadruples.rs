@@ -2,19 +2,20 @@ use core::panic;
 use lazy_static::lazy_static;
 // 1.4.0
 use std::{
-    collections::{HashMap, LinkedList},
+    collections::HashMap,
     fmt::{Debug, Error, Formatter},
-    hash::Hash,
     sync::{Mutex, MutexGuard},
 };
 
-// use crate::{moris_lang::environ::Environment, symbols::SymbolTable};
 use crate::{
     env::Environment,
-    semantics::{ExitStatement, SemanticContext, SemanticRules},
+    memory::{
+        resolver::{MemAddress, MemoryScope},
+        types::DataType,
+        virtual_allocator::VirtualAllocator,
+    },
+    semantics::ExitStatement,
 };
-
-use super::{temp::Temp, types::DataType};
 
 lazy_static! {
     pub static ref MANAGER: Mutex<Manager> = Mutex::new(Manager::new());
@@ -27,6 +28,8 @@ pub struct Manager {
     pub quadruples: Vec<Quadruple>,
     pub unresolved: HashMap<ExitStatement, Vec<usize>>,
     temp_counter: i32,
+    current_scope: MemoryScope,
+    // allocator: VirtualAllocator,
 }
 
 impl<'m> Manager {
@@ -37,6 +40,8 @@ impl<'m> Manager {
             quadruples: vec![],
             env: Environment::new(),
             unresolved: HashMap::new(),
+            // allocator: VirtualAllocator::new(),
+            current_scope: MemoryScope::Global,
         }
     }
 
@@ -44,11 +49,12 @@ impl<'m> Manager {
         return &mut self.env;
     }
 
-    pub fn new_temp(&mut self, data_type: &DataType) -> Temp {
-        self.temp_counter += 1;
-        let tmp = Temp::new(self.temp_counter - 1, data_type.clone());
-
-        return tmp;
+    pub fn new_temp_address(&mut self, data_type: &DataType) -> MemAddress {
+        // self.temp_counter += 1;
+        self.env.allocator
+            .assign_location(&self.env.current_scope, data_type)
+        // let tmp = Temp::new(self.temp_counter - 1, data_type.clone());
+        // return tmp;
     }
 
     pub fn emit(&mut self, quadruple: Quadruple) {

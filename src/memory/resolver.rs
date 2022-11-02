@@ -18,7 +18,7 @@ lazy_static! {
     };
 
     pub static ref TYPE_OFFSETS_INV: HashMap<MemAddress, DataType> =
-        TYPE_OFFSETS.iter().map(|(data_type, offset)| (*offset, *data_type)).collect();
+        TYPE_OFFSETS.iter().map(|(data_type, offset)| (*offset, data_type.clone())).collect();
 
     pub static ref SCOPE_OFFSETS: HashMap<MemoryScope, MemAddress> = {
         HashMap::from([
@@ -32,7 +32,7 @@ lazy_static! {
         SCOPE_OFFSETS.iter().map(|(scope, offset)| (*offset, *scope)).collect();
 }
 
-#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
 pub enum MemoryScope {
     Global,
     Local,

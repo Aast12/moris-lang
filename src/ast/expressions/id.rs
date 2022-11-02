@@ -2,12 +2,14 @@ use crate::ast;
 use crate::ast::expressions::Index;
 use crate::ast::node::Node;
 use crate::ast::quadruples::GlobalManager;
-use crate::ast::types::{self, DataType};
+use crate::ast::types::{self};
+use crate::memory::resolver::MemAddress;
+use crate::memory::types::DataType;
 
 #[derive(Debug)]
 pub struct Id {
     pub id: String,
-    pub dtype: Option<types::DataType>,
+    pub dtype: Option<DataType>,
 }
 
 #[derive(Debug)]
@@ -17,7 +19,7 @@ pub struct Access {
 }
 
 impl Id {
-    pub fn new(id: &str, dtype: Option<types::DataType>) -> Self {
+    pub fn new(id: &str, dtype: Option<DataType>) -> Self {
         Id {
             id: String::from(id),
             dtype,
@@ -36,11 +38,19 @@ impl Id {
             }
         }
     }
+
+    pub fn address(&self) -> MemAddress {
+        if let Some(var_entry) = GlobalManager::get().get_env().get_var(&self.id) {
+            return var_entry.address;
+        } else {
+            panic!("Cannot find id {} in scope", self.id);
+        }
+    }
 }
 
 impl<'m> ast::node::Node<'m> for Id {
     fn reduce(&self) -> String {
-        return self.id.clone();
+        self.address().to_string()
     }
 }
 
@@ -61,7 +71,7 @@ impl<'m> Node<'m> for Access {
 
     fn reduce(&self) -> String {
         if self.indexing.len() == 0 {
-            return self.id.id.clone();
+            return self.id.address().to_string();
         }
         todo!("Access reduce not implemented");
     }
@@ -71,8 +81,7 @@ impl<'m> Node<'m> for Access {
 mod tests {
     use super::*;
     use crate::ast::expressions::Expression;
-    use crate::ast::node::Node;
-    use crate::ast::types::DataType;
+    use crate::memory::types::DataType;
 
     #[test]
     fn test_id() {
@@ -80,8 +89,7 @@ mod tests {
 
         for id_name in test_ids {
             let id = Id::new(&id_name, Some(DataType::Float));
-
-            assert_eq!(id.reduce(), id_name);
+            assert_eq!(id.id, id_name);
         }
     }
 

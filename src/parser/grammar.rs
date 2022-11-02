@@ -1,8 +1,9 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 65e47387178fc09d15776d66cf341cbbbe0fd9de41978d219419b5f04ca82035
+// sha3: f0e954874d649984a209ed548ae5a620409813ae0f549e949b862bf3d25b4310
 use std::str::FromStr;
 use crate::ast::{Dimension};
-use crate::ast::types::{DataType, Function, FunctionParam, Operator, Variable, FunctionSignature};
+use crate::ast::types::{Function, FunctionParam, Operator, Variable, FunctionSignature};
+use crate::memory::types::DataType;
 use crate::ast::expressions::{Expression, Index};
 use crate::ast::expressions::constant::{Const, TypeConst};
 use crate::ast::expressions::id::{Access, Id};
@@ -22,7 +23,8 @@ mod __parse__PProgram {
 
     use std::str::FromStr;
     use crate::ast::{Dimension};
-    use crate::ast::types::{DataType, Function, FunctionParam, Operator, Variable, FunctionSignature};
+    use crate::ast::types::{Function, FunctionParam, Operator, Variable, FunctionSignature};
+    use crate::memory::types::DataType;
     use crate::ast::expressions::{Expression, Index};
     use crate::ast::expressions::constant::{Const, TypeConst};
     use crate::ast::expressions::id::{Access, Id};
@@ -4757,7 +4759,8 @@ mod __intern_token {
     #![allow(unused_imports)]
     use std::str::FromStr;
     use crate::ast::{Dimension};
-    use crate::ast::types::{DataType, Function, FunctionParam, Operator, Variable, FunctionSignature};
+    use crate::ast::types::{Function, FunctionParam, Operator, Variable, FunctionSignature};
+    use crate::memory::types::DataType;
     use crate::ast::expressions::{Expression, Index};
     use crate::ast::expressions::constant::{Const, TypeConst};
     use crate::ast::expressions::id::{Access, Id};

@@ -1,4 +1,4 @@
-use crate::ast::{self, types::DataType};
+use crate::{ast::{self}, memory::types::DataType};
 
 use super::Expression;
 
@@ -46,7 +46,7 @@ mod tests {
                 Box::new(Expression::Id(id::Id::new(fn_name, None))),
                 Box::new(Expression::Const(constant::Const::new(
                     "54",
-                    types::DataType::Int,
+                    DataType::Int,
                 ))),
                 Box::new(Expression::Call(Call::new("arg", vec![]))),
             ],

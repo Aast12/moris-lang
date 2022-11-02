@@ -1,7 +1,14 @@
 use core::panic;
 use std::collections::HashMap;
 
-use crate::ast::types::{DataType, FunctionSignature};
+use crate::{
+    ast::types::{FunctionParam, FunctionSignature},
+    memory::{
+        resolver::{MemAddress, MemoryScope},
+        types::DataType,
+        virtual_allocator::VirtualAllocator,
+    },
+};
 
 #[derive(Debug)]
 pub enum SymbolType {
@@ -11,6 +18,7 @@ pub enum SymbolType {
 #[derive(Debug)]
 pub struct SymbolEntry {
     pub id: String,
+    pub address: MemAddress,
     pub symbol_type: SymbolType,
     pub data_type: DataType,
     pub dimension: usize,
@@ -29,6 +37,8 @@ pub struct EnvEntry {
 pub struct Environment {
     pub current_env: String,
     pub entries: HashMap<String, EnvEntry>,
+    pub current_scope: MemoryScope,
+    pub allocator: VirtualAllocator,
 }
 
 impl Environment {
@@ -44,6 +54,8 @@ impl Environment {
                     symbols: HashMap::new(),
                 },
             )]),
+            allocator: VirtualAllocator::new(),
+            current_scope: MemoryScope::Global,
         };
     }
 
@@ -64,6 +76,11 @@ impl Environment {
     pub fn switch(&mut self, id: &String) {
         if let Some(_) = self.entries.get(id) {
             self.current_env = id.clone();
+            if id == "global" {
+                self.current_scope = MemoryScope::Global;
+            } else {
+                self.current_scope = MemoryScope::Local;
+            }
         } else {
             panic!("Environment {} does not exist!", id);
         }
@@ -73,7 +90,12 @@ impl Environment {
         if let Some(_) = self.entries.get(id) {
             panic!("Environment {} already exist!", id);
         }
-        self.entries.insert(id.clone(), EnvEntry::from_func(func));
+
+        self.current_scope = MemoryScope::Local;
+        self.allocator.reset_locals();
+
+        self.entries
+            .insert(id.clone(), EnvEntry::from_func(func, &mut self.allocator));
 
         if switch {
             self.current_env = id.clone();
@@ -81,8 +103,12 @@ impl Environment {
     }
 
     pub fn add_var(&mut self, id: &String, data_type: &DataType) {
+        let address = self
+            .allocator
+            .assign_location(&self.current_scope, data_type);
+
         self.current_env_mut()
-            .add(SymbolEntry::new_var(id.clone(), data_type.clone()));
+            .add(SymbolEntry::new_var(id.clone(), data_type.clone(), address));
     }
 
     pub fn get_var(&self, id: &String) -> Option<&SymbolEntry> {
@@ -108,12 +134,16 @@ impl EnvEntry {
         }
     }
 
-    pub fn from_func(func: FunctionSignature) -> EnvEntry {
+    pub fn from_func(func: FunctionSignature, allocator: &mut VirtualAllocator) -> EnvEntry {
         let mut symbols: HashMap<String, SymbolEntry> = HashMap::new();
 
-        for param in func.params.iter() {
-            let key = param.0.clone();
-            let val = SymbolEntry::new_var(param.0.clone(), param.1.clone());
+        for FunctionParam(id, data_type) in func.params.iter() {
+            let key = id.clone();
+            let val = SymbolEntry::new_var(
+                id.clone(),
+                data_type.clone(),
+                allocator.assign_location(&MemoryScope::Local, &data_type),
+            );
             symbols.insert(key, val);
         }
 
@@ -138,23 +168,30 @@ impl EnvEntry {
 }
 
 impl SymbolEntry {
-    pub fn new_var(id: String, data_type: DataType) -> SymbolEntry {
+    pub fn new_var(id: String, data_type: DataType, address: MemAddress) -> SymbolEntry {
         SymbolEntry {
             id,
             symbol_type: SymbolType::Variable,
             data_type,
             dimension: 0,
             shape: vec![],
+            address,
         }
     }
 
-    pub fn new_vec(id: String, data_type: DataType, shape: Vec<i32>) -> SymbolEntry {
+    pub fn new_vec(
+        id: String,
+        data_type: DataType,
+        shape: Vec<i32>,
+        address: MemAddress,
+    ) -> SymbolEntry {
         SymbolEntry {
             id,
             symbol_type: SymbolType::Variable,
             data_type,
             dimension: shape.len(),
             shape,
+            address,
         }
     }
 }

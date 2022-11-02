@@ -1,4 +1,7 @@
-use crate::ast::types::{DataType, DataType::*, Operator, Operator::*};
+use crate::{
+    ast::types::{Operator, Operator::*},
+    memory::types::{DataType, DataType::*},
+};
 
 #[derive(Debug, Clone, Copy, Eq, Hash, PartialEq)]
 pub enum SemanticContext {
