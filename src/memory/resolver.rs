@@ -4,8 +4,10 @@ use lazy_static::lazy_static;
 
 use super::types::DataType;
 
+pub type MemAddress = u16;
+
 lazy_static! {
-    pub static ref TYPE_OFFSETS: HashMap<DataType, u16> = {
+    pub static ref TYPE_OFFSETS: HashMap<DataType, MemAddress> = {
         HashMap::from([
             (DataType::Bool, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 0),       // 0 - 1,999
             (DataType::Float, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 1),      // 2,000 - 3,999
@@ -15,10 +17,10 @@ lazy_static! {
         ])
     };
 
-    pub static ref TYPE_OFFSETS_INV: HashMap<u16, DataType> =
+    pub static ref TYPE_OFFSETS_INV: HashMap<MemAddress, DataType> =
         TYPE_OFFSETS.iter().map(|(data_type, offset)| (*offset, *data_type)).collect();
 
-    pub static ref SCOPE_OFFSETS: HashMap<MemoryScope, u16> = {
+    pub static ref SCOPE_OFFSETS: HashMap<MemoryScope, MemAddress> = {
         HashMap::from([
             (MemoryScope::Global, MemoryResolver::SEGMENT_SIZE * 1),      // (10,000 - 19,999)
             (MemoryScope::Local, MemoryResolver::SEGMENT_SIZE * 2),       // (20,000 - 29,999)
@@ -26,7 +28,7 @@ lazy_static! {
         ])
     };
 
-    pub static ref SCOPE_OFFSETS_INV: HashMap<u16, MemoryScope> = 
+    pub static ref SCOPE_OFFSETS_INV: HashMap<MemAddress, MemoryScope> = 
         SCOPE_OFFSETS.iter().map(|(scope, offset)| (*offset, *scope)).collect();
 }
 
@@ -39,13 +41,13 @@ pub enum MemoryScope {
 pub struct MemoryResolver {}
 
 impl MemoryResolver {
-    pub const DATA_TYPE_ALLOC_SIZE: u16 = 2_000;
-    pub const SEGMENT_SIZE: u16 = 10_000;
-    pub const GLOBAL_OFFSET: u16 = 10_000;
-    pub const LOCAL_OFFSET: u16 = 20_000;
-    pub const CONSTANT_OFFSET: u16 = 30_000;
+    pub const DATA_TYPE_ALLOC_SIZE: MemAddress = 2_000;
+    pub const SEGMENT_SIZE: MemAddress = 10_000;
+    pub const GLOBAL_OFFSET: MemAddress = 10_000;
+    pub const LOCAL_OFFSET: MemAddress = 20_000;
+    pub const CONSTANT_OFFSET: MemAddress = 30_000;
 
-    fn get_scope_from_address(address: u16) -> Option<&'static MemoryScope> {
+    fn get_scope_from_address(address: MemAddress) -> Option<&'static MemoryScope> {
         let offset = address - (address % Self::SEGMENT_SIZE);
         if let Some(scope) = SCOPE_OFFSETS_INV.get(&offset) {
             Some(scope)
@@ -54,7 +56,7 @@ impl MemoryResolver {
         }
     }
 
-    fn get_type_from_address(address: u16) -> Option<&'static DataType> {
+    fn get_type_from_address(address: MemAddress) -> Option<&'static DataType> {
         let type_offset = address % Self::SEGMENT_SIZE;
         let step_offset = type_offset - (type_offset % Self::DATA_TYPE_ALLOC_SIZE);
         if let Some(dtype) = TYPE_OFFSETS_INV.get(&step_offset) {
@@ -64,7 +66,7 @@ impl MemoryResolver {
         }
     }
 
-    fn get_scope_offset(scope: &MemoryScope) -> u16 {
+    fn get_scope_offset(scope: &MemoryScope) -> MemAddress {
         if let Some(scope_offset) = SCOPE_OFFSETS.get(scope) {
             *scope_offset
         } else {
@@ -72,7 +74,7 @@ impl MemoryResolver {
         }
     }
 
-    fn get_type_offset(scope: &MemoryScope, data_type: &DataType) -> u16 {
+    fn get_type_offset(scope: &MemoryScope, data_type: &DataType) -> MemAddress {
         if let Some(type_offset) = TYPE_OFFSETS.get(data_type) {
             Self::get_scope_offset(scope) + type_offset
         } else {
@@ -80,16 +82,16 @@ impl MemoryResolver {
         }
     }
 
-    fn is_within(scope: &MemoryScope, data_type: &DataType, address: u16) -> bool {
+    fn is_within(scope: &MemoryScope, data_type: &DataType, address: MemAddress) -> bool {
         let lower_bound = Self::get_type_offset(scope, data_type);
         let upper_bound = lower_bound + Self::DATA_TYPE_ALLOC_SIZE;
 
         address >= lower_bound && address < upper_bound
     }
 
-    pub fn next_address(scope: &MemoryScope, data_type: &DataType, offset: u16) -> u16 {
+    pub fn to_address(scope: &MemoryScope, data_type: &DataType, offset: MemAddress) -> MemAddress {
         let type_offset = Self::get_type_offset(scope, data_type);
-        let address = type_offset + offset + 1;
+        let address = type_offset + offset;
         if Self::is_within(scope, data_type, address) {
             address
         } else {
@@ -97,19 +99,19 @@ impl MemoryResolver {
         }
     }
 
-    pub fn next_global_address(data_type: &DataType, offset: u16) -> u16 {
-        Self::next_address(&MemoryScope::Global, data_type, offset)
+    pub fn next_global_address(data_type: &DataType, offset: MemAddress) -> MemAddress {
+        Self::to_address(&MemoryScope::Global, data_type, offset)
     }
 
-    pub fn next_local_address(data_type: &DataType, offset: u16) -> u16 {
-        Self::next_address(&MemoryScope::Local, data_type, offset)
+    pub fn next_local_address(data_type: &DataType, offset: MemAddress) -> MemAddress {
+        Self::to_address(&MemoryScope::Local, data_type, offset)
     }
 
-    pub fn next_constant_address(data_type: &DataType, offset: u16) -> u16 {
-        Self::next_address(&MemoryScope::Constant, data_type, offset)
+    pub fn next_constant_address(data_type: &DataType, offset: MemAddress) -> MemAddress {
+        Self::to_address(&MemoryScope::Constant, data_type, offset)
     }
 
-    pub fn get_offset(address: u16) -> (MemoryScope, DataType, u16) {
+    pub fn get_offset(address: MemAddress) -> (MemoryScope, DataType, MemAddress) {
         if let Some(scope) = Self::get_scope_from_address(address) {
             if let Some(data_type) = Self::get_type_from_address(address) {
                 let item_offset = address % Self::DATA_TYPE_ALLOC_SIZE;
