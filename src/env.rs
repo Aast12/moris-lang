@@ -91,15 +91,15 @@ impl Environment {
             panic!("Environment {} already exist!", id);
         }
 
+        if switch {
+            self.current_env = id.clone();
+        }
+
         self.current_scope = MemoryScope::Local;
         self.allocator.reset_locals();
 
         self.entries
             .insert(id.clone(), EnvEntry::from_func(func, &mut self.allocator));
-
-        if switch {
-            self.current_env = id.clone();
-        }
     }
 
     pub fn add_var(&mut self, id: &String, data_type: &DataType) {
