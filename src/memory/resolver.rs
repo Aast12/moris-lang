@@ -15,16 +15,8 @@ lazy_static! {
         ])
     };
 
-    pub static ref TYPE_OFFSETS_INV: HashMap<u16, DataType> = {
-        HashMap::from([
-            (MemoryResolver::DATA_TYPE_ALLOC_SIZE * 0, DataType::Bool),       // 0 - 1,999
-            (MemoryResolver::DATA_TYPE_ALLOC_SIZE * 1, DataType::Float),      // 2,000 - 3,999
-            (MemoryResolver::DATA_TYPE_ALLOC_SIZE * 2, DataType::Int),        // 4,000 - 5,999
-            (MemoryResolver::DATA_TYPE_ALLOC_SIZE * 3, DataType::String),     // 6,000 - 7,999
-            (MemoryResolver::DATA_TYPE_ALLOC_SIZE * 4, DataType::DataFrame),  // 8,000 - 9,999
-        ])
-    };
-
+    pub static ref TYPE_OFFSETS_INV: HashMap<u16, DataType> =
+        TYPE_OFFSETS.iter().map(|(data_type, offset)| (*offset, *data_type)).collect();
 
     pub static ref SCOPE_OFFSETS: HashMap<MemoryScope, u16> = {
         HashMap::from([
@@ -34,13 +26,8 @@ lazy_static! {
         ])
     };
 
-    pub static ref SCOPE_OFFSETS_INV: HashMap<u16, MemoryScope> = {
-        HashMap::from([
-            (MemoryResolver::SEGMENT_SIZE * 1, MemoryScope::Global),      // (10,000 - 19,999)
-            (MemoryResolver::SEGMENT_SIZE * 2, MemoryScope::Local),       // (20,000 - 29,999)
-            (MemoryResolver::SEGMENT_SIZE * 3, MemoryScope::Constant),    // (30,000 - 39,999)
-        ])
-    };
+    pub static ref SCOPE_OFFSETS_INV: HashMap<u16, MemoryScope> = 
+        SCOPE_OFFSETS.iter().map(|(scope, offset)| (*offset, *scope)).collect();
 }
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
