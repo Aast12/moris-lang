@@ -14,11 +14,31 @@ lazy_static! {
             (DataType::DataFrame, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 4),  // 8,000 - 9,999
         ])
     };
+
+    pub static ref TYPE_OFFSETS_INV: HashMap<u16, DataType> = {
+        HashMap::from([
+            (MemoryResolver::DATA_TYPE_ALLOC_SIZE * 0, DataType::Bool),       // 0 - 1,999
+            (MemoryResolver::DATA_TYPE_ALLOC_SIZE * 1, DataType::Float),      // 2,000 - 3,999
+            (MemoryResolver::DATA_TYPE_ALLOC_SIZE * 2, DataType::Int),        // 4,000 - 5,999
+            (MemoryResolver::DATA_TYPE_ALLOC_SIZE * 3, DataType::String),     // 6,000 - 7,999
+            (MemoryResolver::DATA_TYPE_ALLOC_SIZE * 4, DataType::DataFrame),  // 8,000 - 9,999
+        ])
+    };
+
+
     pub static ref SCOPE_OFFSETS: HashMap<MemoryScope, u16> = {
         HashMap::from([
             (MemoryScope::Global, MemoryResolver::SEGMENT_SIZE * 1),      // (10,000 - 19,999)
             (MemoryScope::Local, MemoryResolver::SEGMENT_SIZE * 2),       // (20,000 - 29,999)
             (MemoryScope::Constant, MemoryResolver::SEGMENT_SIZE * 3),    // (30,000 - 39,999)
+        ])
+    };
+
+    pub static ref SCOPE_OFFSETS_INV: HashMap<u16, MemoryScope> = {
+        HashMap::from([
+            (MemoryResolver::SEGMENT_SIZE * 1, MemoryScope::Global),      // (10,000 - 19,999)
+            (MemoryResolver::SEGMENT_SIZE * 2, MemoryScope::Local),       // (20,000 - 29,999)
+            (MemoryResolver::SEGMENT_SIZE * 3, MemoryScope::Constant),    // (30,000 - 39,999)
         ])
     };
 }
@@ -38,13 +58,23 @@ impl MemoryResolver {
     pub const LOCAL_OFFSET: u16 = 20_000;
     pub const CONSTANT_OFFSET: u16 = 30_000;
 
-    pub fn get_type_by_offset(offset: u16) -> Option<DataType> {
-        for (data_type, d_offset) in TYPE_OFFSETS.iter() {
-            if offset >= *d_offset && offset < d_offset + Self::DATA_TYPE_ALLOC_SIZE {
-                return Some(data_type.clone());
-            }
+    fn get_scope_from_address(address: u16) -> Option<&'static MemoryScope> {
+        let offset = address - (address % Self::SEGMENT_SIZE);
+        if let Some(scope) = SCOPE_OFFSETS_INV.get(&offset) {
+            Some(scope)
+        } else {
+            None
         }
-        None
+    }
+
+    fn get_type_from_address(address: u16) -> Option<&'static DataType> {
+        let type_offset = address % Self::SEGMENT_SIZE;
+        let step_offset = type_offset - (type_offset % Self::DATA_TYPE_ALLOC_SIZE);
+        if let Some(dtype) = TYPE_OFFSETS_INV.get(&step_offset) {
+            Some(dtype)
+        } else {
+            None
+        }
     }
 
     fn get_scope_offset(scope: &MemoryScope) -> u16 {
@@ -63,18 +93,9 @@ impl MemoryResolver {
         }
     }
 
-    fn is_within_scope(scope: &MemoryScope, address: u16) -> bool {
-        let lower_bound = Self::get_scope_offset(scope);
-        let upper_bound = lower_bound + Self::SEGMENT_SIZE;
-
-        address >= lower_bound && address < upper_bound
-    }
-
     fn is_within(scope: &MemoryScope, data_type: &DataType, address: u16) -> bool {
         let lower_bound = Self::get_type_offset(scope, data_type);
         let upper_bound = lower_bound + Self::DATA_TYPE_ALLOC_SIZE;
-
-        println!("BOUNDS {lower_bound} {upper_bound}");
 
         address >= lower_bound && address < upper_bound
     }
@@ -101,27 +122,12 @@ impl MemoryResolver {
         Self::next_address(&MemoryScope::Constant, data_type, offset)
     }
 
-    fn get_scope_by_offset(address: u16) -> Option<MemoryScope> {
-        for (scope, offset) in SCOPE_OFFSETS.iter() {
-            if address >= *offset && address < *offset + Self::SEGMENT_SIZE {
-                return Some(*scope);
-            }
-        }
-        None
-    }
-
     pub fn get_offset(address: u16) -> (MemoryScope, DataType, u16) {
-        println!("RESOLVE {address}");
-        if let Some(scope) = Self::get_scope_by_offset(address) {
-            println!("SCOPE {:#?}", scope);
-            for data_type in TYPE_OFFSETS.keys() {
-                if Self::is_within(&scope, data_type, address) {
-                    println!("TYPE {:#?}", data_type);
-                    let full_offset = Self::get_type_offset(&scope, data_type);
-                    let item_offset = address % full_offset;
+        if let Some(scope) = Self::get_scope_from_address(address) {
+            if let Some(data_type) = Self::get_type_from_address(address) {
+                let item_offset = address % Self::DATA_TYPE_ALLOC_SIZE;
 
-                    return (scope.clone(), data_type.clone(), item_offset);
-                }
+                return (scope.clone(), data_type.clone(), item_offset);
             }
         }
 
