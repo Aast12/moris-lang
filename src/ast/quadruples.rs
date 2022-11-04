@@ -9,13 +9,11 @@ use std::{
 
 use crate::{
     env::Environment,
-    memory::{
-        resolver::{MemAddress, MemoryScope},
-        types::DataType,
-        virtual_allocator::VirtualAllocator,
-    },
+    memory::{resolver::MemAddress, types::DataType},
     semantics::ExitStatement,
 };
+
+use super::expressions::constant::Const;
 
 lazy_static! {
     pub static ref MANAGER: Mutex<Manager> = Mutex::new(Manager::new());
@@ -27,21 +25,17 @@ pub struct Manager {
     instruction_counter: i32,
     pub quadruples: Vec<Quadruple>,
     pub unresolved: HashMap<ExitStatement, Vec<usize>>,
-    temp_counter: i32,
-    current_scope: MemoryScope,
-    // allocator: VirtualAllocator,
+    constant_table: HashMap<MemAddress, Const>,
 }
 
 impl<'m> Manager {
     pub fn new() -> Self {
         Manager {
-            temp_counter: 0,
             instruction_counter: 0,
             quadruples: vec![],
             env: Environment::new(),
             unresolved: HashMap::new(),
-            // allocator: VirtualAllocator::new(),
-            current_scope: MemoryScope::Global,
+            constant_table: HashMap::new(),
         }
     }
 
@@ -50,11 +44,20 @@ impl<'m> Manager {
     }
 
     pub fn new_temp_address(&mut self, data_type: &DataType) -> MemAddress {
-        // self.temp_counter += 1;
-        self.env.allocator
+        self.env
+            .allocator
             .assign_location(&self.env.current_scope, data_type)
-        // let tmp = Temp::new(self.temp_counter - 1, data_type.clone());
-        // return tmp;
+    }
+
+    pub fn new_constant(&mut self, data_type: &DataType, value: &Const) -> MemAddress {
+        let address = self
+            .env
+            .allocator
+            .assign_location(&self.env.current_scope, data_type);
+
+        self.constant_table.insert(address, value.clone());
+
+        address
     }
 
     pub fn emit(&mut self, quadruple: Quadruple) {
@@ -82,6 +85,14 @@ impl GlobalManager {
         } else {
             panic!("Manager lock could not be acquired!");
         }
+    }
+
+    pub fn new_temp(data_type: &DataType) -> MemAddress {
+        Self::get().new_temp_address(data_type)
+    }
+
+    pub fn new_constant(data_type: &DataType, value: &Const) -> MemAddress {
+        Self::get().new_constant(data_type, value)
     }
 
     pub fn prepare_exit_stmt(stmt_type: &ExitStatement) {

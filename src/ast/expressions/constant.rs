@@ -1,4 +1,4 @@
-use crate::{ast::{node::Node}, memory::types::DataType};
+use crate::{ast::node::Node, memory::types::DataType};
 
 #[derive(Debug)]
 pub enum TypeConst {
@@ -9,7 +9,7 @@ pub enum TypeConst {
     // Vector(Vec<Box<ast::expressions::Expr>>),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Const {
     pub value: String,
     pub dtype: DataType,
@@ -26,7 +26,7 @@ impl Const {
 
 impl<'m> Node<'m> for Const {
     fn generate(&mut self) -> () {
-        todo!("Const generate");
+        self.reduce();
     }
 
     fn reduce(&self) -> String {

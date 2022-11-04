@@ -1,4 +1,4 @@
-use std::collections::{HashMap, LinkedList};
+use std::collections::HashMap;
 
 use super::{
     resolver::{MemAddress, MemoryResolver, MemoryScope},
@@ -32,36 +32,19 @@ impl VirtualAllocator {
 
         if let Some(last) = counter.get(&data_type) {
             let next_offset = last.clone();
-            println!("CURRENT COUNTER {:#?}, {:#?}: {}", scope, data_type, next_offset);
             counter.insert(data_type.clone(), next_offset + 1);
             next_offset
         } else {
             counter.insert(data_type.clone(), 1);
-            println!("STARTING COUNTER {:#?}, {:#?}: {}", scope, data_type, 1);
             0
         }
     }
 
     pub fn reset_locals(&mut self) {
-        println!("RESET???");
         self.local_counters = HashMap::new();
     }
 
     pub fn assign_location(&mut self, scope: &MemoryScope, data_type: &DataType) -> MemAddress {
-        println!("------------- CURRENT STATE -------------\n");
-        println!("GLOBALS:");
-        for (dt, mem) in self.global_counters.iter() {
-            println!("({:#?}, {})", dt, mem);
-        }
-        println!("\nLOCALS:");
-        for (dt, mem) in self.local_counters.iter() {
-            println!("({:#?}, {})", dt, mem);
-        }
-        println!("\nCONSTANTS:");
-        for (dt, mem) in self.constant_counters.iter() {
-            println!("({:#?}, {})", dt, mem);
-        }
-        println!("------------- ------------- -------------\n");
         let next_offset = self.increase_counter(scope, data_type);
         MemoryResolver::to_address(scope, data_type, next_offset)
     }

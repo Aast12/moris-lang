@@ -66,7 +66,7 @@ impl Access {
 
 impl<'m> Node<'m> for Access {
     fn generate(&mut self) -> () {
-        todo!("Access generate not implemented");
+        self.reduce();
     }
 
     fn reduce(&self) -> String {
