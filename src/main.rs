@@ -1,32 +1,28 @@
+use std::path::Path;
+use std::{fs, path};
+
 use moris_lang::ast::node::Node;
 
 use moris_lang::ast::quadruples::MANAGER;
-// use moris_lang::ast::types::DataType;
-use moris_lang::memory::resolver::{MemoryResolver, MemoryScope, SCOPE_OFFSETS, TYPE_OFFSETS};
-use moris_lang::memory::types::DataType;
+use moris_lang::ast::statements::Program;
 use moris_lang::parser::grammar::PProgramParser as Parser;
 
-// #[cfg(not(test))]
+fn try_file(path: &str) -> Program {
+    match fs::read_to_string(path) {
+        Ok(file_content) => Parser::new().parse(file_content.as_str()).unwrap(),
+        Err(error) => panic!("path: {} -> {}", path, error),
+    }
+}
+
 fn main() {
-    let test_program = Parser::new().parse(
-        "
-        fn myFunc(x: int, y: float): bool {
-            5;
-            callFn();
-            let z:bool=7;
-            return z;
-        }
+    let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join("./samples/while.mo");
+    let path = path_buf.to_str().unwrap();
 
-        let x: float;
-        let y: int = 7;
+    let mut test_program = try_file(path);
 
-    ",
-    );
+    print!("{:#?}", test_program);
 
-    let mut program_node = test_program.unwrap();
-    print!("{:#?}", program_node);
-
-    program_node.generate();
+    test_program.generate();
 
     let m = MANAGER.lock().unwrap();
 
