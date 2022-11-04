@@ -5,9 +5,12 @@ use crate::{
         expressions::{id::Access, Expression},
         functions::Function,
         node::Node,
-        quadruples::{GlobalManager, Quadruple, QuadrupleHold},
         types::Operator,
         types::Variable,
+    },
+    codegen::{
+        manager::GlobalManager,
+        quadruples::{Quadruple, QuadrupleHold},
     },
     memory::types::DataType,
     semantics::ExitStatement,

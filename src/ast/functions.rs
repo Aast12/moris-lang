@@ -1,6 +1,9 @@
-use crate::memory::types::DataType;
+use crate::{
+    codegen::{manager::GlobalManager, quadruples::Quadruple},
+    memory::types::DataType,
+};
 
-use super::{node::Node, quadruples::{GlobalManager, Quadruple}, statements::Block};
+use super::{node::Node, statements::Block};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct FunctionSignature {

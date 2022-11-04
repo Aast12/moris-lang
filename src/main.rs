@@ -1,10 +1,10 @@
+use std::fs;
 use std::path::Path;
-use std::{fs, path};
 
 use moris_lang::ast::node::Node;
 
-use moris_lang::ast::quadruples::MANAGER;
 use moris_lang::ast::statements::Program;
+use moris_lang::codegen::manager::MANAGER;
 use moris_lang::parser::grammar::PProgramParser as Parser;
 
 fn try_file(path: &str) -> Program {

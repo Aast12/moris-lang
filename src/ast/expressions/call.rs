@@ -1,8 +1,6 @@
 use crate::{
-    ast::{
-        self,
-        quadruples::{GlobalManager, Quadruple},
-    },
+    ast::node::Node,
+    codegen::{manager::GlobalManager, quadruples::Quadruple},
     memory::types::DataType,
 };
 
@@ -27,7 +25,7 @@ impl<'m> Call {
     }
 }
 
-impl<'m> ast::node::Node<'m> for Call {
+impl<'m> Node<'m> for Call {
     fn generate(&mut self) -> () {
         self.reduce();
     }

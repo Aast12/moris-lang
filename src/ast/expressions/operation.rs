@@ -1,9 +1,6 @@
 use crate::{
-    ast::{
-        self,
-        quadruples::{GlobalManager, Quadruple},
-    },
-    semantics::SemanticRules,
+    codegen::{manager::GlobalManager, quadruples::Quadruple},
+    semantics::SemanticRules, ast::node::Node,
 };
 
 use super::{types, Expression};
@@ -33,7 +30,7 @@ impl<'m> Operation {
     }
 }
 
-impl<'m> ast::node::Node<'m> for Operation {
+impl<'m> Node<'m> for Operation {
     fn generate(&mut self) -> () {
         self.reduce();
     }
@@ -61,17 +58,17 @@ impl<'m> ast::node::Node<'m> for Operation {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{ast::expressions::{constant::Const, id::Id}, memory::types::DataType};
+    use crate::{
+        ast::expressions::{constant::Const, id::Id},
+        memory::types::DataType,
+    };
 
     #[test]
     fn test_operation() {
         let op = Operation::new(
             Box::new(Expression::Id(Id::new("left", None))),
             types::Operator::Add,
-            Box::new(Expression::Const(Const::new(
-                "54.0",
-                DataType::Float,
-            ))),
+            Box::new(Expression::Const(Const::new("54.0", DataType::Float))),
         );
 
         if let Expression::Id(left) = op.left.as_ref() {

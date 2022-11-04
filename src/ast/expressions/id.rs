@@ -1,8 +1,7 @@
 use crate::ast;
 use crate::ast::expressions::Index;
 use crate::ast::node::Node;
-use crate::ast::quadruples::GlobalManager;
-use crate::ast::types::{self};
+use crate::codegen::manager::GlobalManager;
 use crate::memory::resolver::MemAddress;
 use crate::memory::types::DataType;
 
