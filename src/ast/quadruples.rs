@@ -8,12 +8,19 @@ use std::{
 };
 
 use crate::{
+    codegen::function::{FunctionEntry, ParamAddress},
     env::Environment,
-    memory::{resolver::MemAddress, types::DataType},
+    memory::{
+        resolver::{MemAddress, MemoryScope},
+        types::DataType,
+    },
     semantics::ExitStatement,
 };
 
-use super::expressions::constant::Const;
+use super::{
+    expressions::constant::Const,
+    functions::{Function, FunctionParam},
+};
 
 lazy_static! {
     pub static ref MANAGER: Mutex<Manager> = Mutex::new(Manager::new());
@@ -26,6 +33,7 @@ pub struct Manager {
     pub quadruples: Vec<Quadruple>,
     pub unresolved: HashMap<ExitStatement, Vec<usize>>,
     constant_table: HashMap<MemAddress, Const>,
+    procedure_table: HashMap<String, FunctionEntry>,
 }
 
 impl<'m> Manager {
@@ -36,11 +44,80 @@ impl<'m> Manager {
             env: Environment::new(),
             unresolved: HashMap::new(),
             constant_table: HashMap::new(),
+            procedure_table: HashMap::new(),
         }
     }
 
     pub fn get_env(&mut self) -> &mut Environment {
         return &mut self.env;
+    }
+
+    pub fn new_func(
+        &mut self,
+        func: &Function,
+        location: usize,
+        return_address: Option<MemAddress>,
+    ) {
+        if self.procedure_table.contains_key(&func.signature.id)
+            || self.get_env().entries.contains_key(&func.signature.id)
+        {
+            panic!(
+                "A symbol with id {} has been already defined",
+                func.signature.id
+            )
+        }
+
+        self.get_env().from_function(&func.signature, true);
+
+        let params: Vec<ParamAddress> = func
+            .signature
+            .params
+            .iter()
+            .map(|FunctionParam(id, data_type)| {
+                let param_symbol = self.get_env().get_var(id).unwrap();
+                (param_symbol.address, data_type.clone())
+            })
+            .collect();
+
+        self.procedure_table.insert(
+            func.signature.id.clone(),
+            FunctionEntry::new(location, return_address, params, func),
+        );
+    }
+
+    pub fn get_func_return(&self, func_id: &String) -> Option<MemAddress> {
+        if let Some(func) = self.procedure_table.get(func_id) {
+            func.return_address
+        } else {
+            panic!("No funcion {}", func_id);
+        }
+    }
+
+    pub fn get_func(&self, func_id: &String) -> &FunctionEntry {
+        if let Some(func) = self.procedure_table.get(func_id) {
+            func
+        } else {
+            panic!("No funcion {}", func_id);
+        }
+    }
+
+    pub fn drop_func(&mut self, func_id: &String) {
+        self.get_env().switch(&String::from("global"));
+        self.get_env().drop_env(func_id);
+    }
+
+    pub fn new_variable(&mut self, id: &String, data_type: &DataType) {
+        self.get_env().add_var(id, data_type);
+    }
+
+    pub fn remove_variable(&mut self, id: &String) {
+        self.get_env().del_var(id);
+    }
+
+    pub fn new_global(&mut self, data_type: &DataType) -> MemAddress {
+        self.env
+            .allocator
+            .assign_location(&MemoryScope::Global, data_type)
     }
 
     pub fn new_temp_address(&mut self, data_type: &DataType) -> MemAddress {
@@ -163,6 +240,15 @@ impl Quadruple {
 
     pub fn new_empty() -> Quadruple {
         Quadruple(String::new(), String::new(), String::new(), String::new())
+    }
+
+    pub fn new_return(id: &str) -> Quadruple {
+        Quadruple(
+            String::from("return"),
+            String::new(),
+            String::new(),
+            String::from(id),
+        )
     }
 
     pub fn new_coded(key: &str) -> Quadruple {

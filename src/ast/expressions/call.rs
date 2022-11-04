@@ -1,4 +1,10 @@
-use crate::{ast::{self}, memory::types::DataType};
+use crate::{
+    ast::{
+        self,
+        quadruples::{GlobalManager, Quadruple},
+    },
+    memory::types::DataType,
+};
 
 use super::Expression;
 
@@ -17,17 +23,33 @@ impl<'m> Call {
     }
 
     pub fn data_type(&self) -> DataType {
-        todo!("Implement fn call data type")
+        GlobalManager::get().get_func(&self.id).return_type.clone()
     }
 }
 
 impl<'m> ast::node::Node<'m> for Call {
     fn generate(&mut self) -> () {
-        todo!("generate call");
+        self.reduce();
     }
 
     fn reduce(&self) -> String {
-        todo!("reduce call");
+        for (index, param) in self.params.iter().enumerate() {
+            let param_address = param.reduce();
+            GlobalManager::emit(Quadruple::new(
+                "param",
+                param_address.as_str(),
+                "",
+                index.to_string().as_str(),
+            ))
+        }
+
+        GlobalManager::emit(Quadruple::new("gosub", "", "", self.id.as_str()));
+
+        if let Some(address) = GlobalManager::get().get_func_return(&self.id) {
+            address.to_string()
+        } else {
+            todo!()
+        }
     }
 }
 
@@ -44,10 +66,7 @@ mod tests {
             fn_name,
             vec![
                 Box::new(Expression::Id(id::Id::new(fn_name, None))),
-                Box::new(Expression::Const(constant::Const::new(
-                    "54",
-                    DataType::Int,
-                ))),
+                Box::new(Expression::Const(constant::Const::new("54", DataType::Int))),
                 Box::new(Expression::Call(Call::new("arg", vec![]))),
             ],
         );

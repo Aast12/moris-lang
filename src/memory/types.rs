@@ -5,6 +5,8 @@ pub enum DataType {
     Bool,
     String,
     DataFrame,
+    Series,
+    Iterable(Box<DataType>),
     Void,
     Function(Box<DataType>),
 }
@@ -19,6 +21,8 @@ impl DataType {
             DataType::DataFrame => 4,
             DataType::Void => 5,
             DataType::Function(_) => 6,
+            DataType::Series => todo!(),
+            DataType::Iterable(_) => todo!(),
         }
     }
 
@@ -61,6 +65,8 @@ impl DataType {
             },
             DataType::Void => Err(()),
             DataType::Function(func) => Self::equivalent(func, right),
+            DataType::Series => todo!(),
+            DataType::Iterable(_) => todo!(),
         }
     }
 }

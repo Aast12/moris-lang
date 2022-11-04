@@ -4,6 +4,75 @@
 
 ## Status
 
+## Noviembre 4, 2022
+
+- Mapeo de memoria:
+
+  Se asignan las siguientes direcciones para cada tipo de alcance:
+  
+  | Alcance  | Rango de direcciones |
+  | -------- | -------------------- |
+  | Global   | 10,000 - 19,999      |
+  | Local    | 20,000 - 29,999      |
+  | Constant | 30,000 - 39,999      |
+
+  Para cada alcance, se especifican los siguientes rangos para cada tipo de dato:
+
+  | Tipo      | Rango de direcciones |
+  | --------- | -------------------- |
+  | Bool      | 0 - 1,999            |
+  | Float     | 2,000 - 3,999        |
+  | Int       | 4,000 - 5,999        |
+  | String    | 6,000 - 7,999        |
+  | DataFrame | 8,000 - 9,999        |
+
+- Generación de cuadruplos
+  - loops
+    - Implementación completa con continue y break statement.
+    - *Implementación de for faltante, requiere de la implementación de arreglos.
+
+### Ejemplo de cuádruplos Generados
+
+#### **Input**
+
+```moris
+let x: int = 7;
+let y: float = 6;
+let z: float = x * y;
+
+while (x * 2 + y * y < z) {
+    if (x == 10) {
+        break;
+    }
+
+    x = x + 1;
+    y = y * 2;
+}
+```
+
+#### **Output**
+
+|     |           |       |       |       |
+| --- | --------- | ----- | ----- | ----- |
+| 0   | =         | 7     |       | 14000 |
+| 1   | Float     | 6     |       | 12001 |
+| 2   | =         | 12001 |       | 12000 |
+| 3   | *         | 14000 | 12000 | 12003 |
+| 4   | =         | 12003 |       | 12002 |
+| 5   | *         | 14000 | 2     | 14001 |
+| 6   | *         | 12000 | 12000 | 12004 |
+| 7   | +         | 14001 | 12004 | 12005 |
+| 8   | <         | 12005 | 12002 | 10000 |
+| 9   | gotoFalse | 10000 |       | 18    |
+| 10  | ==        | 14000 | 10    | 10001 |
+| 11  | gotoFalse | 10001 |       | 13    |
+| 12  | goto      |       |       | 18    |
+| 13  | +         | 14000 | 1     | 14002 |
+| 14  | =         | 14002 |       | 14000 |
+| 15  | *         | 12000 | 2     | 12006 |
+| 16  | =         | 12006 |       | 12000 |
+| 17  | goto      |       |       | 5     |
+
 ## Octubre 12, 2022
 
 - Validación de tipos en expresiones y asignaciones de variable
@@ -12,7 +81,7 @@
   - conversiones de tipos en asignación (e.g. asignación de un int a float para asignar a una variable)
   - condicionales
 
-### Ejemplo de cuadruplos Generados
+### Ejemplo de cuádruplos Generados
 
 #### **Input**
 

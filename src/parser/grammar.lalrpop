@@ -2,8 +2,9 @@ use std::str::FromStr;
 use crate::ast::{Dimension};
 
 
-use crate::ast::types::{Function, FunctionParam, Operator, Variable, FunctionSignature};
+use crate::ast::types::{Operator, Variable};
 use crate::memory::types::DataType;
+use crate::ast::functions::{Function, FunctionParam, FunctionSignature};
 
 use crate::ast::expressions::{Expression, Index};
 
@@ -126,6 +127,8 @@ PExprOp: Operator = {
 PLogicOp: Operator = {
     LT => Operator::LessThan,
     GT => Operator::GreaterThan,
+    LEQ => Operator::LessOrEq,
+    GEQ => Operator::GreaterOrEq,
     NOTEQUAL => Operator::NotEq,
     EQUAL => Operator::Eq,
 }
@@ -299,16 +302,18 @@ match {
     r#""[^"]*""# => STRING,
     "&&" => AND,
     "||" => OR,
-    "<" => LT,
-    ">" => GT,
     "!=" => NOTEQUAL,
     "!" => NOT,
     "==" => EQUAL,
+    "|>" => PIPE,
+    "<=" => LEQ,
+    ">=" => GEQ,
+    "<" => LT,
+    ">" => GT,
     "+" => ADD,
     "-" => SUB,
     "*" => MUL,
     "/" => DIV,
-    "|>" => PIPE,
     "forward" => FORWARD,
     "int" => T_INT,
     "float" => T_FLOAT,

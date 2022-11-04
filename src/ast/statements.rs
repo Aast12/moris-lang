@@ -3,16 +3,14 @@ use std::fmt::Debug;
 use crate::{
     ast::{
         expressions::{id::Access, Expression},
+        functions::Function,
+        node::Node,
+        quadruples::{GlobalManager, Quadruple, QuadrupleHold},
         types::Operator,
+        types::Variable,
     },
     memory::types::DataType,
     semantics::ExitStatement,
-};
-
-use super::{
-    node::Node,
-    quadruples::{GlobalManager, Quadruple, QuadrupleHold},
-    types::{Function, Variable},
 };
 
 pub enum Statement {
@@ -132,6 +130,7 @@ impl<'m> Node<'m> for Statement {
                 iterable,
                 block,
             } => {
+                // let iterator_temp = GlobalManager::new_temp(iterator_id);
                 // let start_pos = GlobalManager::get_next_pos();
 
                 // let iterable_item = iterable.reduce();
@@ -184,8 +183,8 @@ impl<'m> Node<'m> for Statement {
             }
             Statement::FunctionDeclaration(func) => func.generate(),
             Statement::Return(ret) => {
-                ret.generate();
-                todo!("return statement")
+                let return_item = ret.reduce();
+                GlobalManager::emit(Quadruple::new_return(return_item.as_str()));
             }
             Statement::Break => GlobalManager::prepare_exit_stmt(&ExitStatement::Break),
             Statement::Continue => GlobalManager::prepare_exit_stmt(&ExitStatement::Continue),

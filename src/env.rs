@@ -2,7 +2,7 @@ use core::panic;
 use std::collections::HashMap;
 
 use crate::{
-    ast::types::{FunctionParam, FunctionSignature},
+    ast::functions::{FunctionParam, FunctionSignature},
     memory::{
         resolver::{MemAddress, MemoryScope},
         types::DataType,
@@ -73,6 +73,14 @@ impl Environment {
         panic!("Current environment does not exist!");
     }
 
+    pub fn drop_env(&mut self, id: &String) {
+        if self.current_env == *id {
+            panic!("Cannot drop current env {}", id)
+        }
+
+        self.entries.remove(id);
+    }
+
     pub fn switch(&mut self, id: &String) {
         if let Some(_) = self.entries.get(id) {
             self.current_env = id.clone();
@@ -86,7 +94,8 @@ impl Environment {
         }
     }
 
-    pub fn from_function(&mut self, id: &String, func: FunctionSignature, switch: bool) {
+    pub fn from_function(&mut self, func: &FunctionSignature, switch: bool) {
+        let id = &func.id;
         if let Some(_) = self.entries.get(id) {
             panic!("Environment {} already exist!", id);
         }
@@ -109,6 +118,10 @@ impl Environment {
 
         self.current_env_mut()
             .add(SymbolEntry::new_var(id.clone(), data_type.clone(), address));
+    }
+
+    pub fn del_var(&mut self, id: &String) {
+        self.current_env_mut().delete(id);
     }
 
     pub fn get_var(&self, id: &String) -> Option<&SymbolEntry> {
@@ -134,7 +147,7 @@ impl EnvEntry {
         }
     }
 
-    pub fn from_func(func: FunctionSignature, allocator: &mut VirtualAllocator) -> EnvEntry {
+    pub fn from_func(func: &FunctionSignature, allocator: &mut VirtualAllocator) -> EnvEntry {
         let mut symbols: HashMap<String, SymbolEntry> = HashMap::new();
 
         for FunctionParam(id, data_type) in func.params.iter() {
@@ -144,13 +157,14 @@ impl EnvEntry {
                 data_type.clone(),
                 allocator.assign_location(&MemoryScope::Local, &data_type),
             );
+
             symbols.insert(key, val);
         }
 
         EnvEntry {
             is_global: false,
-            env_id: func.id,
-            return_type: Some(func.data_type),
+            env_id: func.id.clone(),
+            return_type: Some(func.data_type.clone()),
             symbols,
         }
     }
@@ -160,6 +174,10 @@ impl EnvEntry {
         if let Some(_) = &self.symbols.insert(id.clone(), symbol) {
             panic!("{} was already defined!", id.clone());
         }
+    }
+
+    pub fn delete(&mut self, symbol_id: &String) {
+        self.symbols.remove(symbol_id);
     }
 
     pub fn get(&self, id: &String) -> Option<&SymbolEntry> {

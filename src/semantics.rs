@@ -33,7 +33,9 @@ impl SemanticRules {
             Sub | Mul => Self::arith_match(left, right, false),
             Pipe | ForwardPipe => Self::pipe_match(left, right),
             And | Or => Self::bool_match(left, right),
-            LessThan | GreaterThan | NotEq | Eq => Self::comparison_match(left, right),
+            LessThan | GreaterThan | NotEq | Eq | LessOrEq | GreaterOrEq => {
+                Self::comparison_match(left, right)
+            }
             Assign => Self::assign_match(left, right),
         }
     }
