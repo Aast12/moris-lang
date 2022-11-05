@@ -258,15 +258,15 @@ impl<'m> Node<'m> for Program {
     fn generate(&mut self) -> () {
         let Program(statements) = self;
         statements.sort_by(|a, b| match a {
-            Statement::FunctionDeclaration(_) => Ordering::Less,
+            Statement::FunctionDeclaration(_) => Ordering::Greater,
             _ => match b {
-                Statement::FunctionDeclaration(_) => Ordering::Greater,
+                Statement::FunctionDeclaration(_) => Ordering::Less,
                 _ => Ordering::Equal,
             },
         });
 
         // Pre-declare function signatures
-        for stmt in statements.iter_mut() {
+        for stmt in statements.iter().rev() {
             match stmt {
                 Statement::FunctionDeclaration(func) => {
                     let mut manager = GlobalManager::get();
@@ -284,27 +284,20 @@ impl<'m> Node<'m> for Program {
             }
         }
 
-        let mut main_code_goto = QuadrupleHold::new();
         let mut last_func_generated = false;
 
         for stmt in statements.iter_mut() {
             if !last_func_generated {
                 match stmt {
-                    Statement::FunctionDeclaration(_) => (),
-                    _ => {
+                    Statement::FunctionDeclaration(_) => {
                         last_func_generated = true;
-                        main_code_goto
-                            .release(Quadruple::jump("goto", GlobalManager::get_next_pos()));
+                        GlobalManager::emit(Quadruple::new_coded("endprogram"));
                     }
+                    _ => (),
                 }
             }
 
             stmt.generate();
-        }
-
-        // Still jumps if there was only function statements
-        if !main_code_goto.released {
-            main_code_goto.release(Quadruple::jump("goto", GlobalManager::get_next_pos()));
         }
     }
 }

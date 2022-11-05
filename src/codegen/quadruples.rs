@@ -80,7 +80,7 @@ impl QuadrupleHold {
 
         QuadrupleHold {
             position,
-            released: true,
+            released: false,
         }
     }
 

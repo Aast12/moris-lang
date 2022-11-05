@@ -1,9 +1,9 @@
-fn fibonacci3(n: int): int {
-    if (n <= 1) {
+fn fibonacci3(n: int, k: int): int {
+    if (n <= 1 || z == 3) {
         return n;
     }
 
-    return fibonacci2(n - 2) + fibonacci3(n - 2);
+    return fibonacci2(n - 2) + fibonacci3(n - 2, n);
 }
 
 let x: int = 7;
