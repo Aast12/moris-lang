@@ -65,6 +65,7 @@ impl Debug for Quadruple {
 
 pub struct QuadrupleHold {
     pub position: usize,
+    pub released: bool,
 }
 
 impl QuadrupleHold {
@@ -77,12 +78,16 @@ impl QuadrupleHold {
             panic!("Manager lock could not be acquired!");
         }
 
-        QuadrupleHold { position }
+        QuadrupleHold {
+            position,
+            released: true,
+        }
     }
 
     pub fn release(&mut self, value: Quadruple) {
         if let Ok(mut manager) = MANAGER.try_lock() {
             manager.update_instruction(self.position, value);
+            self.released = true;
         } else {
             panic!("Manager lock could not be acquired!");
         }

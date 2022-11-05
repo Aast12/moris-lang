@@ -31,6 +31,8 @@ impl<'m> Node<'m> for Call {
     }
 
     fn reduce(&self) -> String {
+        GlobalManager::emit(Quadruple::new("era", "", "", self.id.as_str()));
+        
         for (index, param) in self.params.iter().enumerate() {
             let param_address = param.reduce();
             GlobalManager::emit(Quadruple::new(

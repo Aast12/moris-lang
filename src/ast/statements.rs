@@ -1,4 +1,4 @@
-use std::fmt::Debug;
+use std::{cmp::Ordering, fmt::Debug};
 
 use crate::{
     ast::{
@@ -9,7 +9,7 @@ use crate::{
         types::Variable,
     },
     codegen::{
-        manager::GlobalManager,
+        manager::{self, GlobalManager},
         quadruples::{Quadruple, QuadrupleHold},
     },
     memory::types::DataType,
@@ -256,8 +256,55 @@ pub struct Program(pub Vec<Statement>);
 
 impl<'m> Node<'m> for Program {
     fn generate(&mut self) -> () {
-        for stmt in self.0.iter_mut() {
+        let Program(statements) = self;
+        statements.sort_by(|a, b| match a {
+            Statement::FunctionDeclaration(_) => Ordering::Less,
+            _ => match b {
+                Statement::FunctionDeclaration(_) => Ordering::Greater,
+                _ => Ordering::Equal,
+            },
+        });
+
+        // Pre-declare function signatures
+        for stmt in statements.iter_mut() {
+            match stmt {
+                Statement::FunctionDeclaration(func) => {
+                    let mut manager = GlobalManager::get();
+
+                    let return_address = match func.signature.data_type {
+                        DataType::Void => None,
+                        _ => Some(manager.new_global(&func.signature.data_type)),
+                    };
+
+                    manager.new_func(func, 0, return_address); // TODO: improve undefined location
+
+                    manager.get_env().switch(&String::from("global"));
+                }
+                _ => break,
+            }
+        }
+
+        let mut main_code_goto = QuadrupleHold::new();
+        let mut last_func_generated = false;
+
+        for stmt in statements.iter_mut() {
+            if !last_func_generated {
+                match stmt {
+                    Statement::FunctionDeclaration(_) => (),
+                    _ => {
+                        last_func_generated = true;
+                        main_code_goto
+                            .release(Quadruple::jump("goto", GlobalManager::get_next_pos()));
+                    }
+                }
+            }
+
             stmt.generate();
+        }
+
+        // Still jumps if there was only function statements
+        if !main_code_goto.released {
+            main_code_goto.release(Quadruple::jump("goto", GlobalManager::get_next_pos()));
         }
     }
 }

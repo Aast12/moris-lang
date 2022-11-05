@@ -32,12 +32,8 @@ impl<'m> Node<'m> for Function {
         let mut manager = GlobalManager::get();
         let next_position = manager.get_next_id();
 
-        let return_address = match &self.signature.data_type {
-            DataType::Void => None,
-            _ => Some(manager.new_global(&self.signature.data_type)),
-        };
-
-        manager.new_func(self, next_position, return_address);
+        manager.update_func_position(&self.signature.id, next_position);
+        manager.get_env().switch(&self.signature.id);
 
         drop(manager);
 
@@ -48,7 +44,7 @@ impl<'m> Node<'m> for Function {
         GlobalManager::get()
             .get_env()
             .switch(&String::from("global"));
-        GlobalManager::get().get_env().drop_env(&self.signature.id);
+        // GlobalManager::get().get_env().drop_env(&self.signature.id);
     }
 
     fn reduce(&self) -> String {

@@ -85,6 +85,14 @@ impl<'m> Manager {
         );
     }
 
+    pub fn update_func_position(&mut self, func_id: &String, position: usize) {
+        if let Some(func) = self.procedure_table.get_mut(func_id) {
+            func.procedure_address = position;
+        } else {
+            panic!("Can't find function {func_id}")
+        }
+    }
+
     pub fn get_func_return(&self, func_id: &String) -> Option<MemAddress> {
         if let Some(func) = self.procedure_table.get(func_id) {
             func.return_address

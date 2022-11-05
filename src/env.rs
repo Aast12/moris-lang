@@ -88,6 +88,7 @@ impl Environment {
                 self.current_scope = MemoryScope::Global;
             } else {
                 self.current_scope = MemoryScope::Local;
+                self.allocator.reset_locals();
             }
         } else {
             panic!("Environment {} does not exist!", id);

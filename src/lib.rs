@@ -1,6 +1,6 @@
 pub mod ast;
-pub mod parser;
-pub mod semantics;
+pub mod codegen;
 pub mod env;
 pub mod memory;
-pub mod codegen;
+pub mod parser;
+pub mod semantics;

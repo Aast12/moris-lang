@@ -35,8 +35,8 @@ impl<'m> Expression {
             Expression::Access(access) => access.id.data_type(),
             Expression::Id(id) => id.data_type(),
             Expression::Call(call) => call.data_type(),
-            Expression::Not(_) => todo!(),
-            Expression::Negative(_) => todo!(),
+            Expression::Not(expr) => expr.data_type(),
+            Expression::Negative(expr) => expr.data_type(),
         }
     }
 }
@@ -77,7 +77,7 @@ impl<'m> ast::node::Node<'m> for Index {}
 
 #[cfg(test)]
 mod tests {
-    use crate::{ast::types::{Operator}, memory::types::DataType};
+    use crate::{ast::types::Operator, memory::types::DataType};
 
     use super::{constant::Const, operation::Operation, Expression};
 
