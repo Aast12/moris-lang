@@ -9,7 +9,7 @@ use crate::{
         types::Variable,
     },
     codegen::{
-        manager::{self, GlobalManager},
+        manager::GlobalManager,
         quadruples::{Quadruple, QuadrupleHold},
     },
     memory::types::DataType,

@@ -5,6 +5,7 @@ use moris_lang::ast::node::Node;
 
 use moris_lang::ast::statements::Program;
 use moris_lang::codegen::manager::MANAGER;
+use moris_lang::codegen::quadruples::Quadruple;
 use moris_lang::parser::grammar::PProgramParser as Parser;
 
 fn try_file(path: &str) -> Program {
@@ -29,7 +30,8 @@ fn main() {
     let mut i = 0;
     println!();
     for quad in m.quadruples.iter() {
-        println!("{}: {:#?}", i, quad);
+        let Quadruple(fst, snd, trd, fth) = quad;
+        println!("|{}|{}|{}|{}|{}|", i, fst, snd, trd, fth);
         i += 1;
     }
     println!();

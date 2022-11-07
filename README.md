@@ -4,6 +4,116 @@
 
 ## Status
 
+## Noviembre 7, 2022
+
+- Generación de cuadruplos
+  - Funciones
+    - Se resetean y asignan locales para cada función distinta.
+    - Se asigna una dirección global para el valor de retorno de cada función.
+    - La firma de cada función se pre-define en las tablas de símbolos antes de generar los cuádruplos (permite referencias a funciones declaradas después de la línea donde se llama).
+    - Antes de generar cuádruplos, el código de las funciones se mueve al final del archivo para permitir la declaración de las variables globales.
+
+### Ejemplo de cuádruplos Generados
+
+#### **Input**
+
+```moris
+fn fibonacci3(n: int, k: int): int {
+    if (n <= 1 || z == 3) {
+        return n;
+    }
+
+    return fibonacci2(n - 2) + fibonacci3(n - 2, n);
+}
+
+let x: int = 7;
+let y: float = 6;
+let z: float = x * y;
+
+fn fibonacci(n: int): int {
+    if (n <= 1) {
+        return n;
+    }
+
+    return fibonacci(n - 2) + fibonacci(n - 2);
+}
+
+let q: bool = false;
+
+fn fibonacci2(n: int): int {
+    if (n <= 1) {
+        return n;
+    }
+
+    return fibonacci2(n - 2) + fibonacci(n - 2);
+}
+
+let res: int = fibonacci3(10, 7.2);
+```
+
+#### **Output**
+
+|     |            |       |       |            |
+| --- | ---------- | ----- | ----- | ---------- |
+| 0   | =          | 7     |       | 14003      |
+| 1   | Float      | 6     |       | 12001      |
+| 2   | =          | 12001 |       | 12000      |
+| 3   | *          | 14003 | 12000 | 12003      |
+| 4   | =          | 12003 |       | 12002      |
+| 5   | =          | false |       | 10000      |
+| 6   | era        |       |       | fibonacci3 |
+| 7   | param      | 10    |       | 0          |
+| 8   | Int        | 7.2   |       | 14005      |
+| 9   | param      | 14005 |       | 1          |
+| 10  | gosub      |       |       | fibonacci3 |
+| 11  | =          | 14002 |       | 14004      |
+| 12  | endprogram |       |       |            |
+| 13  | <=         | 24000 | 1     | 20000      |
+| 14  | ==         | 12002 | 3     | 20001      |
+| 15  | \| \|      | 20000 | 20001 | 20002      |
+| 16  | gotoFalse  | 20002 |       | 18         |
+| 17  | return     |       |       | 24000      |
+| 18  | era        |       |       | fibonacci2 |
+| 19  | -          | 24000 | 2     | 24000      |
+| 20  | param      | 24000 |       | 0          |
+| 21  | gosub      |       |       | fibonacci2 |
+| 22  | era        |       |       | fibonacci3 |
+| 23  | -          | 24000 | 2     | 24001      |
+| 24  | param      | 24001 |       | 0          |
+| 25  | param      | 24000 |       | 1          |
+| 26  | gosub      |       |       | fibonacci3 |
+| 27  | +          | 14000 | 14002 | 24002      |
+| 28  | return     |       |       | 24002      |
+| 29  | endfunc    |       |       |            |
+| 30  | <=         | 24000 | 1     | 20000      |
+| 31  | gotoFalse  | 20000 |       | 33         |
+| 32  | return     |       |       | 24000      |
+| 33  | era        |       |       | fibonacci  |
+| 34  | -          | 24000 | 2     | 24000      |
+| 35  | param      | 24000 |       | 0          |
+| 36  | gosub      |       |       | fibonacci  |
+| 37  | era        |       |       | fibonacci  |
+| 38  | -          | 24000 | 2     | 24001      |
+| 39  | param      | 24001 |       | 0          |
+| 40  | gosub      |       |       | fibonacci  |
+| 41  | +          | 14001 | 14001 | 24002      |
+| 42  | return     |       |       | 24002      |
+| 43  | endfunc    |       |       |            |
+| 44  | <=         | 24000 | 1     | 20000      |
+| 45  | gotoFalse  | 20000 |       | 47         |
+| 46  | return     |       |       | 24000      |
+| 47  | era        |       |       | fibonacci2 |
+| 48  | -          | 24000 | 2     | 24000      |
+| 49  | param      | 24000 |       | 0          |
+| 50  | gosub      |       |       | fibonacci2 |
+| 51  | era        |       |       | fibonacci  |
+| 52  | -          | 24000 | 2     | 24001      |
+| 53  | param      | 24001 |       | 0          |
+| 54  | gosub      |       |       | fibonacci  |
+| 55  | +          | 14000 | 14001 | 24002      |
+| 56  | return     |       |       | 24002      |
+| 57  | endfunc    |       |       |            |
+
 ## Noviembre 4, 2022
 
 - Mapeo de memoria:
