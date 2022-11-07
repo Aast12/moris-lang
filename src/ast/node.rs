@@ -1,5 +1,5 @@
 /// Represents the node of an Abstract Syntax Tree
-pub trait Node<'m> {
+pub trait Node {
     fn generate(&mut self) -> () {
         self.reduce();
     }

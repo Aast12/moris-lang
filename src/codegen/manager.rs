@@ -36,7 +36,7 @@ pub struct Manager {
     procedure_table: HashMap<String, FunctionEntry>,
 }
 
-impl<'m> Manager {
+impl Manager {
     pub fn new() -> Self {
         Manager {
             instruction_counter: 0,

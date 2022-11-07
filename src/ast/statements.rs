@@ -40,7 +40,7 @@ pub enum Statement {
     Continue,
 }
 
-impl<'m> Node<'m> for Statement {
+impl Node for Statement {
     fn generate(&mut self) -> () {
         match self {
             Statement::VarDeclaration(var) => var.generate(),
@@ -243,7 +243,7 @@ impl Debug for Statement {
 #[derive(Debug)]
 pub struct Block(pub Vec<Statement>);
 
-impl<'m> Node<'m> for Block {
+impl Node for Block {
     fn generate(&mut self) -> () {
         for stmt in self.0.iter_mut() {
             stmt.generate();
@@ -254,7 +254,7 @@ impl<'m> Node<'m> for Block {
 #[derive(Debug)]
 pub struct Program(pub Vec<Statement>);
 
-impl<'m> Node<'m> for Program {
+impl Node for Program {
     fn generate(&mut self) -> () {
         let Program(statements) = self;
         statements.sort_by(|a, b| match a {

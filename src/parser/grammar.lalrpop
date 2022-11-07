@@ -17,7 +17,7 @@ use crate::ast::expressions::call::Call;
 use crate::ast::statements::{Block, Program, Statement};
 
 
-grammar<'m>;
+grammar;
 
 
 // Macros

@@ -47,7 +47,7 @@ impl Id {
     }
 }
 
-impl<'m> ast::node::Node<'m> for Id {
+impl ast::node::Node for Id {
     fn reduce(&self) -> String {
         self.address().to_string()
     }
@@ -63,7 +63,7 @@ impl Access {
     }
 }
 
-impl<'m> Node<'m> for Access {
+impl Node for Access {
     fn generate(&mut self) -> () {
         self.reduce();
     }

@@ -79,7 +79,7 @@ impl Variable {
     }
 }
 
-impl<'m> Node<'m> for Variable {
+impl Node for Variable {
     fn generate(&mut self) -> () {
         // Add variable to symbols table
         let mut manager = GlobalManager::get();

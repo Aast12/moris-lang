@@ -21,13 +21,13 @@ pub struct Function {
     pub block: Block,
 }
 
-impl<'m> Function {
+impl Function {
     pub fn new(signature: FunctionSignature, block: Block) -> Function {
         Function { signature, block }
     }
 }
 
-impl<'m> Node<'m> for Function {
+impl Node for Function {
     fn generate(&mut self) -> () {
         let mut manager = GlobalManager::get();
         let next_position = manager.get_next_id();

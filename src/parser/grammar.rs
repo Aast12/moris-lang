@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: a21fe5e72a06638644c7d88c0d13f7b48c7c643235233cae587f9e359925dc87
+// sha3: e0da0f8bffb1f7b6a90a141023ebafad7037c3c67acc4467c4eaddb034dd1ca3
 use std::str::FromStr;
 use crate::ast::{Dimension};
 use crate::ast::types::{Operator, Variable};
@@ -990,13 +990,13 @@ mod __parse__PProgram {
             }
         }).collect()
     }
-    pub(crate) struct __StateMachine<'input, 'm>
+    pub(crate) struct __StateMachine<'input>
     where 
     {
         input: &'input str,
-        __phantom: core::marker::PhantomData<(&'input (), &'m ())>,
+        __phantom: core::marker::PhantomData<(&'input ())>,
     }
-    impl<'input, 'm> __state_machine::ParserDefinition for __StateMachine<'input, 'm>
+    impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
     where 
     {
         type Location = usize;
@@ -1022,7 +1022,7 @@ mod __parse__PProgram {
 
         #[inline]
         fn token_to_index(&self, token: &Self::Token) -> Option<usize> {
-            __token_to_integer(token, core::marker::PhantomData::<(&(), &())>)
+            __token_to_integer(token, core::marker::PhantomData::<(&())>)
         }
 
         #[inline]
@@ -1046,7 +1046,7 @@ mod __parse__PProgram {
         }
 
         fn token_to_symbol(&self, token_index: usize, token: Self::Token) -> Self::Symbol {
-            __token_to_symbol(token_index, token, core::marker::PhantomData::<(&(), &())>)
+            __token_to_symbol(token_index, token, core::marker::PhantomData::<(&())>)
         }
 
         fn expected_tokens(&self, state: i16) -> alloc::vec::Vec<alloc::string::String> {
@@ -1079,7 +1079,7 @@ mod __parse__PProgram {
                 start_location,
                 states,
                 symbols,
-                core::marker::PhantomData::<(&(), &())>,
+                core::marker::PhantomData::<(&())>,
             )
         }
 
@@ -1089,10 +1089,9 @@ mod __parse__PProgram {
     }
     fn __token_to_integer<
         'input,
-        'm,
     >(
         __token: &Token<'input>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> Option<usize>
     {
         match *__token {
@@ -1153,11 +1152,10 @@ mod __parse__PProgram {
     }
     fn __token_to_symbol<
         'input,
-        'm,
     >(
         __token_index: usize,
         __token: Token<'input>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> __Symbol<'input>
     {
         match __token_index {
@@ -1185,7 +1183,6 @@ mod __parse__PProgram {
         #[allow(dead_code)]
         pub fn parse<
             'input,
-            'm,
         >(
             &self,
             input: &'input str,
@@ -1195,7 +1192,7 @@ mod __parse__PProgram {
             __state_machine::Parser::drive(
                 __StateMachine {
                     input,
-                    __phantom: core::marker::PhantomData::<(&(), &())>,
+                    __phantom: core::marker::PhantomData::<(&())>,
                 },
                 __tokens,
             )
@@ -1203,460 +1200,459 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce<
         'input,
-        'm,
     >(
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut alloc::vec::Vec<i16>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> Option<Result<Program,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
     {
         let (__pop_states, __nonterminal) = match __action {
             0 => {
-                __reduce0(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce0(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             1 => {
-                __reduce1(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce1(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             2 => {
-                __reduce2(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce2(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             3 => {
-                __reduce3(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce3(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             4 => {
-                __reduce4(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce4(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             5 => {
-                __reduce5(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce5(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             6 => {
-                __reduce6(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce6(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             7 => {
-                __reduce7(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce7(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             8 => {
-                __reduce8(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce8(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             9 => {
-                __reduce9(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce9(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             10 => {
-                __reduce10(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce10(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             11 => {
-                __reduce11(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce11(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             12 => {
-                __reduce12(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce12(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             13 => {
-                __reduce13(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce13(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             14 => {
-                __reduce14(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce14(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             15 => {
-                __reduce15(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce15(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             16 => {
-                __reduce16(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce16(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             17 => {
-                __reduce17(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce17(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             18 => {
-                __reduce18(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce18(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             19 => {
-                __reduce19(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce19(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             20 => {
-                __reduce20(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce20(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             21 => {
-                __reduce21(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce21(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             22 => {
-                __reduce22(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce22(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             23 => {
-                __reduce23(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce23(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             24 => {
-                __reduce24(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce24(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             25 => {
-                __reduce25(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce25(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             26 => {
-                __reduce26(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce26(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             27 => {
-                __reduce27(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce27(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             28 => {
-                __reduce28(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce28(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             29 => {
-                __reduce29(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce29(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             30 => {
-                __reduce30(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce30(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             31 => {
-                __reduce31(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce31(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             32 => {
-                __reduce32(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce32(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             33 => {
-                __reduce33(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce33(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             34 => {
-                __reduce34(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce34(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             35 => {
-                __reduce35(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce35(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             36 => {
-                __reduce36(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce36(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             37 => {
-                __reduce37(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce37(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             38 => {
-                __reduce38(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce38(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             39 => {
-                __reduce39(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce39(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             40 => {
-                __reduce40(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce40(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             41 => {
-                __reduce41(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce41(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             42 => {
-                __reduce42(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce42(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             43 => {
-                __reduce43(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce43(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             44 => {
-                __reduce44(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce44(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             45 => {
-                __reduce45(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce45(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             46 => {
-                __reduce46(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce46(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             47 => {
-                __reduce47(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce47(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             48 => {
-                __reduce48(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce48(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             49 => {
-                __reduce49(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce49(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             50 => {
-                __reduce50(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce50(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             51 => {
-                __reduce51(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce51(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             52 => {
-                __reduce52(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce52(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             53 => {
-                __reduce53(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce53(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             54 => {
-                __reduce54(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce54(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             55 => {
-                __reduce55(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce55(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             56 => {
-                __reduce56(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce56(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             57 => {
-                __reduce57(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce57(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             58 => {
-                __reduce58(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce58(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             59 => {
-                __reduce59(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce59(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             60 => {
-                __reduce60(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce60(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             61 => {
-                __reduce61(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce61(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             62 => {
-                __reduce62(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce62(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             63 => {
-                __reduce63(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce63(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             64 => {
-                __reduce64(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce64(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             65 => {
-                __reduce65(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce65(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             66 => {
-                __reduce66(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce66(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             67 => {
-                __reduce67(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce67(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             68 => {
-                __reduce68(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce68(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             69 => {
-                __reduce69(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce69(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             70 => {
-                __reduce70(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce70(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             71 => {
-                __reduce71(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce71(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             72 => {
-                __reduce72(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce72(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             73 => {
-                __reduce73(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce73(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             74 => {
-                __reduce74(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce74(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             75 => {
-                __reduce75(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce75(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             76 => {
-                __reduce76(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce76(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             77 => {
-                __reduce77(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce77(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             78 => {
-                __reduce78(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce78(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             79 => {
-                __reduce79(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce79(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             80 => {
-                __reduce80(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce80(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             81 => {
-                __reduce81(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce81(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             82 => {
-                __reduce82(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce82(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             83 => {
-                __reduce83(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce83(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             84 => {
-                __reduce84(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce84(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             85 => {
-                __reduce85(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce85(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             86 => {
-                __reduce86(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce86(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             87 => {
-                __reduce87(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce87(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             88 => {
-                __reduce88(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce88(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             89 => {
-                __reduce89(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce89(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             90 => {
-                __reduce90(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce90(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             91 => {
-                __reduce91(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce91(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             92 => {
-                __reduce92(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce92(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             93 => {
-                __reduce93(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce93(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             94 => {
-                __reduce94(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce94(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             95 => {
-                __reduce95(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce95(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             96 => {
-                __reduce96(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce96(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             97 => {
-                __reduce97(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce97(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             98 => {
-                __reduce98(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce98(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             99 => {
-                __reduce99(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce99(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             100 => {
-                __reduce100(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce100(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             101 => {
-                __reduce101(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce101(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             102 => {
-                __reduce102(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce102(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             103 => {
-                __reduce103(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce103(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             104 => {
-                __reduce104(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce104(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             105 => {
-                __reduce105(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce105(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             106 => {
-                __reduce106(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce106(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             107 => {
-                __reduce107(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce107(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             108 => {
-                __reduce108(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce108(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             109 => {
-                __reduce109(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce109(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             110 => {
-                __reduce110(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce110(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             111 => {
-                __reduce111(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce111(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             112 => {
-                __reduce112(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce112(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             113 => {
-                __reduce113(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce113(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             114 => {
-                __reduce114(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce114(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             115 => {
-                __reduce115(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce115(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             116 => {
-                __reduce116(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce116(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             117 => {
-                __reduce117(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce117(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             118 => {
-                __reduce118(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce118(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             119 => {
-                __reduce119(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce119(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             120 => {
-                __reduce120(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce120(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             121 => {
-                __reduce121(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce121(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             122 => {
-                __reduce122(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce122(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             123 => {
-                __reduce123(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce123(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             124 => {
-                __reduce124(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce124(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             125 => {
-                __reduce125(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce125(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             126 => {
-                __reduce126(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce126(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             127 => {
-                __reduce127(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce127(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             128 => {
-                __reduce128(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce128(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             129 => {
-                __reduce129(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce129(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             130 => {
-                __reduce130(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce130(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             131 => {
-                __reduce131(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce131(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             132 => {
-                __reduce132(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce132(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             133 => {
-                __reduce133(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce133(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             134 => {
-                __reduce134(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce134(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             135 => {
-                __reduce135(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce135(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             136 => {
-                __reduce136(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce136(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             137 => {
-                __reduce137(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce137(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             138 => {
-                __reduce138(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce138(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             139 => {
-                __reduce139(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce139(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             140 => {
-                __reduce140(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce140(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             141 => {
-                __reduce141(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce141(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             142 => {
-                __reduce142(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce142(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             143 => {
-                __reduce143(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce143(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             144 => {
-                __reduce144(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce144(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             145 => {
-                __reduce145(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce145(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             146 => {
-                __reduce146(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce146(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             147 => {
-                __reduce147(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&(), &())>)
+                __reduce147(input, __lookahead_start, __symbols, core::marker::PhantomData::<(&())>)
             }
             148 => {
                 // __PProgram = PProgram => ActionFn(0);
@@ -2000,12 +1996,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce0<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (<PExpr> COMMA) = PExpr, COMMA => ActionFn(118);
@@ -2020,12 +2015,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce1<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (<PExpr> COMMA)* =  => ActionFn(116);
@@ -2037,12 +2031,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce2<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (<PExpr> COMMA)* = (<PExpr> COMMA)+ => ActionFn(117);
@@ -2055,12 +2048,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce3<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (<PExpr> COMMA)+ = PExpr, COMMA => ActionFn(134);
@@ -2075,12 +2067,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce4<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (<PExpr> COMMA)+ = (<PExpr> COMMA)+, PExpr, COMMA => ActionFn(135);
@@ -2096,12 +2087,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce5<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (<PFuncParam> COMMA) = PFuncParam, COMMA => ActionFn(123);
@@ -2116,12 +2106,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce6<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (<PFuncParam> COMMA)* =  => ActionFn(121);
@@ -2133,12 +2122,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce7<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (<PFuncParam> COMMA)* = (<PFuncParam> COMMA)+ => ActionFn(122);
@@ -2151,12 +2139,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce8<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (<PFuncParam> COMMA)+ = PFuncParam, COMMA => ActionFn(138);
@@ -2171,12 +2158,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce9<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (<PFuncParam> COMMA)+ = (<PFuncParam> COMMA)+, PFuncParam, COMMA => ActionFn(139);
@@ -2192,12 +2178,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce10<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (ASSIGN <PExpr>) = ASSIGN, PExpr => ActionFn(111);
@@ -2212,12 +2197,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce11<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (ASSIGN <PExpr>)? = ASSIGN, PExpr => ActionFn(142);
@@ -2232,12 +2216,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce12<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (ASSIGN <PExpr>)? =  => ActionFn(110);
@@ -2249,12 +2232,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce13<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (ELSE <PElseBlock>) = ELSE, PElseBlock => ActionFn(93);
@@ -2269,12 +2251,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce14<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (ELSE <PElseBlock>)? = ELSE, PElseBlock => ActionFn(145);
@@ -2289,12 +2270,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce15<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // (ELSE <PElseBlock>)? =  => ActionFn(92);
@@ -2306,12 +2286,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce16<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PBlock = PStatement => ActionFn(72);
@@ -2324,12 +2303,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce17<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PBlock = PStrictBlock => ActionFn(73);
@@ -2342,12 +2320,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce18<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PBool = TRUE => ActionFn(10);
@@ -2360,12 +2337,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce19<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PBool = FALSE => ActionFn(11);
@@ -2378,12 +2354,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce20<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PBoxed<PId> = PId => ActionFn(100);
@@ -2396,12 +2371,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce21<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PCallParams = PComma<PExpr> => ActionFn(56);
@@ -2414,12 +2388,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce22<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PComma<PExpr> = PExpr => ActionFn(152);
@@ -2432,12 +2405,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce23<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PComma<PExpr> =  => ActionFn(153);
@@ -2449,12 +2421,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce24<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PComma<PExpr> = (<PExpr> COMMA)+, PExpr => ActionFn(154);
@@ -2469,12 +2440,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce25<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PComma<PExpr> = (<PExpr> COMMA)+ => ActionFn(155);
@@ -2487,12 +2457,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce26<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PComma<PFuncParam> = PFuncParam => ActionFn(156);
@@ -2505,12 +2474,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce27<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PComma<PFuncParam> =  => ActionFn(157);
@@ -2522,12 +2490,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce28<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PComma<PFuncParam> = (<PFuncParam> COMMA)+, PFuncParam => ActionFn(158);
@@ -2542,12 +2509,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce29<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PComma<PFuncParam> = (<PFuncParam> COMMA)+ => ActionFn(159);
@@ -2560,12 +2526,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce30<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PCondition = IF, PExpr, RPAREN, PStrictBlock, ELSE, PElseBlock => ActionFn(146);
@@ -2584,12 +2549,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce31<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PCondition = IF, PExpr, RPAREN, PStrictBlock => ActionFn(147);
@@ -2606,12 +2570,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce32<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PConst = PSimpleConst => ActionFn(17);
@@ -2624,12 +2587,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce33<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PDimension = LBRACKET, PExpr, RLBRACKET, PExpr, RBRACKET => ActionFn(21);
@@ -2647,12 +2609,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce34<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PDimension = LBRACKET, PExpr, RBRACKET => ActionFn(22);
@@ -2668,12 +2629,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce35<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PDimension? = PDimension => ActionFn(112);
@@ -2686,12 +2646,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce36<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PDimension? =  => ActionFn(113);
@@ -2703,12 +2662,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce37<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PElseBlock = PCondition => ActionFn(78);
@@ -2721,12 +2679,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce38<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PElseBlock = PStrictBlock => ActionFn(79);
@@ -2739,12 +2696,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce39<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PExpr = PTier<PExprOp, PLogicExpr> => ActionFn(41);
@@ -2757,12 +2713,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce40<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PExpr? = PExpr => ActionFn(114);
@@ -2775,12 +2730,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce41<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PExpr? =  => ActionFn(115);
@@ -2792,12 +2746,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce42<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PExprOp = AND => ActionFn(28);
@@ -2810,12 +2763,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce43<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PExprOp = OR => ActionFn(29);
@@ -2828,12 +2780,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce44<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFactor = PFactor, PPipeOp, FORWARD, PBoxed<PId> => ActionFn(48);
@@ -2850,12 +2801,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce45<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFactor = PFactor, PPipeOp, PBoxed<PId> => ActionFn(49);
@@ -2871,12 +2821,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce46<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFactor = PUnaryOP, PItem => ActionFn(166);
@@ -2891,12 +2840,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce47<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFactor = PItem => ActionFn(167);
@@ -2909,12 +2857,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce48<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFactorOp = MUL => ActionFn(38);
@@ -2927,12 +2874,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce49<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFactorOp = DIV => ActionFn(39);
@@ -2945,12 +2891,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce50<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFloat = FLOAT => ActionFn(9);
@@ -2963,12 +2908,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce51<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFnSignature = FN, CALL_ID, PFunctionParams, RPAREN, COLON, PType => ActionFn(58);
@@ -2987,12 +2931,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce52<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PForLoop = FOR, ID, IN, PExpr, RPAREN, PBlock => ActionFn(84);
@@ -3011,12 +2954,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce53<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFuncParam = ID, COLON, PType => ActionFn(55);
@@ -3032,12 +2974,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce54<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFuncParam? = PFuncParam => ActionFn(119);
@@ -3050,12 +2991,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce55<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFuncParam? =  => ActionFn(120);
@@ -3067,12 +3007,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce56<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunction = PFnSignature, PFunctionBlock => ActionFn(62);
@@ -3087,12 +3026,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce57<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunctionBlock = LCBRACKET, RCBRACKET => ActionFn(160);
@@ -3107,12 +3045,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce58<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunctionBlock = LCBRACKET, PFunctionItem+, RCBRACKET => ActionFn(161);
@@ -3128,12 +3065,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce59<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunctionCall = CALL_ID, PCallParams, RPAREN => ActionFn(63);
@@ -3149,12 +3085,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce60<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunctionItem = PStatement => ActionFn(59);
@@ -3167,12 +3102,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce61<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunctionItem = PVarDeclaration => ActionFn(60);
@@ -3185,12 +3119,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce62<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunctionItem* =  => ActionFn(94);
@@ -3202,12 +3135,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce63<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunctionItem* = PFunctionItem+ => ActionFn(95);
@@ -3220,12 +3152,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce64<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunctionItem+ = PFunctionItem => ActionFn(124);
@@ -3238,12 +3169,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce65<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunctionItem+ = PFunctionItem+, PFunctionItem => ActionFn(125);
@@ -3258,12 +3188,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce66<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunctionParams = PComma<PFuncParam> => ActionFn(57);
@@ -3276,12 +3205,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce67<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunctionType = PType => ActionFn(6);
@@ -3294,12 +3222,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce68<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PFunctionType = T_VOID => ActionFn(7);
@@ -3312,12 +3239,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce69<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PGlobalStatement = PFunction => ActionFn(69);
@@ -3330,12 +3256,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce70<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PGlobalStatement = PStatement => ActionFn(70);
@@ -3348,12 +3273,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce71<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PGlobalStatement = PVarDeclaration => ActionFn(71);
@@ -3366,12 +3290,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce72<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PGlobalStatement* =  => ActionFn(87);
@@ -3383,12 +3306,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce73<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PGlobalStatement* = PGlobalStatement+ => ActionFn(88);
@@ -3401,12 +3323,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce74<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PGlobalStatement+ = PGlobalStatement => ActionFn(128);
@@ -3419,12 +3340,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce75<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PGlobalStatement+ = PGlobalStatement+, PGlobalStatement => ActionFn(129);
@@ -3439,12 +3359,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce76<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PId = ID => ActionFn(18);
@@ -3457,12 +3376,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce77<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PIndexing = PExpr, COLON, PExpr => ActionFn(19);
@@ -3478,12 +3396,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce78<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PIndexing = PExpr => ActionFn(20);
@@ -3496,12 +3413,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce79<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PInt = NUMBER => ActionFn(8);
@@ -3514,12 +3430,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce80<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PItem = PVarReference => ActionFn(51);
@@ -3532,12 +3447,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce81<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PItem = PConst => ActionFn(52);
@@ -3550,12 +3464,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce82<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PItem = LPAREN, PExpr, RPAREN => ActionFn(53);
@@ -3571,12 +3484,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce83<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PItem = PFunctionCall => ActionFn(54);
@@ -3589,12 +3501,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce84<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLineStatement = BREAK, SEMICOLON => ActionFn(74);
@@ -3609,12 +3520,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce85<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLineStatement = CONTINUE, SEMICOLON => ActionFn(75);
@@ -3629,12 +3539,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce86<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLineStatement = PVarAssignment, SEMICOLON => ActionFn(76);
@@ -3649,12 +3558,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce87<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLineStatement = PExpr, SEMICOLON => ActionFn(77);
@@ -3669,12 +3577,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce88<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLogicExpr = PMathExpr, PLogicOp, PMathExpr => ActionFn(42);
@@ -3690,12 +3597,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce89<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLogicExpr = PMathExpr => ActionFn(43);
@@ -3708,12 +3614,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce90<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLogicOp = LT => ActionFn(30);
@@ -3726,12 +3631,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce91<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLogicOp = GT => ActionFn(31);
@@ -3744,12 +3648,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce92<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLogicOp = LEQ => ActionFn(32);
@@ -3762,12 +3665,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce93<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLogicOp = GEQ => ActionFn(33);
@@ -3780,12 +3682,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce94<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLogicOp = NOTEQUAL => ActionFn(34);
@@ -3798,12 +3699,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce95<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLogicOp = EQUAL => ActionFn(35);
@@ -3816,12 +3716,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce96<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLoop = PForLoop => ActionFn(82);
@@ -3834,12 +3733,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce97<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PLoop = PWhileLoop => ActionFn(83);
@@ -3852,12 +3750,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce98<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PMathExpr = PTier<PMathOp, PTerm> => ActionFn(44);
@@ -3870,12 +3767,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce99<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PMathOp = ADD => ActionFn(36);
@@ -3888,12 +3784,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce100<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PMathOp = SUB => ActionFn(37);
@@ -3906,12 +3801,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce101<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PPipeOp = PIPE => ActionFn(40);
@@ -3924,12 +3818,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce102<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PProgram =  => ActionFn(162);
@@ -3941,12 +3834,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce103<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PProgram = PGlobalStatement+ => ActionFn(163);
@@ -3959,12 +3851,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce104<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PReturnStatement = RETURN, PExpr, SEMICOLON => ActionFn(64);
@@ -3980,12 +3871,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce105<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PSimpleConst = PInt => ActionFn(13);
@@ -3998,12 +3888,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce106<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PSimpleConst = PStr => ActionFn(14);
@@ -4016,12 +3905,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce107<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PSimpleConst = PFloat => ActionFn(15);
@@ -4034,12 +3922,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce108<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PSimpleConst = PBool => ActionFn(16);
@@ -4052,12 +3939,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce109<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PStatement = PCondition => ActionFn(65);
@@ -4070,12 +3956,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce110<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PStatement = PLoop => ActionFn(66);
@@ -4088,12 +3973,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce111<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PStatement = PReturnStatement => ActionFn(67);
@@ -4106,12 +3990,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce112<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PStatement = PLineStatement => ActionFn(68);
@@ -4124,12 +4007,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce113<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PStatement* =  => ActionFn(89);
@@ -4141,12 +4023,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce114<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PStatement* = PStatement+ => ActionFn(90);
@@ -4159,12 +4040,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce115<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PStatement+ = PStatement => ActionFn(126);
@@ -4177,12 +4057,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce116<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PStatement+ = PStatement+, PStatement => ActionFn(127);
@@ -4197,12 +4076,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce117<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PStr = STRING => ActionFn(12);
@@ -4215,12 +4093,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce118<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PStrictBlock = LCBRACKET, RCBRACKET => ActionFn(164);
@@ -4235,12 +4112,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce119<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PStrictBlock = LCBRACKET, PStatement+, RCBRACKET => ActionFn(165);
@@ -4256,12 +4132,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce120<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PTerm = PTier<PFactorOp, PFactor> => ActionFn(45);
@@ -4274,12 +4149,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce121<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PTier<PExprOp, PLogicExpr> = PTier<PExprOp, PLogicExpr>, PExprOp, PLogicExpr => ActionFn(105);
@@ -4295,12 +4169,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce122<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PTier<PExprOp, PLogicExpr> = PLogicExpr => ActionFn(106);
@@ -4313,12 +4186,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce123<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PTier<PFactorOp, PFactor> = PTier<PFactorOp, PFactor>, PFactorOp, PFactor => ActionFn(101);
@@ -4334,12 +4206,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce124<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PTier<PFactorOp, PFactor> = PFactor => ActionFn(102);
@@ -4352,12 +4223,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce125<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PTier<PMathOp, PTerm> = PTier<PMathOp, PTerm>, PMathOp, PTerm => ActionFn(103);
@@ -4373,12 +4243,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce126<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PTier<PMathOp, PTerm> = PTerm => ActionFn(104);
@@ -4391,12 +4260,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce127<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PType = T_INT => ActionFn(1);
@@ -4409,12 +4277,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce128<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PType = T_FLOAT => ActionFn(2);
@@ -4427,12 +4294,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce129<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PType = T_BOOl => ActionFn(3);
@@ -4445,12 +4311,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce130<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PType = T_STR => ActionFn(4);
@@ -4463,12 +4328,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce131<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PType = T_DATAFRAME => ActionFn(5);
@@ -4481,12 +4345,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce132<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PUnaryOP = SUB => ActionFn(46);
@@ -4499,12 +4362,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce133<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PUnaryOP = NOT => ActionFn(47);
@@ -4517,12 +4379,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce134<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PUnaryOP? = PUnaryOP => ActionFn(98);
@@ -4535,12 +4396,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce135<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PUnaryOP? =  => ActionFn(99);
@@ -4552,12 +4412,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce136<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PVarAssignment = PVarReference, ASSIGN, PExpr => ActionFn(27);
@@ -4573,12 +4432,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce137<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PVarDeclaration = LET, ID, COLON, PType, PDimension, ASSIGN, PExpr, SEMICOLON => ActionFn(148);
@@ -4599,12 +4457,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce138<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PVarDeclaration = LET, ID, COLON, PType, ASSIGN, PExpr, SEMICOLON => ActionFn(149);
@@ -4624,12 +4481,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce139<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PVarDeclaration = LET, ID, COLON, PType, PDimension, SEMICOLON => ActionFn(150);
@@ -4648,12 +4504,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce140<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PVarDeclaration = LET, ID, COLON, PType, SEMICOLON => ActionFn(151);
@@ -4671,12 +4526,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce141<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PVarRefIndex = LBRACKET, PIndexing, RBRACKET => ActionFn(24);
@@ -4692,12 +4546,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce142<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PVarRefIndex = LBRACKET, PIndexing, RLBRACKET, PIndexing, RBRACKET => ActionFn(25);
@@ -4715,12 +4568,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce143<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PVarRefIndex? = PVarRefIndex => ActionFn(107);
@@ -4733,12 +4585,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce144<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PVarRefIndex? =  => ActionFn(108);
@@ -4750,12 +4601,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce145<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PVarReference = ID, PVarRefIndex => ActionFn(168);
@@ -4770,12 +4620,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce146<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PVarReference = ID => ActionFn(169);
@@ -4788,12 +4637,11 @@ mod __parse__PProgram {
     }
     pub(crate) fn __reduce147<
         'input,
-        'm,
     >(
         input: &'input str,
         __lookahead_start: Option<&usize>,
         __symbols: &mut alloc::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: core::marker::PhantomData<(&'input (), &'m ())>,
+        _: core::marker::PhantomData<(&'input ())>,
     ) -> (usize, usize)
     {
         // PWhileLoop = WHILE, PExpr, RPAREN, PBlock => ActionFn(85);
@@ -4894,7 +4742,6 @@ pub(crate) use self::__lalrpop_util::lexer::Token;
 #[allow(unused_variables)]
 fn __action0<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Program, usize),
@@ -4906,7 +4753,6 @@ fn __action0<
 #[allow(unused_variables)]
 fn __action1<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -4918,7 +4764,6 @@ fn __action1<
 #[allow(unused_variables)]
 fn __action2<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -4930,7 +4775,6 @@ fn __action2<
 #[allow(unused_variables)]
 fn __action3<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -4942,7 +4786,6 @@ fn __action3<
 #[allow(unused_variables)]
 fn __action4<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -4954,7 +4797,6 @@ fn __action4<
 #[allow(unused_variables)]
 fn __action5<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -4966,7 +4808,6 @@ fn __action5<
 #[allow(unused_variables)]
 fn __action6<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, DataType, usize),
@@ -4978,7 +4819,6 @@ fn __action6<
 #[allow(unused_variables)]
 fn __action7<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -4990,7 +4830,6 @@ fn __action7<
 #[allow(unused_variables)]
 fn __action8<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5002,7 +4841,6 @@ fn __action8<
 #[allow(unused_variables)]
 fn __action9<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, f, _): (usize, &'input str, usize),
@@ -5014,7 +4852,6 @@ fn __action9<
 #[allow(unused_variables)]
 fn __action10<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5026,7 +4863,6 @@ fn __action10<
 #[allow(unused_variables)]
 fn __action11<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5038,7 +4874,6 @@ fn __action11<
 #[allow(unused_variables)]
 fn __action12<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, s, _): (usize, &'input str, usize),
@@ -5050,7 +4885,6 @@ fn __action12<
 #[allow(unused_variables)]
 fn __action13<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Const, usize),
@@ -5062,7 +4896,6 @@ fn __action13<
 #[allow(unused_variables)]
 fn __action14<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Const, usize),
@@ -5074,7 +4907,6 @@ fn __action14<
 #[allow(unused_variables)]
 fn __action15<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Const, usize),
@@ -5086,7 +4918,6 @@ fn __action15<
 #[allow(unused_variables)]
 fn __action16<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Const, usize),
@@ -5098,7 +4929,6 @@ fn __action16<
 #[allow(unused_variables)]
 fn __action17<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Const, usize),
@@ -5110,7 +4940,6 @@ fn __action17<
 #[allow(unused_variables)]
 fn __action18<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5125,7 +4954,6 @@ fn __action18<
 #[allow(unused_variables)]
 fn __action19<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, begin, _): (usize, Box<Expression>, usize),
@@ -5139,7 +4967,6 @@ fn __action19<
 #[allow(unused_variables)]
 fn __action20<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, idx, _): (usize, Box<Expression>, usize),
@@ -5151,7 +4978,6 @@ fn __action20<
 #[allow(unused_variables)]
 fn __action21<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -5167,7 +4993,6 @@ fn __action21<
 #[allow(unused_variables)]
 fn __action22<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -5181,7 +5006,6 @@ fn __action22<
 #[allow(unused_variables)]
 fn __action23<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -5204,7 +5028,6 @@ fn __action23<
 #[allow(unused_variables)]
 fn __action24<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -5218,7 +5041,6 @@ fn __action24<
 #[allow(unused_variables)]
 fn __action25<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -5234,7 +5056,6 @@ fn __action25<
 #[allow(unused_variables)]
 fn __action26<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, id, _): (usize, &'input str, usize),
@@ -5250,7 +5071,6 @@ fn __action26<
 #[allow(unused_variables)]
 fn __action27<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, var, _): (usize, Access, usize),
@@ -5264,7 +5084,6 @@ fn __action27<
 #[allow(unused_variables)]
 fn __action28<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5276,7 +5095,6 @@ fn __action28<
 #[allow(unused_variables)]
 fn __action29<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5288,7 +5106,6 @@ fn __action29<
 #[allow(unused_variables)]
 fn __action30<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5300,7 +5117,6 @@ fn __action30<
 #[allow(unused_variables)]
 fn __action31<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5312,7 +5128,6 @@ fn __action31<
 #[allow(unused_variables)]
 fn __action32<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5324,7 +5139,6 @@ fn __action32<
 #[allow(unused_variables)]
 fn __action33<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5336,7 +5150,6 @@ fn __action33<
 #[allow(unused_variables)]
 fn __action34<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5348,7 +5161,6 @@ fn __action34<
 #[allow(unused_variables)]
 fn __action35<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5360,7 +5172,6 @@ fn __action35<
 #[allow(unused_variables)]
 fn __action36<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5372,7 +5183,6 @@ fn __action36<
 #[allow(unused_variables)]
 fn __action37<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5384,7 +5194,6 @@ fn __action37<
 #[allow(unused_variables)]
 fn __action38<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5396,7 +5205,6 @@ fn __action38<
 #[allow(unused_variables)]
 fn __action39<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5408,7 +5216,6 @@ fn __action39<
 #[allow(unused_variables)]
 fn __action40<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5420,7 +5227,6 @@ fn __action40<
 #[allow(unused_variables)]
 fn __action41<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -5432,7 +5238,6 @@ fn __action41<
 #[allow(unused_variables)]
 fn __action42<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -5450,7 +5255,6 @@ fn __action42<
 #[allow(unused_variables)]
 fn __action43<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -5462,7 +5266,6 @@ fn __action43<
 #[allow(unused_variables)]
 fn __action44<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -5474,7 +5277,6 @@ fn __action44<
 #[allow(unused_variables)]
 fn __action45<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -5486,7 +5288,6 @@ fn __action45<
 #[allow(unused_variables)]
 fn __action46<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5498,7 +5299,6 @@ fn __action46<
 #[allow(unused_variables)]
 fn __action47<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5510,7 +5310,6 @@ fn __action47<
 #[allow(unused_variables)]
 fn __action48<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, factor, _): (usize, Box<Expression>, usize),
@@ -5529,7 +5328,6 @@ fn __action48<
 #[allow(unused_variables)]
 fn __action49<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -5547,7 +5345,6 @@ fn __action49<
 #[allow(unused_variables)]
 fn __action50<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, op, _): (usize, core::option::Option<&'input str>, usize),
@@ -5567,7 +5364,6 @@ fn __action50<
 #[allow(unused_variables)]
 fn __action51<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Access, usize),
@@ -5579,7 +5375,6 @@ fn __action51<
 #[allow(unused_variables)]
 fn __action52<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Const, usize),
@@ -5591,7 +5386,6 @@ fn __action52<
 #[allow(unused_variables)]
 fn __action53<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -5605,7 +5399,6 @@ fn __action53<
 #[allow(unused_variables)]
 fn __action54<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Call, usize),
@@ -5617,7 +5410,6 @@ fn __action54<
 #[allow(unused_variables)]
 fn __action55<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, id, _): (usize, &'input str, usize),
@@ -5631,7 +5423,6 @@ fn __action55<
 #[allow(unused_variables)]
 fn __action56<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Vec<Box<Expression>>, usize),
@@ -5643,7 +5434,6 @@ fn __action56<
 #[allow(unused_variables)]
 fn __action57<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Vec<FunctionParam>, usize),
@@ -5655,7 +5445,6 @@ fn __action57<
 #[allow(unused_variables)]
 fn __action58<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -5676,7 +5465,6 @@ fn __action58<
 #[allow(unused_variables)]
 fn __action59<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -5688,7 +5476,6 @@ fn __action59<
 #[allow(unused_variables)]
 fn __action60<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Variable, usize),
@@ -5700,7 +5487,6 @@ fn __action60<
 #[allow(unused_variables)]
 fn __action61<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -5714,7 +5500,6 @@ fn __action61<
 #[allow(unused_variables)]
 fn __action62<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, signature, _): (usize, FunctionSignature, usize),
@@ -5727,7 +5512,6 @@ fn __action62<
 #[allow(unused_variables)]
 fn __action63<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, id, _): (usize, &'input str, usize),
@@ -5741,7 +5525,6 @@ fn __action63<
 #[allow(unused_variables)]
 fn __action64<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -5755,7 +5538,6 @@ fn __action64<
 #[allow(unused_variables)]
 fn __action65<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -5767,7 +5549,6 @@ fn __action65<
 #[allow(unused_variables)]
 fn __action66<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -5779,7 +5560,6 @@ fn __action66<
 #[allow(unused_variables)]
 fn __action67<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -5791,7 +5571,6 @@ fn __action67<
 #[allow(unused_variables)]
 fn __action68<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -5803,7 +5582,6 @@ fn __action68<
 #[allow(unused_variables)]
 fn __action69<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Function, usize),
@@ -5815,7 +5593,6 @@ fn __action69<
 #[allow(unused_variables)]
 fn __action70<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -5827,7 +5604,6 @@ fn __action70<
 #[allow(unused_variables)]
 fn __action71<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Variable, usize),
@@ -5839,7 +5615,6 @@ fn __action71<
 #[allow(unused_variables)]
 fn __action72<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -5851,7 +5626,6 @@ fn __action72<
 #[allow(unused_variables)]
 fn __action73<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Block, usize),
@@ -5863,7 +5637,6 @@ fn __action73<
 #[allow(unused_variables)]
 fn __action74<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5876,7 +5649,6 @@ fn __action74<
 #[allow(unused_variables)]
 fn __action75<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -5889,7 +5661,6 @@ fn __action75<
 #[allow(unused_variables)]
 fn __action76<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -5902,7 +5673,6 @@ fn __action76<
 #[allow(unused_variables)]
 fn __action77<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -5915,7 +5685,6 @@ fn __action77<
 #[allow(unused_variables)]
 fn __action78<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -5927,7 +5696,6 @@ fn __action78<
 #[allow(unused_variables)]
 fn __action79<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Block, usize),
@@ -5939,7 +5707,6 @@ fn __action79<
 #[allow(unused_variables)]
 fn __action80<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -5959,7 +5726,6 @@ fn __action80<
 #[allow(unused_variables)]
 fn __action81<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -5973,7 +5739,6 @@ fn __action81<
 #[allow(unused_variables)]
 fn __action82<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -5985,7 +5750,6 @@ fn __action82<
 #[allow(unused_variables)]
 fn __action83<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -5997,7 +5761,6 @@ fn __action83<
 #[allow(unused_variables)]
 fn __action84<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -6018,7 +5781,6 @@ fn __action84<
 #[allow(unused_variables)]
 fn __action85<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -6036,7 +5798,6 @@ fn __action85<
 #[allow(unused_variables)]
 fn __action86<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, alloc::vec::Vec<Statement>, usize),
@@ -6048,7 +5809,6 @@ fn __action86<
 #[allow(unused_variables)]
 fn __action87<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -6061,7 +5821,6 @@ fn __action87<
 #[allow(unused_variables)]
 fn __action88<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, v, _): (usize, alloc::vec::Vec<Statement>, usize),
@@ -6073,7 +5832,6 @@ fn __action88<
 #[allow(unused_variables)]
 fn __action89<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -6086,7 +5844,6 @@ fn __action89<
 #[allow(unused_variables)]
 fn __action90<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, v, _): (usize, alloc::vec::Vec<Statement>, usize),
@@ -6098,7 +5855,6 @@ fn __action90<
 #[allow(unused_variables)]
 fn __action91<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Block, usize),
@@ -6110,7 +5866,6 @@ fn __action91<
 #[allow(unused_variables)]
 fn __action92<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -6123,7 +5878,6 @@ fn __action92<
 #[allow(unused_variables)]
 fn __action93<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -6136,7 +5890,6 @@ fn __action93<
 #[allow(unused_variables)]
 fn __action94<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -6149,7 +5902,6 @@ fn __action94<
 #[allow(unused_variables)]
 fn __action95<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, v, _): (usize, alloc::vec::Vec<Statement>, usize),
@@ -6161,7 +5913,6 @@ fn __action95<
 #[allow(unused_variables)]
 fn __action96<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, mut vec, _): (usize, alloc::vec::Vec<FunctionParam>, usize),
@@ -6180,7 +5931,6 @@ fn __action96<
 #[allow(unused_variables)]
 fn __action97<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, mut vec, _): (usize, alloc::vec::Vec<Box<Expression>>, usize),
@@ -6199,7 +5949,6 @@ fn __action97<
 #[allow(unused_variables)]
 fn __action98<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
@@ -6211,7 +5960,6 @@ fn __action98<
 #[allow(unused_variables)]
 fn __action99<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -6224,7 +5972,6 @@ fn __action99<
 #[allow(unused_variables)]
 fn __action100<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Expression, usize),
@@ -6236,7 +5983,6 @@ fn __action100<
 #[allow(unused_variables)]
 fn __action101<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -6254,7 +6000,6 @@ fn __action101<
 #[allow(unused_variables)]
 fn __action102<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -6266,7 +6011,6 @@ fn __action102<
 #[allow(unused_variables)]
 fn __action103<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -6284,7 +6028,6 @@ fn __action103<
 #[allow(unused_variables)]
 fn __action104<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -6296,7 +6039,6 @@ fn __action104<
 #[allow(unused_variables)]
 fn __action105<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -6314,7 +6056,6 @@ fn __action105<
 #[allow(unused_variables)]
 fn __action106<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -6326,7 +6067,6 @@ fn __action106<
 #[allow(unused_variables)]
 fn __action107<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Vec<Index>, usize),
@@ -6338,7 +6078,6 @@ fn __action107<
 #[allow(unused_variables)]
 fn __action108<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -6351,7 +6090,6 @@ fn __action108<
 #[allow(unused_variables)]
 fn __action109<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -6363,7 +6101,6 @@ fn __action109<
 #[allow(unused_variables)]
 fn __action110<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -6376,7 +6113,6 @@ fn __action110<
 #[allow(unused_variables)]
 fn __action111<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -6389,7 +6125,6 @@ fn __action111<
 #[allow(unused_variables)]
 fn __action112<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Dimension, usize),
@@ -6401,7 +6136,6 @@ fn __action112<
 #[allow(unused_variables)]
 fn __action113<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -6414,7 +6148,6 @@ fn __action113<
 #[allow(unused_variables)]
 fn __action114<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -6426,7 +6159,6 @@ fn __action114<
 #[allow(unused_variables)]
 fn __action115<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -6439,7 +6171,6 @@ fn __action115<
 #[allow(unused_variables)]
 fn __action116<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -6452,7 +6183,6 @@ fn __action116<
 #[allow(unused_variables)]
 fn __action117<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, v, _): (usize, alloc::vec::Vec<Box<Expression>>, usize),
@@ -6464,7 +6194,6 @@ fn __action117<
 #[allow(unused_variables)]
 fn __action118<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -6477,7 +6206,6 @@ fn __action118<
 #[allow(unused_variables)]
 fn __action119<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, FunctionParam, usize),
@@ -6489,7 +6217,6 @@ fn __action119<
 #[allow(unused_variables)]
 fn __action120<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -6502,7 +6229,6 @@ fn __action120<
 #[allow(unused_variables)]
 fn __action121<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -6515,7 +6241,6 @@ fn __action121<
 #[allow(unused_variables)]
 fn __action122<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, v, _): (usize, alloc::vec::Vec<FunctionParam>, usize),
@@ -6527,7 +6252,6 @@ fn __action122<
 #[allow(unused_variables)]
 fn __action123<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, FunctionParam, usize),
@@ -6540,7 +6264,6 @@ fn __action123<
 #[allow(unused_variables)]
 fn __action124<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -6552,7 +6275,6 @@ fn __action124<
 #[allow(unused_variables)]
 fn __action125<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, v, _): (usize, alloc::vec::Vec<Statement>, usize),
@@ -6565,7 +6287,6 @@ fn __action125<
 #[allow(unused_variables)]
 fn __action126<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -6577,7 +6298,6 @@ fn __action126<
 #[allow(unused_variables)]
 fn __action127<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, v, _): (usize, alloc::vec::Vec<Statement>, usize),
@@ -6590,7 +6310,6 @@ fn __action127<
 #[allow(unused_variables)]
 fn __action128<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
@@ -6602,7 +6321,6 @@ fn __action128<
 #[allow(unused_variables)]
 fn __action129<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, v, _): (usize, alloc::vec::Vec<Statement>, usize),
@@ -6615,7 +6333,6 @@ fn __action129<
 #[allow(unused_variables)]
 fn __action130<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, FunctionParam, usize),
@@ -6627,7 +6344,6 @@ fn __action130<
 #[allow(unused_variables)]
 fn __action131<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, v, _): (usize, alloc::vec::Vec<FunctionParam>, usize),
@@ -6640,7 +6356,6 @@ fn __action131<
 #[allow(unused_variables)]
 fn __action132<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, __0, _): (usize, Box<Expression>, usize),
@@ -6652,7 +6367,6 @@ fn __action132<
 #[allow(unused_variables)]
 fn __action133<
     'input,
-    'm,
 >(
     input: &'input str,
     (_, v, _): (usize, alloc::vec::Vec<Box<Expression>>, usize),
@@ -6665,7 +6379,6 @@ fn __action133<
 #[allow(unused_variables)]
 fn __action134<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, Box<Expression>, usize),
@@ -6689,7 +6402,6 @@ fn __action134<
 #[allow(unused_variables)]
 fn __action135<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, alloc::vec::Vec<Box<Expression>>, usize),
@@ -6715,7 +6427,6 @@ fn __action135<
 #[allow(unused_variables)]
 fn __action136<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, core::option::Option<Box<Expression>>, usize),
@@ -6739,7 +6450,6 @@ fn __action136<
 #[allow(unused_variables)]
 fn __action137<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, alloc::vec::Vec<Box<Expression>>, usize),
@@ -6763,7 +6473,6 @@ fn __action137<
 #[allow(unused_variables)]
 fn __action138<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, FunctionParam, usize),
@@ -6787,7 +6496,6 @@ fn __action138<
 #[allow(unused_variables)]
 fn __action139<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, alloc::vec::Vec<FunctionParam>, usize),
@@ -6813,7 +6521,6 @@ fn __action139<
 #[allow(unused_variables)]
 fn __action140<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, core::option::Option<FunctionParam>, usize),
@@ -6837,7 +6544,6 @@ fn __action140<
 #[allow(unused_variables)]
 fn __action141<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, alloc::vec::Vec<FunctionParam>, usize),
@@ -6861,7 +6567,6 @@ fn __action141<
 #[allow(unused_variables)]
 fn __action142<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -6885,7 +6590,6 @@ fn __action142<
 #[allow(unused_variables)]
 fn __action143<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -6921,7 +6625,6 @@ fn __action143<
 #[allow(unused_variables)]
 fn __action144<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -6955,7 +6658,6 @@ fn __action144<
 #[allow(unused_variables)]
 fn __action145<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -6979,7 +6681,6 @@ fn __action145<
 #[allow(unused_variables)]
 fn __action146<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7011,7 +6712,6 @@ fn __action146<
 #[allow(unused_variables)]
 fn __action147<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7041,7 +6741,6 @@ fn __action147<
 #[allow(unused_variables)]
 fn __action148<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7077,7 +6776,6 @@ fn __action148<
 #[allow(unused_variables)]
 fn __action149<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7113,7 +6811,6 @@ fn __action149<
 #[allow(unused_variables)]
 fn __action150<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7145,7 +6842,6 @@ fn __action150<
 #[allow(unused_variables)]
 fn __action151<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7177,7 +6873,6 @@ fn __action151<
 #[allow(unused_variables)]
 fn __action152<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, Box<Expression>, usize),
@@ -7199,7 +6894,6 @@ fn __action152<
 #[allow(unused_variables)]
 fn __action153<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -7223,7 +6917,6 @@ fn __action153<
 #[allow(unused_variables)]
 fn __action154<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, alloc::vec::Vec<Box<Expression>>, usize),
@@ -7247,7 +6940,6 @@ fn __action154<
 #[allow(unused_variables)]
 fn __action155<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, alloc::vec::Vec<Box<Expression>>, usize),
@@ -7271,7 +6963,6 @@ fn __action155<
 #[allow(unused_variables)]
 fn __action156<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, FunctionParam, usize),
@@ -7293,7 +6984,6 @@ fn __action156<
 #[allow(unused_variables)]
 fn __action157<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -7317,7 +7007,6 @@ fn __action157<
 #[allow(unused_variables)]
 fn __action158<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, alloc::vec::Vec<FunctionParam>, usize),
@@ -7341,7 +7030,6 @@ fn __action158<
 #[allow(unused_variables)]
 fn __action159<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, alloc::vec::Vec<FunctionParam>, usize),
@@ -7365,7 +7053,6 @@ fn __action159<
 #[allow(unused_variables)]
 fn __action160<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7391,7 +7078,6 @@ fn __action160<
 #[allow(unused_variables)]
 fn __action161<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7417,7 +7103,6 @@ fn __action161<
 #[allow(unused_variables)]
 fn __action162<
     'input,
-    'm,
 >(
     input: &'input str,
     __lookbehind: &usize,
@@ -7441,7 +7126,6 @@ fn __action162<
 #[allow(unused_variables)]
 fn __action163<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, alloc::vec::Vec<Statement>, usize),
@@ -7463,7 +7147,6 @@ fn __action163<
 #[allow(unused_variables)]
 fn __action164<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7489,7 +7172,6 @@ fn __action164<
 #[allow(unused_variables)]
 fn __action165<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7515,7 +7197,6 @@ fn __action165<
 #[allow(unused_variables)]
 fn __action166<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7539,7 +7220,6 @@ fn __action166<
 #[allow(unused_variables)]
 fn __action167<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, Box<Expression>, usize),
@@ -7563,7 +7243,6 @@ fn __action167<
 #[allow(unused_variables)]
 fn __action168<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7587,7 +7266,6 @@ fn __action168<
 #[allow(unused_variables)]
 fn __action169<
     'input,
-    'm,
 >(
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -7608,18 +7286,18 @@ fn __action169<
     )
 }
 
-pub trait __ToTriple<'input, 'm, >
+pub trait __ToTriple<'input, >
 {
     fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>;
 }
 
-impl<'input, 'm, > __ToTriple<'input, 'm, > for (usize, Token<'input>, usize)
+impl<'input, > __ToTriple<'input, > for (usize, Token<'input>, usize)
 {
     fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
         Ok(value)
     }
 }
-impl<'input, 'm, > __ToTriple<'input, 'm, > for Result<(usize, Token<'input>, usize), &'static str>
+impl<'input, > __ToTriple<'input, > for Result<(usize, Token<'input>, usize), &'static str>
 {
     fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
         match value {

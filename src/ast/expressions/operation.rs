@@ -12,7 +12,7 @@ pub struct Operation {
     pub right: Box<Expression>,
 }
 
-impl<'m> Operation {
+impl Operation {
     pub fn new(left: Box<Expression>, operator: types::Operator, right: Box<Expression>) -> Self {
         Operation {
             operator,
@@ -30,7 +30,7 @@ impl<'m> Operation {
     }
 }
 
-impl<'m> Node<'m> for Operation {
+impl Node for Operation {
     fn generate(&mut self) -> () {
         self.reduce();
     }

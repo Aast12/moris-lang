@@ -1,3 +1,3 @@
 pub mod function;
-pub mod quadruples;
 pub mod manager;
+pub mod quadruples;

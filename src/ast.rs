@@ -11,7 +11,7 @@ use self::{expressions::Expression, node::Node};
 #[derive(Debug)]
 pub struct Dimension(pub i8, pub Vec<Box<Expression>>); // dimensions number, dimension sizes
 
-impl<'m> Node<'m> for Dimension {
+impl Node for Dimension {
     fn generate(&mut self) -> () {
         for dim in self.1.iter_mut() {
             dim.generate();

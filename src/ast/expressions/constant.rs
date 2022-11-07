@@ -24,7 +24,7 @@ impl Const {
     }
 }
 
-impl<'m> Node<'m> for Const {
+impl Node for Const {
     fn generate(&mut self) -> () {
         self.reduce();
     }

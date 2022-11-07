@@ -12,7 +12,7 @@ pub struct Call {
     pub params: Vec<Box<Expression>>,
 }
 
-impl<'m> Call {
+impl Call {
     pub fn new(id: &str, params: Vec<Box<Expression>>) -> Self {
         Call {
             id: String::from(id),
@@ -25,7 +25,7 @@ impl<'m> Call {
     }
 }
 
-impl<'m> Node<'m> for Call {
+impl Node for Call {
     fn generate(&mut self) -> () {
         self.reduce();
     }

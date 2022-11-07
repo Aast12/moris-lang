@@ -27,7 +27,7 @@ pub enum Expression {
     Negative(Box<Expression>),
 }
 
-impl<'m> Expression {
+impl Expression {
     // TODO: optimize data type resolution
     pub fn data_type(&self) -> DataType {
         match &self {
@@ -42,7 +42,7 @@ impl<'m> Expression {
     }
 }
 
-impl<'m> node::Node<'m> for Expression {
+impl node::Node for Expression {
     fn generate(&mut self) -> () {
         match self {
             Expression::Const(constant) => constant.generate(),
@@ -74,7 +74,7 @@ pub enum Index {
     Range(Box<Expression>, Box<Expression>),
 }
 
-impl<'m> ast::node::Node<'m> for Index {}
+impl ast::node::Node for Index {}
 
 #[cfg(test)]
 mod tests {
@@ -82,15 +82,15 @@ mod tests {
 
     use super::{constant::Const, operation::Operation, Expression};
 
-    fn build_int<'m>() -> Box<Expression> {
+    fn build_int() -> Box<Expression> {
         Box::new(Expression::Const(Const::new("5", DataType::Int)))
     }
 
-    fn build_float<'m>() -> Box<Expression> {
+    fn build_float() -> Box<Expression> {
         Box::new(Expression::Const(Const::new("5.0", DataType::Float)))
     }
 
-    fn build_string<'m>() -> Box<Expression> {
+    fn build_string() -> Box<Expression> {
         Box::new(Expression::Const(Const::new("str", DataType::String)))
     }
 
