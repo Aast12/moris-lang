@@ -28,6 +28,7 @@ pub enum Expression {
 }
 
 impl<'m> Expression {
+    // TODO: optimize data type resolution
     pub fn data_type(&self) -> DataType {
         match &self {
             Expression::Const(constant) => constant.dtype.clone(),

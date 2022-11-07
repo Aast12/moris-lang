@@ -46,7 +46,7 @@ impl<'m> Node<'m> for Statement {
             Statement::VarDeclaration(var) => var.generate(),
             Statement::VarAssign(access, value) => {
                 // TODO: Generalize for assign and var declaration
-
+                // TODO: Generalize data type casting
                 let value_data_type = value.data_type();
                 let access_data_type = access.data_type();
                 assert!(

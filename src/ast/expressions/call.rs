@@ -31,16 +31,50 @@ impl<'m> Node<'m> for Call {
     }
 
     fn reduce(&self) -> String {
+        let target_params = GlobalManager::get().get_func(&self.id).params.clone();
+        let target_params_len = target_params.len();
+        if self.params.len() != target_params_len {
+            panic!(
+                "Params size does not match {} {} - {}",
+                self.id,
+                self.params.len(),
+                target_params_len
+            );
+        }
+
         GlobalManager::emit(Quadruple::new("era", "", "", self.id.as_str()));
-        
+
         for (index, param) in self.params.iter().enumerate() {
-            let param_address = param.reduce();
+            let (_, target_data_type) = target_params.get(index).unwrap();
+            let mut param_address = param.reduce();
+            let param_data_type = param.data_type();
+            assert!(
+                DataType::equivalent(&param_data_type, target_data_type).is_ok(),
+                "Data type {:?} cannot be assigned to a variable {:?}.",
+                param_data_type,
+                target_data_type
+            );
+
+            // TODO: Refactor type casting instruction into func
+            if param_data_type != *target_data_type {
+                let value_temp = GlobalManager::new_temp(&target_data_type).to_string();
+
+                GlobalManager::emit(Quadruple(
+                    String::from(format!("{:?}", target_data_type)),
+                    param_address,
+                    String::new(),
+                    value_temp.clone(),
+                ));
+
+                param_address = value_temp.clone();
+            }
+
             GlobalManager::emit(Quadruple::new(
                 "param",
                 param_address.as_str(),
                 "",
                 index.to_string().as_str(),
-            ))
+            ));
         }
 
         GlobalManager::emit(Quadruple::new("gosub", "", "", self.id.as_str()));

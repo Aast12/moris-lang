@@ -28,4 +28,4 @@ fn fibonacci2(n: int): int {
     return fibonacci2(n - 2) + fibonacci(n - 2);
 }
 
-let res: int = fibonacci3(10);
+let res: int = fibonacci3(10, 7.2);
