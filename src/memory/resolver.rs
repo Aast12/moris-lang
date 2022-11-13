@@ -2,8 +2,6 @@ use std::collections::HashMap;
 
 use lazy_static::lazy_static;
 
-use crate::ast::Dimension;
-
 use super::types::DataType;
 
 pub type MemAddress = u16;
@@ -16,6 +14,7 @@ lazy_static! {
             (DataType::Int, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 2),        // 4,000 - 5,999
             (DataType::String, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 3),     // 6,000 - 7,999
             (DataType::DataFrame, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 4),  // 8,000 - 9,999
+            (DataType::Pointer, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 5),    // 10,000 - 12,000
         ])
     };
 
@@ -24,9 +23,9 @@ lazy_static! {
 
     pub static ref SCOPE_OFFSETS: HashMap<MemoryScope, MemAddress> = {
         HashMap::from([
-            (MemoryScope::Global, MemoryResolver::SEGMENT_SIZE * 1),      // (10,000 - 19,999)
-            (MemoryScope::Local, MemoryResolver::SEGMENT_SIZE * 2),       // (20,000 - 29,999)
-            (MemoryScope::Constant, MemoryResolver::SEGMENT_SIZE * 3),    // (30,000 - 39,999)
+            (MemoryScope::Global, MemoryResolver::SEGMENT_SIZE * 1),      // (12,000 - 23,999)
+            (MemoryScope::Local, MemoryResolver::SEGMENT_SIZE * 2),       // (24,000 - 35,999)
+            (MemoryScope::Constant, MemoryResolver::SEGMENT_SIZE * 3),    // (36,000 - 39,999)
         ])
     };
 
@@ -44,13 +43,14 @@ pub struct MemoryResolver {}
 
 impl MemoryResolver {
     pub const DATA_TYPE_ALLOC_SIZE: MemAddress = 2_000;
-    pub const SEGMENT_SIZE: MemAddress = 10_000;
-    pub const GLOBAL_OFFSET: MemAddress = 10_000;
-    pub const LOCAL_OFFSET: MemAddress = 20_000;
-    pub const CONSTANT_OFFSET: MemAddress = 30_000;
+    pub const SEGMENT_SIZE: MemAddress = Self::DATA_TYPE_ALLOC_SIZE * 6; // 6 - Data types count
+    pub const GLOBAL_OFFSET: MemAddress = Self::SEGMENT_SIZE * 1;
+    pub const LOCAL_OFFSET: MemAddress = Self::SEGMENT_SIZE * 2;
+    pub const CONSTANT_OFFSET: MemAddress = Self::SEGMENT_SIZE * 3;
 
     fn get_scope_from_address(address: MemAddress) -> Option<&'static MemoryScope> {
         let offset = address - (address % Self::SEGMENT_SIZE);
+        println!("SCOPE OFFSET {}", offset);
         if let Some(scope) = SCOPE_OFFSETS_INV.get(&offset) {
             Some(scope)
         } else {
@@ -154,23 +154,35 @@ mod tests {
 
         assert_eq!(
             MemoryResolver::get_offset(
-                SCOPE_OFFSETS[&MemoryScope::Constant] + TYPE_OFFSETS[&DataType::String] + 1999,
+                SCOPE_OFFSETS[&MemoryScope::Constant]
+                    + TYPE_OFFSETS[&DataType::String]
+                    + MemoryResolver::DATA_TYPE_ALLOC_SIZE
+                    - 1,
             ),
-            (MemoryScope::Constant, DataType::String, 1999)
+            (
+                MemoryScope::Constant,
+                DataType::String,
+                MemoryResolver::DATA_TYPE_ALLOC_SIZE - 1
+            )
         );
 
         assert_eq!(
             MemoryResolver::get_offset(
-                SCOPE_OFFSETS[&MemoryScope::Constant] + TYPE_OFFSETS[&DataType::String] + 2000,
+                SCOPE_OFFSETS[&MemoryScope::Constant]
+                    + TYPE_OFFSETS[&DataType::String]
+                    + MemoryResolver::DATA_TYPE_ALLOC_SIZE,
             ),
             (MemoryScope::Constant, DataType::DataFrame, 0)
         );
 
         assert_eq!(
             MemoryResolver::get_offset(
-                SCOPE_OFFSETS[&MemoryScope::Local] + TYPE_OFFSETS[&DataType::DataFrame] + 2005,
+                SCOPE_OFFSETS[&MemoryScope::Local]
+                    + TYPE_OFFSETS[&DataType::DataFrame]
+                    + MemoryResolver::DATA_TYPE_ALLOC_SIZE
+                    + 5,
             ),
-            (MemoryScope::Constant, DataType::Bool, 5)
+            (MemoryScope::Local, DataType::Pointer, 5)
         );
     }
 }

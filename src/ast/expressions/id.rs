@@ -2,6 +2,7 @@ use crate::ast;
 use crate::ast::expressions::Index;
 use crate::ast::node::Node;
 use crate::codegen::manager::GlobalManager;
+use crate::codegen::quadruples::Quadruple;
 use crate::memory::resolver::MemAddress;
 use crate::memory::types::DataType;
 
@@ -72,7 +73,23 @@ impl Node for Access {
         if self.indexing.len() == 0 {
             return self.id.address().to_string();
         }
-        todo!("Access reduce not implemented");
+
+        let indexing_addresses = self.indexing.iter().map(|index| index.reduce());
+
+        indexing_addresses.for_each(|address| {
+            GlobalManager::emit(Quadruple::new("idx", "", "", address.as_str()))
+        });
+
+        let access_tmp = GlobalManager::new_temp(&self.id.data_type());
+
+        GlobalManager::emit(Quadruple::new(
+            "acc",
+            self.id.id.as_str(),
+            "",
+            access_tmp.to_string().as_str(),
+        ));
+
+        access_tmp.to_string()
     }
 }
 

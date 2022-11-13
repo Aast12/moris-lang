@@ -1,4 +1,8 @@
-use crate::{ast, memory::types::DataType};
+use crate::{
+    ast,
+    codegen::{manager::GlobalManager, quadruples::Quadruple},
+    memory::types::DataType,
+};
 
 use self::{
     call::Call,
@@ -74,7 +78,14 @@ pub enum Index {
     Range(Box<Expression>, Box<Expression>),
 }
 
-impl ast::node::Node for Index {}
+impl ast::node::Node for Index {
+    fn reduce(&self) -> String {
+        match self {
+            Self::Simple(idx) => idx.reduce(),
+            Self::Range(_, _) => panic!("Range not supported"), // TODO
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {

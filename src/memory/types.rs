@@ -9,6 +9,7 @@ pub enum DataType {
     Iterable(Box<DataType>),
     Void,
     Function(Box<DataType>),
+    Pointer,
 }
 
 impl DataType {
@@ -23,6 +24,7 @@ impl DataType {
             DataType::Function(_) => 6,
             DataType::Series => todo!(),
             DataType::Iterable(_) => todo!(),
+            _ => todo!()
         }
     }
 
@@ -67,6 +69,7 @@ impl DataType {
             DataType::Function(func) => Self::equivalent(func, right),
             DataType::Series => todo!(),
             DataType::Iterable(_) => todo!(),
+            _ => todo!()
         }
     }
 }
