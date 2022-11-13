@@ -4,12 +4,19 @@ pub mod node;
 pub mod statements;
 pub mod types;
 
-use std::fmt::Debug;
+use std::{fmt::Debug, vec};
 
-use self::{expressions::{Expression, constant::Const}, node::Node};
+use self::{
+    expressions::{constant::Const, Expression},
+    node::Node,
+};
 
 #[derive(Debug)]
-pub struct Dimension(pub i8, pub Vec<Const>); // dimensions number, dimension sizes
+pub struct Dimension {
+    pub dimensions: i8,
+    pub shape: Vec<usize>,
+    pub size: usize,
+} // dimensions number, dimension sizes
 
 impl Node for Dimension {
     fn generate(&mut self) -> () {
@@ -17,6 +24,41 @@ impl Node for Dimension {
         //     dim.generate();
         // }
         todo!()
+    }
+}
+
+impl Dimension {
+    pub fn new_scalar() -> Dimension {
+        Dimension {
+            dimensions: 0,
+            shape: vec![],
+            size: 1,
+        }
+    }
+
+    pub fn new(dimensions: i8, shape: Vec<Const>) -> Dimension {
+        let usize_shape: Vec<usize> = shape
+            .iter()
+            .map(
+                |constant| match str::parse::<usize>(constant.value.as_str()) {
+                    Ok(size) => {
+                        if size <= 0 {
+                            panic!("Invalid dimension size {size} in array declaration.")
+                        }
+                        size
+                    }
+                    Err(error) => panic!("Can't parse variable dimension: {:#?}", error),
+                },
+            )
+            .collect();
+
+        let size = usize_shape.iter().fold(1, |acc, item| acc * item);
+
+        Dimension {
+            dimensions,
+            shape: usize_shape,
+            size,
+        }
     }
 }
 

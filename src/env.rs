@@ -26,7 +26,7 @@ pub struct SymbolEntry {
     pub data_type: DataType,
     pub dimension: usize,
     pub shape: Vec<usize>,
-    pub size: usize
+    pub size: usize,
 }
 
 #[derive(Debug)]
@@ -117,24 +117,13 @@ impl Environment {
     }
 
     pub fn add_var(&mut self, id: &String, data_type: &DataType, dimension: &Dimension) {
-        let Dimension(dim, shape) = dimension;
+        let Dimension {
+            dimensions: dim,
+            shape,
+            size,
+        } = dimension;
 
-        let usize_shape: Vec<usize> = shape
-            .iter()
-            .map(
-                |constant| match str::parse::<usize>(constant.value.as_str()) {
-                    Ok(size) => {
-                        if size <= 0 {
-                            panic!("Invalid dimension size {size} in array declaration.")
-                        }
-                        size
-                    }
-                    Err(error) => panic!("Can't parse variable dimension: {:#?}", error),
-                },
-            )
-            .collect();
-
-        let flat_size = usize_shape.iter().fold(1, |acc, item| acc * item);
+        let flat_size = shape.iter().fold(1, |acc, item| acc * item);
 
         let address = self
             .allocator
@@ -144,9 +133,9 @@ impl Environment {
             self.current_env_mut().add(SymbolEntry::new_vec(
                 id.clone(),
                 data_type.clone(),
-                usize_shape,
+                shape.clone(),
                 address,
-                flat_size
+                *size,
             ));
         } else {
             self.current_env_mut().add(SymbolEntry::new_var(
@@ -231,7 +220,7 @@ impl SymbolEntry {
             dimension: 0,
             shape: vec![],
             address,
-            size: 1
+            size: 1,
         }
     }
 
@@ -240,7 +229,7 @@ impl SymbolEntry {
         data_type: DataType,
         shape: Vec<usize>,
         address: MemAddress,
-        size: usize
+        size: usize,
     ) -> SymbolEntry {
         SymbolEntry {
             id,
@@ -249,7 +238,7 @@ impl SymbolEntry {
             dimension: shape.len(),
             shape,
             address,
-            size
+            size,
         }
     }
 }

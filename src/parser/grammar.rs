@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 91d4cf80942f7b54100fa2a56b8103c127595756376cab6cb584512e423e5dad
+// sha3: e1c8eb66a01cde707f90a028380ecaf37097974a9a5b32168f85075d46e959f2
 use std::str::FromStr;
 use crate::ast::{Dimension};
 use crate::ast::types::{Operator, Variable};
@@ -5020,7 +5020,7 @@ fn __action21<
     (_, _, _): (usize, &'input str, usize),
 ) -> Dimension
 {
-    Dimension(2, vec![a, b])
+    Dimension::new(2, vec![a, b])
 }
 
 #[allow(unused_variables)]
@@ -5033,7 +5033,7 @@ fn __action22<
     (_, _, _): (usize, &'input str, usize),
 ) -> Dimension
 {
-    Dimension(1, vec![__0])
+    Dimension::new(1, vec![__0])
 }
 
 #[allow(unused_variables)]
@@ -5053,7 +5053,7 @@ fn __action23<
     Variable::new(
         String::from(id),
         data_type,
-        dim.unwrap_or(Dimension(0, vec![])),
+        dim.unwrap_or(Dimension::new_scalar()),
         value
     )
 }

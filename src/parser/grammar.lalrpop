@@ -87,16 +87,17 @@ PIndexing: Index = {
     <idx:PExpr> => Index::Simple(idx)
 }
 
+
 PDimension: Dimension = {
-    LBRACKET <a: PInt> RLBRACKET <b: PInt> RBRACKET => Dimension(2, vec![a, b]),
-    LBRACKET <PInt> RBRACKET => Dimension(1, vec![<>])
+    LBRACKET <a: PInt> RLBRACKET <b: PInt> RBRACKET => Dimension::new(2, vec![a, b]),
+    LBRACKET <PInt> RBRACKET => Dimension::new(1, vec![<>])
 }
 
 PVarDeclaration: Variable = {
     LET <id: ID> COLON <data_type: PType> <dim: PDimension?> <value: (ASSIGN <PExpr>)?> SEMICOLON => Variable::new(
         String::from(id),
         data_type,
-        dim.unwrap_or(Dimension(0, vec![])),
+        dim.unwrap_or(Dimension::new_scalar()),
         value
     )
 }

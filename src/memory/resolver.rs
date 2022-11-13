@@ -2,6 +2,8 @@ use std::collections::HashMap;
 
 use lazy_static::lazy_static;
 
+use crate::ast::Dimension;
+
 use super::types::DataType;
 
 pub type MemAddress = u16;
@@ -121,6 +123,10 @@ impl MemoryResolver {
         }
 
         panic!("Cannot resolve address");
+    }
+
+    pub fn get_array_offset(dimension: &Dimension, access: Vec<usize>) {
+        
     }
 }
 
