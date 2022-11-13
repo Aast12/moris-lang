@@ -16,7 +16,7 @@ fn try_file(path: &str) -> Program {
 }
 
 fn main() {
-    let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join("./samples/multi_function.mo");
+    let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join("./samples/array.mo");
     let path = path_buf.to_str().unwrap();
 
     let mut test_program = try_file(path);

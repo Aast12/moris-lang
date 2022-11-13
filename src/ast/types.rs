@@ -83,7 +83,7 @@ impl Node for Variable {
     fn generate(&mut self) -> () {
         // Add variable to symbols table
         let mut manager = GlobalManager::get();
-        manager.get_env().add_var(&self.id, &self.data_type);
+        manager.get_env().add_var(&self.id, &self.data_type, &self.dimension);
         drop(manager);
 
         let self_address = self.address();

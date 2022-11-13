@@ -88,8 +88,8 @@ PIndexing: Index = {
 }
 
 PDimension: Dimension = {
-    LBRACKET <a: PExpr> RLBRACKET <b: PExpr> RBRACKET => Dimension(2, vec![a, b]),
-    LBRACKET <PExpr> RBRACKET => Dimension(1, vec![<>])
+    LBRACKET <a: PInt> RLBRACKET <b: PInt> RBRACKET => Dimension(2, vec![a, b]),
+    LBRACKET <PInt> RBRACKET => Dimension(1, vec![<>])
 }
 
 PVarDeclaration: Variable = {
@@ -211,7 +211,7 @@ PItem: Box<Expression> = {
 // Functions
 
 
-PFuncParam: FunctionParam = <id: ID> COLON <dtype: PType> => FunctionParam(String::from(id), dtype);
+PFuncParam: FunctionParam = <id: ID> COLON <dtype: PType> <dim: PDimension?> => FunctionParam(String::from(id), dtype);
 
 PCallParams = PComma<PExpr>;
 

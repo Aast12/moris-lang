@@ -9,7 +9,7 @@ use std::{
 use crate::{
     ast::{
         expressions::constant::Const,
-        functions::{Function, FunctionParam},
+        functions::{Function, FunctionParam}, Dimension,
     },
     codegen::function::{FunctionEntry, ParamAddress},
     env::Environment,
@@ -114,8 +114,9 @@ impl Manager {
         self.get_env().drop_env(func_id);
     }
 
-    pub fn new_variable(&mut self, id: &String, data_type: &DataType) {
-        self.get_env().add_var(id, data_type);
+
+    pub fn new_variable(&mut self, id: &String, data_type: &DataType, dimension: &Dimension) {
+        self.get_env().add_var(id, data_type, dimension);
     }
 
     pub fn remove_variable(&mut self, id: &String) {
@@ -125,20 +126,20 @@ impl Manager {
     pub fn new_global(&mut self, data_type: &DataType) -> MemAddress {
         self.env
             .allocator
-            .assign_location(&MemoryScope::Global, data_type)
+            .assign_location(&MemoryScope::Global, data_type, 1)
     }
 
     pub fn new_temp_address(&mut self, data_type: &DataType) -> MemAddress {
         self.env
             .allocator
-            .assign_location(&self.env.current_scope, data_type)
+            .assign_location(&self.env.current_scope, data_type, 1)
     }
 
     pub fn new_constant(&mut self, data_type: &DataType, value: &Const) -> MemAddress {
         let address = self
             .env
             .allocator
-            .assign_location(&self.env.current_scope, data_type);
+            .assign_location(&self.env.current_scope, data_type, 1);
 
         self.constant_table.insert(address, value.clone());
 

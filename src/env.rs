@@ -2,7 +2,10 @@ use core::panic;
 use std::collections::HashMap;
 
 use crate::{
-    ast::functions::{FunctionParam, FunctionSignature},
+    ast::{
+        functions::{FunctionParam, FunctionSignature},
+        Dimension,
+    },
     memory::{
         resolver::{MemAddress, MemoryScope},
         types::DataType,
@@ -22,7 +25,8 @@ pub struct SymbolEntry {
     pub symbol_type: SymbolType,
     pub data_type: DataType,
     pub dimension: usize,
-    pub shape: Vec<i32>,
+    pub shape: Vec<usize>,
+    pub size: usize
 }
 
 #[derive(Debug)]
@@ -112,13 +116,45 @@ impl Environment {
             .insert(id.clone(), EnvEntry::from_func(func, &mut self.allocator));
     }
 
-    pub fn add_var(&mut self, id: &String, data_type: &DataType) {
+    pub fn add_var(&mut self, id: &String, data_type: &DataType, dimension: &Dimension) {
+        let Dimension(dim, shape) = dimension;
+
+        let usize_shape: Vec<usize> = shape
+            .iter()
+            .map(
+                |constant| match str::parse::<usize>(constant.value.as_str()) {
+                    Ok(size) => {
+                        if size <= 0 {
+                            panic!("Invalid dimension size {size} in array declaration.")
+                        }
+                        size
+                    }
+                    Err(error) => panic!("Can't parse variable dimension: {:#?}", error),
+                },
+            )
+            .collect();
+
+        let flat_size = usize_shape.iter().fold(1, |acc, item| acc * item);
+
         let address = self
             .allocator
-            .assign_location(&self.current_scope, data_type);
+            .assign_location(&self.current_scope, data_type, flat_size);
 
-        self.current_env_mut()
-            .add(SymbolEntry::new_var(id.clone(), data_type.clone(), address));
+        if *dim > 0 {
+            self.current_env_mut().add(SymbolEntry::new_vec(
+                id.clone(),
+                data_type.clone(),
+                usize_shape,
+                address,
+                flat_size
+            ));
+        } else {
+            self.current_env_mut().add(SymbolEntry::new_var(
+                id.clone(),
+                data_type.clone(),
+                address,
+            ));
+        }
     }
 
     pub fn del_var(&mut self, id: &String) {
@@ -156,7 +192,7 @@ impl EnvEntry {
             let val = SymbolEntry::new_var(
                 id.clone(),
                 data_type.clone(),
-                allocator.assign_location(&MemoryScope::Local, &data_type),
+                allocator.assign_location(&MemoryScope::Local, &data_type, 1), // TODO: Arrays as function params
             );
 
             symbols.insert(key, val);
@@ -195,14 +231,16 @@ impl SymbolEntry {
             dimension: 0,
             shape: vec![],
             address,
+            size: 1
         }
     }
 
     pub fn new_vec(
         id: String,
         data_type: DataType,
-        shape: Vec<i32>,
+        shape: Vec<usize>,
         address: MemAddress,
+        size: usize
     ) -> SymbolEntry {
         SymbolEntry {
             id,
@@ -211,6 +249,7 @@ impl SymbolEntry {
             dimension: shape.len(),
             shape,
             address,
+            size
         }
     }
 }

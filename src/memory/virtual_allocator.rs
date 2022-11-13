@@ -1,11 +1,11 @@
-use std::collections::HashMap;
+use std::{collections::HashMap};
 
 use super::{
     resolver::{MemAddress, MemoryResolver, MemoryScope},
     types::DataType,
 };
 
-type MemoryCounter = HashMap<DataType, MemAddress>;
+type MemoryCounter = HashMap<DataType, usize>;
 
 #[derive(Debug)]
 pub struct VirtualAllocator {
@@ -23,7 +23,12 @@ impl VirtualAllocator {
         }
     }
 
-    fn increase_counter(&mut self, scope: &MemoryScope, data_type: &DataType) -> MemAddress {
+    /// Increases the counter to the next available address for a certain data type.s
+    fn increase_counter(&mut self, scope: &MemoryScope, data_type: &DataType) -> usize {
+        self.increase_counter_by(scope, data_type, 1)
+    }
+
+    fn increase_counter_by(&mut self, scope: &MemoryScope, data_type: &DataType, size: usize) -> usize {
         let counter = match scope {
             MemoryScope::Global => &mut self.global_counters,
             MemoryScope::Local => &mut self.local_counters,
@@ -32,10 +37,10 @@ impl VirtualAllocator {
 
         if let Some(last) = counter.get(&data_type) {
             let next_offset = last.clone();
-            counter.insert(data_type.clone(), next_offset + 1);
+            counter.insert(data_type.clone(), next_offset + size);
             next_offset
         } else {
-            counter.insert(data_type.clone(), 1);
+            counter.insert(data_type.clone(), size);
             0
         }
     }
@@ -44,8 +49,8 @@ impl VirtualAllocator {
         self.local_counters = HashMap::new();
     }
 
-    pub fn assign_location(&mut self, scope: &MemoryScope, data_type: &DataType) -> MemAddress {
-        let next_offset = self.increase_counter(scope, data_type);
-        MemoryResolver::to_address(scope, data_type, next_offset)
+    pub fn assign_location(&mut self, scope: &MemoryScope, data_type: &DataType, size: usize) -> MemAddress {
+        let start_address = self.increase_counter_by(scope, data_type, size);
+        MemoryResolver::to_address(scope, data_type, start_address as MemAddress)
     }
 }

@@ -6,16 +6,17 @@ pub mod types;
 
 use std::fmt::Debug;
 
-use self::{expressions::Expression, node::Node};
+use self::{expressions::{Expression, constant::Const}, node::Node};
 
 #[derive(Debug)]
-pub struct Dimension(pub i8, pub Vec<Box<Expression>>); // dimensions number, dimension sizes
+pub struct Dimension(pub i8, pub Vec<Const>); // dimensions number, dimension sizes
 
 impl Node for Dimension {
     fn generate(&mut self) -> () {
-        for dim in self.1.iter_mut() {
-            dim.generate();
-        }
+        // for dim in self.1.iter_mut() {
+        //     dim.generate();
+        // }
+        todo!()
     }
 }
 
