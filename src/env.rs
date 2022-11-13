@@ -122,6 +122,7 @@ impl Environment {
             dimensions: dim,
             shape,
             size,
+            acc_size: _
         } = dimension;
 
         let flat_size = shape.iter().fold(1, |acc, item| acc * item);

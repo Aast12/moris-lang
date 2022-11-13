@@ -30,7 +30,7 @@ lazy_static! {
         ])
     };
 
-    pub static ref SCOPE_OFFSETS_INV: HashMap<MemAddress, MemoryScope> = 
+    pub static ref SCOPE_OFFSETS_INV: HashMap<MemAddress, MemoryScope> =
         SCOPE_OFFSETS.iter().map(|(scope, offset)| (*offset, *scope)).collect();
 }
 
@@ -123,10 +123,6 @@ impl MemoryResolver {
         }
 
         panic!("Cannot resolve address");
-    }
-
-    pub fn get_array_offset(dimension: &Dimension, access: Vec<usize>) {
-        
     }
 }
 
