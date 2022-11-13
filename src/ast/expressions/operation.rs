@@ -5,7 +5,7 @@ use crate::{
 
 use super::{types, Expression};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Operation {
     pub operator: types::Operator,
     pub left: Box<Expression>,

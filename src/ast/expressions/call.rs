@@ -6,7 +6,7 @@ use crate::{
 
 use super::Expression;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Call {
     pub id: String,
     pub params: Vec<Box<Expression>>,

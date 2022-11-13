@@ -3,17 +3,17 @@ use crate::{
     memory::types::DataType,
 };
 
-use super::{node::Node, statements::Block};
+use super::{node::Node, statements::Block, types::Variable};
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct FunctionSignature {
     pub id: String,
     pub data_type: DataType,
     pub params: Vec<FunctionParam>,
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct FunctionParam(pub String, pub DataType);
+#[derive(Debug, Clone)]
+pub struct FunctionParam(pub Variable);
 
 #[derive(Debug)]
 pub struct Function {

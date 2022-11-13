@@ -9,7 +9,9 @@ use std::{
 use crate::{
     ast::{
         expressions::constant::Const,
-        functions::{Function, FunctionParam}, Dimension,
+        functions::{Function, FunctionParam},
+        types::Variable,
+        Dimension,
     },
     codegen::function::{FunctionEntry, ParamAddress},
     env::Environment,
@@ -73,10 +75,17 @@ impl Manager {
             .signature
             .params
             .iter()
-            .map(|FunctionParam(id, data_type)| {
-                let param_symbol = self.get_env().get_var(id).unwrap();
-                (param_symbol.address, data_type.clone())
-            })
+            .map(
+                |FunctionParam(Variable {
+                     id,
+                     data_type,
+                     dimension: _,
+                     value: _,
+                 })| {
+                    let param_symbol = self.get_env().get_var(id).unwrap();
+                    (param_symbol.address, data_type.clone())
+                },
+            )
             .collect();
 
         self.procedure_table.insert(
@@ -113,7 +122,6 @@ impl Manager {
         self.get_env().switch(&String::from("global"));
         self.get_env().drop_env(func_id);
     }
-
 
     pub fn new_variable(&mut self, id: &String, data_type: &DataType, dimension: &Dimension) {
         self.get_env().add_var(id, data_type, dimension);

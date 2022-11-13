@@ -11,7 +11,7 @@ use self::{
     node::Node,
 };
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Dimension {
     pub dimensions: i8,
     pub shape: Vec<usize>,

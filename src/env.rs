@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use crate::{
     ast::{
         functions::{FunctionParam, FunctionSignature},
+        types::Variable,
         Dimension,
     },
     memory::{
@@ -176,12 +177,16 @@ impl EnvEntry {
     pub fn from_func(func: &FunctionSignature, allocator: &mut VirtualAllocator) -> EnvEntry {
         let mut symbols: HashMap<String, SymbolEntry> = HashMap::new();
 
-        for FunctionParam(id, data_type) in func.params.iter() {
-            let key = id.clone();
+        for FunctionParam(variable) in func.params.iter() {
+            let key = variable.id.clone();
             let val = SymbolEntry::new_var(
-                id.clone(),
-                data_type.clone(),
-                allocator.assign_location(&MemoryScope::Local, &data_type, 1), // TODO: Arrays as function params
+                variable.id.clone(),
+                variable.data_type.clone(),
+                allocator.assign_location(
+                    &MemoryScope::Local,
+                    &variable.data_type,
+                    variable.dimension.size,
+                ),
             );
 
             symbols.insert(key, val);

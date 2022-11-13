@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: e1c8eb66a01cde707f90a028380ecaf37097974a9a5b32168f85075d46e959f2
+// sha3: ce0968b7b2a20a7962fdf783b43436f46e90f98f628b8fa89d8bd85b055c188d
 use std::str::FromStr;
 use crate::ast::{Dimension};
 use crate::ast::types::{Operator, Variable};
@@ -5451,7 +5451,12 @@ fn __action55<
     (_, dim, _): (usize, core::option::Option<Dimension>, usize),
 ) -> FunctionParam
 {
-    FunctionParam(String::from(id), dtype)
+    FunctionParam(Variable::new(
+        String::from(id),
+        dtype,
+        dim.unwrap_or(Dimension::new_scalar()),
+        None
+    ))
 }
 
 #[allow(unused_variables)]

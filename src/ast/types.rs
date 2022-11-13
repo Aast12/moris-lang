@@ -46,7 +46,7 @@ impl Operator {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Variable {
     pub id: String,
     pub data_type: DataType,

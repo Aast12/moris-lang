@@ -16,7 +16,7 @@ pub mod constant;
 pub mod id;
 pub mod operation;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Expression {
     Const(Const),
     Op(Operation),
@@ -68,7 +68,7 @@ impl node::Node for Expression {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Index {
     Simple(Box<Expression>),
     Range(Box<Expression>, Box<Expression>),

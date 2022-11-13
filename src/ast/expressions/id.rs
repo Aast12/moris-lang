@@ -5,13 +5,13 @@ use crate::codegen::manager::GlobalManager;
 use crate::memory::resolver::MemAddress;
 use crate::memory::types::DataType;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Id {
     pub id: String,
     pub dtype: Option<DataType>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Access {
     pub id: Id,
     pub indexing: Vec<Index>,

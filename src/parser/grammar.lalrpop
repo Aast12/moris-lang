@@ -212,7 +212,12 @@ PItem: Box<Expression> = {
 // Functions
 
 
-PFuncParam: FunctionParam = <id: ID> COLON <dtype: PType> <dim: PDimension?> => FunctionParam(String::from(id), dtype);
+PFuncParam: FunctionParam = <id: ID> COLON <dtype: PType> <dim: PDimension?> => FunctionParam(Variable::new(
+        String::from(id),
+        dtype,
+        dim.unwrap_or(Dimension::new_scalar()),
+        None
+    ));
 
 PCallParams = PComma<PExpr>;
 
