@@ -73,11 +73,13 @@ impl Node for Statement {
                     ))
                 }
 
+                let access = access.reduce();
+
                 GlobalManager::emit(Quadruple(
                     String::from(Operator::Assign.to_string()),
                     value_temp,
                     String::new(),
-                    access.id.address().to_string(),
+                    access,
                 ));
             }
             Statement::Expression(exp) => exp.generate(),

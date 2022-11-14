@@ -50,7 +50,6 @@ impl MemoryResolver {
 
     fn get_scope_from_address(address: MemAddress) -> Option<&'static MemoryScope> {
         let offset = address - (address % Self::SEGMENT_SIZE);
-        println!("SCOPE OFFSET {}", offset);
         if let Some(scope) = SCOPE_OFFSETS_INV.get(&offset) {
             Some(scope)
         } else {

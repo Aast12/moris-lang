@@ -1,3 +1,5 @@
+use std::iter::zip;
+
 use crate::ast;
 use crate::ast::expressions::Index;
 use crate::ast::node::Node;
@@ -74,22 +76,76 @@ impl Node for Access {
             return self.id.address().to_string();
         }
 
-        let indexing_addresses = self.indexing.iter().map(|index| index.reduce());
+        let indexing_addresses = self
+            .indexing
+            .iter()
+            .map(|index| index.reduce())
+            .collect::<Vec<String>>();
 
-        indexing_addresses.for_each(|address| {
-            GlobalManager::emit(Quadruple::new("idx", "", "", address.as_str()))
-        });
+        let id_var = GlobalManager::get().get_env().get_var(&self.id.id).cloned();
 
-        let access_tmp = GlobalManager::new_temp(&self.id.data_type());
+        if let Some(access_item) = id_var {
+            if indexing_addresses.len() > access_item.dimension.dimensions as usize {
+                panic!("Incompatible index!");
+            }
 
-        GlobalManager::emit(Quadruple::new(
-            "acc",
-            self.id.id.as_str(),
-            "",
-            access_tmp.to_string().as_str(),
-        ));
+            let shape_cp = access_item.dimension.shape.clone();
+            let mut curr_dim = shape_cp.iter();
+            let acc_tmp = GlobalManager::new_temp(&DataType::Int).to_string();
+            let first_run = true;
 
-        access_tmp.to_string()
+            zip(&indexing_addresses, &access_item.dimension.acc_size).for_each(
+                |(index, dim_size)| {
+                    if let Some(dim) = curr_dim.next() {
+                        GlobalManager::emit(Quadruple::new(
+                            "ver",
+                            index.as_str(),
+                            "",
+                            dim.to_string().as_str(),
+                        ))
+                    }
+
+                    if first_run {
+                        GlobalManager::emit(Quadruple::new(
+                            "*",
+                            index.as_str(),
+                            dim_size.to_string().as_str(),
+                            acc_tmp.as_str(),
+                        ));
+                    } else {
+                        let tmp = GlobalManager::new_temp(&DataType::Int);
+                        let tmp_str = tmp.to_string();
+
+                        GlobalManager::emit(Quadruple::new(
+                            "*",
+                            index.as_str(),
+                            dim_size.to_string().as_str(),
+                            tmp_str.as_str(),
+                        ));
+
+                        GlobalManager::emit(Quadruple::new(
+                            "+",
+                            acc_tmp.as_str(),
+                            tmp_str.as_str(),
+                            acc_tmp.as_str(),
+                        ));
+                    }
+                },
+            );
+
+            let access_tmp = GlobalManager::new_temp(&DataType::Pointer);
+
+            GlobalManager::emit(Quadruple::new(
+                "+",
+                format!("&{}", access_item.address).as_str(),
+                acc_tmp.as_str(),
+                access_tmp.to_string().as_str(),
+            ));
+
+            format!("*{}", access_tmp)
+        } else {
+            panic!("Item {} does not exist!", self.id.id);
+        }
     }
 }
 

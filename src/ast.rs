@@ -16,7 +16,7 @@ pub struct Dimension {
     pub dimensions: i8,
     pub shape: Vec<usize>,
     pub size: usize,
-    pub acc_size: Option<Vec<usize>>,
+    pub acc_size: Vec<usize>,
 } // dimensions number, dimension sizes
 
 impl Node for Dimension {
@@ -34,7 +34,7 @@ impl Dimension {
             dimensions: 0,
             shape: vec![],
             size: 1,
-            acc_size: None,
+            acc_size: vec![],
         }
     }
 
@@ -56,16 +56,20 @@ impl Dimension {
 
         let size = usize_shape.iter().fold(1, |acc, item| acc * item);
 
-        Dimension {
+        let mut new_dim = Dimension {
             dimensions,
             shape: usize_shape,
             size,
-            acc_size: None,
-        }
+            acc_size: vec![],
+        };
+        
+        new_dim.calc_acc_size();
+        new_dim
+
     }
 
-    fn calc_acc_size(&mut self) -> Option<&Vec<usize>> {
-        if let None = self.acc_size {
+    pub fn calc_acc_size(&mut self) {
+        if self.acc_size.len() != self.dimensions as usize {
             let mut new_acc_size = self
                 .shape
                 .iter()
@@ -76,34 +80,33 @@ impl Dimension {
                 })
                 .collect::<Vec<usize>>();
             new_acc_size.reverse();
-            self.acc_size = Some(new_acc_size);
-        }
 
-        self.acc_size.as_ref()
-    }
-
-    pub fn get_array_offset(&mut self, access: Vec<usize>) -> usize {
-        println!("{:#?}", access);
-        if access.len() > self.shape.len() {
-            panic!("Incompatible index!")
-        }
-        let shape_cp = self.shape.clone();
-        let mut curr_dim = shape_cp.iter();
-
-        if let Some(acc_size) = self.calc_acc_size() {
-            let offset = zip(access, acc_size).fold(0, |acc, (index, dim_size)| {
-                if let Some(dim) = curr_dim.next() {
-                    if index >= *dim {
-                        panic!("Index out of bounds");
-                    }
-                }
-                acc + index * *dim_size
-            });
-            offset
-        } else {
-            0
+            self.acc_size = new_acc_size;
         }
     }
+
+    // pub fn get_array_offset(&mut self, access: Vec<usize>) -> usize {
+    //     println!("{:#?}", access);
+    //     if access.len() > self.shape.len() {
+    //         panic!("Incompatible index!")
+    //     }
+    //     let shape_cp = self.shape.clone();
+    //     let mut curr_dim = shape_cp.iter();
+
+    //     if let Some(acc_size) = self.calc_acc_size() {
+    //         let offset = zip(access, acc_size).fold(0, |acc, (index, dim_size)| {
+    //             if let Some(dim) = curr_dim.next() {
+    //                 if index >= *dim {
+    //                     panic!("Index out of bounds");
+    //                 }
+    //             }
+    //             acc + index * *dim_size
+    //         });
+    //         offset
+    //     } else {
+    //         0
+    //     }
+    // }
 }
 
 #[derive(Debug)]
@@ -140,10 +143,10 @@ mod tests {
                 },
             ],
         );
-        assert_eq!(dim.get_array_offset(vec![0, 0, 3]), 3);
-        assert_eq!(dim.get_array_offset(vec![0, 3, 0]), 3 * 4);
-        assert_eq!(dim.get_array_offset(vec![2, 3, 3]), 63);
+        // assert_eq!(dim.get_array_offset(vec![0, 0, 3]), 3);
+        // assert_eq!(dim.get_array_offset(vec![0, 3, 0]), 3 * 4);
+        // assert_eq!(dim.get_array_offset(vec![2, 3, 3]), 63);
 
-        assert_eq!(dim.get_array_offset(vec![0, 1]), 1 * 4); // TODO: Decide if lower dimension index is valid
+        // assert_eq!(dim.get_array_offset(vec![0, 1]), 1 * 4); // TODO: Decide if lower dimension index is valid
     }
 }

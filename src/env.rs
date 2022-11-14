@@ -14,20 +14,21 @@ use crate::{
     },
 };
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SymbolType {
     Variable,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SymbolEntry {
     pub id: String,
     pub address: MemAddress,
     pub symbol_type: SymbolType,
     pub data_type: DataType,
-    pub dimension: usize,
-    pub shape: Vec<usize>,
-    pub size: usize,
+    // pub dimension: usize,
+    pub dimension: Dimension,
+    // pub shape: Vec<usize>,
+    // pub size: usize,
 }
 
 #[derive(Debug)]
@@ -122,7 +123,7 @@ impl Environment {
             dimensions: dim,
             shape,
             size,
-            acc_size: _
+            acc_size: _,
         } = dimension;
 
         let flat_size = shape.iter().fold(1, |acc, item| acc * item);
@@ -135,15 +136,15 @@ impl Environment {
             self.current_env_mut().add(SymbolEntry::new_vec(
                 id.clone(),
                 data_type.clone(),
-                shape.clone(),
                 address,
-                *size,
+                dimension.clone(),
             ));
         } else {
             self.current_env_mut().add(SymbolEntry::new_var(
                 id.clone(),
                 data_type.clone(),
                 address,
+                dimension.clone()
             ));
         }
     }
@@ -188,6 +189,7 @@ impl EnvEntry {
                     &variable.data_type,
                     variable.dimension.size,
                 ),
+                variable.dimension.clone()
             );
 
             symbols.insert(key, val);
@@ -218,33 +220,36 @@ impl EnvEntry {
 }
 
 impl SymbolEntry {
-    pub fn new_var(id: String, data_type: DataType, address: MemAddress) -> SymbolEntry {
+    pub fn new_var(
+        id: String,
+        data_type: DataType,
+        address: MemAddress,
+        dimension: Dimension,
+    ) -> SymbolEntry {
         SymbolEntry {
             id,
             symbol_type: SymbolType::Variable,
             data_type,
-            dimension: 0,
-            shape: vec![],
+            dimension,
             address,
-            size: 1,
         }
     }
 
     pub fn new_vec(
         id: String,
         data_type: DataType,
-        shape: Vec<usize>,
+        // shape: Vec<usize>,
         address: MemAddress,
-        size: usize,
+        dimension: Dimension, // size: usize,
     ) -> SymbolEntry {
         SymbolEntry {
             id,
             symbol_type: SymbolType::Variable,
             data_type,
-            dimension: shape.len(),
-            shape,
+            dimension,
+            // shape,
             address,
-            size,
+            // size,
         }
     }
 }
