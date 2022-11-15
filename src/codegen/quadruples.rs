@@ -1,9 +1,11 @@
 use core::panic;
 use std::fmt::{Debug, Error, Formatter};
 
+use serde::{Deserialize, Serialize};
+
 use super::manager::MANAGER;
 
-#[derive(Clone)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Quadruple(pub String, pub String, pub String, pub String);
 
 impl Quadruple {

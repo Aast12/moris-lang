@@ -1,4 +1,4 @@
-use crate::{ast::node::Node, memory::types::DataType};
+use crate::{ast::node::Node, memory::types::DataType, codegen::manager::GlobalManager};
 
 #[derive(Debug)]
 pub enum TypeConst {
@@ -30,7 +30,9 @@ impl Node for Const {
     }
 
     fn reduce(&self) -> String {
-        return self.value.clone();
+
+        let const_address = GlobalManager::new_constant(&self.dtype, self);
+        return const_address.to_string();
     }
 }
 

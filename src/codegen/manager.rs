@@ -1,8 +1,11 @@
 use core::panic;
 use lazy_static::lazy_static;
+use serde_pickle::SerOptions;
 use std::{
+    borrow::Borrow,
     collections::HashMap,
     fmt::Debug,
+    fs::File,
     sync::{Mutex, MutexGuard},
 };
 
@@ -22,7 +25,7 @@ use crate::{
     semantics::ExitStatement,
 };
 
-use super::quadruples::Quadruple;
+use super::{meta::ProgramMeta, quadruples::Quadruple};
 
 lazy_static! {
     pub static ref MANAGER: Mutex<Manager> = Mutex::new(Manager::new());
@@ -48,6 +51,28 @@ impl Manager {
             constant_table: HashMap::new(),
             procedure_table: HashMap::new(),
         }
+    }
+
+    pub fn dump(&self) {
+        let meta = ProgramMeta {
+            quadruples: self.quadruples.clone(),
+            constant_table: self
+                .constant_table
+                .iter()
+                .map(|(k, v)| (*k, v.value.clone()))
+                .collect::<HashMap<MemAddress, String>>(),
+            procedure_table: self
+                .procedure_table
+                .iter()
+                .map(|(k, v)| (k.clone(), v.clone()))
+                .collect::<HashMap<String, FunctionEntry>>(),
+        };
+
+        let v = serde_pickle::to_vec(&meta, Default::default()).unwrap();
+
+        let mut buffer = File::create("program.o").unwrap();
+
+        serde_pickle::to_writer(&mut buffer, &meta, Default::default()).unwrap();
     }
 
     pub fn get_env(&mut self) -> &mut Environment {

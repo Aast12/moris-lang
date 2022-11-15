@@ -1,3 +1,5 @@
+use serde::{Serialize, Deserialize};
+
 use crate::{
     ast::functions::Function,
     memory::{resolver::MemAddress, types::DataType},
@@ -5,7 +7,7 @@ use crate::{
 
 pub type ParamAddress = (MemAddress, DataType);
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FunctionEntry {
     pub id: String,
     pub return_type: DataType,
