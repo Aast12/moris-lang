@@ -1,5 +1,5 @@
 use core::panic;
-use std::{any::Any, borrow::Borrow, collections::HashMap, fmt::Pointer, fs::File, ops::Add};
+use std::{collections::HashMap, fs::File};
 
 use crate::{
     codegen::{meta::ProgramMeta, quadruples::Quadruple},
@@ -20,28 +20,15 @@ pub enum Item {
     Pointer(MemAddress),
 }
 
-impl Item {
-    // pub fn get<T>(op: Item) -> T {
-    //     match op {
-    //         Item::Int(op) => ,
-    //         Item::Float(_) => todo!(),
-    //         Item::Bool(_) => todo!(),
-    //         Item::String(_) => todo!(),
-    //         Item::Pointer(_) => todo!(),
-    //     }
-    // }
-    // pub fn get<T>(op1: Item, op2: Item) -> (T, T) where T: Any {
-    //     match op1 {
-    //         Item::Int(op1) => match op2 {
-    //             Item::Int(op2) => (op1, op2),
-    //             _ => panic!()
-    //         },
-    //         Item::Float(_) => todo!(),
-    //         Item::Bool(_) => todo!(),
-    //         Item::String(_) => todo!(),
-    //         Item::Pointer(_) => todo!(),
-    //     }
-    // }
+macro_rules! match_types {
+    ($typ:tt, $op1:expr, $op2:expr) => {{
+        if let Item::$typ(op1) = $op1 {
+            if let Item::$typ(op2) = $op2 {
+                return (op1, op2);
+            }
+        }
+        panic!();
+    }};
 }
 
 macro_rules! cast {
@@ -137,30 +124,15 @@ impl VirtualMachine {
     }
 
     fn match_ints(op1: Item, op2: Item) -> (i32, i32) {
-        if let Item::Int(op1) = op1 {
-            if let Item::Int(op2) = op2 {
-                return (op1, op2);
-            }
-        }
-        panic!();
+        match_types!(Int, op1, op2);
     }
 
     fn match_floats(op1: Item, op2: Item) -> (f32, f32) {
-        if let Item::Float(op1) = op1 {
-            if let Item::Float(op2) = op2 {
-                return (op1, op2);
-            }
-        }
-        panic!();
+        match_types!(Float, op1, op2);
     }
 
     fn match_strings(op1: Item, op2: Item) -> (String, String) {
-        if let Item::String(op1) = op1 {
-            if let Item::String(op2) = op2 {
-                return (op1, op2);
-            }
-        }
-        panic!();
+        match_types!(String, op1, op2);
     }
 
     fn match_pointers(op1: Item, op2: Item) -> (MemAddress, MemAddress) {
@@ -189,9 +161,9 @@ impl VirtualMachine {
         let (_, data_type, _) = MemoryResolver::get_offset(dest);
 
         match instruction {
-            "+" =>  arith_operation!(data_type, self, +, op1, op2, dest),
-            "-" =>  arith_operation!(data_type, self, -, op1, op2, dest),
-            "*" =>  arith_operation!(data_type, self, *, op1, op2, dest),
+            "+" => arith_operation!(data_type, self, +, op1, op2, dest),
+            "-" => arith_operation!(data_type, self, -, op1, op2, dest),
+            "*" => arith_operation!(data_type, self, *, op1, op2, dest),
             "/" => arith_operation!(data_type, self, /, op1, op2, dest),
             _ => todo!(),
         }
