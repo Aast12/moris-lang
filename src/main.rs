@@ -39,7 +39,7 @@ fn main() {
     println!("Starting execution");
     vm.execute();
     println!("{:#?}", GlobalManager::get().quadruples);
-    println!("{:#?}", vm.memory);
+    println!("{:#?}", vm.globals);
     
     // let m = MANAGER.lock().unwrap();
 

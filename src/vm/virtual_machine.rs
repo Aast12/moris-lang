@@ -1,10 +1,13 @@
 use core::panic;
-use std::{collections::HashMap, fs::File};
+use std::{
+    collections::{HashMap, LinkedList},
+    fs::File,
+};
 
 use crate::{
     codegen::{meta::ProgramMeta, quadruples::Quadruple},
     memory::{
-        resolver::{MemAddress, MemoryResolver},
+        resolver::{MemAddress, MemoryResolver, MemoryScope},
         types::DataType,
     },
 };
@@ -49,15 +52,15 @@ macro_rules! arith_operation {
         match $data_type {
             DataType::Int => {
                 let (op1, op2) = Self::match_ints($op1, $op2);
-                $self.memory.insert($dest, Item::Int(op1 $op op2));
+                $self.update($dest, Item::Int(op1 $op op2));
             }
             DataType::Float => {
                 let (op1, op2) = Self::match_floats($op1, $op2);
-                $self.memory.insert($dest, Item::Float(op1 $op op2));
+                $self.update($dest, Item::Float(op1 $op op2));
             }
             DataType::Pointer => {
                 let (op1, op2) = Self::match_pointers($op1, $op2);
-                $self.memory.insert($dest, Item::Pointer(op1 $op op2));
+                $self.update($dest, Item::Pointer(op1 $op op2));
             }
             DataType::String => panic!(),
             _ => todo!(),
@@ -67,7 +70,8 @@ macro_rules! arith_operation {
 
 pub struct VirtualMachine {
     pub data: ProgramMeta,
-    pub memory: HashMap<MemAddress, Item>,
+    pub globals: HashMap<MemAddress, Item>,
+    pub locals: LinkedList<HashMap<MemAddress, Item>>,
 }
 
 impl VirtualMachine {
@@ -94,14 +98,15 @@ impl VirtualMachine {
 
         VirtualMachine {
             data,
-            memory: HashMap::from(constants),
+            globals: HashMap::from(constants),
+            locals: LinkedList::new(),
         }
     }
 
     fn get_address(&self, address: &String) -> MemAddress {
         if address.starts_with("*") {
             let address = address[1..].parse::<MemAddress>().unwrap();
-            let accesed = self.memory.get(&address).unwrap();
+            let accesed = self.globals.get(&address).unwrap();
 
             match accesed {
                 Item::Pointer(addr) => *addr as MemAddress,
@@ -113,13 +118,41 @@ impl VirtualMachine {
         }
     }
 
+    fn update(&mut self, address: MemAddress, item: Item) {
+        let (scope, _, _) = MemoryResolver::get_offset(address);
+        match scope {
+            MemoryScope::Global | MemoryScope::Constant => {
+                self.globals.insert(address, item);
+            }
+            MemoryScope::Local => {
+                if let Some(curr_context) = self.locals.back_mut() {
+                    curr_context.insert(address, item);
+                } else {
+                    panic!("No current local context");
+                }
+            }
+        }
+    }
+
     fn get(&self, address: &String) -> Item {
         if address.starts_with("&") {
             let address = address[1..].parse::<MemAddress>().unwrap();
             Item::Pointer(address)
         } else {
             let address = address.parse::<MemAddress>().unwrap();
-            self.memory.get(&address).unwrap().clone()
+            let (scope, _, _) = MemoryResolver::get_offset(address);
+            match scope {
+                MemoryScope::Global | MemoryScope::Constant => {
+                    self.globals.get(&address).unwrap().clone() // TODO: Remove constants if not reused
+                }
+                MemoryScope::Local => {
+                    if let Some(curr) = self.locals.back() {
+                        curr.get(&address).unwrap().clone()
+                    } else {
+                        panic!("No current local context");
+                    }
+                }
+            }
         }
     }
 
@@ -181,7 +214,7 @@ impl VirtualMachine {
                     let op = self.get(&op);
                     let dest = self.get_address(&dest);
 
-                    self.memory.insert(dest, op);
+                    self.update(dest, op);
                 }
                 "Float" => {
                     let Quadruple(_, op, _, dest) = quad;
@@ -194,7 +227,7 @@ impl VirtualMachine {
                     };
                     let op = cast!(op, [Int, Float, Pointer], f32);
 
-                    self.memory.insert(dest, Item::Float(op));
+                    self.update(dest, Item::Float(op));
                 }
                 "Int" => {
                     let Quadruple(_, op, _, dest) = quad;
@@ -203,7 +236,7 @@ impl VirtualMachine {
 
                     let op = cast!(op, [Int, Float, Pointer, Bool], i32);
 
-                    self.memory.insert(dest, Item::Int(op));
+                    self.update(dest, Item::Int(op));
                 }
                 _ => panic!(),
             })
