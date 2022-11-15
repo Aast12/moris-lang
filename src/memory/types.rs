@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]
 pub enum DataType {
@@ -26,7 +26,7 @@ impl DataType {
             DataType::Function(_) => 6,
             DataType::Series => todo!(),
             DataType::Iterable(_) => todo!(),
-            _ => todo!()
+            _ => todo!(),
         }
     }
 
@@ -42,21 +42,15 @@ impl DataType {
         let ok_ret = Ok(Self::max(&left, &right));
         match left {
             DataType::Int => match right {
-                DataType::Int => ok_ret,
-                DataType::Float => ok_ret,
-                DataType::Bool => ok_ret,
+                DataType::Int | DataType::Float | DataType::Bool => ok_ret,
                 _ => Err(()),
             },
             DataType::Float => match right {
-                DataType::Int => ok_ret,
-                DataType::Float => ok_ret,
-                DataType::Bool => ok_ret,
+                DataType::Int | DataType::Float | DataType::Bool => ok_ret,
                 _ => Err(()),
             },
             DataType::Bool => match right {
-                DataType::Int => ok_ret,
-                DataType::Float => ok_ret,
-                DataType::Bool => ok_ret,
+                DataType::Int | DataType::Float | DataType::Bool => ok_ret,
                 _ => Err(()),
             },
             DataType::String => match right {
@@ -71,7 +65,7 @@ impl DataType {
             DataType::Function(func) => Self::equivalent(func, right),
             DataType::Series => todo!(),
             DataType::Iterable(_) => todo!(),
-            _ => todo!()
+            _ => todo!(),
         }
     }
 }

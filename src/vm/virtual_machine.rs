@@ -43,6 +43,41 @@ impl Item {
     //     }
     // }
 }
+
+macro_rules! cast {
+    ($op:expr, [ $($x:tt),*], $y:ty  ) =>
+       {
+        match $op {
+            $(
+                Item::$x(op) => op as $y,
+            )*
+            _ => panic!()
+        }
+       }
+    ;
+}
+
+macro_rules! arith_operation {
+    ($data_type:expr, $self: expr, $op: tt, $op1: expr, $op2: expr, $dest: expr) => {
+        match $data_type {
+            DataType::Int => {
+                let (op1, op2) = Self::match_ints($op1, $op2);
+                $self.memory.insert($dest, Item::Int(op1 $op op2));
+            }
+            DataType::Float => {
+                let (op1, op2) = Self::match_floats($op1, $op2);
+                $self.memory.insert($dest, Item::Float(op1 $op op2));
+            }
+            DataType::Pointer => {
+                let (op1, op2) = Self::match_pointers($op1, $op2);
+                $self.memory.insert($dest, Item::Pointer(op1 $op op2));
+            }
+            DataType::String => panic!(),
+            _ => todo!(),
+        }
+    };
+}
+
 pub struct VirtualMachine {
     pub data: ProgramMeta,
     pub memory: HashMap<MemAddress, Item>,
@@ -102,35 +137,21 @@ impl VirtualMachine {
     }
 
     fn match_ints(op1: Item, op2: Item) -> (i32, i32) {
-        match op1 {
-            Item::Int(op1) => match op2 {
-                Item::Int(op2) => (op1, op2),
-                Item::Float(op2) => (op1, op2 as i32),
-                _ => panic!(),
-            },
-            Item::Float(op1) => match op2 {
-                Item::Int(op2) => (op1 as i32, op2),
-                Item::Float(op2) => (op1 as i32, op2 as i32),
-                _ => panic!(),
-            },
-            _ => panic!(),
+        if let Item::Int(op1) = op1 {
+            if let Item::Int(op2) = op2 {
+                return (op1, op2);
+            }
         }
+        panic!();
     }
 
     fn match_floats(op1: Item, op2: Item) -> (f32, f32) {
-        match op1 {
-            Item::Int(op1) => match op2 {
-                Item::Int(op2) => (op1 as f32, op2 as f32),
-                Item::Float(op2) => (op1 as f32, op2),
-                _ => panic!(),
-            },
-            Item::Float(op1) => match op2 {
-                Item::Int(op2) => (op1 as f32, op2 as f32),
-                Item::Float(op2) => (op1, op2),
-                _ => panic!(),
-            },
-            _ => panic!(),
+        if let Item::Float(op1) = op1 {
+            if let Item::Float(op2) = op2 {
+                return (op1, op2);
+            }
         }
+        panic!();
     }
 
     fn match_strings(op1: Item, op2: Item) -> (String, String) {
@@ -168,94 +189,10 @@ impl VirtualMachine {
         let (_, data_type, _) = MemoryResolver::get_offset(dest);
 
         match instruction {
-            "+" => {
-                match data_type {
-                    DataType::Int => {
-                        let (op1, op2) = Self::match_ints(op1, op2);
-                        self.memory.insert(dest, Item::Int(op1 + op2));
-                    }
-                    DataType::Float => {
-                        let (op1, op2) = Self::match_floats(op1, op2);
-                        self.memory.insert(dest, Item::Float(op1 + op2));
-                    }
-                    DataType::Bool => {
-                        // if let Item::Bool(op1) = op1 {
-                        //     if let Item::Bool(op2) = op2 {
-                        //         self.memory.insert(dest, Item::Bool(op1 + op2));
-                        //     }
-                        // }
-                        todo!()
-                    }
-                    DataType::String => {
-                        let (op1, op2) = Self::match_strings(op1, op2);
-                        self.memory.insert(dest, Item::String(op1 + op2.as_str()));
-                    }
-                    DataType::Pointer => {
-                        let (op1, op2) = Self::match_pointers(op1, op2);
-                        self.memory.insert(dest, Item::Pointer(op1 + op2));
-                    }
-                    _ => todo!(),
-                }
-            }
-            "-" => {
-                match data_type {
-                    DataType::Int => {
-                        let (op1, op2) = Self::match_ints(op1, op2);
-                        self.memory.insert(dest, Item::Int(op1 - op2));
-                    }
-                    DataType::Float => {
-                        let (op1, op2) = Self::match_floats(op1, op2);
-                        self.memory.insert(dest, Item::Float(op1 - op2));
-                    }
-                    DataType::Bool => {
-                        // if let Item::Bool(op1) = op1 {
-                        //     if let Item::Bool(op2) = op2 {
-                        //         self.memory.insert(dest, Item::Bool(op1 + op2));
-                        //     }
-                        // }
-                        todo!()
-                    }
-                    DataType::String => panic!(),
-                    DataType::Pointer => {
-                        let (op1, op2) = Self::match_pointers(op1, op2);
-                        self.memory.insert(dest, Item::Pointer(op1 - op2));
-                    }
-                    _ => todo!(),
-                }
-            }
-            "*" => match data_type {
-                DataType::Int => {
-                    let (op1, op2) = Self::match_ints(op1, op2);
-                    self.memory.insert(dest, Item::Int(op1 * op2));
-                }
-                DataType::Float => {
-                    let (op1, op2) = Self::match_floats(op1, op2);
-                    self.memory.insert(dest, Item::Float(op1 * op2));
-                }
-                DataType::String => panic!(),
-                DataType::Pointer => {
-                    let (op1, op2) = Self::match_pointers(op1, op2);
-                    self.memory.insert(dest, Item::Pointer(op1 * op2));
-                }
-                _ => todo!(),
-            },
-            "/" => match data_type {
-                DataType::Int => {
-                    let (op1, op2) = Self::match_ints(op1, op2);
-                    self.memory
-                        .insert(dest, Item::Float(op1 as f32 / op2 as f32));
-                }
-                DataType::Float => {
-                    let (op1, op2) = Self::match_floats(op1, op2);
-                    self.memory.insert(dest, Item::Float(op1 / op2));
-                }
-                DataType::String => panic!(),
-                DataType::Pointer => {
-                    let (op1, op2) = Self::match_pointers(op1, op2);
-                    self.memory.insert(dest, Item::Pointer(op1 / op2));
-                }
-                _ => todo!(),
-            },
+            "+" =>  arith_operation!(data_type, self, +, op1, op2, dest),
+            "-" =>  arith_operation!(data_type, self, -, op1, op2, dest),
+            "*" =>  arith_operation!(data_type, self, *, op1, op2, dest),
+            "/" => arith_operation!(data_type, self, /, op1, op2, dest),
             _ => todo!(),
         }
     }
@@ -280,12 +217,10 @@ impl VirtualMachine {
                     let dest = self.get_address(&dest);
 
                     let op = match op {
-                        Item::Int(op) => op as f32,
-                        Item::Float(op) => op as f32,
-                        Item::Bool(op) => (op as u8) as f32,
-                        Item::Pointer(op) => op as f32,
-                        _ => panic!(),
+                        Item::Bool(op) => Item::Float((op as u8) as f32),
+                        _ => op,
                     };
+                    let op = cast!(op, [Int, Float, Pointer], f32);
 
                     self.memory.insert(dest, Item::Float(op));
                 }
@@ -294,13 +229,7 @@ impl VirtualMachine {
                     let op = self.get(&op);
                     let dest = self.get_address(&dest);
 
-                    let op = match op {
-                        Item::Int(op) => op as i32,
-                        Item::Float(op) => op as i32,
-                        Item::Bool(op) => op as i32,
-                        Item::Pointer(op) => op as i32,
-                        _ => panic!(),
-                    };
+                    let op = cast!(op, [Int, Float, Pointer, Bool], i32);
 
                     self.memory.insert(dest, Item::Int(op));
                 }

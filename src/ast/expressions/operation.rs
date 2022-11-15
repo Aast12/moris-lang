@@ -1,6 +1,7 @@
 use crate::{
+    ast::node::Node,
     codegen::{manager::GlobalManager, quadruples::Quadruple},
-    semantics::SemanticRules, ast::node::Node,
+    semantics::SemanticRules,
 };
 
 use super::{types, Expression};
@@ -36,10 +37,35 @@ impl Node for Operation {
     }
 
     fn reduce(&self) -> String {
-        let left = self.left.reduce();
-        let right = self.right.reduce();
+        let mut left = self.left.reduce();
+        let mut right = self.right.reduce();
 
         let dt = self.data_type();
+
+        if self.left.data_type() != dt {
+            let new_left = GlobalManager::new_temp(&dt).to_string();
+            GlobalManager::emit(Quadruple::new(
+                format!("{:#?}", dt).as_str(),
+                left.as_str(),
+                "",
+                new_left.as_str(),
+            ));
+
+            left = new_left
+        }
+
+        if self.right.data_type() != dt {
+            let new_right = GlobalManager::new_temp(&dt).to_string();
+            GlobalManager::emit(Quadruple::new(
+                format!("{:#?}", dt).as_str(),
+                right.as_str(),
+                "",
+                new_right.as_str(),
+            ));
+
+            right = new_right
+        }
+        
         let mut manager = GlobalManager::get();
 
         let tmp = manager.new_temp_address(&dt).to_string();
