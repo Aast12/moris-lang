@@ -18,8 +18,8 @@ impl Quadruple {
         )
     }
 
-    pub fn jump_check(instruction: &str, check: &str, position: usize) -> Quadruple {
-        Quadruple::new(instruction, check, "", position.to_string().as_str())
+    pub fn goto_false(check: &str, position: usize) -> Quadruple {
+        Quadruple::new("gotoFalse", check, "", position.to_string().as_str())
     }
 
     pub fn jump(instruction: &str, position: usize) -> Quadruple {
