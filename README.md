@@ -4,6 +4,15 @@
 
 ## Status
 
+## Noviembre 14, 2022
+
+- Generación de cuadruplos
+  - Arreglos
+    - Genera cuadruplos y asigna memoria para arreglos y matrices.
+- Ejecución
+  - La máquina virtual ejecuta código para operaciones básicas (=, +, -, *, /).
+
+
 ## Noviembre 7, 2022
 
 - Generación de cuadruplos

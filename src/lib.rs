@@ -4,3 +4,4 @@ pub mod env;
 pub mod memory;
 pub mod parser;
 pub mod semantics;
+pub mod vm;

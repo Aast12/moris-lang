@@ -62,7 +62,7 @@ impl Dimension {
             size,
             acc_size: vec![],
         };
-        
+
         new_dim.calc_acc_size();
         new_dim
 
