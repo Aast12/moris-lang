@@ -65,21 +65,19 @@ impl Node for Statement {
                     let prev_value_temp = value_temp.clone();
                     value_temp = manager.new_temp_address(&access_data_type).to_string();
 
-                    manager.emit(Quadruple(
-                        String::from(format!("{:?}", access_data_type)),
-                        prev_value_temp,
-                        String::new(),
-                        value_temp.clone(),
+                    manager.emit(Quadruple::type_cast(
+                        &access_data_type,
+                        prev_value_temp.as_str(),
+                        value_temp.clone().as_str(),
                     ))
                 }
 
                 let access = access.reduce();
 
-                GlobalManager::emit(Quadruple(
-                    String::from(Operator::Assign.to_string()),
-                    value_temp,
-                    String::new(),
-                    access,
+                GlobalManager::emit(Quadruple::unary(
+                    Operator::Assign,
+                    value_temp.as_str(),
+                    access.as_str(),
                 ));
             }
             Statement::Expression(exp) => exp.generate(),
@@ -286,7 +284,7 @@ impl Node for Program {
                 match stmt {
                     Statement::FunctionDeclaration(_) => {
                         last_func_generated = true;
-                        GlobalManager::emit(Quadruple::new_coded("endprogram"));
+                        GlobalManager::emit(Quadruple::end_program());
                     }
                     _ => (),
                 }

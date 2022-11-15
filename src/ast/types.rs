@@ -83,7 +83,9 @@ impl Node for Variable {
     fn generate(&mut self) -> () {
         // Add variable to symbols table
         let mut manager = GlobalManager::get();
-        manager.get_env().add_var(&self.id, &self.data_type, &self.dimension);
+        manager
+            .get_env()
+            .add_var(&self.id, &self.data_type, &self.dimension);
         drop(manager);
 
         let self_address = self.address();
@@ -107,19 +109,17 @@ impl Node for Variable {
                 let prev_value_temp = value_temp.clone();
                 value_temp = manager.new_temp_address(&self.data_type).to_string();
 
-                manager.emit(Quadruple(
-                    String::from(format!("{:?}", self.data_type)),
-                    prev_value_temp,
-                    String::new(),
-                    value_temp.clone(),
+                manager.emit(Quadruple::type_cast(
+                    &self.data_type,
+                    prev_value_temp.as_str(),
+                    value_temp.clone().as_str(),
                 ))
             }
 
-            manager.emit(Quadruple(
-                String::from(Operator::Assign.to_string()),
-                value_temp,
-                String::new(),
-                self_address.to_string(),
+            manager.emit(Quadruple::unary(
+                Operator::Assign,
+                value_temp.as_str(),
+                self_address.to_string().as_str(),
             ));
 
             drop(manager);

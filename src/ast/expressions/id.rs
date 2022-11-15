@@ -3,6 +3,7 @@ use std::iter::zip;
 use crate::ast;
 use crate::ast::expressions::Index;
 use crate::ast::node::Node;
+use crate::ast::types::Operator;
 use crate::codegen::manager::GlobalManager;
 use crate::codegen::quadruples::Quadruple;
 use crate::memory::resolver::MemAddress;
@@ -97,17 +98,15 @@ impl Node for Access {
             zip(&indexing_addresses, &access_item.dimension.acc_size).for_each(
                 |(index, dim_size)| {
                     if let Some(dim) = curr_dim.next() {
-                        GlobalManager::emit(Quadruple::new(
-                            "ver",
+                        GlobalManager::emit(Quadruple::verify(
                             index.as_str(),
-                            "",
                             dim.to_string().as_str(),
                         ))
                     }
 
                     if first_run {
-                        GlobalManager::emit(Quadruple::new(
-                            "*",
+                        GlobalManager::emit(Quadruple::operation(
+                            Operator::Mul,
                             index.as_str(),
                             dim_size.to_string().as_str(),
                             acc_tmp.as_str(),
@@ -116,15 +115,15 @@ impl Node for Access {
                         let tmp = GlobalManager::new_temp(&DataType::Int);
                         let tmp_str = tmp.to_string();
 
-                        GlobalManager::emit(Quadruple::new(
-                            "*",
+                        GlobalManager::emit(Quadruple::operation(
+                            Operator::Mul,
                             index.as_str(),
                             dim_size.to_string().as_str(),
                             tmp_str.as_str(),
                         ));
 
-                        GlobalManager::emit(Quadruple::new(
-                            "+",
+                        GlobalManager::emit(Quadruple::operation(
+                            Operator::Add,
                             acc_tmp.as_str(),
                             tmp_str.as_str(),
                             acc_tmp.as_str(),
@@ -135,8 +134,8 @@ impl Node for Access {
 
             let access_tmp = GlobalManager::new_temp(&DataType::Pointer);
 
-            GlobalManager::emit(Quadruple::new(
-                "+",
+            GlobalManager::emit(Quadruple::operation(
+                Operator::Add,
                 format!("&{}", access_item.address).as_str(),
                 acc_tmp.as_str(),
                 access_tmp.to_string().as_str(),

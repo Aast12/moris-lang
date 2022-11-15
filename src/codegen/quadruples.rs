@@ -3,6 +3,8 @@ use std::fmt::{Debug, Error, Formatter};
 
 use serde::{Deserialize, Serialize};
 
+use crate::{ast::types::Operator, memory::types::DataType};
+
 use super::manager::MANAGER;
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -18,16 +20,42 @@ impl Quadruple {
         )
     }
 
+    pub fn param(param_address: &str, index: usize) -> Quadruple {
+        Quadruple::new("param", param_address, "", index.to_string().as_str())
+    }
+
+    pub fn era(id: &str) -> Quadruple {
+        Quadruple::new("era", "", "", id)
+    }
+
+    pub fn type_cast(data_type: &DataType, origin: &str, dest: &str) -> Quadruple {
+        Quadruple::new(format!("{:#?}", data_type).as_str(), origin, "", dest)
+    }
+
+    pub fn unary(operator: Operator, left: &str, dest: &str) -> Quadruple {
+        let op = operator.to_string();
+        Quadruple::new(op, left, "", dest)
+    }
+
+    pub fn operation(operator: Operator, left: &str, right: &str, dest: &str) -> Quadruple {
+        let op = operator.to_string();
+        Quadruple::new(op, left, right, dest)
+    }
+
+    pub fn verify(value: &str, bound: &str) -> Quadruple {
+        Quadruple::new("ver", value, "", bound)
+    }
+
+    pub fn go_sub(id: &str) -> Quadruple {
+        Quadruple::new("gosub", "", "", id)
+    }
+
     pub fn goto_false(check: &str, position: usize) -> Quadruple {
         Quadruple::new("gotoFalse", check, "", position.to_string().as_str())
     }
 
     pub fn goto(position: usize) -> Quadruple {
         Quadruple::new("goto", "", "", position.to_string().as_str())
-    }
-
-    pub fn jump(instruction: &str, position: usize) -> Quadruple {
-        Quadruple::new(instruction, "", "", position.to_string().as_str())
     }
 
     pub fn new_empty() -> Quadruple {
@@ -43,7 +71,15 @@ impl Quadruple {
         )
     }
 
-    pub fn new_coded(key: &str) -> Quadruple {
+    pub fn end_func() -> Quadruple {
+        Self::new_coded("endFunc")
+    }
+
+    pub fn end_program() -> Quadruple {
+        Self::new_coded("endProgram")
+    }
+
+    fn new_coded(key: &str) -> Quadruple {
         Quadruple(
             String::from(key),
             String::new(),

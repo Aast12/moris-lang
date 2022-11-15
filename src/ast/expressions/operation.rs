@@ -44,37 +44,31 @@ impl Node for Operation {
 
         if self.left.data_type() != dt {
             let new_left = GlobalManager::new_temp(&dt).to_string();
-            GlobalManager::emit(Quadruple::new(
-                format!("{:#?}", dt).as_str(),
-                left.as_str(),
-                "",
-                new_left.as_str(),
-            ));
+            GlobalManager::emit(Quadruple::type_cast(&dt, left.as_str(), new_left.as_str()));
 
             left = new_left
         }
 
         if self.right.data_type() != dt {
             let new_right = GlobalManager::new_temp(&dt).to_string();
-            GlobalManager::emit(Quadruple::new(
-                format!("{:#?}", dt).as_str(),
+            GlobalManager::emit(Quadruple::type_cast(
+                &dt,
                 right.as_str(),
-                "",
                 new_right.as_str(),
             ));
 
             right = new_right
         }
-        
+
         let mut manager = GlobalManager::get();
 
         let tmp = manager.new_temp_address(&dt).to_string();
 
-        manager.emit(Quadruple(
-            String::from(self.operator.to_string()),
-            left,
-            right,
-            tmp.clone(),
+        manager.emit(Quadruple::operation(
+            self.operator,
+            left.as_str(),
+            right.as_str(),
+            tmp.as_str(),
         ));
 
         return tmp;

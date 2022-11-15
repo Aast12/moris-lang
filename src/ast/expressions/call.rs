@@ -42,7 +42,7 @@ impl Node for Call {
             );
         }
 
-        GlobalManager::emit(Quadruple::new("era", "", "", self.id.as_str()));
+        GlobalManager::emit(Quadruple::era(self.id.as_str()));
 
         for (index, param) in self.params.iter().enumerate() {
             let (_, target_data_type) = target_params.get(index).unwrap();
@@ -59,25 +59,19 @@ impl Node for Call {
             if param_data_type != *target_data_type {
                 let value_temp = GlobalManager::new_temp(&target_data_type).to_string();
 
-                GlobalManager::emit(Quadruple(
-                    String::from(format!("{:?}", target_data_type)),
-                    param_address,
-                    String::new(),
-                    value_temp.clone(),
+                GlobalManager::emit(Quadruple::type_cast(
+                    &target_data_type,
+                    param_address.as_str(),
+                    value_temp.as_str(),
                 ));
 
                 param_address = value_temp.clone();
             }
 
-            GlobalManager::emit(Quadruple::new(
-                "param",
-                param_address.as_str(),
-                "",
-                index.to_string().as_str(),
-            ));
+            GlobalManager::emit(Quadruple::param(param_address.as_str(), index));
         }
 
-        GlobalManager::emit(Quadruple::new("gosub", "", "", self.id.as_str()));
+        GlobalManager::emit(Quadruple::go_sub(self.id.as_str()));
 
         if let Some(address) = GlobalManager::get().get_func_return(&self.id) {
             address.to_string()

@@ -39,7 +39,7 @@ impl Node for Function {
 
         self.block.generate();
 
-        GlobalManager::emit(Quadruple::new_coded("endfunc"));
+        GlobalManager::emit(Quadruple::end_func());
 
         GlobalManager::get()
             .get_env()
