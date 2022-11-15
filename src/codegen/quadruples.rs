@@ -22,6 +22,10 @@ impl Quadruple {
         Quadruple::new("gotoFalse", check, "", position.to_string().as_str())
     }
 
+    pub fn goto(position: usize) -> Quadruple {
+        Quadruple::new("goto", "", "", position.to_string().as_str())
+    }
+
     pub fn jump(instruction: &str, position: usize) -> Quadruple {
         Quadruple::new(instruction, "", "", position.to_string().as_str())
     }

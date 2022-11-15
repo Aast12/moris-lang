@@ -116,7 +116,7 @@ impl Node for Statement {
 
                     // Update goto to skip else block
                     let end_pos = GlobalManager::get_next_pos();
-                    goto_end_block.release(Quadruple::jump("goto", end_pos));
+                    goto_end_block.release(Quadruple::goto(end_pos));
                 } else {
                     // Update goto to skip if false
                     let end_pos = GlobalManager::get_next_pos();
@@ -166,12 +166,12 @@ impl Node for Statement {
                 block.generate();
 
                 // Emit instruction to return to condition evaluation
-                let to_start_pos_quadruple = Quadruple::jump("goto", start_pos);
+                let to_start_pos_quadruple = Quadruple::goto(start_pos);
                 GlobalManager::emit(to_start_pos_quadruple.clone());
 
                 let end_pos = GlobalManager::get_next_pos();
 
-                let to_end_pos_quadruple = Quadruple::jump("goto", end_pos);
+                let to_end_pos_quadruple = Quadruple::goto(end_pos);
 
                 // Emit instruction to return to condition evaluation
                 goto_false_cond.release(Quadruple::goto_false(&condition_id, end_pos));
