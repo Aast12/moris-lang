@@ -99,8 +99,8 @@ impl VirtualMachine {
         VirtualMachine { data, memory }
     }
 
-    fn match_ints(op1: Item, op2: Item) -> (i32, i32) {
-        match_types!(Int, op1, op2);
+    fn match_ints(left: Item, right: Item) -> (i32, i32) {
+        match_types!(Int, left, right)
     }
 
     fn match_floats(op1: Item, op2: Item) -> (f32, f32) {
@@ -144,7 +144,7 @@ impl VirtualMachine {
         (operator.as_str(), left, right, dest)
     }
 
-    fn operation(&mut self, quadruple: Quadruple) {
+    fn arithmetic_op(&mut self, quadruple: &Quadruple) {
         let Quadruple(instruction, left, right, dest) = quadruple;
         let instruction = instruction.as_str();
         let left = self.memory.get(&left);
@@ -162,7 +162,22 @@ impl VirtualMachine {
         }
     }
 
-    fn logic_cmp(&mut self, quadruple: Quadruple) {
+    fn boolean_op(&mut self, quadruple: &Quadruple) {
+        let (op, left, right, dest) = self.unpack_binary(quadruple);
+
+        let left = left.unwrap_bool();
+        let right = right.unwrap_bool();
+
+        let result = match op {
+            "&&" => operate!(left, &&, right),
+            "||" => operate!(left, ||, right),
+            _ => todo!(),
+        };
+
+        self.memory.update(dest, Item::Bool(result));
+    }
+
+    fn logic_cmp(&mut self, quadruple: &Quadruple) {
         let operator = quadruple.0.as_str();
         let left_addr = self.memory.get_address(&quadruple.1);
 
@@ -189,22 +204,9 @@ impl VirtualMachine {
             let curr_instruction = quadruples.get(instruction_pointer).unwrap();
             println!("EXEC {:#?}", curr_instruction.0.as_str());
             match curr_instruction.0.as_str() {
-                "*" | "+" | "-" | "/" => self.operation(curr_instruction.clone()),
-                ">" | ">=" | "<" | "<=" | "==" | "!=" => self.logic_cmp(curr_instruction.clone()),
-                "&&" | "||" => {
-                    let (op, left, right, dest) = self.unpack_binary(curr_instruction);
-
-                    let left = left.unwrap_bool();
-                    let right = right.unwrap_bool();
-
-                    let result = match op {
-                        "&&" => operate!(left, &&, right),
-                        "||" => operate!(left, ||, right),
-                        _ => todo!(),
-                    };
-
-                    self.memory.update(dest, Item::Bool(result));
-                }
+                "*" | "+" | "-" | "/" => self.arithmetic_op(curr_instruction),
+                ">" | ">=" | "<" | "<=" | "==" | "!=" => self.logic_cmp(curr_instruction),
+                "&&" | "||" => self.boolean_op(curr_instruction),
                 "=" => {
                     let (op, dest) = self.unpack_unary(curr_instruction);
                     self.memory.update(dest, op);
