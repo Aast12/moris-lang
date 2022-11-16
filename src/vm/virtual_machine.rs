@@ -24,9 +24,9 @@ pub enum Item {
 }
 
 macro_rules! match_types {
-    ($typ:tt, $op1:expr, $op2:expr) => {{
-        if let Item::$typ(op1) = $op1 {
-            if let Item::$typ(op2) = $op2 {
+    ($typ:tt, $left:expr, $right:expr) => {{
+        if let Item::$typ(op1) = $left {
+            if let Item::$typ(op2) = $right {
                 return (op1, op2);
             }
         }
@@ -48,18 +48,18 @@ macro_rules! cast {
 }
 
 macro_rules! arith_operation {
-    ($data_type:expr, $self: expr, $op: tt, $op1: expr, $op2: expr, $dest: expr) => {
+    ($data_type:expr, $self: expr, $op: tt, $left: expr, $right: expr, $dest: expr) => {
         match $data_type {
             DataType::Int => {
-                let (op1, op2) = Self::match_ints($op1, $op2);
+                let (op1, op2) = Self::match_ints($left, $right);
                 $self.update($dest, Item::Int(op1 $op op2));
             }
             DataType::Float => {
-                let (op1, op2) = Self::match_floats($op1, $op2);
+                let (op1, op2) = Self::match_floats($left, $right);
                 $self.update($dest, Item::Float(op1 $op op2));
             }
             DataType::Pointer => {
-                let (op1, op2) = Self::match_pointers($op1, $op2);
+                let (op1, op2) = Self::match_pointers($left, $right);
                 $self.update($dest, Item::Pointer(op1 $op op2));
             }
             DataType::String => panic!(),
@@ -184,42 +184,47 @@ impl VirtualMachine {
         }
     }
 
+    fn unpack_unary(&self, instruction: &Quadruple) -> (Item, MemAddress) {
+        let Quadruple(_, op, _, dest) = instruction;
+        let op = self.get(&op);
+        let dest = self.get_address(&dest);
+
+        (op, dest)
+    }
+
     fn operation(&mut self, quadruple: Quadruple) {
-        let Quadruple(instruction, op1, op2, dest) = quadruple;
+        let Quadruple(instruction, left, right, dest) = quadruple;
         let instruction = instruction.as_str();
-        let op1 = self.get(&op1);
-        let op2 = self.get(&op2);
+        let left = self.get(&left);
+        let right = self.get(&right);
         let dest = self.get_address(&dest);
 
         let (_, data_type, _) = MemoryResolver::get_offset(dest);
 
         match instruction {
-            "+" => arith_operation!(data_type, self, +, op1, op2, dest),
-            "-" => arith_operation!(data_type, self, -, op1, op2, dest),
-            "*" => arith_operation!(data_type, self, *, op1, op2, dest),
-            "/" => arith_operation!(data_type, self, /, op1, op2, dest),
+            "+" => arith_operation!(data_type, self, +, left, right, dest),
+            "-" => arith_operation!(data_type, self, -, left, right, dest),
+            "*" => arith_operation!(data_type, self, *, left, right, dest),
+            "/" => arith_operation!(data_type, self, /, left, right, dest),
             _ => todo!(),
         }
     }
 
     pub fn execute(&mut self) {
-        self.data
-            .quadruples
-            .clone()
-            .iter()
-            .for_each(|quad| match quad.0.as_str() {
-                "*" | "+" | "-" | "/" => self.operation(quad.clone()),
-                "=" => {
-                    let Quadruple(_, op, _, dest) = quad;
-                    let op = self.get(&op);
-                    let dest = self.get_address(&dest);
+        let mut instruction_pointer = 0;
+        let quadruples: Vec<Quadruple> = self.data.quadruples.drain(..).collect();
 
+        while instruction_pointer < quadruples.len() {
+            let curr_instruction = quadruples.get(instruction_pointer).unwrap();
+
+            match curr_instruction.0.as_str() {
+                "*" | "+" | "-" | "/" => self.operation(curr_instruction.clone()),
+                "=" => {
+                    let (op, dest) = self.unpack_unary(curr_instruction);
                     self.update(dest, op);
                 }
                 "Float" => {
-                    let Quadruple(_, op, _, dest) = quad;
-                    let op = self.get(&op);
-                    let dest = self.get_address(&dest);
+                    let (op, dest) = self.unpack_unary(curr_instruction);
 
                     let op = match op {
                         Item::Bool(op) => Item::Float((op as u8) as f32),
@@ -230,15 +235,24 @@ impl VirtualMachine {
                     self.update(dest, Item::Float(op));
                 }
                 "Int" => {
-                    let Quadruple(_, op, _, dest) = quad;
-                    let op = self.get(&op);
-                    let dest = self.get_address(&dest);
+                    let (op, dest) = self.unpack_unary(curr_instruction);
 
                     let op = cast!(op, [Int, Float, Pointer, Bool], i32);
 
                     self.update(dest, Item::Int(op));
                 }
+                "Bool" => {
+                    let (op, dest) = self.unpack_unary(curr_instruction);
+
+                    let op = cast!(op, [Int, Float, Pointer, Bool], i32);
+                    let op = if op > 0 { true } else { false };
+
+                    self.update(dest, Item::Bool(op));
+                }
                 _ => panic!(),
-            })
+            }
+
+            instruction_pointer += 1;
+        }
     }
 }
