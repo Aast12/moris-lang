@@ -1,6 +1,7 @@
 use crate::{
     ast::node::Node,
     codegen::{manager::GlobalManager, quadruples::Quadruple},
+    memory::types::DataType,
     semantics::SemanticRules,
 };
 
@@ -42,22 +43,54 @@ impl Node for Operation {
 
         let dt = self.data_type();
 
-        if self.left.data_type() != dt {
-            let new_left = GlobalManager::new_temp(&dt).to_string();
-            GlobalManager::emit(Quadruple::type_cast(&dt, left.as_str(), new_left.as_str()));
+        match dt {
+            DataType::Int | DataType::Float | DataType::String | DataType::Pointer => {
+                if self.left.data_type() != dt {
+                    let new_left = GlobalManager::new_temp(&dt).to_string();
+                    GlobalManager::emit(Quadruple::type_cast(
+                        &dt,
+                        left.as_str(),
+                        new_left.as_str(),
+                    ));
 
-            left = new_left
-        }
+                    left = new_left
+                }
 
-        if self.right.data_type() != dt {
-            let new_right = GlobalManager::new_temp(&dt).to_string();
-            GlobalManager::emit(Quadruple::type_cast(
-                &dt,
-                right.as_str(),
-                new_right.as_str(),
-            ));
+                if self.right.data_type() != dt {
+                    let new_right = GlobalManager::new_temp(&dt).to_string();
+                    GlobalManager::emit(Quadruple::type_cast(
+                        &dt,
+                        right.as_str(),
+                        new_right.as_str(),
+                    ));
 
-            right = new_right
+                    right = new_right
+                }
+            }
+            DataType::Bool => {
+                let left_dt = self.left.data_type();
+                let right_dt = self.right.data_type();
+                if left_dt != right_dt {
+                    let max_dt = DataType::max(&left_dt, &right_dt);
+                    let new = GlobalManager::new_temp(&max_dt).to_string();
+                    if max_dt != left_dt {
+                        GlobalManager::emit(Quadruple::type_cast(
+                            &max_dt,
+                            left.as_str(),
+                            new.as_str(),
+                        ));
+                        left = new;
+                    } else {
+                        GlobalManager::emit(Quadruple::type_cast(
+                            &max_dt,
+                            right.as_str(),
+                            new.as_str(),
+                        ));
+                        right = new;
+                    }
+                }
+            }
+            _ => (),
         }
 
         let mut manager = GlobalManager::get();
