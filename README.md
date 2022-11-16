@@ -4,13 +4,19 @@
 
 ## Status
 
+## Noviembre 15, 2022
+
+- Ejecución
+  - La máquina virtual ejecuta código para comparaciones lógicas (>, <, >=, <=, !=, ==) con Floats, Ints y Bools.
+  - Se ejecuta código para estatutos if-else,
+
 ## Noviembre 14, 2022
 
 - Generación de cuadruplos
   - Arreglos
     - Genera cuadruplos y asigna memoria para arreglos y matrices.
 - Ejecución
-  - La máquina virtual ejecuta código para operaciones básicas (=, +, -, *, /).
+  - La máquina virtual ejecuta código para operaciones básicas (=, +, -, *, /) con Floats, Ints y Bools.
 
 
 ## Noviembre 7, 2022

@@ -68,6 +68,29 @@ macro_rules! arith_operation {
     };
 }
 
+macro_rules! logic_cmp {
+    ($data_type:expr, $self: expr, $op: tt, $curr_instruction: expr) => {
+        match $data_type {
+            DataType::Int => {
+                let (left, right, dest) = $self.unpack_binary($curr_instruction);
+                let (left, right) = Self::match_ints(left, right);
+
+                $self.update(dest, Item::Bool(left $op right));
+            }
+            DataType::Float => {
+                let (left, right, dest) = $self.unpack_binary($curr_instruction);
+                let (left, right) = Self::match_floats(left, right);
+                $self.update(dest, Item::Bool(left $op right));
+            }
+            DataType::Bool => todo!(),
+            DataType::String => todo!(),
+            DataType::Series => todo!(),
+            _ => panic!(),
+        }
+
+    };
+}
+
 pub struct VirtualMachine {
     pub data: ProgramMeta,
     pub globals: HashMap<MemAddress, Item>,
@@ -192,6 +215,15 @@ impl VirtualMachine {
         (op, dest)
     }
 
+    fn unpack_binary(&self, instruction: &Quadruple) -> (Item, Item, MemAddress) {
+        let Quadruple(_, left, right, dest) = instruction;
+        let left = self.get(&left);
+        let right = self.get(&right);
+        let dest = self.get_address(&dest);
+
+        (left, right, dest)
+    }
+
     fn operation(&mut self, quadruple: Quadruple) {
         let Quadruple(instruction, left, right, dest) = quadruple;
         let instruction = instruction.as_str();
@@ -210,15 +242,32 @@ impl VirtualMachine {
         }
     }
 
+    fn logic_cmp(&mut self, quadruple: Quadruple) {
+        let operator = quadruple.0.as_str();
+        let left_addr = self.get_address(&quadruple.1);
+        let (_, data_type, _) = MemoryResolver::get_offset(left_addr);
+
+        match operator {
+            ">" => logic_cmp!(data_type, self, >, &quadruple),
+            ">=" => logic_cmp!(data_type, self, >=, &quadruple),
+            "<" => logic_cmp!(data_type, self, <, &quadruple),
+            "<=" => logic_cmp!(data_type, self, <=, &quadruple),
+            "==" => logic_cmp!(data_type, self, ==, &quadruple),
+            "!=" => logic_cmp!(data_type, self, !=, &quadruple),
+            _ => todo!(),
+        }
+    }
+
     pub fn execute(&mut self) {
         let mut instruction_pointer = 0;
         let quadruples: Vec<Quadruple> = self.data.quadruples.drain(..).collect();
 
         while instruction_pointer < quadruples.len() {
             let curr_instruction = quadruples.get(instruction_pointer).unwrap();
-
+            println!("Evaluating {:#?}", curr_instruction);
             match curr_instruction.0.as_str() {
                 "*" | "+" | "-" | "/" => self.operation(curr_instruction.clone()),
+                ">" | ">=" | "<" | "<=" | "==" | "!=" => self.logic_cmp(curr_instruction.clone()),
                 "=" => {
                     let (op, dest) = self.unpack_unary(curr_instruction);
                     self.update(dest, op);
@@ -258,6 +307,24 @@ impl VirtualMachine {
                     if value >= bound {
                         panic!("Index out of bounds!");
                     }
+                }
+                "goto" => {
+                    let Quadruple(_, _, _, next) = curr_instruction;
+                    instruction_pointer = next.parse::<usize>().unwrap();
+                    continue;
+                }
+                "gotoFalse" => {
+                    let Quadruple(_, check, _, next) = curr_instruction;
+                    let check = self.get(check);
+                    match check {
+                        Item::Bool(check) => {
+                            if !check {
+                                instruction_pointer = next.parse::<usize>().unwrap();
+                                continue;
+                            }
+                        }
+                        _ => panic!("Can't check non-boolean condition."),
+                    };
                 }
                 _ => panic!(),
             }
