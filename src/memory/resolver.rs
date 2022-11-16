@@ -48,7 +48,7 @@ impl MemoryResolver {
     pub const LOCAL_OFFSET: MemAddress = Self::SEGMENT_SIZE * 2;
     pub const CONSTANT_OFFSET: MemAddress = Self::SEGMENT_SIZE * 3;
 
-    fn get_scope_from_address(address: MemAddress) -> Option<&'static MemoryScope> {
+    pub fn get_scope_from_address(address: MemAddress) -> Option<&'static MemoryScope> {
         let offset = address - (address % Self::SEGMENT_SIZE);
         if let Some(scope) = SCOPE_OFFSETS_INV.get(&offset) {
             Some(scope)
@@ -57,7 +57,7 @@ impl MemoryResolver {
         }
     }
 
-    fn get_type_from_address(address: MemAddress) -> Option<&'static DataType> {
+    pub fn get_type_from_address(address: MemAddress) -> Option<&'static DataType> {
         let type_offset = address % Self::SEGMENT_SIZE;
         let step_offset = type_offset - (type_offset % Self::DATA_TYPE_ALLOC_SIZE);
         if let Some(dtype) = TYPE_OFFSETS_INV.get(&step_offset) {

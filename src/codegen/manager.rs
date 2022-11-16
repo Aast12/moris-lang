@@ -1,8 +1,6 @@
 use core::panic;
 use lazy_static::lazy_static;
-use serde_pickle::SerOptions;
 use std::{
-    borrow::Borrow,
     collections::HashMap,
     fmt::Debug,
     fs::File,
@@ -252,6 +250,13 @@ impl GlobalManager {
 
     pub fn emit(quadruple: Quadruple) {
         Self::get().emit(quadruple);
+    }
+
+    pub fn emit_cast(target_dt: &DataType, target: &str) -> String {
+        let new = GlobalManager::new_temp(target_dt).to_string();
+        GlobalManager::emit(Quadruple::type_cast(target_dt, target, new.as_str()));
+
+        new
     }
 
     pub fn get_next_pos() -> usize {

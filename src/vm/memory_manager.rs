@@ -1,6 +1,8 @@
 use core::panic;
 use std::collections::{HashMap, LinkedList};
 
+use variantly::Variantly;
+
 use crate::{
     codegen::meta::ProgramMeta,
     memory::{
@@ -9,7 +11,7 @@ use crate::{
     },
 };
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Variantly)]
 pub enum Item {
     Int(i32),
     Float(f32),
@@ -20,6 +22,7 @@ pub enum Item {
     Pointer(MemAddress),
 }
 
+#[derive(Debug)]
 pub struct MemoryManager {
     pub globals: HashMap<MemAddress, Item>,
     pub locals: LinkedList<HashMap<MemAddress, Item>>,

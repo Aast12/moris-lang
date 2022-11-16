@@ -6,6 +6,15 @@ use crate::{
 use super::{expressions::Expression, node::Node, Dimension};
 
 #[derive(Clone, Copy, Debug)]
+pub enum OperatorType {
+    Arithmetic,
+    Pipe,
+    Boolean,
+    Comparison,
+    Assign,
+}
+
+#[derive(Clone, Copy, Debug)]
 pub enum Operator {
     Mul,
     Div,
@@ -42,6 +51,49 @@ impl Operator {
             Operator::Assign => "=",
             Operator::LessOrEq => "<=",
             Operator::GreaterOrEq => ">=",
+        }
+    }
+
+    pub fn is_arithmetic(&self) -> bool {
+        match self {
+            Operator::Mul | Operator::Div | Operator::Add | Operator::Sub => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_comparison(&self) -> bool {
+        match self {
+            Operator::LessThan
+            | Operator::GreaterThan
+            | Operator::LessOrEq
+            | Operator::GreaterOrEq
+            | Operator::NotEq
+            | Operator::Eq => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_boolean(&self) -> bool {
+        match self {
+            Operator::And | Operator::Or => true,
+            _ => false,
+        }
+    }
+
+    pub fn which(&self) -> OperatorType {
+        match self {
+            Operator::LessThan
+            | Operator::GreaterThan
+            | Operator::LessOrEq
+            | Operator::GreaterOrEq
+            | Operator::NotEq
+            | Operator::Eq => OperatorType::Comparison,
+            Operator::And | Operator::Or => OperatorType::Boolean,
+            Operator::Mul | Operator::Div | Operator::Add | Operator::Sub => {
+                OperatorType::Arithmetic
+            }
+            Operator::Pipe | Operator::ForwardPipe => OperatorType::Pipe,
+            Operator::Assign => OperatorType::Assign,
         }
     }
 }

@@ -94,7 +94,11 @@ impl Node for Statement {
                 //  4. [goto if condition was true, jumps after 5.]
                 //  5. [else-block instruction]
 
-                let condition_id = condition.reduce();
+                let mut condition_id = condition.reduce();
+                let condition_dt = condition.data_type();
+                if condition_dt != DataType::Bool {
+                    condition_id = GlobalManager::emit_cast(&DataType::Bool, condition_id.as_str());
+                }
 
                 // goto instruction to skip if-true block
                 let mut goto_if_false_quad = QuadrupleHold::new();
@@ -156,7 +160,12 @@ impl Node for Statement {
                 let start_pos = GlobalManager::get_next_pos();
 
                 // Temporal storing condition value
-                let condition_id = condition.reduce();
+                let mut condition_id = condition.reduce();
+                let condition_dt = condition.data_type();
+                if condition_dt != DataType::Bool {
+                    condition_id = GlobalManager::emit_cast(&DataType::Bool, condition_id.as_str());
+                }
+
 
                 // Goto instruction to exit the loop
                 let mut goto_false_cond = QuadrupleHold::new();

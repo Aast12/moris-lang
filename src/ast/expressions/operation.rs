@@ -1,5 +1,8 @@
 use crate::{
-    ast::node::Node,
+    ast::{
+        node::Node,
+        types::{OperatorType},
+    },
     codegen::{manager::GlobalManager, quadruples::Quadruple},
     memory::types::DataType,
     semantics::SemanticRules,
@@ -68,25 +71,36 @@ impl Node for Operation {
                 }
             }
             DataType::Bool => {
-                let left_dt = self.left.data_type();
-                let right_dt = self.right.data_type();
-                if left_dt != right_dt {
-                    let max_dt = DataType::max(&left_dt, &right_dt);
-                    let new = GlobalManager::new_temp(&max_dt).to_string();
-                    if max_dt != left_dt {
-                        GlobalManager::emit(Quadruple::type_cast(
-                            &max_dt,
-                            left.as_str(),
-                            new.as_str(),
-                        ));
-                        left = new;
-                    } else {
-                        GlobalManager::emit(Quadruple::type_cast(
-                            &max_dt,
-                            right.as_str(),
-                            new.as_str(),
-                        ));
-                        right = new;
+                if self.operator.is_arithmetic() {
+                    panic!()
+                }
+
+                // TODO: Type casting compatibility validations
+                match self.operator.which() {
+                    OperatorType::Arithmetic => todo!(),
+                    OperatorType::Pipe | OperatorType::Assign => todo!(),
+                    OperatorType::Boolean => {
+                        let left_dt = self.left.data_type();
+                        let right_dt = self.right.data_type();
+
+                        if left_dt != DataType::Bool {
+                            left = GlobalManager::emit_cast(&DataType::Bool, left.as_str());
+                        }
+                        if right_dt != DataType::Bool {
+                            right = GlobalManager::emit_cast(&DataType::Bool, left.as_str());
+                        }
+                    }
+                    OperatorType::Comparison => {
+                        let left_dt = self.left.data_type();
+                        let right_dt = self.right.data_type();
+                        if left_dt != right_dt {
+                            let max_dt = DataType::max(&left_dt, &right_dt);
+                            if max_dt != left_dt {
+                                left = GlobalManager::emit_cast(&max_dt, left.as_str());
+                            } else {
+                                right = GlobalManager::emit_cast(&max_dt, right.as_str());
+                            }
+                        }
                     }
                 }
             }

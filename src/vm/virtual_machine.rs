@@ -1,8 +1,5 @@
 use core::panic;
-use std::{
-    collections::{HashMap, LinkedList},
-    fs::File,
-};
+use std::fs::File;
 
 use crate::{
     codegen::{meta::ProgramMeta, quadruples::Quadruple},
@@ -59,17 +56,23 @@ macro_rules! arith_operation {
     };
 }
 
+macro_rules! operate {
+    ($left: expr, $op: tt, $right: expr) => {
+        $left $op $right
+    };
+}
+
 macro_rules! logic_cmp {
     ($data_type:expr, $self: expr, $op: tt, $curr_instruction: expr) => {
         match $data_type {
             DataType::Int => {
-                let (left, right, dest) = $self.unpack_binary($curr_instruction);
+                let (_, left, right, dest) = $self.unpack_binary($curr_instruction);
                 let (left, right) = Self::match_ints(left, right);
 
                 $self.memory.update(dest, Item::Bool(left $op right));
             }
             DataType::Float => {
-                let (left, right, dest) = $self.unpack_binary($curr_instruction);
+                let (_, left, right, dest) = $self.unpack_binary($curr_instruction);
                 let (left, right) = Self::match_floats(left, right);
                 $self.memory.update(dest, Item::Bool(left $op right));
             }
@@ -84,8 +87,6 @@ macro_rules! logic_cmp {
 
 pub struct VirtualMachine {
     pub data: ProgramMeta,
-    pub globals: HashMap<MemAddress, Item>,
-    pub locals: LinkedList<HashMap<MemAddress, Item>>,
     pub memory: MemoryManager,
 }
 
@@ -95,12 +96,7 @@ impl VirtualMachine {
         let data: ProgramMeta = serde_pickle::from_reader(reader, Default::default()).unwrap();
         let memory = MemoryManager::from_data(&data);
 
-        VirtualMachine {
-            data,
-            globals: HashMap::new(),
-            locals: LinkedList::new(),
-            memory,
-        }
+        VirtualMachine { data, memory }
     }
 
     fn match_ints(op1: Item, op2: Item) -> (i32, i32) {
@@ -139,13 +135,13 @@ impl VirtualMachine {
         (op, dest)
     }
 
-    fn unpack_binary(&self, instruction: &Quadruple) -> (Item, Item, MemAddress) {
-        let Quadruple(_, left, right, dest) = instruction;
+    fn unpack_binary<'a>(&self, instruction: &'a Quadruple) -> (&'a str, Item, Item, MemAddress) {
+        let Quadruple(operator, left, right, dest) = instruction;
         let left = self.memory.get(&left);
         let right = self.memory.get(&right);
         let dest = self.memory.get_address(&dest);
 
-        (left, right, dest)
+        (operator.as_str(), left, right, dest)
     }
 
     fn operation(&mut self, quadruple: Quadruple) {
@@ -155,7 +151,7 @@ impl VirtualMachine {
         let right = self.memory.get(&right);
         let dest = self.memory.get_address(&dest);
 
-        let (_, data_type, _) = MemoryResolver::get_offset(dest);
+        let data_type = MemoryResolver::get_type_from_address(dest).unwrap();
 
         match instruction {
             "+" => arith_operation!(data_type, self, +, left, right, dest),
@@ -169,7 +165,10 @@ impl VirtualMachine {
     fn logic_cmp(&mut self, quadruple: Quadruple) {
         let operator = quadruple.0.as_str();
         let left_addr = self.memory.get_address(&quadruple.1);
-        let (_, data_type, _) = MemoryResolver::get_offset(left_addr);
+
+        // Instructions for comparisons expect both operators to be of the same type
+        // Proper casting instruction for compatible types is emitted during compile time
+        let data_type = MemoryResolver::get_type_from_address(left_addr).unwrap();
 
         match operator {
             ">" => logic_cmp!(data_type, self, >, &quadruple),
@@ -188,10 +187,24 @@ impl VirtualMachine {
 
         while instruction_pointer < quadruples.len() {
             let curr_instruction = quadruples.get(instruction_pointer).unwrap();
-            println!("Evaluating {:#?}", curr_instruction);
+            println!("EXEC {:#?}", curr_instruction.0.as_str());
             match curr_instruction.0.as_str() {
                 "*" | "+" | "-" | "/" => self.operation(curr_instruction.clone()),
                 ">" | ">=" | "<" | "<=" | "==" | "!=" => self.logic_cmp(curr_instruction.clone()),
+                "&&" | "||" => {
+                    let (op, left, right, dest) = self.unpack_binary(curr_instruction);
+
+                    let left = left.unwrap_bool();
+                    let right = right.unwrap_bool();
+
+                    let result = match op {
+                        "&&" => operate!(left, &&, right),
+                        "||" => operate!(left, ||, right),
+                        _ => todo!(),
+                    };
+
+                    self.memory.update(dest, Item::Bool(result));
+                }
                 "=" => {
                     let (op, dest) = self.unpack_unary(curr_instruction);
                     self.memory.update(dest, op);
