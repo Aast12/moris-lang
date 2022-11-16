@@ -7,21 +7,12 @@ use std::{
 use crate::{
     codegen::{meta::ProgramMeta, quadruples::Quadruple},
     memory::{
-        resolver::{MemAddress, MemoryResolver, MemoryScope},
+        resolver::{MemAddress, MemoryResolver},
         types::DataType,
     },
 };
 
-#[derive(Debug, Clone)]
-pub enum Item {
-    Int(i32),
-    Float(f32),
-    Bool(bool),
-    String(String),
-    // DataFrame(),
-    // Series,
-    Pointer(MemAddress),
-}
+use super::memory_manager::{Item, MemoryManager};
 
 macro_rules! match_types {
     ($typ:tt, $left:expr, $right:expr) => {{
@@ -52,15 +43,15 @@ macro_rules! arith_operation {
         match $data_type {
             DataType::Int => {
                 let (op1, op2) = Self::match_ints($left, $right);
-                $self.update($dest, Item::Int(op1 $op op2));
+                $self.memory.update($dest, Item::Int(op1 $op op2));
             }
             DataType::Float => {
                 let (op1, op2) = Self::match_floats($left, $right);
-                $self.update($dest, Item::Float(op1 $op op2));
+                $self.memory.update($dest, Item::Float(op1 $op op2));
             }
             DataType::Pointer => {
                 let (op1, op2) = Self::match_pointers($left, $right);
-                $self.update($dest, Item::Pointer(op1 $op op2));
+                $self.memory.update($dest, Item::Pointer(op1 $op op2));
             }
             DataType::String => panic!(),
             _ => todo!(),
@@ -75,12 +66,12 @@ macro_rules! logic_cmp {
                 let (left, right, dest) = $self.unpack_binary($curr_instruction);
                 let (left, right) = Self::match_ints(left, right);
 
-                $self.update(dest, Item::Bool(left $op right));
+                $self.memory.update(dest, Item::Bool(left $op right));
             }
             DataType::Float => {
                 let (left, right, dest) = $self.unpack_binary($curr_instruction);
                 let (left, right) = Self::match_floats(left, right);
-                $self.update(dest, Item::Bool(left $op right));
+                $self.memory.update(dest, Item::Bool(left $op right));
             }
             DataType::Bool => todo!(),
             DataType::String => todo!(),
@@ -95,87 +86,20 @@ pub struct VirtualMachine {
     pub data: ProgramMeta,
     pub globals: HashMap<MemAddress, Item>,
     pub locals: LinkedList<HashMap<MemAddress, Item>>,
+    pub memory: MemoryManager,
 }
 
 impl VirtualMachine {
     pub fn load(path: &str) -> VirtualMachine {
         let reader = File::open(path).unwrap();
         let data: ProgramMeta = serde_pickle::from_reader(reader, Default::default()).unwrap();
-        let constants = data
-            .constant_table
-            .iter()
-            .map(|(address, value)| {
-                let (_, data_type, _) = MemoryResolver::get_offset(*address);
-
-                let val = match data_type {
-                    DataType::Int => Item::Int(value.parse::<i32>().unwrap()),
-                    DataType::Float => Item::Float(value.parse::<f32>().unwrap()),
-                    DataType::Bool => Item::Bool(value.parse::<bool>().unwrap()),
-                    DataType::String => Item::String(value.clone()),
-                    DataType::Pointer => Item::Pointer(value.parse::<MemAddress>().unwrap()),
-                    _ => todo!(),
-                };
-                (*address, val)
-            })
-            .collect::<HashMap<MemAddress, Item>>();
+        let memory = MemoryManager::from_data(&data);
 
         VirtualMachine {
             data,
-            globals: HashMap::from(constants),
+            globals: HashMap::new(),
             locals: LinkedList::new(),
-        }
-    }
-
-    fn get_address(&self, address: &String) -> MemAddress {
-        if address.starts_with("*") {
-            let address = address[1..].parse::<MemAddress>().unwrap();
-            let accesed = self.globals.get(&address).unwrap();
-
-            match accesed {
-                Item::Pointer(addr) => *addr as MemAddress,
-                _ => panic!("Element is not a pointer"),
-            }
-        } else {
-            let address = address.parse::<MemAddress>().unwrap();
-            address
-        }
-    }
-
-    fn update(&mut self, address: MemAddress, item: Item) {
-        let (scope, _, _) = MemoryResolver::get_offset(address);
-        match scope {
-            MemoryScope::Global | MemoryScope::Constant => {
-                self.globals.insert(address, item);
-            }
-            MemoryScope::Local => {
-                if let Some(curr_context) = self.locals.back_mut() {
-                    curr_context.insert(address, item);
-                } else {
-                    panic!("No current local context");
-                }
-            }
-        }
-    }
-
-    fn get(&self, address: &String) -> Item {
-        if address.starts_with("&") {
-            let address = address[1..].parse::<MemAddress>().unwrap();
-            Item::Pointer(address)
-        } else {
-            let address = address.parse::<MemAddress>().unwrap();
-            let (scope, _, _) = MemoryResolver::get_offset(address);
-            match scope {
-                MemoryScope::Global | MemoryScope::Constant => {
-                    self.globals.get(&address).unwrap().clone() // TODO: Remove constants if not reused
-                }
-                MemoryScope::Local => {
-                    if let Some(curr) = self.locals.back() {
-                        curr.get(&address).unwrap().clone()
-                    } else {
-                        panic!("No current local context");
-                    }
-                }
-            }
+            memory,
         }
     }
 
@@ -209,17 +133,17 @@ impl VirtualMachine {
 
     fn unpack_unary(&self, instruction: &Quadruple) -> (Item, MemAddress) {
         let Quadruple(_, op, _, dest) = instruction;
-        let op = self.get(&op);
-        let dest = self.get_address(&dest);
+        let op = self.memory.get(&op);
+        let dest = self.memory.get_address(&dest);
 
         (op, dest)
     }
 
     fn unpack_binary(&self, instruction: &Quadruple) -> (Item, Item, MemAddress) {
         let Quadruple(_, left, right, dest) = instruction;
-        let left = self.get(&left);
-        let right = self.get(&right);
-        let dest = self.get_address(&dest);
+        let left = self.memory.get(&left);
+        let right = self.memory.get(&right);
+        let dest = self.memory.get_address(&dest);
 
         (left, right, dest)
     }
@@ -227,9 +151,9 @@ impl VirtualMachine {
     fn operation(&mut self, quadruple: Quadruple) {
         let Quadruple(instruction, left, right, dest) = quadruple;
         let instruction = instruction.as_str();
-        let left = self.get(&left);
-        let right = self.get(&right);
-        let dest = self.get_address(&dest);
+        let left = self.memory.get(&left);
+        let right = self.memory.get(&right);
+        let dest = self.memory.get_address(&dest);
 
         let (_, data_type, _) = MemoryResolver::get_offset(dest);
 
@@ -244,7 +168,7 @@ impl VirtualMachine {
 
     fn logic_cmp(&mut self, quadruple: Quadruple) {
         let operator = quadruple.0.as_str();
-        let left_addr = self.get_address(&quadruple.1);
+        let left_addr = self.memory.get_address(&quadruple.1);
         let (_, data_type, _) = MemoryResolver::get_offset(left_addr);
 
         match operator {
@@ -270,7 +194,7 @@ impl VirtualMachine {
                 ">" | ">=" | "<" | "<=" | "==" | "!=" => self.logic_cmp(curr_instruction.clone()),
                 "=" => {
                     let (op, dest) = self.unpack_unary(curr_instruction);
-                    self.update(dest, op);
+                    self.memory.update(dest, op);
                 }
                 "Float" => {
                     let (op, dest) = self.unpack_unary(curr_instruction);
@@ -281,14 +205,14 @@ impl VirtualMachine {
                     };
                     let op = cast!(op, [Int, Float, Pointer], f32);
 
-                    self.update(dest, Item::Float(op));
+                    self.memory.update(dest, Item::Float(op));
                 }
                 "Int" => {
                     let (op, dest) = self.unpack_unary(curr_instruction);
 
                     let op = cast!(op, [Int, Float, Pointer, Bool], i32);
 
-                    self.update(dest, Item::Int(op));
+                    self.memory.update(dest, Item::Int(op));
                 }
                 "Bool" => {
                     let (op, dest) = self.unpack_unary(curr_instruction);
@@ -296,12 +220,12 @@ impl VirtualMachine {
                     let op = cast!(op, [Int, Float, Pointer, Bool], i32);
                     let op = if op > 0 { true } else { false };
 
-                    self.update(dest, Item::Bool(op));
+                    self.memory.update(dest, Item::Bool(op));
                 }
                 "ver" => {
                     let Quadruple(_, value, _, bound) = curr_instruction;
-                    let value = self.get(&value);
-                    let bound = self.get(&bound);
+                    let value = self.memory.get(&value);
+                    let bound = self.memory.get(&bound);
                     let (value, bound) = Self::match_ints(value, bound);
 
                     if value >= bound {
@@ -315,7 +239,7 @@ impl VirtualMachine {
                 }
                 "gotoFalse" => {
                     let Quadruple(_, check, _, next) = curr_instruction;
-                    let check = self.get(check);
+                    let check = self.memory.get(check);
                     match check {
                         Item::Bool(check) => {
                             if !check {
