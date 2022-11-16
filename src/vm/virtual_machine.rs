@@ -249,6 +249,16 @@ impl VirtualMachine {
 
                     self.update(dest, Item::Bool(op));
                 }
+                "ver" => {
+                    let Quadruple(_, value, _, bound) = curr_instruction;
+                    let value = self.get(&value);
+                    let bound = self.get(&bound);
+                    let (value, bound) = Self::match_ints(value, bound);
+
+                    if value >= bound {
+                        panic!("Index out of bounds!");
+                    }
+                }
                 _ => panic!(),
             }
 
