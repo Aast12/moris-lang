@@ -4,9 +4,9 @@ pub mod node;
 pub mod statements;
 pub mod types;
 
-use std::{fmt::Debug, iter::zip, thread::panicking, vec};
+use std::{fmt::Debug, vec};
 
-use crate::memory::types::IntType;
+use crate::memory::types::{IntType, FloatType};
 
 use self::{
     expressions::{constant::Const, Expression},
@@ -91,7 +91,7 @@ impl Dimension {
 pub enum TypeConst {
     Bool(bool),
     Int(IntType),
-    Float(f32),
+    Float(FloatType),
     String(String),
     Vector(Vec<Box<Expression>>),
 }

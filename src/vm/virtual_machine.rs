@@ -5,7 +5,7 @@ use crate::{
     codegen::{function::FunctionEntry, meta::ProgramMeta, quadruples::Quadruple},
     memory::{
         resolver::{MemAddress, MemoryResolver},
-        types::{DataType, IntType},
+        types::{DataType, IntType, FloatType},
     },
 };
 
@@ -103,7 +103,7 @@ impl VirtualMachine {
         (Item::cast_int(left), Item::cast_int(right))
     }
 
-    fn match_floats(op1: Item, op2: Item) -> (f32, f32) {
+    fn match_floats(op1: Item, op2: Item) -> (FloatType, FloatType) {
         match_types!(Float, op1, op2);
     }
 
@@ -227,10 +227,10 @@ impl VirtualMachine {
                     let (op, dest) = self.unpack_unary(curr_instruction);
 
                     let op = match op {
-                        Item::Bool(op) => Item::Float((op as u8) as f32),
+                        Item::Bool(op) => Item::Float((op as u8) as FloatType),
                         _ => op,
                     };
-                    let op = cast!(op, [Int, Float, Pointer], f32);
+                    let op = cast!(op, [Int, Float, Pointer], FloatType);
 
                     self.memory.update(dest, Item::Float(op));
                 }

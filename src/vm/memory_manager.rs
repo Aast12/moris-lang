@@ -10,14 +10,14 @@ use crate::{
     codegen::meta::ProgramMeta,
     memory::{
         resolver::{self, MemAddress, MemoryResolver, MemoryScope},
-        types::{DataType, IntType},
+        types::{DataType, IntType, FloatType},
     },
 };
 
 #[derive(Debug, Clone, Variantly, PartialEq)]
 pub enum Item {
     Int(IntType),
-    Float(f32),
+    Float(FloatType),
     Bool(bool),
     String(String),
     // DataFrame(),
@@ -93,7 +93,7 @@ impl MemoryManager {
 
                 let val = match data_type {
                     DataType::Int => Item::Int(value.parse::<IntType>().unwrap()),
-                    DataType::Float => Item::Float(value.parse::<f32>().unwrap()),
+                    DataType::Float => Item::Float(value.parse::<FloatType>().unwrap()),
                     DataType::Bool => Item::Bool(value.parse::<bool>().unwrap()),
                     DataType::String => Item::String(value.clone()),
                     DataType::Pointer => Item::Pointer(value.parse::<MemAddress>().unwrap()),

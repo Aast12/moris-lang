@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 pub type IntType = i64;
+pub type FloatType = f64;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]
 pub enum DataType {
