@@ -6,7 +6,7 @@ pub mod types;
 
 use std::{fmt::Debug, vec};
 
-use crate::memory::types::{IntType, FloatType};
+use crate::memory::types::{FloatType, IntType};
 
 use self::{
     expressions::{constant::Const, Expression},
@@ -69,7 +69,7 @@ impl Dimension {
         new_dim
     }
 
-    pub fn calc_acc_size(&mut self) {
+    fn calc_acc_size(&mut self) {
         if self.acc_size.len() != self.dimensions as usize {
             let mut new_acc_size = self
                 .shape
@@ -104,7 +104,7 @@ mod tests {
 
     #[test]
     fn test_array_offset() {
-        let mut dim = Dimension::new(
+        let dim = Dimension::new(
             3,
             vec![
                 Const {
@@ -121,6 +121,7 @@ mod tests {
                 },
             ],
         );
+        assert_eq!(dim.acc_size, vec![24, 4, 1]);
         // assert_eq!(dim.get_array_offset(vec![0, 0, 3]), 3);
         // assert_eq!(dim.get_array_offset(vec![0, 3, 0]), 3 * 4);
         // assert_eq!(dim.get_array_offset(vec![2, 3, 3]), 63);

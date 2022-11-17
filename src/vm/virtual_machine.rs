@@ -2,10 +2,10 @@ use core::panic;
 use std::{collections::LinkedList, fs::File};
 
 use crate::{
-    codegen::{function::FunctionEntry, meta::ProgramMeta, quadruples::Quadruple},
+    codegen::{meta::ProgramMeta, quadruples::Quadruple},
     memory::{
         resolver::{MemAddress, MemoryResolver},
-        types::{DataType, IntType, FloatType},
+        types::{DataType, FloatType, IntType},
     },
 };
 

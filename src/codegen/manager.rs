@@ -66,8 +66,6 @@ impl Manager {
                 .collect::<HashMap<String, FunctionEntry>>(),
         };
 
-        let v = serde_pickle::to_vec(&meta, Default::default()).unwrap();
-
         let mut buffer = File::create("program.o").unwrap();
 
         serde_pickle::to_writer(&mut buffer, &meta, Default::default()).unwrap();

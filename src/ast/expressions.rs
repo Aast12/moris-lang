@@ -87,7 +87,7 @@ impl node::Node for Expression {
 
                 dest
             }
-            Expression::Negative(expr) => {
+            Expression::Negative(_) => {
                 todo!()
             },
         }

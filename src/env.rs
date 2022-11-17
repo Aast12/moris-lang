@@ -1,10 +1,9 @@
 use core::panic;
-use std::{collections::HashMap, hash::Hash};
+use std::collections::HashMap;
 
 use crate::{
     ast::{
         functions::{FunctionParam, FunctionSignature},
-        types::Variable,
         Dimension,
     },
     memory::{
@@ -102,10 +101,9 @@ impl Environment {
                     counters.insert(entry.data_type.clone(), value);
                 });
 
-                counters.iter().for_each(|(k, v)| {
-                    self.allocator
-                        .update_counter(&MemoryScope::Local, k, *v)
-                });
+                counters
+                    .iter()
+                    .for_each(|(k, v)| self.allocator.update_counter(&MemoryScope::Local, k, *v));
             }
         } else {
             panic!("Environment {} does not exist!", id);
@@ -133,7 +131,7 @@ impl Environment {
         let Dimension {
             dimensions: dim,
             shape,
-            size,
+            size: _,
             acc_size: _,
         } = dimension;
 

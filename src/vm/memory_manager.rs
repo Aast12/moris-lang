@@ -9,8 +9,8 @@ use variantly::Variantly;
 use crate::{
     codegen::meta::ProgramMeta,
     memory::{
-        resolver::{self, MemAddress, MemoryResolver, MemoryScope},
-        types::{DataType, IntType, FloatType},
+        resolver::{MemAddress, MemoryResolver, MemoryScope},
+        types::{DataType, FloatType, IntType},
     },
 };
 
