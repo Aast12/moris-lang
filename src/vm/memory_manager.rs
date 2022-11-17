@@ -10,13 +10,13 @@ use crate::{
     codegen::meta::ProgramMeta,
     memory::{
         resolver::{self, MemAddress, MemoryResolver, MemoryScope},
-        types::DataType,
+        types::{DataType, IntType},
     },
 };
 
 #[derive(Debug, Clone, Variantly, PartialEq)]
 pub enum Item {
-    Int(i32),
+    Int(IntType),
     Float(f32),
     Bool(bool),
     String(String),
@@ -26,10 +26,10 @@ pub enum Item {
 }
 
 impl Item {
-    pub fn cast_int(item: Item) -> i32 {
+    pub fn cast_int(item: Item) -> IntType {
         match item {
             Item::Int(item) => item,
-            Item::Float(item) => item as i32,
+            Item::Float(item) => item as IntType,
             Item::Bool(item) => {
                 if item {
                     1
@@ -37,8 +37,8 @@ impl Item {
                     0
                 }
             }
-            Item::Pointer(item) => item as i32,
-            _ => panic!("Cant cast {:#?} to i32", item),
+            Item::Pointer(item) => item as IntType,
+            _ => panic!("Cant cast {:#?} to int", item),
         }
     }
 }
@@ -92,7 +92,7 @@ impl MemoryManager {
                 let (_, data_type, _) = MemoryResolver::get_offset(*address);
 
                 let val = match data_type {
-                    DataType::Int => Item::Int(value.parse::<i32>().unwrap()),
+                    DataType::Int => Item::Int(value.parse::<IntType>().unwrap()),
                     DataType::Float => Item::Float(value.parse::<f32>().unwrap()),
                     DataType::Bool => Item::Bool(value.parse::<bool>().unwrap()),
                     DataType::String => Item::String(value.clone()),
@@ -190,7 +190,6 @@ impl MemoryManager {
         if address.starts_with("*") {
             let address = address[1..].parse::<MemAddress>().unwrap();
 
-            // println!("TRY GET {address}");
             let accesed = self._get(address);
             match accesed {
                 Item::Pointer(addr) => *addr as MemAddress,
@@ -205,15 +204,9 @@ impl MemoryManager {
     pub fn update(&mut self, address: MemAddress, item: Item) {
         let (scope, _, _) = MemoryResolver::get_offset(address);
         match scope {
-            MemoryScope::Global | MemoryScope::Constant => {
-                // println!("INSERT GLOBAL {address}");
-                self.globals.insert(address, item);
-            }
-            MemoryScope::Local => {
-                // println!("INSERT LOCAL {address} - {:#?}", item);
-                self.curr_locals_mut().insert(address, item);
-            }
-        }
+            MemoryScope::Global | MemoryScope::Constant => self.globals.insert(address, item),
+            MemoryScope::Local => self.curr_locals_mut().insert(address, item),
+        };
     }
 
     fn _get(&self, address: MemAddress) -> &Item {
@@ -260,9 +253,6 @@ impl MemoryManager {
             } else {
                 panic!("Item is not a pointer");
             }
-            // println!("FETCH * {next}");
-            // let address = address[1..].parse::<MemAddress>().unwrap();
-            
         } else {
             let address = address.parse::<MemAddress>().unwrap();
             self.resolved_get(address)

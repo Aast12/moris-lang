@@ -6,6 +6,8 @@ pub mod types;
 
 use std::{fmt::Debug, iter::zip, thread::panicking, vec};
 
+use crate::memory::types::IntType;
+
 use self::{
     expressions::{constant::Const, Expression},
     node::Node,
@@ -88,7 +90,7 @@ impl Dimension {
 #[derive(Debug)]
 pub enum TypeConst {
     Bool(bool),
-    Int(i32),
+    Int(IntType),
     Float(f32),
     String(String),
     Vector(Vec<Box<Expression>>),

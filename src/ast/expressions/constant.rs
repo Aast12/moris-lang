@@ -1,9 +1,9 @@
-use crate::{ast::node::Node, memory::types::DataType, codegen::manager::GlobalManager};
+use crate::{ast::node::Node, memory::types::{DataType, IntType}, codegen::manager::GlobalManager};
 
 #[derive(Debug)]
 pub enum TypeConst {
     Bool(bool),
-    Int(i32),
+    Int(IntType),
     Float(f32),
     String(String),
     // Vector(Vec<Box<ast::expressions::Expr>>),

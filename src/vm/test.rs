@@ -1,18 +1,16 @@
-use std::{collections::HashMap, path::Path, fs};
+use std::{collections::HashMap, fs, path::Path};
 
 use crate::codegen::manager::GlobalManager;
 use crate::parser::grammar::PProgramParser as Parser;
 
-use crate::{memory::resolver::MemAddress, env::Environment, ast::statements::Program};
+use crate::{ast::statements::Program, env::Environment, memory::resolver::MemAddress};
 
 use crate::ast::node::Node;
 
 use super::memory_manager::Item;
 use super::virtual_machine::VirtualMachine;
 
-
 type TargetMeta = HashMap<String, MemAddress>;
-
 
 fn try_file(path: &str) -> Program {
     match fs::read_to_string(path) {
@@ -23,11 +21,11 @@ fn try_file(path: &str) -> Program {
 
 pub struct Inspector {
     target_meta: HashMap<String, MemAddress>,
-    memory: HashMap<MemAddress, Item>
+    memory: HashMap<MemAddress, Item>,
 }
 
 impl Inspector {
-    pub fn new(path: &str) ->  Inspector {
+    pub fn new(path: &str) -> Inspector {
         let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join(path);
         let path = path_buf.to_str().unwrap();
 
@@ -36,10 +34,11 @@ impl Inspector {
 
         let target_meta: TargetMeta;
         if let Some(global_env) = GlobalManager::get().env.entries.get("global") {
-            target_meta = global_env.symbols.iter().map(|(id, entry)| {
-                (id.clone(), entry.address)
-            }).collect::<TargetMeta>();
-
+            target_meta = global_env
+                .symbols
+                .iter()
+                .map(|(id, entry)| (id.clone(), entry.address))
+                .collect::<TargetMeta>();
         } else {
             panic!("Can't parse global environment!")
         }
@@ -48,11 +47,9 @@ impl Inspector {
         let mut vm = VirtualMachine::load("program.o");
         vm.execute();
 
-        println!("TARGET META {:#?}", target_meta);
-
         Inspector {
             target_meta,
-            memory: vm.memory.globals
+            memory: vm.memory.globals,
         }
     }
 

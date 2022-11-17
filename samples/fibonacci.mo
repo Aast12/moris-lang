@@ -20,4 +20,4 @@ fn fib(x: int): int {
     return res;
 }
 
-let y: int = fib(30);
+let y: int = fib(50);
