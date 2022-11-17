@@ -1,7 +1,7 @@
 use crate::{
     ast,
     codegen::{manager::GlobalManager, quadruples::Quadruple},
-    memory::types::DataType,
+    memory::{resolver::MemoryResolver, types::DataType},
 };
 
 use self::{
@@ -13,7 +13,7 @@ use self::{
 
 use super::{
     node,
-    types::{self},
+    types::{self, Operator},
 };
 pub mod call;
 pub mod constant;
@@ -54,7 +54,7 @@ impl node::Node for Expression {
             Expression::Access(access) => access.generate(),
             Expression::Id(id) => id.generate(),
             Expression::Call(call) => call.generate(),
-            Expression::Not(_) => todo!(),
+            Expression::Not(not) => not.generate(),
             Expression::Negative(_) => todo!(),
         }
     }
@@ -66,7 +66,27 @@ impl node::Node for Expression {
             Expression::Access(access) => access.reduce(),
             Expression::Id(id) => id.reduce(),
             Expression::Call(call) => call.reduce(),
-            Expression::Not(_) => todo!(),
+            Expression::Not(not) => {
+                let mut to_negate = not.reduce();
+                let expr_type =
+                    MemoryResolver::get_type_from_address(to_negate.parse().unwrap()).unwrap();
+
+                if DataType::equivalent(expr_type, &DataType::Bool).is_err() {
+                    panic!("Expression can't be casted to boolean");
+                }
+                if *expr_type != DataType::Bool {
+                    to_negate = GlobalManager::emit_cast(&DataType::Bool, &to_negate);
+                }
+
+                let dest = GlobalManager::new_temp(&DataType::Bool).to_string();
+                GlobalManager::emit(Quadruple::unary(
+                    Operator::Not,
+                    to_negate.as_str(),
+                    dest.as_str(),
+                ));
+
+                dest
+            }
             Expression::Negative(_) => todo!(),
         }
     }
@@ -108,7 +128,6 @@ mod tests {
     #[test]
     fn test_compatible_types() {
         let expr = Expression::Op(Operation::new(build_int(), Operator::Add, build_float()));
-
         assert_eq!(expr.data_type(), DataType::Float);
     }
 

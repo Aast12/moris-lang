@@ -213,6 +213,14 @@ impl VirtualMachine {
                 "*" | "+" | "-" | "/" => self.arithmetic_op(curr_instruction),
                 ">" | ">=" | "<" | "<=" | "==" | "!=" => self.logic_cmp(curr_instruction),
                 "&&" | "||" => self.boolean_op(curr_instruction),
+                "not" => {
+                    let Quadruple(_, to_negate, _, dest) = curr_instruction;
+                    let to_negate = self.memory.get(to_negate);
+                    let to_negate = to_negate.unwrap_bool();
+                    let dest = self.memory.get_address(dest);
+
+                    self.memory.update(dest, Item::Bool(!to_negate));
+                },
                 "=" => {
                     let (op, dest) = self.unpack_unary(curr_instruction);
                     self.memory.update(dest, op);

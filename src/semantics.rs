@@ -37,6 +37,7 @@ impl SemanticRules {
                 Self::comparison_match(left, right)
             }
             Assign => Self::assign_match(left, right),
+            Not => panic!(),
         }
     }
 

@@ -31,6 +31,7 @@ pub enum Operator {
     NotEq,
     Eq,
     Assign,
+    Not,
 }
 
 impl Operator {
@@ -51,6 +52,7 @@ impl Operator {
             Operator::Assign => "=",
             Operator::LessOrEq => "<=",
             Operator::GreaterOrEq => ">=",
+            Operator::Not => "not",
         }
     }
 
@@ -75,7 +77,7 @@ impl Operator {
 
     pub fn is_boolean(&self) -> bool {
         match self {
-            Operator::And | Operator::Or => true,
+            Operator::And | Operator::Or | Operator::Not => true,
             _ => false,
         }
     }
@@ -88,7 +90,7 @@ impl Operator {
             | Operator::GreaterOrEq
             | Operator::NotEq
             | Operator::Eq => OperatorType::Comparison,
-            Operator::And | Operator::Or => OperatorType::Boolean,
+            Operator::And | Operator::Or | Operator::Not => OperatorType::Boolean,
             Operator::Mul | Operator::Div | Operator::Add | Operator::Sub => {
                 OperatorType::Arithmetic
             }

@@ -8,3 +8,7 @@ fn fib(x: int): int {
 
 let y: int = fib(10);
 
+if (!(y > 50)) {
+    y = 2022;
+}
+
