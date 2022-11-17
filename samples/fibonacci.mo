@@ -1,14 +1,23 @@
+let mem: int[500];
+let i: int = 0;
+while (i < 500) {
+    mem[i] = 0;
+    i = i + 1;
+}
+
 fn fib(x: int): int {
-    if (x <= 2) {
-        return x;
+    if (mem[x] != 0) {
+        return mem[x];
     }
 
-    return fib(x - 1) + fib(x - 2);
+    if (x <= 1) {
+        mem[x] = 1;
+        return 1;
+    }
+
+    let res: int = fib(x - 1) + fib(x - 2);
+    mem[x] = res;
+    return res;
 }
 
-let y: int = fib(10);
-
-if (!(y > 50)) {
-    y = 2022;
-}
-
+let y: int = fib(30);

@@ -8,6 +8,7 @@ use moris_lang::codegen::manager::{MANAGER, GlobalManager};
 use moris_lang::codegen::meta::ProgramMeta;
 use moris_lang::codegen::quadruples::Quadruple;
 use moris_lang::parser::grammar::PProgramParser as Parser;
+use moris_lang::vm::test::Inspector;
 use moris_lang::vm::virtual_machine::VirtualMachine;
 
 fn try_file(path: &str) -> Program {
@@ -31,38 +32,44 @@ fn main() {
     // let data: ProgramMeta = serde_pickle::from_reader(reader, Default::default()).unwrap();
 
     // println!("{:#?}", data);
+    let mut inspector = Inspector::new("samples/fibonacci.mo");
 
-    let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join("./samples/fibonacci.mo");
-    let path = path_buf.to_str().unwrap();
+    println!("i = {:#?}", inspector.get("i"));
+    println!("mem = {:#?}", inspector.get("mem"));
+    println!("y = {:#?}", inspector.get("y"));
 
-    let mut test_program = try_file(path);
 
-    // print!("{:#?}", test_program);
+    // let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join("./samples/fibonacci.mo");
+    // let path = path_buf.to_str().unwrap();
 
-    test_program.generate();
+    // let mut test_program = try_file(path);
+
+    // // print!("{:#?}", test_program);
+
+    // test_program.generate();
 
     // println!("meta \n{:#?}", GlobalManager::get().env);
 
-    GlobalManager::get().dump();
+    // GlobalManager::get().dump();
 
-    let mut vm = VirtualMachine::load("program.o");
+    // let mut vm = VirtualMachine::load("program.o");
     
-    println!("META \n{:#?}", vm.data);
-    println!("Memory \n{:#?}", vm.memory);
+    // // println!("META \n{:#?}", vm.data);
+    // // println!("Memory \n{:#?}", vm.memory);
 
-    println!("Quadruples");
-    println!("{:#?}", GlobalManager::get().quadruples);
-    let mut i = 0;
-    println!();
-    for quad in GlobalManager::get().quadruples.iter() {
-        let Quadruple(fst, snd, trd, fth) = quad;
-        println!("{}.\t{}\t{}\t{}\t{}", i, fst, snd, trd, fth);
-        i += 1;
-    }
-    // println!("Starting execution");
-    vm.execute();
+    // println!("Quadruples");
+    // println!("{:#?}", GlobalManager::get().quadruples);
+    // let mut i = 0;
+    // println!();
+    // for quad in GlobalManager::get().quadruples.iter() {
+    //     let Quadruple(fst, snd, trd, fth) = quad;
+    //     println!("{}.\t{}\t{}\t{}\t{}", i, fst, snd, trd, fth);
+    //     i += 1;
+    // }
+    // // println!("Starting execution");
+    // vm.execute();
 
-    println!("Memory \n{:#?}", vm.memory);
+    // println!("Memory \n{:#?}", vm.memory);
     
     println!("FIB {}", fib(10));
     

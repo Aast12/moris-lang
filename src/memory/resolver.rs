@@ -121,7 +121,7 @@ impl MemoryResolver {
             }
         }
 
-        panic!("Cannot resolve address");
+        panic!("Cannot resolve address {address}");
     }
 }
 

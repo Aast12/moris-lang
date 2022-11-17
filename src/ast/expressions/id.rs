@@ -9,6 +9,8 @@ use crate::codegen::quadruples::Quadruple;
 use crate::memory::resolver::MemAddress;
 use crate::memory::types::DataType;
 
+use super::constant::Const;
+
 #[derive(Debug, Clone)]
 pub struct Id {
     pub id: String,
@@ -104,11 +106,14 @@ impl Node for Access {
                         ))
                     }
 
+                    let dim_const = GlobalManager::new_constant(&DataType::Int, &Const::new(dim_size.to_string().as_str(), DataType::Int));
+                    let dim_const = dim_const.to_string();
+                    
                     if first_run {
                         GlobalManager::emit(Quadruple::operation(
                             Operator::Mul,
                             index.as_str(),
-                            dim_size.to_string().as_str(),
+                            dim_const.as_str(),
                             acc_tmp.as_str(),
                         ));
                     } else {
@@ -118,7 +123,7 @@ impl Node for Access {
                         GlobalManager::emit(Quadruple::operation(
                             Operator::Mul,
                             index.as_str(),
-                            dim_size.to_string().as_str(),
+                            dim_const.as_str(),
                             tmp_str.as_str(),
                         ));
 

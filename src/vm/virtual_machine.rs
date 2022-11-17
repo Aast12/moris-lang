@@ -40,15 +40,21 @@ macro_rules! arith_operation {
         match $data_type {
             DataType::Int => {
                 let (op1, op2) = Self::match_ints($left, $right);
+                println!("ADDING {op1} + {op2}");
                 $self.memory.update($dest, Item::Int(op1 $op op2));
             }
             DataType::Float => {
                 let (op1, op2) = Self::match_floats($left, $right);
+                println!("ADDING {op1} + {op2}");
                 $self.memory.update($dest, Item::Float(op1 $op op2));
             }
             DataType::Pointer => {
                 let (op1, op2) = Self::match_pointers($left, $right);
+                println!("ADDING {op1} + {op2}");
+                // println!("Summing POINTERS {:#?} {:#?} into {:#?}", op1, op2, $dest.clone());
                 $self.memory.update($dest, Item::Pointer(op1 $op op2));
+                // println!("TRY");
+                // println!("MEM dest {} {:#?}", $dest, $self.memory.resolved_get($dest));
             }
             DataType::String => panic!(),
             _ => todo!(),
@@ -99,8 +105,9 @@ impl VirtualMachine {
         VirtualMachine { data, memory }
     }
 
+    
     fn match_ints(left: Item, right: Item) -> (i32, i32) {
-        match_types!(Int, left, right)
+        (Item::cast_int(left), Item::cast_int(right))
     }
 
     fn match_floats(op1: Item, op2: Item) -> (f32, f32) {
@@ -135,7 +142,10 @@ impl VirtualMachine {
         (op, dest)
     }
 
-    fn unpack_binary<'a>(&mut self, instruction: &'a Quadruple) -> (&'a str, Item, Item, MemAddress) {
+    fn unpack_binary<'a>(
+        &mut self,
+        instruction: &'a Quadruple,
+    ) -> (&'a str, Item, Item, MemAddress) {
         let Quadruple(operator, left, right, dest) = instruction;
         let left = self.memory.get(&left);
         let right = self.memory.get(&right);
@@ -179,8 +189,10 @@ impl VirtualMachine {
 
     fn logic_cmp(&mut self, quadruple: &Quadruple) {
         let operator = quadruple.0.as_str();
+        // println!("MEMw {:#?}", self.memory.call_context);
+        // println!("LEFT {}", quadruple.1);
         let left_addr = self.memory.get_address(&quadruple.1);
-
+        // println!("LEFT {left_addr}");
         // Instructions for comparisons expect both operators to be of the same type
         // Proper casting instruction for compatible types is emitted during compile time
         let data_type = MemoryResolver::get_type_from_address(left_addr).unwrap();
@@ -209,6 +221,7 @@ impl VirtualMachine {
 
         while instruction_pointer < quadruples.len() {
             let curr_instruction = quadruples.get(instruction_pointer).unwrap();
+            println!("EXEC {:#?}", curr_instruction);
             match curr_instruction.0.as_str() {
                 "*" | "+" | "-" | "/" => self.arithmetic_op(curr_instruction),
                 ">" | ">=" | "<" | "<=" | "==" | "!=" => self.logic_cmp(curr_instruction),
@@ -220,7 +233,7 @@ impl VirtualMachine {
                     let dest = self.memory.get_address(dest);
 
                     self.memory.update(dest, Item::Bool(!to_negate));
-                },
+                }
                 "=" => {
                     let (op, dest) = self.unpack_unary(curr_instruction);
                     self.memory.update(dest, op);
@@ -253,9 +266,11 @@ impl VirtualMachine {
                 }
                 "ver" => {
                     let Quadruple(_, value, _, bound) = curr_instruction;
-                    let value = self.memory.get(&value);
-                    let bound = self.memory.get(&bound);
-                    let (value, bound) = Self::match_ints(value, bound);
+                    // let value = self.memory.get(&value);
+                    // let bound = self.memory.get(&bound);
+                    // let (value, bound) = Self::match_ints(value, bound);
+                    let value = self.memory.get(&value).unwrap_int();
+                    let bound: i32 = bound.parse().unwrap();
 
                     if value >= bound {
                         panic!("Index out of bounds!");
@@ -320,8 +335,9 @@ impl VirtualMachine {
                     let func_meta = self.data.get_func(function_id);
                     // TODO: void return
                     let return_addr = func_meta.return_address.unwrap();
+                    println!("RETURN VALUE ADD {:#?}", return_value_addr);
                     let value = self.memory.get(return_value_addr);
-
+                    println!("RETURN VALUE {:#?}", value);
                     self.memory.update(return_addr, value);
                     self.memory.pop_context();
 

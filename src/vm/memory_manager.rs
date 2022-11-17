@@ -9,12 +9,12 @@ use variantly::Variantly;
 use crate::{
     codegen::meta::ProgramMeta,
     memory::{
-        resolver::{MemAddress, MemoryResolver, MemoryScope},
+        resolver::{self, MemAddress, MemoryResolver, MemoryScope},
         types::DataType,
     },
 };
 
-#[derive(Debug, Clone, Variantly)]
+#[derive(Debug, Clone, Variantly, PartialEq)]
 pub enum Item {
     Int(i32),
     Float(f32),
@@ -23,6 +23,24 @@ pub enum Item {
     // DataFrame(),
     // Series,
     Pointer(MemAddress),
+}
+
+impl Item {
+    pub fn cast_int(item: Item) -> i32 {
+        match item {
+            Item::Int(item) => item,
+            Item::Float(item) => item as i32,
+            Item::Bool(item) => {
+                if item {
+                    1
+                } else {
+                    0
+                }
+            }
+            Item::Pointer(item) => item as i32,
+            _ => panic!("Cant cast {:#?} to i32", item),
+        }
+    }
 }
 
 // (value address, param address)
@@ -171,8 +189,9 @@ impl MemoryManager {
     pub fn get_address(&self, address: &String) -> MemAddress {
         if address.starts_with("*") {
             let address = address[1..].parse::<MemAddress>().unwrap();
-            let accesed = self.globals.get(&address).unwrap();
 
+            // println!("TRY GET {address}");
+            let accesed = self._get(address);
             match accesed {
                 Item::Pointer(addr) => *addr as MemAddress,
                 _ => panic!("Element is not a pointer"),
@@ -187,44 +206,63 @@ impl MemoryManager {
         let (scope, _, _) = MemoryResolver::get_offset(address);
         match scope {
             MemoryScope::Global | MemoryScope::Constant => {
+                // println!("INSERT GLOBAL {address}");
                 self.globals.insert(address, item);
             }
             MemoryScope::Local => {
+                // println!("INSERT LOCAL {address} - {:#?}", item);
                 self.curr_locals_mut().insert(address, item);
             }
         }
     }
 
-    pub fn resolved_get(&mut self, address: MemAddress) -> Item {
-        let x = MemoryResolver::get_offset(address);
-        let (scope, _, _) = x;
-        match scope {
-            MemoryScope::Global => self.globals.get(&address).unwrap().clone(),
-            MemoryScope::Constant => {
-                let item = self.globals.get(&address).unwrap().clone();
-                if self.call_context.is_empty() {
-                    self.globals.remove(&address); // Removes global constants, will never be re-read
-                }
-                item
+    fn _get(&self, address: MemAddress) -> &Item {
+        if let Some(scope) = MemoryResolver::get_scope_from_address(address) {
+            match scope {
+                MemoryScope::Global | MemoryScope::Constant => self._get_global(address),
+                MemoryScope::Local => self._get_local(address),
             }
-            MemoryScope::Local => {
-                if let Some(item) = self.curr_locals().get(&address) {
-                    item.clone()
-                } else {
-                    if let Some(item) = self.globals.get(&address) {
-                        item.clone()
-                    } else {
-                        panic!("Cannot find item with address {}", address);
-                    }
-                }
-            }
+        } else {
+            panic!("{address} is not a valid address");
         }
+    }
+
+    fn _get_global(&self, address: MemAddress) -> &Item {
+        if let Some(item) = self.globals.get(&address) {
+            item
+        } else {
+            panic!("Cant find global address {address}");
+        }
+    }
+
+    fn _get_local(&self, address: MemAddress) -> &Item {
+        if let Some(item) = self.curr_locals().get(&address) {
+            item
+        } else {
+            panic!("Cant find local address {address}");
+        }
+    }
+
+    pub fn resolved_get(&mut self, address: MemAddress) -> Item {
+        self._get(address).clone()
     }
 
     pub fn get(&mut self, address: &String) -> Item {
         if address.starts_with("&") {
             let address = address[1..].parse::<MemAddress>().unwrap();
             Item::Pointer(address)
+        } else if address.starts_with("*") {
+            let next = &address[1..].to_string();
+            let next_address = self.get(next);
+
+            if let Item::Pointer(address) = next_address {
+                self._get(address).clone()
+            } else {
+                panic!("Item is not a pointer");
+            }
+            // println!("FETCH * {next}");
+            // let address = address[1..].parse::<MemAddress>().unwrap();
+            
         } else {
             let address = address.parse::<MemAddress>().unwrap();
             self.resolved_get(address)

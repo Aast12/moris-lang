@@ -1,8 +1,5 @@
 use crate::{
-    ast::{
-        node::Node,
-        types::{OperatorType},
-    },
+    ast::{node::Node, types::OperatorType},
     codegen::{manager::GlobalManager, quadruples::Quadruple},
     memory::types::DataType,
     semantics::SemanticRules,
@@ -109,8 +106,6 @@ impl Node for Operation {
         let mut manager = GlobalManager::get();
 
         let tmp = manager.new_temp_address(&dt).to_string();
-
-        println!("EMIT OP {} {} {}", left, right, tmp);
 
         manager.emit(Quadruple::operation(
             self.operator,
