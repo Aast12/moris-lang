@@ -65,7 +65,6 @@ impl Dimension {
 
         new_dim.calc_acc_size();
         new_dim
-
     }
 
     pub fn calc_acc_size(&mut self) {
@@ -84,29 +83,6 @@ impl Dimension {
             self.acc_size = new_acc_size;
         }
     }
-
-    // pub fn get_array_offset(&mut self, access: Vec<usize>) -> usize {
-    //     println!("{:#?}", access);
-    //     if access.len() > self.shape.len() {
-    //         panic!("Incompatible index!")
-    //     }
-    //     let shape_cp = self.shape.clone();
-    //     let mut curr_dim = shape_cp.iter();
-
-    //     if let Some(acc_size) = self.calc_acc_size() {
-    //         let offset = zip(access, acc_size).fold(0, |acc, (index, dim_size)| {
-    //             if let Some(dim) = curr_dim.next() {
-    //                 if index >= *dim {
-    //                     panic!("Index out of bounds");
-    //                 }
-    //             }
-    //             acc + index * *dim_size
-    //         });
-    //         offset
-    //     } else {
-    //         0
-    //     }
-    // }
 }
 
 #[derive(Debug)]

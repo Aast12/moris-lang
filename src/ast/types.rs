@@ -123,7 +123,7 @@ impl Variable {
 
     // TODO: Refactor to use Id
     pub fn address(&self) -> MemAddress {
-        if let Some(var_entry) = GlobalManager::get().get_env().get_var(&self.id) {
+        if let Some(var_entry) = GlobalManager::get().get_env_mut().get_var(&self.id) {
             return var_entry.address;
         } else {
             panic!("Cannot find id {} in scope", self.id);
@@ -136,7 +136,7 @@ impl Node for Variable {
         // Add variable to symbols table
         let mut manager = GlobalManager::get();
         manager
-            .get_env()
+            .get_env_mut()
             .add_var(&self.id, &self.data_type, &self.dimension);
         drop(manager);
 

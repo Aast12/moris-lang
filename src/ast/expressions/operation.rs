@@ -43,7 +43,6 @@ impl Node for Operation {
     fn reduce(&self) -> String {
         let mut left = self.left.reduce();
         let mut right = self.right.reduce();
-
         let dt = self.data_type();
 
         match dt {
@@ -110,6 +109,8 @@ impl Node for Operation {
         let mut manager = GlobalManager::get();
 
         let tmp = manager.new_temp_address(&dt).to_string();
+
+        println!("EMIT OP {} {} {}", left, right, tmp);
 
         manager.emit(Quadruple::operation(
             self.operator,

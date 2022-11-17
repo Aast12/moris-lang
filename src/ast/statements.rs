@@ -166,7 +166,6 @@ impl Node for Statement {
                     condition_id = GlobalManager::emit_cast(&DataType::Bool, condition_id.as_str());
                 }
 
-
                 // Goto instruction to exit the loop
                 let mut goto_false_cond = QuadrupleHold::new();
 
@@ -188,7 +187,16 @@ impl Node for Statement {
             }
             Statement::FunctionDeclaration(func) => func.generate(),
             Statement::Return(ret) => {
-                let return_item = ret.reduce();
+                let mut return_item = ret.reduce();
+                let manager = GlobalManager::get();
+                let context = manager.get_env().current_env();
+                assert_eq!(context.is_global, false);
+                let return_type = context.return_type.clone().unwrap();
+                drop(manager);
+                if return_type != ret.data_type() {
+                    return_item = GlobalManager::emit_cast(&return_type, return_item.as_str());
+                }
+
                 GlobalManager::emit(Quadruple::new_return(return_item.as_str()));
             }
             Statement::Break => GlobalManager::prepare_exit_stmt(&ExitStatement::Break),
@@ -280,7 +288,7 @@ impl Node for Program {
 
                     manager.new_func(func, 0, return_address); // TODO: improve undefined location
 
-                    manager.get_env().switch(&String::from("global"));
+                    manager.get_env_mut().switch(&String::from("global"));
                 }
                 _ => break,
             }

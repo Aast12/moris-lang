@@ -1,5 +1,8 @@
 use core::panic;
-use std::collections::{HashMap, LinkedList};
+use std::{
+    borrow::BorrowMut,
+    collections::{HashMap, LinkedList},
+};
 
 use variantly::Variantly;
 
@@ -22,10 +25,44 @@ pub enum Item {
     Pointer(MemAddress),
 }
 
+// (value address, param address)
+type ParamMapping = (MemAddress, MemAddress);
+
+#[derive(Debug)]
+pub struct CallHold {
+    pub call_params: Vec<ParamMapping>,
+    pub procedure_id: String,
+}
+
+impl CallHold {
+    pub fn new(procedure_id: String) -> CallHold {
+        CallHold {
+            procedure_id,
+            call_params: Vec::new(),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct CallContext {
+    pub procedure_id: String,
+    pub locals: HashMap<MemAddress, Item>,
+}
+
+impl CallContext {
+    pub fn new(procedure_id: String, locals: HashMap<MemAddress, Item>) -> CallContext {
+        CallContext {
+            procedure_id,
+            locals,
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct MemoryManager {
     pub globals: HashMap<MemAddress, Item>,
-    pub locals: LinkedList<HashMap<MemAddress, Item>>,
+    pub call_context: LinkedList<CallContext>,
+    pub call_hold: LinkedList<CallHold>,
 }
 
 impl MemoryManager {
@@ -50,8 +87,84 @@ impl MemoryManager {
 
         MemoryManager {
             globals: HashMap::from(constants),
-            locals: LinkedList::new(),
+            call_context: LinkedList::new(),
+            call_hold: LinkedList::new(),
         }
+    }
+
+    pub fn curr_context(&self) -> &CallContext {
+        if let Some(ctx) = self.call_context.back() {
+            ctx
+        } else {
+            panic!("Cannot find current context!");
+        }
+    }
+
+    pub fn curr_context_mut(&mut self) -> &mut CallContext {
+        if let Some(ctx) = self.call_context.back_mut() {
+            ctx
+        } else {
+            panic!("Cannot find current context!");
+        }
+    }
+
+    pub fn curr_locals(&self) -> &HashMap<MemAddress, Item> {
+        &self.curr_context().locals
+    }
+
+    pub fn curr_locals_mut(&mut self) -> &mut HashMap<MemAddress, Item> {
+        self.call_context.back_mut().unwrap().locals.borrow_mut()
+    }
+
+    pub fn push_context(&mut self) {
+        let curr_hold = self.curr_hold();
+        let locals: HashMap<MemAddress, Item> = curr_hold
+            .call_params
+            .iter()
+            .map(|(value_addr, param_addr)| {
+                let value = self.resolved_get(*value_addr);
+                (param_addr.clone(), value)
+            })
+            .collect();
+
+        self.call_context
+            .push_back(CallContext::new(curr_hold.procedure_id.clone(), locals));
+
+        self.pop_hold();
+    }
+
+    pub fn pop_context(&mut self) {
+        self.call_context.pop_back();
+    }
+
+    pub fn curr_hold(&self) -> &CallHold {
+        &self.call_hold.back().unwrap()
+    }
+
+    pub fn curr_hold_mut(&mut self) -> &mut CallHold {
+        self.call_hold.back_mut().unwrap().borrow_mut()
+    }
+
+    pub fn push_hold(&mut self, procedure_id: String) {
+        self.call_hold.push_back(CallHold::new(procedure_id));
+    }
+
+    pub fn delete(&mut self, address: MemAddress) {
+        let (scope, _, _) = MemoryResolver::get_offset(address);
+        match scope {
+            MemoryScope::Global | MemoryScope::Constant => self.globals.remove(&address),
+            MemoryScope::Local => self.curr_locals_mut().remove(&address),
+        };
+    }
+
+    pub fn push_param(&mut self, value_address: MemAddress, param_address: MemAddress) {
+        self.curr_hold_mut()
+            .call_params
+            .push((value_address, param_address));
+    }
+
+    pub fn pop_hold(&mut self) {
+        self.call_hold.pop_back();
     }
 
     pub fn get_address(&self, address: &String) -> MemAddress {
@@ -76,10 +189,27 @@ impl MemoryManager {
                 self.globals.insert(address, item);
             }
             MemoryScope::Local => {
-                if let Some(curr_context) = self.locals.back_mut() {
-                    curr_context.insert(address, item);
+                self.curr_locals_mut().insert(address, item);
+            }
+        }
+    }
+
+    pub fn resolved_get(&self, address: MemAddress) -> Item {
+        let x = MemoryResolver::get_offset(address);
+        let (scope, _, _) = x;
+        match scope {
+            MemoryScope::Global | MemoryScope::Constant => {
+                self.globals.get(&address).unwrap().clone() // TODO: Remove constants if not reused
+            }
+            MemoryScope::Local => {
+                if let Some(item) = self.curr_locals().get(&address) {
+                    item.clone()
                 } else {
-                    panic!("No current local context");
+                    if let Some(item) = self.globals.get(&address) {
+                        item.clone()
+                    } else {
+                        panic!("Cannot find item with address {}", address);
+                    }
                 }
             }
         }
@@ -91,19 +221,7 @@ impl MemoryManager {
             Item::Pointer(address)
         } else {
             let address = address.parse::<MemAddress>().unwrap();
-            let (scope, _, _) = MemoryResolver::get_offset(address);
-            match scope {
-                MemoryScope::Global | MemoryScope::Constant => {
-                    self.globals.get(&address).unwrap().clone() // TODO: Remove constants if not reused
-                }
-                MemoryScope::Local => {
-                    if let Some(curr) = self.locals.back() {
-                        curr.get(&address).unwrap().clone()
-                    } else {
-                        panic!("No current local context");
-                    }
-                }
-            }
+            self.resolved_get(address)
         }
     }
 }

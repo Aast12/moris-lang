@@ -73,7 +73,11 @@ impl Manager {
         serde_pickle::to_writer(&mut buffer, &meta, Default::default()).unwrap();
     }
 
-    pub fn get_env(&mut self) -> &mut Environment {
+    pub fn get_env(&self) -> &Environment {
+        return &self.env;
+    }
+
+    pub fn get_env_mut(&mut self) -> &mut Environment {
         return &mut self.env;
     }
 
@@ -84,7 +88,7 @@ impl Manager {
         return_address: Option<MemAddress>,
     ) {
         if self.procedure_table.contains_key(&func.signature.id)
-            || self.get_env().entries.contains_key(&func.signature.id)
+            || self.get_env_mut().entries.contains_key(&func.signature.id)
         {
             panic!(
                 "A symbol with id {} has been already defined",
@@ -92,7 +96,7 @@ impl Manager {
             )
         }
 
-        self.get_env().from_function(&func.signature, true);
+        self.get_env_mut().from_function(&func.signature, true);
 
         let params: Vec<ParamAddress> = func
             .signature
@@ -105,7 +109,7 @@ impl Manager {
                      dimension: _,
                      value: _,
                  })| {
-                    let param_symbol = self.get_env().get_var(id).unwrap();
+                    let param_symbol = self.get_env_mut().get_var(id).unwrap();
                     (param_symbol.address, data_type.clone())
                 },
             )
@@ -142,16 +146,16 @@ impl Manager {
     }
 
     pub fn drop_func(&mut self, func_id: &String) {
-        self.get_env().switch(&String::from("global"));
-        self.get_env().drop_env(func_id);
+        self.get_env_mut().switch(&String::from("global"));
+        self.get_env_mut().drop_env(func_id);
     }
 
     pub fn new_variable(&mut self, id: &String, data_type: &DataType, dimension: &Dimension) {
-        self.get_env().add_var(id, data_type, dimension);
+        self.get_env_mut().add_var(id, data_type, dimension);
     }
 
     pub fn remove_variable(&mut self, id: &String) {
-        self.get_env().del_var(id);
+        self.get_env_mut().del_var(id);
     }
 
     pub fn new_global(&mut self, data_type: &DataType) -> MemAddress {
@@ -170,7 +174,7 @@ impl Manager {
         let address = self
             .env
             .allocator
-            .assign_location(&self.env.current_scope, data_type, 1);
+            .assign_location(&MemoryScope::Constant, data_type, 1);
 
         self.constant_table.insert(address, value.clone());
 
@@ -180,6 +184,12 @@ impl Manager {
     pub fn emit(&mut self, quadruple: Quadruple) {
         self.quadruples.push(quadruple);
         self.instruction_counter += 1;
+    }
+
+    pub fn emit_cast(&mut self, target_dt: &DataType, target: &str) -> String {
+        let new = self.new_temp_address(target_dt).to_string();
+        self.emit(Quadruple::type_cast(target_dt, target, new.as_str()));
+        new
     }
 
     pub fn get_next_id(&self) -> usize {
@@ -253,10 +263,7 @@ impl GlobalManager {
     }
 
     pub fn emit_cast(target_dt: &DataType, target: &str) -> String {
-        let new = GlobalManager::new_temp(target_dt).to_string();
-        GlobalManager::emit(Quadruple::type_cast(target_dt, target, new.as_str()));
-
-        new
+        GlobalManager::get().emit_cast(target_dt, target)
     }
 
     pub fn get_next_pos() -> usize {

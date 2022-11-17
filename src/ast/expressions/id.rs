@@ -34,7 +34,7 @@ impl Id {
             Some(dtype) => dtype.clone(),
             _ => {
                 let mut man = GlobalManager::get();
-                if let Some(id) = man.get_env().get_var(&self.id) {
+                if let Some(id) = man.get_env_mut().get_var(&self.id) {
                     return id.data_type.clone();
                 }
                 panic!("id {} is not defined", self.id);
@@ -43,7 +43,7 @@ impl Id {
     }
 
     pub fn address(&self) -> MemAddress {
-        if let Some(var_entry) = GlobalManager::get().get_env().get_var(&self.id) {
+        if let Some(var_entry) = GlobalManager::get().get_env_mut().get_var(&self.id) {
             return var_entry.address;
         } else {
             panic!("Cannot find id {} in scope", self.id);
@@ -83,7 +83,7 @@ impl Node for Access {
             .map(|index| index.reduce())
             .collect::<Vec<String>>();
 
-        let id_var = GlobalManager::get().get_env().get_var(&self.id.id).cloned();
+        let id_var = GlobalManager::get().get_env_mut().get_var(&self.id.id).cloned();
 
         if let Some(access_item) = id_var {
             if indexing_addresses.len() > access_item.dimension.dimensions as usize {

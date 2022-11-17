@@ -30,7 +30,6 @@ impl Node for Const {
     }
 
     fn reduce(&self) -> String {
-
         let const_address = GlobalManager::new_constant(&self.dtype, self);
         return const_address.to_string();
     }

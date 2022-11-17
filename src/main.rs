@@ -16,6 +16,15 @@ fn try_file(path: &str) -> Program {
         Err(error) => panic!("path: {} -> {}", path, error),
     }
 }
+fn fib(x: i32) -> i32 {
+    if (x <= 2) {
+        return x;
+    }
+
+    return fib(x - 1) + fib(x - 2);
+}
+
+
 
 fn main() {
     // let reader = File::open("program.o").unwrap();
@@ -23,23 +32,39 @@ fn main() {
 
     // println!("{:#?}", data);
 
-    let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join("./samples/expressions.mo");
+    let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join("./samples/fibonacci.mo");
     let path = path_buf.to_str().unwrap();
 
     let mut test_program = try_file(path);
 
-    print!("{:#?}", test_program);
+    // print!("{:#?}", test_program);
 
     test_program.generate();
 
+    // println!("meta \n{:#?}", GlobalManager::get().env);
 
     GlobalManager::get().dump();
 
     let mut vm = VirtualMachine::load("program.o");
-    println!("Starting execution");
-    vm.execute();
+    
+    println!("META \n{:#?}", vm.data);
+    println!("Memory \n{:#?}", vm.memory);
+
+    println!("Quadruples");
     println!("{:#?}", GlobalManager::get().quadruples);
-    println!("{:#?}", vm.globals);
+    let mut i = 0;
+    println!();
+    for quad in GlobalManager::get().quadruples.iter() {
+        let Quadruple(fst, snd, trd, fth) = quad;
+        println!("{}.\t{}\t{}\t{}\t{}", i, fst, snd, trd, fth);
+        i += 1;
+    }
+    // println!("Starting execution");
+    vm.execute();
+
+    println!("Memory \n{:#?}", vm.memory);
+    
+    println!("FIB {}", fib(10));
     
     // let m = MANAGER.lock().unwrap();
 

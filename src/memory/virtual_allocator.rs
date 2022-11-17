@@ -1,11 +1,11 @@
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
 use super::{
     resolver::{MemAddress, MemoryResolver, MemoryScope},
     types::DataType,
 };
 
-type MemoryCounter = HashMap<DataType, usize>;
+pub type MemoryCounter = HashMap<DataType, usize>;
 
 #[derive(Debug)]
 pub struct VirtualAllocator {
@@ -23,17 +23,27 @@ impl VirtualAllocator {
         }
     }
 
-    /// Increases the counter to the next available address for a certain data type.s
-    fn increase_counter(&mut self, scope: &MemoryScope, data_type: &DataType) -> usize {
-        self.increase_counter_by(scope, data_type, 1)
-    }
-
-    fn increase_counter_by(&mut self, scope: &MemoryScope, data_type: &DataType, size: usize) -> usize {
-        let counter = match scope {
+    pub fn get_counter(&mut self, scope: &MemoryScope) -> &mut MemoryCounter {
+        match scope {
             MemoryScope::Global => &mut self.global_counters,
             MemoryScope::Local => &mut self.local_counters,
             MemoryScope::Constant => &mut self.constant_counters,
-        };
+        }
+    }
+
+    pub fn update_counter(&mut self, scope: &MemoryScope, data_type: &DataType, size: usize) {
+        let counter = self.get_counter(scope);
+
+        counter.insert(data_type.clone(), size);
+    }
+
+    pub fn increase_counter_by(
+        &mut self,
+        scope: &MemoryScope,
+        data_type: &DataType,
+        size: usize,
+    ) -> usize {
+        let counter = self.get_counter(scope);
 
         if let Some(last) = counter.get(&data_type) {
             let next_offset = last.clone();
@@ -49,7 +59,12 @@ impl VirtualAllocator {
         self.local_counters = HashMap::new();
     }
 
-    pub fn assign_location(&mut self, scope: &MemoryScope, data_type: &DataType, size: usize) -> MemAddress {
+    pub fn assign_location(
+        &mut self,
+        scope: &MemoryScope,
+        data_type: &DataType,
+        size: usize,
+    ) -> MemAddress {
         let start_address = self.increase_counter_by(scope, data_type, size);
         MemoryResolver::to_address(scope, data_type, start_address as MemAddress)
     }

@@ -1,8 +1,8 @@
 use core::panic;
-use std::fs::File;
+use std::{collections::LinkedList, fs::File};
 
 use crate::{
-    codegen::{meta::ProgramMeta, quadruples::Quadruple},
+    codegen::{function::FunctionEntry, meta::ProgramMeta, quadruples::Quadruple},
     memory::{
         resolver::{MemAddress, MemoryResolver},
         types::DataType,
@@ -196,13 +196,19 @@ impl VirtualMachine {
         }
     }
 
+    fn get_func(&self, id: String) -> &FunctionEntry {
+        self.data.procedure_table.get(&id).unwrap()
+    }
+
     pub fn execute(&mut self) {
         let mut instruction_pointer = 0;
+        let mut call_pointer: LinkedList<usize> = LinkedList::new();
+        let mut pre_call_stack: LinkedList<String> = LinkedList::new();
+
         let quadruples: Vec<Quadruple> = self.data.quadruples.drain(..).collect();
 
         while instruction_pointer < quadruples.len() {
             let curr_instruction = quadruples.get(instruction_pointer).unwrap();
-            println!("EXEC {:#?}", curr_instruction.0.as_str());
             match curr_instruction.0.as_str() {
                 "*" | "+" | "-" | "/" => self.arithmetic_op(curr_instruction),
                 ">" | ">=" | "<" | "<=" | "==" | "!=" => self.logic_cmp(curr_instruction),
@@ -264,6 +270,63 @@ impl VirtualMachine {
                         }
                         _ => panic!("Can't check non-boolean condition."),
                     };
+                }
+                "era" => {
+                    let Quadruple(_, _, _, function_id) = curr_instruction;
+                    self.memory.push_hold(function_id.clone());
+                    pre_call_stack.push_back(function_id.clone());
+                }
+                "param" => {
+                    let Quadruple(_, arg_addr, _, param_index) = curr_instruction;
+                    let function_id = pre_call_stack.back().unwrap();
+                    let call_context = self.data.get_func(function_id);
+
+                    let value_addr = self.memory.get_address(arg_addr);
+                    let (param_addr, _) = call_context
+                        .params
+                        .get(param_index.parse::<usize>().unwrap())
+                        .unwrap();
+
+                    self.memory.push_param(value_addr, param_addr.clone());
+                }
+                "gosub" => {
+                    let Quadruple(_, _, _, function_id) = curr_instruction;
+
+                    call_pointer.push_back(instruction_pointer + 1);
+
+                    let func_meta = self.data.get_func(&function_id);
+                    self.memory.push_context();
+                    pre_call_stack.pop_back();
+
+                    // Cleanup function return address to catch no-return errors
+                    let return_addr = func_meta.return_address.unwrap();
+                    self.memory.delete(return_addr);
+
+                    instruction_pointer = func_meta.procedure_address;
+                    continue;
+                }
+                "return" => {
+                    let Quadruple(_, _, _, return_value_addr) = curr_instruction;
+                    let function_id = &self.memory.curr_context().procedure_id;
+
+                    let func_meta = self.data.get_func(function_id);
+                    // TODO: void return
+                    let return_addr = func_meta.return_address.unwrap();
+                    let value = self.memory.get(return_value_addr);
+
+                    self.memory.update(return_addr, value);
+                    self.memory.pop_context();
+
+                    instruction_pointer = call_pointer.pop_back().unwrap();
+                    continue;
+                }
+                "endFunc" => {
+                    self.memory.pop_context();
+                    instruction_pointer = call_pointer.pop_back().unwrap();
+                    continue;
+                }
+                "endProgram" => {
+                    break;
                 }
                 _ => panic!(),
             }

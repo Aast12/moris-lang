@@ -19,3 +19,10 @@ if (q > 10) {
     y = 20;
 }
 
+fn test_func(x: float, y: float): int {
+    x = x + 1;
+    return x;
+}
+
+
+y = test_func(10, test_func(test_func(10, 0), 0));

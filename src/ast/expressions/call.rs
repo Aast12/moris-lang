@@ -1,5 +1,5 @@
 use crate::{
-    ast::node::Node,
+    ast::{node::Node, types::Operator},
     codegen::{manager::GlobalManager, quadruples::Quadruple},
     memory::types::DataType,
 };
@@ -31,7 +31,11 @@ impl Node for Call {
     }
 
     fn reduce(&self) -> String {
-        let target_params = GlobalManager::get().get_func(&self.id).params.clone();
+        let man = GlobalManager::get();
+        let func = man.get_func(&self.id).clone();
+        let return_type = func.return_type.clone();
+        let target_params = func.params.clone();
+        drop(man);
         let target_params_len = target_params.len();
         if self.params.len() != target_params_len {
             panic!(
@@ -73,8 +77,15 @@ impl Node for Call {
 
         GlobalManager::emit(Quadruple::go_sub(self.id.as_str()));
 
-        if let Some(address) = GlobalManager::get().get_func_return(&self.id) {
-            address.to_string()
+        let mut manager = GlobalManager::get();
+        if let Some(address) = manager.get_func_return(&self.id) {
+            let return_value = manager.new_temp_address(&return_type).to_string();
+            manager.emit(Quadruple::unary(
+                Operator::Assign,
+                address.to_string().as_str(),
+                return_value.as_str(),
+            ));
+            return_value
         } else {
             todo!()
         }

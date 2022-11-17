@@ -33,8 +33,8 @@ impl Node for Function {
         let next_position = manager.get_next_id();
 
         manager.update_func_position(&self.signature.id, next_position);
-        manager.get_env().switch(&self.signature.id);
-
+        manager.get_env_mut().switch(&self.signature.id);
+        
         drop(manager);
 
         self.block.generate();
@@ -42,7 +42,7 @@ impl Node for Function {
         GlobalManager::emit(Quadruple::end_func());
 
         GlobalManager::get()
-            .get_env()
+            .get_env_mut()
             .switch(&String::from("global"));
         // GlobalManager::get().get_env().drop_env(&self.signature.id);
     }

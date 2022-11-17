@@ -1,5 +1,5 @@
 use core::panic;
-use std::collections::HashMap;
+use std::{collections::HashMap, hash::Hash};
 
 use crate::{
     ast::{
@@ -33,7 +33,7 @@ pub struct SymbolEntry {
 
 #[derive(Debug)]
 pub struct EnvEntry {
-    is_global: bool,
+    pub is_global: bool,
     pub env_id: String,
     pub return_type: Option<DataType>,
     pub symbols: HashMap<String, SymbolEntry>,
@@ -72,7 +72,7 @@ impl Environment {
         panic!("Current environment does not exist!");
     }
 
-    fn current_env(&self) -> &EnvEntry {
+    pub fn current_env(&self) -> &EnvEntry {
         if let Some(env) = self.entries.get(&self.current_env) {
             return env;
         }
@@ -95,6 +95,17 @@ impl Environment {
             } else {
                 self.current_scope = MemoryScope::Local;
                 self.allocator.reset_locals();
+                let current_context = self.entries.get(id).unwrap();
+                let mut counters: HashMap<DataType, usize> = HashMap::new();
+                current_context.symbols.iter().for_each(|(_, entry)| {
+                    let value = counters.get(&entry.data_type).unwrap_or(&0) + 1;
+                    counters.insert(entry.data_type.clone(), value);
+                });
+
+                counters.iter().for_each(|(k, v)| {
+                    self.allocator
+                        .update_counter(&MemoryScope::Local, k, *v)
+                });
             }
         } else {
             panic!("Environment {} does not exist!", id);
@@ -144,7 +155,7 @@ impl Environment {
                 id.clone(),
                 data_type.clone(),
                 address,
-                dimension.clone()
+                dimension.clone(),
             ));
         }
     }
@@ -189,7 +200,7 @@ impl EnvEntry {
                     &variable.data_type,
                     variable.dimension.size,
                 ),
-                variable.dimension.clone()
+                variable.dimension.clone(),
             );
 
             symbols.insert(key, val);
