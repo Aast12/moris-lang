@@ -117,9 +117,10 @@ impl MemoryManager {
     }
 
     pub fn push_context(&mut self) {
-        let curr_hold = self.curr_hold();
-        let locals: HashMap<MemAddress, Item> = curr_hold
-            .call_params
+        let call_params = self.curr_hold().call_params.clone();
+        let procedure_id = self.curr_hold().procedure_id.clone();
+
+        let locals: HashMap<MemAddress, Item> = call_params
             .iter()
             .map(|(value_addr, param_addr)| {
                 let value = self.resolved_get(*value_addr);
@@ -128,7 +129,7 @@ impl MemoryManager {
             .collect();
 
         self.call_context
-            .push_back(CallContext::new(curr_hold.procedure_id.clone(), locals));
+            .push_back(CallContext::new(procedure_id, locals));
 
         self.pop_hold();
     }
@@ -194,12 +195,17 @@ impl MemoryManager {
         }
     }
 
-    pub fn resolved_get(&self, address: MemAddress) -> Item {
+    pub fn resolved_get(&mut self, address: MemAddress) -> Item {
         let x = MemoryResolver::get_offset(address);
         let (scope, _, _) = x;
         match scope {
-            MemoryScope::Global | MemoryScope::Constant => {
-                self.globals.get(&address).unwrap().clone() // TODO: Remove constants if not reused
+            MemoryScope::Global => self.globals.get(&address).unwrap().clone(),
+            MemoryScope::Constant => {
+                let item = self.globals.get(&address).unwrap().clone();
+                if self.call_context.is_empty() {
+                    self.globals.remove(&address); // Removes global constants, will never be re-read
+                }
+                item
             }
             MemoryScope::Local => {
                 if let Some(item) = self.curr_locals().get(&address) {
@@ -215,7 +221,7 @@ impl MemoryManager {
         }
     }
 
-    pub fn get(&self, address: &String) -> Item {
+    pub fn get(&mut self, address: &String) -> Item {
         if address.starts_with("&") {
             let address = address[1..].parse::<MemAddress>().unwrap();
             Item::Pointer(address)

@@ -127,7 +127,7 @@ impl VirtualMachine {
         }
     }
 
-    fn unpack_unary(&self, instruction: &Quadruple) -> (Item, MemAddress) {
+    fn unpack_unary(&mut self, instruction: &Quadruple) -> (Item, MemAddress) {
         let Quadruple(_, op, _, dest) = instruction;
         let op = self.memory.get(&op);
         let dest = self.memory.get_address(&dest);
@@ -135,7 +135,7 @@ impl VirtualMachine {
         (op, dest)
     }
 
-    fn unpack_binary<'a>(&self, instruction: &'a Quadruple) -> (&'a str, Item, Item, MemAddress) {
+    fn unpack_binary<'a>(&mut self, instruction: &'a Quadruple) -> (&'a str, Item, Item, MemAddress) {
         let Quadruple(operator, left, right, dest) = instruction;
         let left = self.memory.get(&left);
         let right = self.memory.get(&right);
