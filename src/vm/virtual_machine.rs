@@ -49,7 +49,10 @@ macro_rules! arith_operation {
                 let (op1, op2) = Self::match_pointers($left, $right);
                 $self.memory.update($dest, Item::Pointer(op1 $op op2));
             }
-            DataType::String => panic!(),
+            DataType::String => {
+                let (left, right) = Self::match_strings($left, $right);
+                $self.memory.update($dest, Item::String(format!("{}{}", left, right)));
+            },
             _ => todo!(),
         }
     };
@@ -76,7 +79,7 @@ macro_rules! logic_cmp {
                 $self.memory.update(dest, Item::Bool(left $op right));
             }
             DataType::Bool => todo!(),
-            DataType::String => todo!(),
+            DataType::String => panic!(),
             DataType::Series => todo!(),
             _ => panic!(),
         }
@@ -346,6 +349,15 @@ impl VirtualMachine {
                 }
                 "endProgram" => {
                     break;
+                }
+                "print" => {
+                    let Quadruple(_, _, _, print_target) = curr_instruction;
+
+                    if let Ok(print_target) = self.memory.safe_get(print_target) {
+                        print!("{} ", print_target);
+                    } else {
+                        print!("{}", print_target);
+                    }
                 }
                 _ => panic!(),
             }

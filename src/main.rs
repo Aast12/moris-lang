@@ -1,6 +1,11 @@
 use moris_lang::vm::{test::Inspector, memory_manager::Item};
 
 fn main() {
+
+    println!("samples/strings.mo");
+    let inspector = Inspector::new("samples/strings.mo");
+    println!("concat = {:#?}", inspector.get("concat"));
+
     println!("samples/arrays.mo");
     let inspector = Inspector::new("samples/arrays.mo");
     println!("x = {:#?}", inspector.get("x"));

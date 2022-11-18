@@ -1,9 +1,8 @@
-use std::{collections::HashMap, fs, path::Path};
+use std::{collections::HashMap, path::Path};
 
 use codegen::manager::GlobalManager;
-use parser::grammar::PProgramParser as Parser;
+use parser::try_file;
 
-use parser::statements::Program;
 use memory::resolver::MemAddress;
 
 use codegen::node::Node;
@@ -12,13 +11,6 @@ use super::memory_manager::Item;
 use super::virtual_machine::VirtualMachine;
 
 type TargetMeta = HashMap<String, MemAddress>;
-
-fn try_file(path: &str) -> Program {
-    match fs::read_to_string(path) {
-        Ok(file_content) => Parser::new().parse(file_content.as_str()).unwrap(),
-        Err(error) => panic!("path: {} -> {}", path, error),
-    }
-}
 
 pub struct Inspector {
     pub target_meta: HashMap<String, MemAddress>,

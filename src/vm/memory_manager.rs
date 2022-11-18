@@ -2,6 +2,7 @@ use core::panic;
 use std::{
     borrow::BorrowMut,
     collections::{HashMap, LinkedList},
+    fmt::Display,
 };
 
 use variantly::Variantly;
@@ -38,6 +39,18 @@ impl Item {
             }
             Item::Pointer(item) => item as IntType,
             _ => panic!("Cant cast {:#?} to int", item),
+        }
+    }
+}
+
+impl Display for Item {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Item::Int(item) => write!(fmt, "{}", item),
+            Item::Float(item) => write!(fmt, "{}", item),
+            Item::Bool(item) => write!(fmt, "{}", item),
+            Item::String(item) => write!(fmt, "{}", item),
+            Item::Pointer(item) => write!(fmt, "prt({})", item),
         }
     }
 }
@@ -239,23 +252,31 @@ impl MemoryManager {
         self._get(address).clone()
     }
 
-    pub fn get(&mut self, address: &String) -> Item {
+    pub fn safe_get(&mut self, address: &String) -> Result<Item, String> {
         if address.starts_with("&") {
             let address = address[1..].parse::<MemAddress>().unwrap();
-            Item::Pointer(address)
+            Ok(Item::Pointer(address))
         } else if address.starts_with("*") {
             let next = &address[1..].to_string();
             let next_address = self.get(next);
 
             if let Item::Pointer(address) = next_address {
-                let q = self._get(address).clone();
-                q
+                Ok(self._get(address).clone())
             } else {
-                panic!("Item is not a pointer");
+                Err(String::from("Item is not a pointer"))
             }
         } else {
-            let address = address.parse::<MemAddress>().unwrap();
-            self.resolved_get(address)
+            let parse = address.parse::<MemAddress>();
+            if let Ok(address) = parse {
+                Ok(self.resolved_get(address))
+            } else {
+                let err = format!("Item {} is not an address", address).to_owned();
+                Err(err.to_owned())
+            }
         }
+    }
+
+    pub fn get(&mut self, address: &String) -> Item {
+        self.safe_get(address).unwrap()
     }
 }

@@ -1,15 +1,24 @@
 pub mod expressions;
 pub mod functions;
+pub mod grammar;
 pub mod semantics;
 pub mod statements;
 pub mod types;
-pub mod grammar;
 
-use std::{fmt::Debug, vec};
+use std::{fmt::Debug, vec, fs};
 
+use grammar::PProgramParser;
 use memory::types::{FloatType, IntType};
+use statements::Program;
 
 use self::expressions::{constant::Const, Expression};
+
+pub fn try_file(path: &str) -> Program {
+    match fs::read_to_string(path) {
+        Ok(file_content) => PProgramParser::new().parse(file_content.as_str()).unwrap(),
+        Err(error) => panic!("path: {} -> {}", path, error),
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct Dimension {

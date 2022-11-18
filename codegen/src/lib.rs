@@ -1,5 +1,3 @@
-use std::cmp::Ordering;
-use std::iter::zip;
 use env::SymbolEntry;
 use manager::GlobalManager;
 use memory::{
@@ -17,10 +15,12 @@ use parser::{
     },
     functions::Function,
     semantics::{ExitStatement, SemanticRules},
-    statements::{Block, Statement, Program},
+    statements::{Block, Program, Statement},
     types::{Operator, OperatorType, Variable},
 };
 use quadruples::{Quadruple, QuadrupleHold};
+use std::cmp::Ordering;
+use std::iter::zip;
 pub mod env;
 pub mod function;
 pub mod manager;
@@ -79,7 +79,6 @@ impl Node for Variable {
         todo!("reduce variable");
     }
 }
-
 
 impl Node for Block {
     fn generate(&mut self) -> () {
@@ -724,7 +723,10 @@ impl Node for Access {
 
 impl Node for Call {
     fn data_type(&self) -> DataType {
-        GlobalManager::get().get_func(&self.id).return_type.clone()
+        match self.id.as_str() {
+            "print" => DataType::Void,
+            _ => GlobalManager::get().get_func(&self.id).return_type.clone(),
+        }
     }
 
     fn generate(&mut self) -> () {
@@ -732,6 +734,21 @@ impl Node for Call {
     }
 
     fn reduce(&self) -> String {
+        let id = self.id.as_str();
+        match id {
+            "print" | "println" => {
+                self.params.iter().for_each(|param| {
+                    let value = param.reduce();
+                    GlobalManager::emit(Quadruple::new("print", "", "", value.as_str()));
+                });
+                if id == "println" {
+                    GlobalManager::emit(Quadruple::new("print", "", "", "\n"));
+                }
+                return String::from("VOID");
+            }
+            _ => (),
+        }
+
         let man = GlobalManager::get();
         let func = man.get_func(&self.id).clone();
         let return_type = func.return_type.clone();
@@ -750,7 +767,7 @@ impl Node for Call {
         GlobalManager::emit(Quadruple::era(self.id.as_str()));
 
         for (index, param) in self.params.iter().enumerate() {
-            let (_, def_param_data_type, param_pointer_addr) = param_defintions.get(index).unwrap();
+            let (_, def_param_data_type, _) = param_defintions.get(index).unwrap();
             let mut param_address = param.reduce();
             let param_data_type = param.data_type();
             assert!(

@@ -11,7 +11,6 @@ fn array_mod(arr: int[10]): int {
     return arr[2];
 }
 
-
 fn array_item(arr_item: int): int {
     arr_item = arr_item * 2;
     return arr_item;
