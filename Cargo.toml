@@ -8,6 +8,7 @@ build = "build.rs" # LALRPOP preprocessing
 [dependencies]
 lalrpop-util = { version = "^0.19", features = ["lexer"] }
 lazy_static = "1.4.0"
+memory = { version = "0.1.0", path = "memory" }
 regex = "1"
 serde = { version = "1.0.147", features = ["derive"] }
 serde-pickle = "1.1.1"
