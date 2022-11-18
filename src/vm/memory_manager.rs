@@ -6,12 +6,11 @@ use std::{
 
 use variantly::Variantly;
 
-use crate::{
-    codegen::meta::ProgramMeta,
-    memory::{
-        resolver::{MemAddress, MemoryResolver, MemoryScope},
-        types::{DataType, FloatType, IntType},
-    },
+use crate::codegen::meta::ProgramMeta;
+
+use memory::{
+    resolver::{MemAddress, MemoryResolver, MemoryScope},
+    types::{DataType, FloatType, IntType},
 };
 
 #[derive(Debug, Clone, Variantly, PartialEq)]

@@ -1,4 +1,4 @@
-use crate::ast::types::{Operator, Operator::*};
+use crate::types::{Operator, Operator::*};
 use memory::types::{DataType, DataType::*};
 
 #[derive(Debug, Clone, Copy, Eq, Hash, PartialEq)]

@@ -1,15 +1,8 @@
-use std::ops::DerefMut;
+use memory::types::DataType;
 
-use crate::{
-    codegen::{manager::GlobalManager, quadruples::Quadruple},
-    memory::types::DataType,
-};
+use crate::codegen::{manager::GlobalManager, quadruples::Quadruple};
 
-use super::{
-    node::Node,
-    statements::Block,
-    types::{Operator, Variable},
-};
+use super::{node::Node, statements::Block, types::Variable};
 
 #[derive(Debug, Clone)]
 pub struct FunctionSignature {

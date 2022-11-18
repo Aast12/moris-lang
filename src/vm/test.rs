@@ -3,7 +3,8 @@ use std::{collections::HashMap, fs, path::Path};
 use crate::codegen::manager::GlobalManager;
 use crate::parser::grammar::PProgramParser as Parser;
 
-use crate::{ast::statements::Program, memory::resolver::MemAddress};
+use crate::ast::statements::Program;
+use memory::resolver::MemAddress;
 
 use crate::ast::node::Node;
 
@@ -33,7 +34,6 @@ impl Inspector {
         // println!("Program {:#?}", test_program);
         test_program.generate();
 
-
         let target_meta: TargetMeta;
         if let Some(global_env) = GlobalManager::get().env.entries.get("global") {
             target_meta = global_env
@@ -54,7 +54,7 @@ impl Inspector {
         vm.execute();
 
         // println!("MEM {:#?}", vm.memory);
-        
+
         Inspector {
             target_meta,
             memory: vm.memory.globals,

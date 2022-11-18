@@ -4,7 +4,7 @@ use std::fmt::{Debug, Error, Formatter};
 use memory::types::DataType;
 use serde::{Deserialize, Serialize};
 
-use crate::ast::types::Operator;
+use parser::types::Operator;
 
 use super::manager::MANAGER;
 

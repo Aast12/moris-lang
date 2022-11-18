@@ -1,17 +1,8 @@
-use memory::{types::DataType, resolver::MemAddress};
+use memory::types::DataType;
 
-use crate::{
-    ast::{
-        expressions::id::{Access, Id},
-        statements::Statement,
-    },
-    codegen::{
-        manager::{GlobalManager, Manager},
-        quadruples::Quadruple,
-    },
-};
+use crate::Dimension;
 
-use super::{expressions::Expression, node::Node, Dimension};
+use super::expressions::Expression;
 
 #[derive(Clone, Copy, Debug)]
 pub enum OperatorType {
@@ -135,89 +126,12 @@ impl Variable {
         }
     }
 
-    // TODO: Refactor to use Id
-    pub fn address(&self) -> MemAddress {
-        if let Some(var_entry) = GlobalManager::get().get_env_mut().get_var(&self.id) {
-            return var_entry.address;
-        } else {
-            panic!("Cannot find id {} in scope", self.id);
-        }
-    }
-
-    pub fn _generate(&mut self, manager: &mut Manager) -> () {
-        // Add variable to symbols table
-        let var_address = manager
-            .get_env_mut()
-            .add_var(&self.id, &self.data_type, &self.dimension);
-
-        if self.dimension.size > 1 {
-            let array_address = manager
-                .get_env_mut()
-                .allocate_array(&self.data_type, &self.dimension);
-
-            manager.emit(Quadruple::operation(
-                Operator::Assign,
-                format!("&{}", array_address).as_str(),
-                "",
-                format!("{}", var_address).as_str(),
-            ))
-        }
-
-        drop(manager);
-
-        if let Some(value) = &self.value {
-            let mut assign = Statement::VarAssign(
-                Access::new(
-                    Id::new(self.id.as_str(), Some(self.data_type.clone())),
-                    vec![],
-                ),
-                value.to_owned(),
-            );
-
-            assign.generate();
-        }
-    }
-}
-
-impl Node for Variable {
-    fn generate(&mut self) -> () {
-        // Add variable to symbols table
-        let mut manager = GlobalManager::get();
-        let var_address = manager
-            .get_env_mut()
-            .add_var(&self.id, &self.data_type, &self.dimension);
-
-        if self.dimension.size > 1 {
-            let array_address = manager
-                .get_env_mut()
-                .allocate_array(&self.data_type, &self.dimension);
-            println!(
-                "ALLOCATION ARRAY ADDRESS {} - {}",
-                var_address, array_address
-            );
-            manager.emit(Quadruple::operation(
-                Operator::Assign,
-                format!("&{}", array_address).as_str(),
-                "",
-                format!("{}", var_address).as_str(),
-            ))
-        }
-
-        drop(manager);
-        if let Some(value) = &self.value {
-            let mut assign = Statement::VarAssign(
-                Access::new(
-                    Id::new(self.id.as_str(), Some(self.data_type.clone())),
-                    vec![],
-                ),
-                value.to_owned(),
-            );
-
-            assign.generate();
-        }
-    }
-
-    fn reduce(&self) -> String {
-        todo!("reduce variable");
-    }
+    // // TODO: Refactor to use Id
+    // pub fn address(&self) -> MemAddress {
+    //     if let Some(var_entry) = GlobalManager::get().get_env_mut().get_var(&self.id) {
+    //         return var_entry.address;
+    //     } else {
+    //         panic!("Cannot find id {} in scope", self.id);
+    //     }
+    // }
 }

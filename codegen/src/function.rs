@@ -1,7 +1,7 @@
 use memory::{resolver::MemAddress, types::DataType};
 use serde::{Deserialize, Serialize};
 
-use crate::ast::functions::Function;
+use parser::functions::Function;
 
 pub type ParamAddress = (MemAddress, DataType, Option<MemAddress>);
 

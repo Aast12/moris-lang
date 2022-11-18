@@ -1,8 +1,9 @@
 use crate::{
     ast,
     codegen::{manager::GlobalManager, quadruples::Quadruple},
-    memory::{resolver::MemoryResolver, types::DataType},
 };
+
+use memory::{resolver::MemoryResolver, types::DataType};
 
 use self::{
     call::Call,
@@ -117,7 +118,8 @@ impl ast::node::Node for Index {
 
 #[cfg(test)]
 mod tests {
-    use crate::{ast::types::Operator, memory::types::DataType};
+    use crate::{ast::types::Operator};
+    use memory::types::DataType;
 
     use super::{constant::Const, operation::Operation, Expression};
 

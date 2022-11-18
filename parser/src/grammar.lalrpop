@@ -1,20 +1,20 @@
 use std::str::FromStr;
-use crate::ast::{Dimension};
+use crate::{Dimension};
 
 
-use crate::ast::types::{Operator, Variable};
+use crate::types::{Operator, Variable};
 use memory::types::DataType;
-use crate::ast::functions::{Function, FunctionParam, FunctionSignature};
+use crate::functions::{Function, FunctionParam, FunctionSignature};
 
-use crate::ast::expressions::{Expression, Index};
+use crate::expressions::{Expression, Index};
 
 
-use crate::ast::expressions::constant::{Const, TypeConst};
+use crate::expressions::constant::{Const, TypeConst};
 
-use crate::ast::expressions::id::{Access, Id};
-use crate::ast::expressions::operation::Operation;
-use crate::ast::expressions::call::Call;
-use crate::ast::statements::{Block, Program, Statement};
+use crate::expressions::id::{Access, Id};
+use crate::expressions::operation::Operation;
+use crate::expressions::call::Call;
+use crate::statements::{Block, Program, Statement};
 
 
 grammar;

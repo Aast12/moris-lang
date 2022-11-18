@@ -4,9 +4,10 @@ use crate::{
         types::{Operator, OperatorType},
     },
     codegen::{manager::GlobalManager, quadruples::Quadruple},
-    memory::types::DataType,
     semantics::SemanticRules,
 };
+
+use memory::types::DataType;
 
 use super::{call::Call, types, Expression};
 
@@ -187,10 +188,8 @@ impl Node for Operation {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{
-        ast::expressions::{constant::Const, id::Id},
-        memory::types::DataType,
-    };
+    use crate::ast::expressions::{constant::Const, id::Id};
+    use memory::types::DataType;
 
     #[test]
     fn test_operation() {

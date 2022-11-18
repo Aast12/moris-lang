@@ -1,8 +1,9 @@
 pub mod expressions;
 pub mod functions;
-pub mod node;
+pub mod semantics;
 pub mod statements;
 pub mod types;
+pub mod grammar;
 
 use std::{fmt::Debug, vec};
 

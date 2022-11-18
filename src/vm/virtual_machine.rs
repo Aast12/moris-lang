@@ -1,12 +1,11 @@
 use core::panic;
 use std::{collections::LinkedList, fs::File};
 
-use crate::{
-    codegen::{meta::ProgramMeta, quadruples::Quadruple},
-    memory::{
-        resolver::{MemAddress, MemoryResolver},
-        types::{DataType, FloatType, IntType},
-    },
+use crate::codegen::{meta::ProgramMeta, quadruples::Quadruple};
+
+use memory::{
+    resolver::{MemAddress, MemoryResolver},
+    types::{DataType, FloatType, IntType},
 };
 
 use super::memory_manager::{Item, MemoryManager};

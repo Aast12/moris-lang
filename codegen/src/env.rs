@@ -1,7 +1,7 @@
 use core::panic;
 use std::collections::HashMap;
 
-use crate::ast::{
+use parser::{
     functions::{FunctionParam, FunctionSignature},
     Dimension,
 };

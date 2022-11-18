@@ -1,4 +1,6 @@
-use std::{cmp::Ordering, fmt::Debug, borrow::BorrowMut};
+use std::{borrow::BorrowMut, cmp::Ordering, fmt::Debug};
+
+use memory::types::DataType;
 
 use crate::{
     ast::{
@@ -12,7 +14,6 @@ use crate::{
         manager::GlobalManager,
         quadruples::{Quadruple, QuadrupleHold},
     },
-    memory::types::DataType,
     semantics::ExitStatement,
 };
 

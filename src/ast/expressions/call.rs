@@ -1,10 +1,10 @@
 use crate::{
     ast::{node::Node, types::Operator},
     codegen::{manager::GlobalManager, quadruples::Quadruple},
-    memory::types::DataType,
 };
 
 use super::Expression;
+use memory::types::DataType;
 
 #[derive(Debug, Clone)]
 pub struct Call {

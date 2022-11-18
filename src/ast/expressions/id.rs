@@ -7,8 +7,8 @@ use crate::ast::types::Operator;
 use crate::codegen::manager::GlobalManager;
 use crate::codegen::quadruples::Quadruple;
 use crate::env::SymbolEntry;
-use crate::memory::resolver::MemAddress;
-use crate::memory::types::DataType;
+use memory::resolver::MemAddress;
+use memory::types::DataType;
 
 use super::constant::Const;
 
@@ -179,7 +179,7 @@ impl Node for Access {
 mod tests {
     use super::*;
     use crate::ast::expressions::Expression;
-    use crate::memory::types::DataType;
+    use memory::types::DataType;
 
     #[test]
     fn test_id() {

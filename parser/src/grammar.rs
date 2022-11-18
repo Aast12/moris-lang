@@ -1,16 +1,16 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 71b7d929df3f55618069b1107c683ba61c784f7fd1fb67240fb992cf416b1f5b
+// sha3: 0edd20a865169e5d58649bb8f882bf21d9134db6ad8ee4a41dc7e169b8512bd7
 use std::str::FromStr;
-use crate::ast::{Dimension};
-use crate::ast::types::{Operator, Variable};
+use crate::{Dimension};
+use crate::types::{Operator, Variable};
 use memory::types::DataType;
-use crate::ast::functions::{Function, FunctionParam, FunctionSignature};
-use crate::ast::expressions::{Expression, Index};
-use crate::ast::expressions::constant::{Const, TypeConst};
-use crate::ast::expressions::id::{Access, Id};
-use crate::ast::expressions::operation::Operation;
-use crate::ast::expressions::call::Call;
-use crate::ast::statements::{Block, Program, Statement};
+use crate::functions::{Function, FunctionParam, FunctionSignature};
+use crate::expressions::{Expression, Index};
+use crate::expressions::constant::{Const, TypeConst};
+use crate::expressions::id::{Access, Id};
+use crate::expressions::operation::Operation;
+use crate::expressions::call::Call;
+use crate::statements::{Block, Program, Statement};
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 #[allow(unused_imports)]
@@ -23,16 +23,16 @@ mod __parse__PProgram {
     #![allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens, clippy::all)]
 
     use std::str::FromStr;
-    use crate::ast::{Dimension};
-    use crate::ast::types::{Operator, Variable};
+    use crate::{Dimension};
+    use crate::types::{Operator, Variable};
     use memory::types::DataType;
-    use crate::ast::functions::{Function, FunctionParam, FunctionSignature};
-    use crate::ast::expressions::{Expression, Index};
-    use crate::ast::expressions::constant::{Const, TypeConst};
-    use crate::ast::expressions::id::{Access, Id};
-    use crate::ast::expressions::operation::Operation;
-    use crate::ast::expressions::call::Call;
-    use crate::ast::statements::{Block, Program, Statement};
+    use crate::functions::{Function, FunctionParam, FunctionSignature};
+    use crate::expressions::{Expression, Index};
+    use crate::expressions::constant::{Const, TypeConst};
+    use crate::expressions::id::{Access, Id};
+    use crate::expressions::operation::Operation;
+    use crate::expressions::call::Call;
+    use crate::statements::{Block, Program, Statement};
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -4667,16 +4667,16 @@ pub use self::__parse__PProgram::PProgramParser;
 mod __intern_token {
     #![allow(unused_imports)]
     use std::str::FromStr;
-    use crate::ast::{Dimension};
-    use crate::ast::types::{Operator, Variable};
+    use crate::{Dimension};
+    use crate::types::{Operator, Variable};
     use memory::types::DataType;
-    use crate::ast::functions::{Function, FunctionParam, FunctionSignature};
-    use crate::ast::expressions::{Expression, Index};
-    use crate::ast::expressions::constant::{Const, TypeConst};
-    use crate::ast::expressions::id::{Access, Id};
-    use crate::ast::expressions::operation::Operation;
-    use crate::ast::expressions::call::Call;
-    use crate::ast::statements::{Block, Program, Statement};
+    use crate::functions::{Function, FunctionParam, FunctionSignature};
+    use crate::expressions::{Expression, Index};
+    use crate::expressions::constant::{Const, TypeConst};
+    use crate::expressions::id::{Access, Id};
+    use crate::expressions::operation::Operation;
+    use crate::expressions::call::Call;
+    use crate::statements::{Block, Program, Statement};
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]

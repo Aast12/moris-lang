@@ -1,4 +1,3 @@
-use crate::{ast::node::Node, codegen::manager::GlobalManager};
 use memory::types::{DataType, FloatType, IntType};
 
 #[derive(Debug)]
@@ -22,17 +21,6 @@ impl Const {
             value: String::from(value),
             dtype,
         }
-    }
-}
-
-impl Node for Const {
-    fn generate(&mut self) -> () {
-        self.reduce();
-    }
-
-    fn reduce(&self) -> String {
-        let const_address = GlobalManager::new_constant(&self.dtype, self);
-        return const_address.to_string();
     }
 }
 

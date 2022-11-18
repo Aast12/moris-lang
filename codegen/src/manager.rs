@@ -1,6 +1,9 @@
 use core::panic;
 use lazy_static::lazy_static;
-use memory::{resolver::{MemAddress, MemoryScope}, types::DataType};
+use memory::{
+    resolver::{MemAddress, MemoryScope},
+    types::DataType,
+};
 use std::{
     collections::HashMap,
     fmt::Debug,
@@ -9,15 +12,15 @@ use std::{
 };
 
 use crate::{
-    ast::{
-        expressions::constant::Const,
-        functions::{Function, FunctionParam},
-        types::Variable,
-        Dimension,
-    },
-    codegen::function::{FunctionEntry, ParamAddress},
     env::Environment,
+    function::{FunctionEntry, ParamAddress},
+};
+use parser::{
+    expressions::constant::Const,
+    functions::{Function, FunctionParam},
     semantics::ExitStatement,
+    types::Variable,
+    Dimension,
 };
 
 use super::{meta::ProgramMeta, quadruples::Quadruple};
