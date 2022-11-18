@@ -1,5 +1,3 @@
-use moris_lang::parser;
-
 fn get_parser() -> parser::grammar::PProgramParser {
     parser::grammar::PProgramParser::new()
 }
@@ -16,7 +14,8 @@ fn expect_success(in_str: &str) {
 
 #[test]
 fn test_program() {
-    expect_success("
+    expect_success(
+        "
         let x:int = readNumber();
 
         fn fibonacci(x: int): int {
@@ -28,13 +27,12 @@ fn test_program() {
         }
 
         print(fibonacci(x));
-    ");
-
+    ",
+    );
 }
 
 #[test]
 fn test_expressions() {
-
     expect_success("5 + 2 - 3 * (5 + 10) / 3;");
     expect_success("5 + 2- 3 *(5 + 10)/ 3;");
     expect_success("5 |> fn2;");
@@ -96,7 +94,7 @@ fn test_if() {
         }else{
             x = 7;
         }
-    "
+    ",
     );
     expect_success(
         " 
@@ -108,7 +106,7 @@ fn test_if() {
         } else {
             x = 7;
         }
-    "
+    ",
     );
 
     expect_fail("if(x == 2) x = 3;");
@@ -122,7 +120,7 @@ fn test_if() {
         } else {
             x = 7;
         }
-    "
+    ",
     );
     expect_fail(
         " 
@@ -134,7 +132,7 @@ fn test_if() {
         else {
             x = 7;
         }
-    "
+    ",
     );
     expect_fail(
         " 
@@ -143,57 +141,68 @@ fn test_if() {
             fncall();
         }
         else x = 7;
-    "
+    ",
     );
     expect_fail(
         " 
         if (x == 2) {
             let y:int = 4;
         }
-    "
+    ",
     );
 }
 
 #[test]
 fn test_for() {
     expect_success("for (it in iterable) it = it + 1;");
-    expect_success("for (it in iterable) {
+    expect_success(
+        "for (it in iterable) {
         it = it + 1;    
-    }");
-    expect_success("for(it in iterable){
+    }",
+    );
+    expect_success(
+        "for(it in iterable){
         it = it + 1;    
-    }");
+    }",
+    );
     expect_success("for(it in iterable) {}");
 
-
-    expect_fail("for (it in iterable) {
+    expect_fail(
+        "for (it in iterable) {
         let x:int = 2;
-    }");
+    }",
+    );
     expect_fail("in + 2;");
     expect_fail("for + 2;");
-    expect_fail("for(it in iterable){
+    expect_fail(
+        "for(it in iterable){
         let x:int = 3;
-    }");
+    }",
+    );
     expect_fail("for(let it in iterable){}");
     expect_fail("for(it initerable){}");
 }
 
-
 #[test]
 fn test_while() {
     expect_success("while (x == 2) it = it + 1;");
-    expect_success("while (true) {
+    expect_success(
+        "while (true) {
         x = x + 2;
-    }");
-    expect_success("while(a && b && c){
+    }",
+    );
+    expect_success(
+        "while(a && b && c){
         it = it + 1;    
-    }");
+    }",
+    );
     expect_success("while(a || b) {}");
 
-
-    expect_fail("while (true) {
+    expect_fail(
+        "while (true) {
         let x:int = 2;
-    }");
+    }",
+    );
     expect_fail("while + 2;");
     expect_fail("while(let x:int = 1){}");
 }

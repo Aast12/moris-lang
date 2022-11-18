@@ -1,12 +1,12 @@
 use std::{collections::HashMap, fs, path::Path};
 
-use crate::codegen::manager::GlobalManager;
-use crate::parser::grammar::PProgramParser as Parser;
+use codegen::manager::GlobalManager;
+use parser::grammar::PProgramParser as Parser;
 
-use crate::ast::statements::Program;
+use parser::statements::Program;
 use memory::resolver::MemAddress;
 
-use crate::ast::node::Node;
+use codegen::node::Node;
 
 use super::memory_manager::Item;
 use super::virtual_machine::VirtualMachine;

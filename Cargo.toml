@@ -6,9 +6,11 @@ edition = "2021"
 build = "build.rs" # LALRPOP preprocessing
 
 [dependencies]
+codegen = { version = "0.1.0", path = "codegen" }
 lalrpop-util = { version = "^0.19", features = ["lexer"] }
 lazy_static = "1.4.0"
 memory = { version = "0.1.0", path = "memory" }
+parser = { version = "0.1.0", path = "parser" }
 regex = "1"
 serde = { version = "1.0.147", features = ["derive"] }
 serde-pickle = "1.1.1"

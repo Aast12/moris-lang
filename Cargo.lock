@@ -81,6 +81,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+name = "codegen"
+version = "0.1.0"
+dependencies = [
+ "lazy_static",
+ "memory",
+ "parser",
+ "serde",
+ "serde-pickle",
+]
+
+[[package]]
 name = "crunchy"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -313,10 +324,12 @@ dependencies = [
 name = "moris-lang"
 version = "0.1.0"
 dependencies = [
+ "codegen",
  "lalrpop",
  "lalrpop-util",
  "lazy_static",
  "memory",
+ "parser",
  "regex",
  "serde",
  "serde-pickle",
@@ -386,6 +399,16 @@ dependencies = [
  "redox_syscall",
  "smallvec",
  "windows-sys",
+]
+
+[[package]]
+name = "parser"
+version = "0.1.0"
+dependencies = [
+ "lalrpop",
+ "lalrpop-util",
+ "memory",
+ "regex",
 ]
 
 [[package]]

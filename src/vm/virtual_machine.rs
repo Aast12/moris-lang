@@ -1,7 +1,7 @@
 use core::panic;
 use std::{collections::LinkedList, fs::File};
 
-use crate::codegen::{meta::ProgramMeta, quadruples::Quadruple};
+use codegen::{meta::ProgramMeta, quadruples::Quadruple};
 
 use memory::{
     resolver::{MemAddress, MemoryResolver},

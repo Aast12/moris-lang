@@ -6,7 +6,7 @@ use std::{
 
 use variantly::Variantly;
 
-use crate::codegen::meta::ProgramMeta;
+use codegen::meta::ProgramMeta;
 
 use memory::{
     resolver::{MemAddress, MemoryResolver, MemoryScope},
