@@ -6,6 +6,7 @@ use crate::ast::node::Node;
 use crate::ast::types::Operator;
 use crate::codegen::manager::GlobalManager;
 use crate::codegen::quadruples::Quadruple;
+use crate::env::SymbolEntry;
 use crate::memory::resolver::MemAddress;
 use crate::memory::types::DataType;
 
@@ -75,81 +76,102 @@ impl Node for Access {
     }
 
     fn reduce(&self) -> String {
-        if self.indexing.len() == 0 {
-            return self.id.address().to_string();
+        let access_item: SymbolEntry;
+        let id_var = GlobalManager::get()
+            .get_env_mut()
+            .get_var(&self.id.id)
+            .cloned();
+        if let Some(entry) = id_var {
+            access_item = entry;
+        } else {
+            panic!("Item {} does not exist!", self.id.id);
         }
 
+        if self.indexing.len() == 0 {
+            return self.id.address().to_string();
+        } else if access_item.dimension.size == 1 {
+            panic!("Can't index scalar value {}", self.id.id);
+        }
+
+        // Address to values used to index the array
         let indexing_addresses = self
             .indexing
             .iter()
             .map(|index| index.reduce())
             .collect::<Vec<String>>();
 
-        let id_var = GlobalManager::get().get_env_mut().get_var(&self.id.id).cloned();
+        if indexing_addresses.len() > access_item.dimension.dimensions as usize {
+            panic!("Incompatible index!");
+        }
 
-        if let Some(access_item) = id_var {
-            if indexing_addresses.len() > access_item.dimension.dimensions as usize {
-                panic!("Incompatible index!");
+        let shape_cp = access_item.dimension.shape.clone();
+        let mut array_shape = shape_cp.iter();
+        let acc_tmp = GlobalManager::new_temp(&DataType::Pointer).to_string();
+        let first_run = true;
+
+        zip(&indexing_addresses, &access_item.dimension.acc_size).for_each(|(index, dim_size)| {
+            if let Some(dim) = array_shape.next() {
+                GlobalManager::emit(Quadruple::verify(index.as_str(), dim.to_string().as_str()))
             }
 
-            let shape_cp = access_item.dimension.shape.clone();
-            let mut curr_dim = shape_cp.iter();
-            let acc_tmp = GlobalManager::new_temp(&DataType::Int).to_string();
-            let first_run = true;
-
-            zip(&indexing_addresses, &access_item.dimension.acc_size).for_each(
-                |(index, dim_size)| {
-                    if let Some(dim) = curr_dim.next() {
-                        GlobalManager::emit(Quadruple::verify(
-                            index.as_str(),
-                            dim.to_string().as_str(),
-                        ))
-                    }
-
-                    let dim_const = GlobalManager::new_constant(&DataType::Int, &Const::new(dim_size.to_string().as_str(), DataType::Int));
-                    let dim_const = dim_const.to_string();
-                    
-                    if first_run {
-                        GlobalManager::emit(Quadruple::operation(
-                            Operator::Mul,
-                            index.as_str(),
-                            dim_const.as_str(),
-                            acc_tmp.as_str(),
-                        ));
-                    } else {
-                        let tmp = GlobalManager::new_temp(&DataType::Int);
-                        let tmp_str = tmp.to_string();
-
-                        GlobalManager::emit(Quadruple::operation(
-                            Operator::Mul,
-                            index.as_str(),
-                            dim_const.as_str(),
-                            tmp_str.as_str(),
-                        ));
-
-                        GlobalManager::emit(Quadruple::operation(
-                            Operator::Add,
-                            acc_tmp.as_str(),
-                            tmp_str.as_str(),
-                            acc_tmp.as_str(),
-                        ));
-                    }
-                },
+            let dim_const = GlobalManager::new_constant(
+                &DataType::Int,
+                &Const::new(dim_size.to_string().as_str(), DataType::Int),
             );
+            let dim_const = dim_const.to_string();
 
-            let access_tmp = GlobalManager::new_temp(&DataType::Pointer);
+            if first_run {
+                GlobalManager::emit(Quadruple::operation(
+                    Operator::Mul,
+                    index.as_str(),
+                    dim_const.as_str(),
+                    acc_tmp.as_str(),
+                ));
+            } else {
+                let tmp = GlobalManager::new_temp(&DataType::Int);
+                let tmp_str = tmp.to_string();
 
-            GlobalManager::emit(Quadruple::operation(
-                Operator::Add,
-                format!("&{}", access_item.address).as_str(),
-                acc_tmp.as_str(),
-                access_tmp.to_string().as_str(),
-            ));
+                GlobalManager::emit(Quadruple::operation(
+                    Operator::Mul,
+                    index.as_str(),
+                    dim_const.as_str(),
+                    tmp_str.as_str(),
+                ));
 
+                GlobalManager::emit(Quadruple::operation(
+                    Operator::Add,
+                    acc_tmp.as_str(),
+                    tmp_str.as_str(),
+                    acc_tmp.as_str(),
+                ));
+            }
+        });
+
+        let access_tmp = GlobalManager::new_temp(&DataType::Pointer);
+
+        GlobalManager::emit(Quadruple::operation(
+            Operator::Add,
+            access_item.address.to_string().as_str(),
+            acc_tmp.as_str(),
+            access_tmp.to_string().as_str(),
+        ));
+
+        // let dump_address = GlobalManager::new_temp(&self.id.data_type()).to_string();
+
+        // GlobalManager::emit(Quadruple::operation(
+        //     Operator::Assign,
+        //     format!("*{}", access_tmp).as_str(),
+        //     "",
+        //     dump_address.as_str(),
+        // ));
+
+        if self.indexing.len() == access_item.dimension.dimensions as usize {
             format!("*{}", access_tmp)
         } else {
-            panic!("Item {} does not exist!", self.id.id);
+            format!("{}", access_tmp)
         }
+
+        // dump_address
     }
 }
 

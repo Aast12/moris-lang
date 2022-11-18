@@ -101,9 +101,7 @@ impl Node for Operation {
 
     fn reduce(&self) -> String {
         if self.operator == Operator::Pipe {
-            println!("RESOLVING");
             let new_tree = self.resolve_pipe();
-            println!("NEW TREE {:#?}", new_tree);
             return new_tree.reduce();
         }
 

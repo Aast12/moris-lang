@@ -1,4 +1,4 @@
-use std::{cmp::Ordering, fmt::Debug};
+use std::{cmp::Ordering, fmt::Debug, borrow::BorrowMut};
 
 use crate::{
     ast::{
@@ -36,6 +36,7 @@ pub enum Statement {
     },
     FunctionDeclaration(Function),
     Return(Box<Expression>),
+    VoidReturn,
     Break,
     Continue,
 }
@@ -201,6 +202,7 @@ impl Node for Statement {
             }
             Statement::Break => GlobalManager::prepare_exit_stmt(&ExitStatement::Break),
             Statement::Continue => GlobalManager::prepare_exit_stmt(&ExitStatement::Continue),
+            Statement::VoidReturn => GlobalManager::emit(Quadruple::void_return()),
         }
     }
 
@@ -246,6 +248,7 @@ impl Debug for Statement {
             Statement::Return(stmt) => write!(fmt, "RETURN {:#?}", stmt),
             Statement::Break => write!(fmt, "Break"),
             Statement::Continue => write!(fmt, "Continue"),
+            Statement::VoidReturn => write!(fmt, "VoidReturn"),
         }
     }
 }
@@ -276,7 +279,7 @@ impl Node for Program {
         });
 
         // Pre-declare function signatures
-        for stmt in statements.iter().rev() {
+        for stmt in statements.iter_mut().rev() {
             match stmt {
                 Statement::FunctionDeclaration(func) => {
                     let mut manager = GlobalManager::get();
@@ -286,7 +289,7 @@ impl Node for Program {
                         _ => Some(manager.new_global(&func.signature.data_type)),
                     };
 
-                    manager.new_func(func, 0, return_address); // TODO: improve undefined location
+                    manager.new_func(&func, 0, return_address); // TODO: improve undefined location
 
                     manager.get_env_mut().switch(&String::from("global"));
                 }

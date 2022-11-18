@@ -148,11 +148,7 @@ impl VirtualMachine {
     }
 
     fn arithmetic_op(&mut self, quadruple: &Quadruple) {
-        let Quadruple(instruction, left, right, dest) = quadruple;
-        let instruction = instruction.as_str();
-        let left = self.memory.get(&left);
-        let right = self.memory.get(&right);
-        let dest = self.memory.get_address(&dest);
+        let (instruction, left, right, dest) = self.unpack_binary(quadruple);
 
         let data_type = MemoryResolver::get_type_from_address(dest).unwrap();
 
@@ -301,7 +297,7 @@ impl VirtualMachine {
                     let call_context = self.data.get_func(function_id);
 
                     let value_addr = self.memory.get_address(arg_addr);
-                    let (param_addr, _) = call_context
+                    let (param_addr, _, _) = call_context
                         .params
                         .get(param_index.parse::<usize>().unwrap())
                         .unwrap();
@@ -318,23 +314,29 @@ impl VirtualMachine {
                     pre_call_stack.pop_back();
 
                     // Cleanup function return address to catch no-return errors
-                    let return_addr = func_meta.return_address.unwrap();
-                    self.memory.delete(return_addr);
+                    if let Some(return_addres) = func_meta.return_address {
+                        self.memory.delete(return_addres);
+                    }
 
                     instruction_pointer = func_meta.procedure_address;
                     continue;
                 }
-                "return" => {
+                "return" | "voidReturn" => {
                     let Quadruple(_, _, _, return_value_addr) = curr_instruction;
                     let function_id = &self.memory.curr_context().procedure_id;
 
                     let func_meta = self.data.get_func(function_id);
-                    // TODO: void return
-                    let return_addr = func_meta.return_address.unwrap();
-                    let value = self.memory.get(return_value_addr);
-                    self.memory.update(return_addr, value);
-                    self.memory.pop_context();
+                    if let None = func_meta.return_address {
+                        if !return_value_addr.is_empty() {
+                            panic!("Can't return value for void function");
+                        }
+                    } else {
+                        let return_addr = func_meta.return_address.unwrap();
+                        let value = self.memory.get(return_value_addr);
+                        self.memory.update(return_addr, value);
+                    }
 
+                    self.memory.pop_context();
                     instruction_pointer = call_pointer.pop_back().unwrap();
                     continue;
                 }

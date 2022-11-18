@@ -30,7 +30,9 @@ impl Inspector {
         let path = path_buf.to_str().unwrap();
 
         let mut test_program = try_file(path);
+        // println!("Program {:#?}", test_program);
         test_program.generate();
+
 
         let target_meta: TargetMeta;
         if let Some(global_env) = GlobalManager::get().env.entries.get("global") {
@@ -46,7 +48,12 @@ impl Inspector {
         GlobalManager::get().dump();
         GlobalManager::get().reset();
         let mut vm = VirtualMachine::load("program.o");
+        // println!("QUADS {:#?}", vm.data.quadruples);
+        // println!("MEM {:#?}", vm.memory);
+        // println!("PROCS {:#?}", vm.data.procedure_table);
         vm.execute();
+
+        // println!("MEM {:#?}", vm.memory);
         
         Inspector {
             target_meta,

@@ -249,7 +249,8 @@ impl MemoryManager {
             let next_address = self.get(next);
 
             if let Item::Pointer(address) = next_address {
-                self._get(address).clone()
+                let q = self._get(address).clone();
+                q
             } else {
                 panic!("Item is not a pointer");
             }

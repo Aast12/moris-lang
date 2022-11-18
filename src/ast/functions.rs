@@ -1,9 +1,15 @@
+use std::ops::DerefMut;
+
 use crate::{
     codegen::{manager::GlobalManager, quadruples::Quadruple},
     memory::types::DataType,
 };
 
-use super::{node::Node, statements::Block, types::Variable};
+use super::{
+    node::Node,
+    statements::Block,
+    types::{Operator, Variable},
+};
 
 #[derive(Debug, Clone)]
 pub struct FunctionSignature {
@@ -34,7 +40,7 @@ impl Node for Function {
 
         manager.update_func_position(&self.signature.id, next_position);
         manager.get_env_mut().switch(&self.signature.id);
-        
+
         drop(manager);
 
         self.block.generate();

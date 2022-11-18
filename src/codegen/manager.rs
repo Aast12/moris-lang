@@ -1,6 +1,7 @@
 use core::panic;
 use lazy_static::lazy_static;
 use std::{
+    borrow::BorrowMut,
     collections::HashMap,
     fmt::Debug,
     fs::File,
@@ -88,6 +89,12 @@ impl Manager {
         return &mut self.env;
     }
 
+    /// Adds a new function to the procedure table and adds the parameters as
+    /// local variables to its corresponding environment (symbol table).
+    ///
+    /// # Panics
+    ///
+    /// Panics if a function with the same id as func has been declared before
     pub fn new_func(
         &mut self,
         func: &Function,
@@ -117,7 +124,11 @@ impl Manager {
                      value: _,
                  })| {
                     let param_symbol = self.get_env_mut().get_var(id).unwrap();
-                    (param_symbol.address, data_type.clone())
+                    (
+                        param_symbol.address,
+                        data_type.clone(),
+                        param_symbol.point_address,
+                    )
                 },
             )
             .collect();
@@ -145,7 +156,6 @@ impl Manager {
     }
 
     pub fn get_func(&self, func_id: &String) -> &FunctionEntry {
-        
         if let Some(func) = self.procedure_table.get(func_id) {
             func
         } else {

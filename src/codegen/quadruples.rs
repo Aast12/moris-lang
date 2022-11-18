@@ -71,6 +71,10 @@ impl Quadruple {
         )
     }
 
+    pub fn void_return() -> Quadruple {
+        Quadruple::new("voidReturn", "", "", "")
+    }
+
     pub fn end_func() -> Quadruple {
         Self::new_coded("endFunc")
     }

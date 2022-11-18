@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use crate::{
     ast::{
         functions::{FunctionParam, FunctionSignature},
+        node::Node,
         Dimension,
     },
     memory::{
@@ -22,6 +23,7 @@ pub enum SymbolType {
 pub struct SymbolEntry {
     pub id: String,
     pub address: MemAddress,
+    pub point_address: Option<MemAddress>,
     pub symbol_type: SymbolType,
     pub data_type: DataType,
     // pub dimension: usize,
@@ -96,9 +98,27 @@ impl Environment {
                 self.allocator.reset_locals();
                 let current_context = self.entries.get(id).unwrap();
                 let mut counters: HashMap<DataType, usize> = HashMap::new();
+
+                // TODO: Store initial counters
                 current_context.symbols.iter().for_each(|(_, entry)| {
                     let value = counters.get(&entry.data_type).unwrap_or(&0) + 1;
-                    counters.insert(entry.data_type.clone(), value);
+                    if entry.dimension.size > 1 {
+                        counters.insert(
+                            DataType::Pointer,
+                            counters.get(&DataType::Pointer).unwrap_or(&0) + 1,
+                        );
+                        counters.insert(
+                            entry.data_type.clone(),
+                            counters.get(&entry.data_type.clone()).unwrap_or(&0)
+                                + entry.dimension.size,
+                        );
+                    } else {
+                        // counters.insert(entry.data_type.clone(), value);
+                        counters.insert(
+                            entry.data_type.clone(),
+                            counters.get(&entry.data_type.clone()).unwrap_or(&0) + 1,
+                        );
+                    }
                 });
 
                 counters
@@ -110,6 +130,12 @@ impl Environment {
         }
     }
 
+    /// Creates a new environment to keep a function's local variables.
+    ///
+    /// # Panics
+    ///
+    /// Panics if an environment with the same name (function id) has
+    /// been declared before.
     pub fn from_function(&mut self, func: &FunctionSignature, switch: bool) {
         let id = &func.id;
         if let Some(_) = self.entries.get(id) {
@@ -125,30 +151,63 @@ impl Environment {
 
         self.entries
             .insert(id.clone(), EnvEntry::from_func(func, &mut self.allocator));
+
+        for FunctionParam(variable) in func.params.iter() {
+            self.add_var(&variable.id, &variable.data_type, &variable.dimension);
+        }
     }
 
-    pub fn add_var(&mut self, id: &String, data_type: &DataType, dimension: &Dimension) {
+    pub fn allocate_array(&mut self, data_type: &DataType, dimension: &Dimension) -> MemAddress {
+        let Dimension {
+            dimensions: _,
+            shape,
+            size,
+            acc_size: _,
+        } = dimension;
+
+        let address: u16;
+
+        address = self
+            .allocator
+            .assign_location(&self.current_scope, data_type, *size);
+
+        address
+    }
+
+    pub fn add_var(
+        &mut self,
+        id: &String,
+        data_type: &DataType,
+        dimension: &Dimension,
+    ) -> MemAddress {
         let Dimension {
             dimensions: dim,
-            shape,
+            shape: _,
             size: _,
             acc_size: _,
         } = dimension;
 
-        let flat_size = shape.iter().fold(1, |acc, item| acc * item);
-
-        let address = self
-            .allocator
-            .assign_location(&self.current_scope, data_type, flat_size);
+        let address: u16;
 
         if *dim > 0 {
+            address = self
+                .allocator
+                .assign_location(&self.current_scope, &DataType::Pointer, 1);
+
+            let array_address = self.allocate_array(data_type, dimension);
+
             self.current_env_mut().add(SymbolEntry::new_vec(
                 id.clone(),
                 data_type.clone(),
                 address,
                 dimension.clone(),
+                array_address,
             ));
         } else {
+            address = self
+                .allocator
+                .assign_location(&self.current_scope, data_type, 1);
+
             self.current_env_mut().add(SymbolEntry::new_var(
                 id.clone(),
                 data_type.clone(),
@@ -156,6 +215,8 @@ impl Environment {
                 dimension.clone(),
             ));
         }
+
+        address
     }
 
     pub fn del_var(&mut self, id: &String) {
@@ -185,24 +246,35 @@ impl EnvEntry {
         }
     }
 
+    /// Adds the parameters metadata from a function signature to an environment.
     pub fn from_func(func: &FunctionSignature, allocator: &mut VirtualAllocator) -> EnvEntry {
         let mut symbols: HashMap<String, SymbolEntry> = HashMap::new();
 
-        for FunctionParam(variable) in func.params.iter() {
-            let key = variable.id.clone();
-            let val = SymbolEntry::new_var(
-                variable.id.clone(),
-                variable.data_type.clone(),
-                allocator.assign_location(
-                    &MemoryScope::Local,
-                    &variable.data_type,
-                    variable.dimension.size,
-                ),
-                variable.dimension.clone(),
-            );
+        // for FunctionParam(variable) in func.params.iter() {
+        //     let key = variable.id.clone();
+        //     let val: SymbolEntry;
+        //     if variable.dimension.size > 1 {
+        //         val = SymbolEntry::new_var(
+        //             variable.id.clone(),
+        //             variable.data_type.clone(),
+        //             allocator.assign_location(&MemoryScope::Local, &DataType::Pointer, 1),
+        //             variable.dimension.clone(),
+        //         );
+        //     } else {
+        //         val = SymbolEntry::new_var(
+        //             variable.id.clone(),
+        //             variable.data_type.clone(),
+        //             allocator.assign_location(
+        //                 &MemoryScope::Local,
+        //                 &variable.data_type,
+        //                 variable.dimension.size,
+        //             ),
+        //             variable.dimension.clone(),
+        //         );
+        //     }
 
-            symbols.insert(key, val);
-        }
+        //     symbols.insert(key, val);
+        // }
 
         EnvEntry {
             is_global: false,
@@ -241,6 +313,7 @@ impl SymbolEntry {
             data_type,
             dimension,
             address,
+            point_address: None,
         }
     }
 
@@ -250,6 +323,7 @@ impl SymbolEntry {
         // shape: Vec<usize>,
         address: MemAddress,
         dimension: Dimension, // size: usize,
+        point_address: MemAddress,
     ) -> SymbolEntry {
         SymbolEntry {
             id,
@@ -259,6 +333,7 @@ impl SymbolEntry {
             // shape,
             address,
             // size,
+            point_address: Some(point_address),
         }
     }
 }

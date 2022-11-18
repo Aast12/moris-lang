@@ -34,12 +34,12 @@ impl Node for Call {
         let man = GlobalManager::get();
         let func = man.get_func(&self.id).clone();
         let return_type = func.return_type.clone();
-        let target_params = func.params.clone();
+        let param_defintions = func.params.clone();
         drop(man);
-        let target_params_len = target_params.len();
+        let target_params_len = param_defintions.len();
         if self.params.len() != target_params_len {
             panic!(
-                "Params size does not match {} {} - {}",
+                "Params size do not match {} {} - {}",
                 self.id,
                 self.params.len(),
                 target_params_len
@@ -49,22 +49,22 @@ impl Node for Call {
         GlobalManager::emit(Quadruple::era(self.id.as_str()));
 
         for (index, param) in self.params.iter().enumerate() {
-            let (_, target_data_type) = target_params.get(index).unwrap();
+            let (_, def_param_data_type, param_pointer_addr) = param_defintions.get(index).unwrap();
             let mut param_address = param.reduce();
             let param_data_type = param.data_type();
             assert!(
-                DataType::equivalent(&param_data_type, target_data_type).is_ok(),
+                DataType::equivalent(&param_data_type, def_param_data_type).is_ok(),
                 "Data type {:?} cannot be assigned to a variable {:?}.",
                 param_data_type,
-                target_data_type
+                def_param_data_type
             );
 
             // TODO: Refactor type casting instruction into func
-            if param_data_type != *target_data_type {
-                let value_temp = GlobalManager::new_temp(&target_data_type).to_string();
+            if param_data_type != *def_param_data_type {
+                let value_temp = GlobalManager::new_temp(&def_param_data_type).to_string();
 
                 GlobalManager::emit(Quadruple::type_cast(
-                    &target_data_type,
+                    &def_param_data_type,
                     param_address.as_str(),
                     value_temp.as_str(),
                 ));
@@ -72,6 +72,11 @@ impl Node for Call {
                 param_address = value_temp.clone();
             }
 
+            // if let Some(_) = param_pointer_addr {
+            //     GlobalManager::emit(Quadruple::param(format!("*{}", param_address).as_str(), index));
+            // } else {
+            //     GlobalManager::emit(Quadruple::param(param_address.as_str(), index));
+            // }
             GlobalManager::emit(Quadruple::param(param_address.as_str(), index));
         }
 
@@ -87,7 +92,7 @@ impl Node for Call {
             ));
             return_value
         } else {
-            todo!()
+            String::from("VOID")
         }
     }
 }

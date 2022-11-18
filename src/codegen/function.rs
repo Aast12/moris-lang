@@ -5,7 +5,7 @@ use crate::{
     memory::{resolver::MemAddress, types::DataType},
 };
 
-pub type ParamAddress = (MemAddress, DataType);
+pub type ParamAddress = (MemAddress, DataType, Option<MemAddress>);
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FunctionEntry {

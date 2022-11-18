@@ -1,5 +1,12 @@
 use crate::{
-    codegen::{manager::GlobalManager, quadruples::Quadruple},
+    ast::{
+        expressions::id::{Access, Id},
+        statements::Statement,
+    },
+    codegen::{
+        manager::{GlobalManager, Manager},
+        quadruples::Quadruple,
+    },
     memory::{resolver::MemAddress, types::DataType},
 };
 
@@ -99,7 +106,7 @@ impl Operator {
             }
             Operator::Pipe | Operator::ForwardPipe => OperatorType::Pipe,
             Operator::Assign => OperatorType::Assign,
-            Operator::Neg => OperatorType::Neg
+            Operator::Neg => OperatorType::Neg,
         }
     }
 }
@@ -135,52 +142,77 @@ impl Variable {
             panic!("Cannot find id {} in scope", self.id);
         }
     }
+
+    pub fn _generate(&mut self, manager: &mut Manager) -> () {
+        // Add variable to symbols table
+        let var_address = manager
+            .get_env_mut()
+            .add_var(&self.id, &self.data_type, &self.dimension);
+
+        if self.dimension.size > 1 {
+            let array_address = manager
+                .get_env_mut()
+                .allocate_array(&self.data_type, &self.dimension);
+            
+            manager.emit(Quadruple::operation(
+                Operator::Assign,
+                format!("&{}", array_address).as_str(),
+                "",
+                format!("{}", var_address).as_str(),
+            ))
+        }
+
+        drop(manager);
+
+        if let Some(value) = &self.value {
+            let mut assign = Statement::VarAssign(
+                Access::new(
+                    Id::new(self.id.as_str(), Some(self.data_type.clone())),
+                    vec![],
+                ),
+                value.to_owned(),
+            );
+
+            assign.generate();
+        }
+    }
 }
 
 impl Node for Variable {
     fn generate(&mut self) -> () {
         // Add variable to symbols table
         let mut manager = GlobalManager::get();
-        manager
+        let var_address = manager
             .get_env_mut()
             .add_var(&self.id, &self.data_type, &self.dimension);
+
+        if self.dimension.size > 1 {
+            let array_address = manager
+                .get_env_mut()
+                .allocate_array(&self.data_type, &self.dimension);
+            println!(
+                "ALLOCATION ARRAY ADDRESS {} - {}",
+                var_address, array_address
+            );
+            manager.emit(Quadruple::operation(
+                Operator::Assign,
+                format!("&{}", array_address).as_str(),
+                "",
+                format!("{}", var_address).as_str(),
+            ))
+        }
+
         drop(manager);
-
-        let self_address = self.address();
-
         if let Some(value) = &self.value {
-            let value_data_type = value.data_type();
-            // TODO: Refactor to use VarAssign
-            assert!(
-                DataType::equivalent(&self.data_type, &value_data_type).is_ok(),
-                "Data type {:?} cannot be assigned to a variable {:?}.",
-                value_data_type,
-                self.data_type
+            let mut assign = Statement::VarAssign(
+                Access::new(
+                    Id::new(self.id.as_str(), Some(self.data_type.clone())),
+                    vec![],
+                ),
+                value.to_owned(),
             );
 
-            // Get temporal variable for assignment R-value
-            let mut value_temp = value.reduce();
-            manager = GlobalManager::get();
-
-            if self.data_type != value_data_type {
-                // Emits type casting operation quadruple on r-value type mismatch
-                let prev_value_temp = value_temp.clone();
-                value_temp = manager.new_temp_address(&self.data_type).to_string();
-
-                manager.emit(Quadruple::type_cast(
-                    &self.data_type,
-                    prev_value_temp.as_str(),
-                    value_temp.clone().as_str(),
-                ))
-            }
-
-            manager.emit(Quadruple::unary(
-                Operator::Assign,
-                value_temp.as_str(),
-                self_address.to_string().as_str(),
-            ));
-
-            drop(manager);
+            assign.generate();
         }
     }
 
