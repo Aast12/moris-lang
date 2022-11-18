@@ -1,5 +1,5 @@
 use core::panic;
-use std::{collections::LinkedList, fs::File};
+use std::{cmp::Ordering, collections::LinkedList, fs::File};
 
 use codegen::{meta::ProgramMeta, quadruples::Quadruple};
 
@@ -185,14 +185,32 @@ impl VirtualMachine {
         // Proper casting instruction for compatible types is emitted during compile time
         let data_type = MemoryResolver::get_type_from_address(left_addr).unwrap();
 
-        match operator {
-            ">" => logic_cmp!(data_type, self, >, &quadruple),
-            ">=" => logic_cmp!(data_type, self, >=, &quadruple),
-            "<" => logic_cmp!(data_type, self, <, &quadruple),
-            "<=" => logic_cmp!(data_type, self, <=, &quadruple),
-            "==" => logic_cmp!(data_type, self, ==, &quadruple),
-            "!=" => logic_cmp!(data_type, self, !=, &quadruple),
-            _ => todo!(),
+        match data_type {
+            DataType::String => {
+                let (_, left, right, dest) = self.unpack_binary(quadruple);
+                let (left, right) = Self::match_strings(left, right);
+                let cmp = left.cmp(&right);
+                let result: bool = match operator {
+                    ">" => cmp == Ordering::Greater,
+                    ">=" => cmp == Ordering::Greater || cmp == Ordering::Equal,
+                    "<" => cmp == Ordering::Less,
+                    "<=" => cmp == Ordering::Less || cmp == Ordering::Equal,
+                    "==" => cmp == Ordering::Equal,
+                    "!=" => cmp != Ordering::Equal,
+                    _ => panic!(),
+                };
+
+                self.memory.update(dest, Item::Bool(result));
+            }
+            _ => match operator {
+                ">" => logic_cmp!(data_type, self, >, &quadruple),
+                ">=" => logic_cmp!(data_type, self, >=, &quadruple),
+                "<" => logic_cmp!(data_type, self, <, &quadruple),
+                "<=" => logic_cmp!(data_type, self, <=, &quadruple),
+                "==" => logic_cmp!(data_type, self, ==, &quadruple),
+                "!=" => logic_cmp!(data_type, self, !=, &quadruple),
+                _ => todo!(),
+            },
         }
     }
 
