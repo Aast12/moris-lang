@@ -1,23 +1,16 @@
-let mem: int[500];
-let i: int = 0;
-while (i < 500) {
-    mem[i] = 0;
-    i = i + 1;
-}
+let x: int = 7;
+let y: float = 6;
+let z: float = x * y;
 
-fn fib(x: int): int {
-    if (mem[x] != 0) {
-        return mem[x];
+fn fibonacci(n: int): int {
+    if (n <= 0) {
+        return 0;
+    }
+    if (n <= 2) {
+        return n;
     }
 
-    if (x <= 1) {
-        mem[x] = 1;
-        return 1;
-    }
-
-    let res: int = fib(x - 1) + fib(x - 2);
-    mem[x] = res;
-    return res;
+    return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-let y: int = fib(50);
+let result:int = fibonacci(10);

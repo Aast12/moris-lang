@@ -12,6 +12,7 @@ pub enum OperatorType {
     Boolean,
     Comparison,
     Assign,
+    Neg,
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -32,6 +33,7 @@ pub enum Operator {
     Eq,
     Assign,
     Not,
+    Neg,
 }
 
 impl Operator {
@@ -53,6 +55,7 @@ impl Operator {
             Operator::LessOrEq => "<=",
             Operator::GreaterOrEq => ">=",
             Operator::Not => "not",
+            Operator::Neg => "neg",
         }
     }
 
@@ -96,6 +99,7 @@ impl Operator {
             }
             Operator::Pipe | Operator::ForwardPipe => OperatorType::Pipe,
             Operator::Assign => OperatorType::Assign,
+            Operator::Neg => OperatorType::Neg
         }
     }
 }

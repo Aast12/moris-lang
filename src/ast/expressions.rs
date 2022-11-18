@@ -87,9 +87,15 @@ impl node::Node for Expression {
 
                 dest
             }
-            Expression::Negative(_) => {
-                todo!()
-            },
+            Expression::Negative(expr) => {
+                let addr = expr.reduce();
+                let expr_dt = expr.data_type();
+                let new_addr = GlobalManager::new_temp(&expr_dt).to_string();
+
+                GlobalManager::emit(Quadruple::unary(Operator::Neg, &addr, &new_addr));
+
+                new_addr
+            }
         }
     }
 }

@@ -73,8 +73,6 @@ impl Node for Operation {
 
                 // TODO: Type casting compatibility validations
                 match self.operator.which() {
-                    OperatorType::Arithmetic => todo!(),
-                    OperatorType::Pipe | OperatorType::Assign => todo!(),
                     OperatorType::Boolean => {
                         let left_dt = self.left.data_type();
                         let right_dt = self.right.data_type();
@@ -98,6 +96,9 @@ impl Node for Operation {
                             }
                         }
                     }
+                    OperatorType::Arithmetic => todo!(),
+                    OperatorType::Pipe | OperatorType::Assign => todo!(),
+                    OperatorType::Neg => todo!(),
                 }
             }
             _ => (),

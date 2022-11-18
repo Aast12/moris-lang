@@ -219,6 +219,17 @@ impl VirtualMachine {
 
                     self.memory.update(dest, Item::Bool(!to_negate));
                 }
+                "neg" => {
+                    let Quadruple(_, to_negate, _, dest) = curr_instruction;
+                    let to_negate = self.memory.get(to_negate);
+                    let dest = self.memory.get_address(dest);
+
+                    match to_negate {
+                        Item::Int(item) => self.memory.update(dest, Item::Int(-item)),
+                        Item::Float(item) => self.memory.update(dest, Item::Float(-item)),
+                        _ => panic!("{:#?} can't be negated", to_negate),
+                    }
+                }
                 "=" => {
                     let (op, dest) = self.unpack_unary(curr_instruction);
                     self.memory.update(dest, op);

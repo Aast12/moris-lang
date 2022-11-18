@@ -3,7 +3,7 @@ use std::{collections::HashMap, fs, path::Path};
 use crate::codegen::manager::GlobalManager;
 use crate::parser::grammar::PProgramParser as Parser;
 
-use crate::{ast::statements::Program, env::Environment, memory::resolver::MemAddress};
+use crate::{ast::statements::Program, memory::resolver::MemAddress};
 
 use crate::ast::node::Node;
 
@@ -20,8 +20,8 @@ fn try_file(path: &str) -> Program {
 }
 
 pub struct Inspector {
-    target_meta: HashMap<String, MemAddress>,
-    memory: HashMap<MemAddress, Item>,
+    pub target_meta: HashMap<String, MemAddress>,
+    pub memory: HashMap<MemAddress, Item>,
 }
 
 impl Inspector {
@@ -44,9 +44,10 @@ impl Inspector {
         }
 
         GlobalManager::get().dump();
+        GlobalManager::get().reset();
         let mut vm = VirtualMachine::load("program.o");
         vm.execute();
-
+        
         Inspector {
             target_meta,
             memory: vm.memory.globals,

@@ -8,10 +8,7 @@ use std::{fmt::Debug, vec};
 
 use crate::memory::types::{FloatType, IntType};
 
-use self::{
-    expressions::{constant::Const, Expression},
-    node::Node,
-};
+use self::expressions::{constant::Const, Expression};
 
 #[derive(Debug, Clone)]
 pub struct Dimension {
@@ -19,15 +16,6 @@ pub struct Dimension {
     pub shape: Vec<usize>,
     pub size: usize,
     pub acc_size: Vec<usize>,
-} // dimensions number, dimension sizes
-
-impl Node for Dimension {
-    fn generate(&mut self) -> () {
-        // for dim in self.1.iter_mut() {
-        //     dim.generate();
-        // }
-        todo!()
-    }
 }
 
 impl Dimension {

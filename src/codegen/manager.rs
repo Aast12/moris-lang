@@ -51,6 +51,15 @@ impl Manager {
         }
     }
 
+    pub fn reset(&mut self) {
+        self.instruction_counter = 0;
+        self.quadruples = vec![];
+        self.env = Environment::new();
+        self.unresolved = HashMap::new();
+        self.constant_table = HashMap::new();
+        self.procedure_table = HashMap::new();
+    }
+
     pub fn dump(&self) {
         let meta = ProgramMeta {
             quadruples: self.quadruples.clone(),
