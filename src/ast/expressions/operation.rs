@@ -1,11 +1,14 @@
 use crate::{
-    ast::{node::Node, types::OperatorType},
+    ast::{
+        node::Node,
+        types::{Operator, OperatorType},
+    },
     codegen::{manager::GlobalManager, quadruples::Quadruple},
     memory::types::DataType,
     semantics::SemanticRules,
 };
 
-use super::{types, Expression};
+use super::{call::Call, types, Expression};
 
 #[derive(Debug, Clone)]
 pub struct Operation {
@@ -23,12 +26,71 @@ impl Operation {
         }
     }
 
-    pub fn data_type(&self) -> crate::memory::types::DataType {
-        return SemanticRules::match_type(
-            self.operator,
-            self.left.data_type(),
-            self.right.data_type(),
-        );
+    pub fn data_type(&self) -> DataType {
+        match self.operator {
+            Operator::Pipe => self.resolve_pipe_type(),
+            _ => SemanticRules::match_type(
+                self.operator,
+                self.left.data_type(),
+                self.right.data_type(),
+            ),
+        }
+    }
+
+    fn resolve_pipe_type(&self) -> DataType {
+        let input_expr = self.left.to_owned();
+        let piped_fn = self.right.to_owned();
+
+        if let Expression::Access(access) = *piped_fn {
+            match *input_expr {
+                Expression::Op(op) => match op {
+                    Operation {
+                        operator: Operator::Pipe,
+                        left: _,
+                        right: _,
+                    } => {
+                        let call_param = op.resolve_pipe();
+                        let call = Call::new(&access.id.id, vec![call_param]);
+                        call.data_type()
+                    }
+                    _ => {
+                        let call = Call::new(&access.id.id, vec![Box::new(Expression::Op(op))]);
+                        call.data_type()
+                    }
+                },
+                _ => panic!(),
+            }
+        } else {
+            panic!()
+        }
+    }
+
+    fn resolve_pipe(&self) -> Box<Expression> {
+        let input_expr = self.left.to_owned();
+        let piped_fn = self.right.to_owned();
+
+        if let Expression::Access(access) = *piped_fn {
+            match *input_expr {
+                Expression::Op(op) => match op {
+                    Operation {
+                        operator: Operator::Pipe,
+                        left: _,
+                        right: _,
+                    } => {
+                        let call_param = op.resolve_pipe();
+                        let call = Call::new(&access.id.id, vec![call_param]);
+                        Box::new(Expression::Call(call))
+                    }
+                    _ => {
+                        let call = Call::new(&access.id.id, vec![Box::new(Expression::Op(op))]);
+                        Box::new(Expression::Call(call))
+                    }
+                },
+                _ => panic!(),
+            }
+        } else {
+            piped_fn
+        }
     }
 }
 
@@ -38,13 +100,23 @@ impl Node for Operation {
     }
 
     fn reduce(&self) -> String {
+        if self.operator == Operator::Pipe {
+            println!("RESOLVING");
+            let new_tree = self.resolve_pipe();
+            println!("NEW TREE {:#?}", new_tree);
+            return new_tree.reduce();
+        }
+
         let mut left = self.left.reduce();
+        let left_dt = self.left.data_type();
         let mut right = self.right.reduce();
+        let right_dt = self.right.data_type();
+
         let dt = self.data_type();
 
         match dt {
             DataType::Int | DataType::Float | DataType::String | DataType::Pointer => {
-                if self.left.data_type() != dt {
+                if left_dt != dt {
                     let new_left = GlobalManager::new_temp(&dt).to_string();
                     GlobalManager::emit(Quadruple::type_cast(
                         &dt,
@@ -55,7 +127,7 @@ impl Node for Operation {
                     left = new_left
                 }
 
-                if self.right.data_type() != dt {
+                if right_dt != dt {
                     let new_right = GlobalManager::new_temp(&dt).to_string();
                     GlobalManager::emit(Quadruple::type_cast(
                         &dt,
@@ -74,9 +146,6 @@ impl Node for Operation {
                 // TODO: Type casting compatibility validations
                 match self.operator.which() {
                     OperatorType::Boolean => {
-                        let left_dt = self.left.data_type();
-                        let right_dt = self.right.data_type();
-
                         if left_dt != DataType::Bool {
                             left = GlobalManager::emit_cast(&DataType::Bool, left.as_str());
                         }
@@ -85,8 +154,6 @@ impl Node for Operation {
                         }
                     }
                     OperatorType::Comparison => {
-                        let left_dt = self.left.data_type();
-                        let right_dt = self.right.data_type();
                         if left_dt != right_dt {
                             let max_dt = DataType::max(&left_dt, &right_dt);
                             if max_dt != left_dt {

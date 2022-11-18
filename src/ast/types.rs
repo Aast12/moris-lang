@@ -15,7 +15,7 @@ pub enum OperatorType {
     Neg,
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Operator {
     Mul,
     Div,

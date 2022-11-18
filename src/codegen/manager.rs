@@ -145,6 +145,7 @@ impl Manager {
     }
 
     pub fn get_func(&self, func_id: &String) -> &FunctionEntry {
+        
         if let Some(func) = self.procedure_table.get(func_id) {
             func
         } else {

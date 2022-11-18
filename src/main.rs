@@ -1,6 +1,11 @@
 use moris_lang::vm::test::Inspector;
 
 fn main() {
+    println!("samples/pipe.mo");
+    let inspector = Inspector::new("samples/pipe.mo");
+    println!("input = {:#?}", inspector.get("input"));
+    println!("res = {:#?}", inspector.get("res"));
+
     println!("samples/fibonacci_memo.mo");
     let inspector = Inspector::new("samples/fibonacci_memo.mo");
 

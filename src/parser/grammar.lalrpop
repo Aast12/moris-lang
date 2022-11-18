@@ -180,12 +180,6 @@ PUnaryOP = {
 }
 
 PFactor: Box<Expression> = {
-    <factor:PFactor> PPipeOp FORWARD <id:PBoxed<PId>> => 
-        Box::new(
-            Expression::Op(
-                Operation::new(factor, Operator::ForwardPipe, id)
-            )
-        ),
     PFactor PPipeOp PBoxed<PId> => 
         Box::new(
             Expression::Op(
@@ -320,7 +314,6 @@ match {
     "-" => SUB,
     "*" => MUL,
     "/" => DIV,
-    "forward" => FORWARD,
     "int" => T_INT,
     "float" => T_FLOAT,
     "bool" => T_BOOl,
