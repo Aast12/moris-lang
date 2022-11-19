@@ -20,43 +20,18 @@ impl Id {
             dtype,
         }
     }
-
-    // pub fn data_type(&self) -> DataType {
-    //     match &self.dtype {
-    //         Some(dtype) => dtype.clone(),
-    //         _ => {
-    //             let mut man = GlobalManager::get();
-    //             if let Some(id) = man.get_env_mut().get_var(&self.id) {
-    //                 return id.data_type.clone();
-    //             }
-    //             panic!("id {} is not defined", self.id);
-    //         }
-    //     }
-    // }
-
-    // pub fn address(&self) -> MemAddress {
-    //     if let Some(var_entry) = GlobalManager::get().get_env_mut().get_var(&self.id) {
-    //         return var_entry.address;
-    //     } else {
-    //         panic!("Cannot find id {} in scope", self.id);
-    //     }
-    // }
 }
 
 impl Access {
     pub fn new(id: Id, indexing: Vec<Index>) -> Self {
         Access { id, indexing }
     }
-
-    // pub fn data_type(&mut self) -> DataType {
-    //     return self.id.data_type();
-    // }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ast::expressions::Expression;
+    use crate::expressions::Expression;
     use memory::types::DataType;
 
     #[test]

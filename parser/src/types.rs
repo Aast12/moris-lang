@@ -112,6 +112,15 @@ pub struct Variable {
 }
 
 impl Variable {
+    pub fn new_scalar(id: &str, data_type: DataType) -> Variable {
+        Variable {
+            id: id.to_string(),
+            data_type,
+            dimension: Dimension::new_scalar(),
+            value: None,
+        }
+    }
+
     pub fn new(
         id: String,
         data_type: DataType,

@@ -41,37 +41,3 @@ pub enum Index {
     Simple(Box<Expression>),
     Range(Box<Expression>, Box<Expression>),
 }
-
-#[cfg(test)]
-mod tests {
-    use crate::ast::types::Operator;
-    use memory::types::DataType;
-
-    use super::{constant::Const, operation::Operation, Expression};
-
-    fn build_int() -> Box<Expression> {
-        Box::new(Expression::Const(Const::new("5", DataType::Int)))
-    }
-
-    fn build_float() -> Box<Expression> {
-        Box::new(Expression::Const(Const::new("5.0", DataType::Float)))
-    }
-
-    fn build_string() -> Box<Expression> {
-        Box::new(Expression::Const(Const::new("str", DataType::String)))
-    }
-
-    #[test]
-    fn test_compatible_types() {
-        let expr = Expression::Op(Operation::new(build_int(), Operator::Add, build_float()));
-        assert_eq!(expr.data_type(), DataType::Float);
-    }
-
-    #[test]
-    #[should_panic]
-    fn test_incompatible_types() {
-        let expr = Expression::Op(Operation::new(build_string(), Operator::Add, build_float()));
-
-        expr.data_type();
-    }
-}

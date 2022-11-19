@@ -220,7 +220,8 @@ PFunctionParams = PComma<PFuncParam>;
 PFnSignature: FunctionSignature = FN <id: CALL_ID> <params: PFunctionParams> RPAREN COLON <dtype: PFunctionType> => FunctionSignature {
     id:  String::from(&id[..id.len() - 1]),
     data_type: dtype,
-    params: params
+    params: params,
+    is_native: false
 };
 
 PFunctionItem: Statement = {

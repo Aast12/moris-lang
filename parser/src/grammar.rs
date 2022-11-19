@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 0edd20a865169e5d58649bb8f882bf21d9134db6ad8ee4a41dc7e169b8512bd7
+// sha3: f5ee9655e89f8405c962759aeb99ea88ca44ea60b675baddeacd073457b539af
 use std::str::FromStr;
 use crate::{Dimension};
 use crate::types::{Operator, Variable};
@@ -5450,7 +5450,8 @@ fn __action57<
     FunctionSignature {
     id:  String::from(&id[..id.len() - 1]),
     data_type: dtype,
-    params: params
+    params: params,
+    is_native: false
 }
 }
 

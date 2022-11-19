@@ -13,28 +13,4 @@ impl Call {
             params,
         }
     }
-
-    // pub fn data_type(&self) -> DataType {
-    //     GlobalManager::get().get_func(&self.id).return_type.clone()
-    // }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::ast::expressions::*;
-
-    #[test]
-    fn test_function() {
-        let fn_name = "testFn";
-
-        Call::new(
-            fn_name,
-            vec![
-                Box::new(Expression::Id(id::Id::new(fn_name, None))),
-                Box::new(Expression::Const(constant::Const::new("54", DataType::Int))),
-                Box::new(Expression::Call(Call::new("arg", vec![]))),
-            ],
-        );
-    }
 }
