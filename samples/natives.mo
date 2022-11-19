@@ -1,0 +1,1 @@
+int zeros_arr: int[10] = zeros(10);

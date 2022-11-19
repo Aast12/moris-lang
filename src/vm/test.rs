@@ -2,11 +2,8 @@ use std::{collections::HashMap, path::Path};
 
 use codegen::generate;
 use codegen::manager::GlobalManager;
-use parser::try_file;
 
 use memory::resolver::MemAddress;
-
-use codegen::node::Node;
 
 use super::memory_manager::Item;
 use super::virtual_machine::VirtualMachine;

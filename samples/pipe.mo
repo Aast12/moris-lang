@@ -20,3 +20,5 @@ fn step2(x: int): int {
 let input:int = 1220;
 
 let res: int = (input + 2) |> step0 |> step1 |> step2;
+
+println("Piped result", res);

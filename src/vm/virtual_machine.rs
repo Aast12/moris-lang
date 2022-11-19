@@ -1,7 +1,7 @@
 use core::panic;
-use std::{cmp::Ordering, collections::LinkedList, fs::File};
+use std::{cmp::Ordering, collections::LinkedList, fs::File, str::FromStr};
 
-use codegen::{meta::ProgramMeta, quadruples::Quadruple};
+use codegen::{meta::ProgramMeta, quadruples::Quadruple, NativeFunctions};
 
 use memory::{
     resolver::{MemAddress, MemoryResolver},
@@ -328,19 +328,25 @@ impl VirtualMachine {
                 "gosub" => {
                     let Quadruple(_, _, _, function_id) = curr_instruction;
 
-                    call_pointer.push_back(instruction_pointer + 1);
+                    if let Ok(native_func) = NativeFunctions::from_str(function_id) {
+                        let params = self.memory.pop_params();
+                        println!("Call func {} with params: {:#?}", native_func, params);
+                        pre_call_stack.pop_back();
+                    } else {
+                        call_pointer.push_back(instruction_pointer + 1);
 
-                    let func_meta = self.data.get_func(&function_id);
-                    self.memory.push_context();
-                    pre_call_stack.pop_back();
+                        let func_meta = self.data.get_func(&function_id);
+                        self.memory.push_context();
+                        pre_call_stack.pop_back();
 
-                    // Cleanup function return address to catch no-return errors
-                    if let Some(return_addres) = func_meta.return_address {
-                        self.memory.delete(return_addres);
+                        // Cleanup function return address to catch no-return errors
+                        if let Some(return_addres) = func_meta.return_address {
+                            self.memory.delete(return_addres);
+                        }
+
+                        instruction_pointer = func_meta.procedure_address;
+                        continue;
                     }
-
-                    instruction_pointer = func_meta.procedure_address;
-                    continue;
                 }
                 "return" | "voidReturn" => {
                     let Quadruple(_, _, _, return_value_addr) = curr_instruction;

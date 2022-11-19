@@ -146,6 +146,22 @@ impl MemoryManager {
         self.call_context.back_mut().unwrap().locals.borrow_mut()
     }
 
+    pub fn pop_params(&mut self) -> Vec<Item> {
+        let call_params = self.curr_hold().call_params.clone();
+
+        let params: Vec<Item> = call_params
+            .iter()
+            .map(|(value_addr, param_addr)| {
+                let value = self.resolved_get(*value_addr);
+                value
+            })
+            .collect();
+
+        self.pop_hold();
+
+        params
+    }
+
     pub fn push_context(&mut self) {
         let call_params = self.curr_hold().call_params.clone();
         let procedure_id = self.curr_hold().procedure_id.clone();

@@ -21,8 +21,8 @@ use parser::{
     types::{Operator, OperatorType, Variable},
 };
 use quadruples::{Quadruple, QuadrupleHold};
-use std::iter::zip;
 use std::{cmp::Ordering, path::PathBuf};
+use std::{iter::zip, str::FromStr};
 use strum::{Display, EnumString, EnumVariantNames};
 pub mod env;
 pub mod function;
@@ -31,6 +31,70 @@ pub mod meta;
 pub mod quadruples;
 
 pub mod node;
+
+#[derive(Debug, PartialEq, EnumString, EnumVariantNames, Display)]
+#[strum(serialize_all = "snake_case")]
+pub enum NativeFunctions {
+    Print,
+    Println,
+    Zeros,
+    Split,
+    ReadCsv,
+    Select,
+    ToCsv,
+}
+
+pub fn generate(path: &PathBuf) {
+    let native_functions = vec![
+        FunctionSignature {
+            id: NativeFunctions::Zeros.to_string(),
+            params: vec![FunctionParam::new_scalar("size", DataType::Int)],
+            data_type: DataType::Pointer,
+            is_native: true,
+        },
+        FunctionSignature {
+            id: NativeFunctions::Split.to_string(),
+            params: vec![],
+            data_type: DataType::Pointer,
+            is_native: true,
+        },
+        FunctionSignature {
+            id: NativeFunctions::ReadCsv.to_string(),
+            params: vec![],
+            data_type: DataType::DataFrame,
+            is_native: true,
+        },
+        FunctionSignature {
+            id: NativeFunctions::Select.to_string(),
+            params: vec![],
+            data_type: DataType::DataFrame,
+            is_native: true,
+        },
+        FunctionSignature {
+            id: NativeFunctions::ToCsv.to_string(),
+            params: vec![FunctionParam::new_scalar("df", DataType::DataFrame)],
+            data_type: DataType::Void,
+            is_native: true,
+        },
+    ];
+
+    let mut manager = GlobalManager::get();
+
+    native_functions.iter().for_each(|func| {
+        let return_address = match func.data_type {
+            DataType::Void => None,
+            _ => Some(manager.new_global(&func.data_type)),
+        };
+
+        manager.new_func(&func, 0, return_address, false);
+    });
+
+    drop(manager);
+
+    let path = path.to_str().unwrap();
+    let mut test_program = try_file(path);
+    test_program.generate();
+}
 
 impl Node for Variable {
     // TODO: Refactor to use Id
@@ -789,9 +853,13 @@ impl Node for Access {
 
 impl Node for Call {
     fn data_type(&self) -> DataType {
-        match self.id.as_str() {
-            "print" => DataType::Void,
-            _ => GlobalManager::get().get_func(&self.id).return_type.clone(),
+        if let Ok(function_id) = NativeFunctions::from_str(self.id.as_str()) {
+            match function_id {
+                NativeFunctions::Print | NativeFunctions::Println => DataType::Void, // Functions with no formal definition e.g. infinite params
+                _ => GlobalManager::get().get_func(&self.id).return_type.clone(),
+            }
+        } else {
+            GlobalManager::get().get_func(&self.id).return_type.clone()
         }
     }
 
@@ -801,18 +869,30 @@ impl Node for Call {
 
     fn reduce(&self) -> String {
         let id = self.id.as_str();
-        match id {
-            "print" | "println" => {
-                self.params.iter().for_each(|param| {
-                    let value = param.reduce();
-                    GlobalManager::emit(Quadruple::new("print", "", "", value.as_str()));
-                });
-                if id == "println" {
-                    GlobalManager::emit(Quadruple::new("print", "", "", "\n"));
+        if let Ok(function_id) = NativeFunctions::from_str(id) {
+            match function_id {
+                NativeFunctions::Print | NativeFunctions::Println => {
+                    self.params.iter().for_each(|param| {
+                        let value = param.reduce();
+                        GlobalManager::emit(Quadruple::new(
+                            NativeFunctions::Print.to_string().as_str(),
+                            "",
+                            "",
+                            value.as_str(),
+                        ));
+                    });
+                    if function_id == NativeFunctions::Println {
+                        GlobalManager::emit(Quadruple::new(
+                            NativeFunctions::Print.to_string().as_str(),
+                            "",
+                            "",
+                            "\n",
+                        ));
+                    }
+                    return String::from("VOID");
                 }
-                return String::from("VOID");
+                _ => todo!(),
             }
-            _ => (),
         }
 
         let man = GlobalManager::get();

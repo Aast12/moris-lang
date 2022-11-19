@@ -14,4 +14,4 @@ fn arr_func(arr_var: int[20]): int {
     return q;
 }
 
-let x: int[10] = zeros(10);
+let zeros_arr: int[10] = zeros(10);
