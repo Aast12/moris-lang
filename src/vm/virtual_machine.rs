@@ -295,6 +295,7 @@ impl VirtualMachine {
                 }
                 "gotoFalse" => {
                     let Quadruple(_, check, _, next) = curr_instruction;
+
                     let check = self.memory.get(check);
                     match check {
                         Item::Bool(check) => {

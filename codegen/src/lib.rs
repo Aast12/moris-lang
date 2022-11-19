@@ -49,10 +49,7 @@ impl Node for Variable {
             let array_address = manager
                 .get_env_mut()
                 .allocate_array(&self.data_type, &self.dimension);
-            println!(
-                "ALLOCATION ARRAY ADDRESS {} - {}",
-                var_address, array_address
-            );
+
             manager.emit(Quadruple::operation(
                 Operator::Assign,
                 format!("&{}", array_address).as_str(),
@@ -62,6 +59,7 @@ impl Node for Variable {
         }
 
         drop(manager);
+
         if let Some(value) = &self.value {
             let mut assign = Statement::VarAssign(
                 Access::new(
@@ -144,6 +142,15 @@ impl Node for Statement {
                 // TODO: Generalize data type casting
                 let value_data_type = value.data_type();
                 let access_data_type = access.data_type();
+
+                let access_dims = access.dimensionality();
+                let value_dims = value.dimensionality();
+                if access_dims != value_dims {
+                    panic!(
+                        "Can't assign item {} with dimensions {:#?} to value with dimensions {:#?}",
+                        access.id.id, access_dims, value_dims
+                    )
+                }
                 assert!(
                     DataType::equivalent(&access.data_type(), &value_data_type).is_ok(),
                     "Data type {:?} cannot be assigned to a variable {:?}.",
@@ -331,6 +338,17 @@ impl Node for Function {
 }
 
 impl Node for Expression {
+    fn dimensionality(&self) -> Vec<usize> {
+        match &self {
+            Expression::Const(constant) => constant.dimensionality(),
+            Expression::Op(operation) => operation.dimensionality(),
+            Expression::Access(access) => access.dimensionality(),
+            Expression::Id(id) => id.dimensionality(),
+            Expression::Call(call) => call.dimensionality(),
+            Expression::Not(expr) => expr.dimensionality(),
+            Expression::Negative(expr) => expr.dimensionality(),
+        }
+    }
     fn data_type(&self) -> DataType {
         match &self {
             Expression::Const(constant) => constant.dtype.clone(),
@@ -474,6 +492,15 @@ impl Pipe for Operation {
 }
 
 impl Node for Operation {
+    fn dimensionality(&self) -> Vec<usize> {
+        if self.operator == Operator::Pipe {
+            let new_tree = self.resolve_pipe();
+            new_tree.dimensionality()
+        } else {
+            self.left.dimensionality()
+        }
+    }
+
     fn data_type(&self) -> DataType {
         match self.operator {
             Operator::Pipe => self.resolve_pipe_type(),
@@ -493,6 +520,14 @@ impl Node for Operation {
         if self.operator == Operator::Pipe {
             let new_tree = self.resolve_pipe();
             return new_tree.reduce();
+        }
+        let left_dims = self.left.dimensionality();
+        let right_dims = self.right.dimensionality();
+        if left_dims != right_dims {
+            panic!(
+                "Can't operate items with dimensions {:#?} and {:#?}",
+                left_dims, right_dims
+            )
         }
 
         let mut left = self.left.reduce();
@@ -586,6 +621,14 @@ impl Node for Const {
 }
 
 impl Node for Id {
+    fn dimensionality(&self) -> Vec<usize> {
+        let mut man = GlobalManager::get();
+        if let Some(id) = man.get_env_mut().get_var(&self.id) {
+            return id.dimension.shape.clone();
+        }
+        panic!("id {} is not defined", self.id);
+    }
+
     fn reduce(&self) -> String {
         self.address().to_string()
     }
@@ -613,6 +656,26 @@ impl Node for Id {
 }
 
 impl Node for Access {
+    fn dimensionality(&self) -> Vec<usize> {
+        let to_access_shape = self.id.dimensionality();
+        let to_access_dims = to_access_shape.len();
+        let indexing_dims = self.indexing.len();
+
+        if indexing_dims > to_access_dims {
+            panic!();
+        }
+
+        let slice_dims = to_access_dims - indexing_dims;
+
+        if indexing_dims >= to_access_dims {
+            vec![]
+        } else {
+            to_access_shape[(to_access_dims - slice_dims as usize)..]
+                .to_vec()
+                .clone()
+        }
+    }
+
     fn data_type(&self) -> DataType {
         return self.id.data_type();
     }
@@ -653,7 +716,7 @@ impl Node for Access {
         let shape_cp = access_item.dimension.shape.clone();
         let mut array_shape = shape_cp.iter();
         let acc_tmp = GlobalManager::new_temp(&DataType::Pointer).to_string();
-        let first_run = true;
+        let mut first_run = true;
 
         zip(&indexing_addresses, &access_item.dimension.acc_size).for_each(|(index, dim_size)| {
             if let Some(dim) = array_shape.next() {
@@ -661,8 +724,8 @@ impl Node for Access {
             }
 
             let dim_const = GlobalManager::new_constant(
-                &DataType::Int,
-                &Const::new(dim_size.to_string().as_str(), DataType::Int),
+                &DataType::Pointer,
+                &Const::new(dim_size.to_string().as_str(), DataType::Pointer),
             );
             let dim_const = dim_const.to_string();
 
@@ -673,8 +736,9 @@ impl Node for Access {
                     dim_const.as_str(),
                     acc_tmp.as_str(),
                 ));
+                first_run = false;
             } else {
-                let tmp = GlobalManager::new_temp(&DataType::Int);
+                let tmp = GlobalManager::new_temp(&DataType::Pointer);
                 let tmp_str = tmp.to_string();
 
                 GlobalManager::emit(Quadruple::operation(

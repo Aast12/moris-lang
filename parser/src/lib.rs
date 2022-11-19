@@ -38,6 +38,35 @@ impl Dimension {
         }
     }
 
+    pub fn new_from_values(dimensions: i8, shape: Vec<Const>) -> Dimension {
+        let usize_shape: Vec<usize> = shape
+            .iter()
+            .map(
+                |constant| match str::parse::<usize>(constant.value.as_str()) {
+                    Ok(size) => {
+                        if size <= 0 {
+                            panic!("Invalid dimension size {size} in array declaration.")
+                        }
+                        size
+                    }
+                    Err(error) => panic!("Can't parse variable dimension: {:#?}", error),
+                },
+            )
+            .collect();
+
+        let size = usize_shape.iter().fold(1, |acc, item| acc * item);
+
+        let mut new_dim = Dimension {
+            dimensions,
+            shape: usize_shape,
+            size,
+            acc_size: vec![],
+        };
+
+        new_dim.calc_acc_size();
+        new_dim
+    }
+
     pub fn new(dimensions: i8, shape: Vec<Const>) -> Dimension {
         let usize_shape: Vec<usize> = shape
             .iter()

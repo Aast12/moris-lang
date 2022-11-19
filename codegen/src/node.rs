@@ -1,7 +1,12 @@
-use memory::{types::DataType, resolver::MemAddress};
+use memory::{resolver::MemAddress, types::DataType};
+use parser::Dimension;
 
 /// Represents the node of an Abstract Syntax Tree
 pub trait Node {
+    fn dimensionality(&self) -> Vec<usize> {
+        vec![]
+    }
+
     fn generate(&mut self) -> () {
         self.reduce();
     }

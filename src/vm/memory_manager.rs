@@ -258,12 +258,15 @@ impl MemoryManager {
             Ok(Item::Pointer(address))
         } else if address.starts_with("*") {
             let next = &address[1..].to_string();
-            let next_address = self.get(next);
-
-            if let Item::Pointer(address) = next_address {
-                Ok(self._get(address).clone())
+            let attempt = self.safe_get(next);
+            if let Ok(next_address) = attempt {
+                if let Item::Pointer(address) = next_address {
+                    self.safe_get(&format!("{}", address))
+                } else {
+                    Err(String::from("Item is not a pointer"))
+                }
             } else {
-                Err(String::from("Item is not a pointer"))
+                attempt
             }
         } else {
             let parse = address.parse::<MemAddress>();

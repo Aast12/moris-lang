@@ -41,6 +41,10 @@ impl Inspector {
         GlobalManager::get().reset();
         let mut vm = VirtualMachine::load("program.o");
         // println!("QUADS {:#?}", vm.data.quadruples);
+
+        // vm.data.quadruples.iter().enumerate().for_each(|(i, quad)| {
+        //     println!("{i}. {:#?}", quad);
+        // });
         // println!("MEM {:#?}", vm.memory);
         // println!("PROCS {:#?}", vm.data.procedure_table);
         vm.execute();

@@ -2,16 +2,19 @@ use moris_lang::vm::{test::Inspector, memory_manager::Item};
 
 fn main() {
 
-    println!("samples/strings.mo");
-    let inspector = Inspector::new("samples/strings.mo");
-    println!("concat = {:#?}", inspector.get("concat"));
+    // println!("samples/strings.mo");
+    // let inspector = Inspector::new("samples/strings.mo");
+    // println!("concat = {:#?}", inspector.get("concat"));
 
     println!("samples/arrays.mo");
     let inspector = Inspector::new("samples/arrays.mo");
-    println!("x = {:#?}", inspector.get("x"));
-    println!("y = {:#?}", inspector.get("y"));
-    println!("z = {:#?}", inspector.get("z"));
-    // println!("mem = {:#?}", inspector.get("mem"));
+    // println!("MEM {:#?}", inspector.memory);
+    // println!("ROW {:#?}", inspector.get("row"));
+    println!("MATRIX {:#?}", inspector.get("matrix"));
+    // println!("x = {:#?}", inspector.get("x"));
+    // println!("y = {:#?}", inspector.get("y"));
+    // println!("z = {:#?}", inspector.get("z"));
+    // println!("matrix = {:#?}", inspector.get("matrix"));
     // assert_eq!(inspector.get("x"), Item::Int(125));
 
     println!("samples/pipe.mo");

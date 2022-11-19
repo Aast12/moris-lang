@@ -1,21 +1,20 @@
-let mem: int[10];
-let i: int = 0;
+let matrix: float[10][10];
+
+let i: int = 0; 
+let j: int = 0;
 while (i < 10) {
-    mem[i] = i;
+    j = 0;
+    while (j < 10) {
+        matrix[i][j] = i * j * 5;
+        println(i, ", ", j, " -> ", matrix[i][j]);
+        j = j + 1;
+    }
     i = i + 1;
 }
 
-fn array_mod(arr: int[10]): int {
-    arr[2] = 123 + arr[2];
-    arr[0] = 12; 
-    return arr[2];
-}
+println("RES", matrix[2][3]);
 
-fn array_item(arr_item: int): int {
-    arr_item = arr_item * 2;
-    return arr_item;
-}
-
-let x: int = array_mod(mem);
-let y: int = array_item(mem[4]);
-let z: int = mem[4];
+let row: int[10] = matrix[2];
+println("ROW", row[3]);
+row[3] = 77;
+println("MAT", matrix[2][3]);
