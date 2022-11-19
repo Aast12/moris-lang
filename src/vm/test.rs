@@ -1,5 +1,6 @@
 use std::{collections::HashMap, path::Path};
 
+use codegen::generate;
 use codegen::manager::GlobalManager;
 use parser::try_file;
 
@@ -20,11 +21,7 @@ pub struct Inspector {
 impl Inspector {
     pub fn new(path: &str) -> Inspector {
         let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join(path);
-        let path = path_buf.to_str().unwrap();
-
-        let mut test_program = try_file(path);
-        // println!("Program {:#?}", test_program);
-        test_program.generate();
+        generate(&path_buf);
 
         let target_meta: TargetMeta;
         if let Some(global_env) = GlobalManager::get().env.entries.get("global") {
@@ -39,17 +36,10 @@ impl Inspector {
 
         GlobalManager::get().dump();
         GlobalManager::get().reset();
+
         let mut vm = VirtualMachine::load("program.o");
-        // println!("QUADS {:#?}", vm.data.quadruples);
 
-        // vm.data.quadruples.iter().enumerate().for_each(|(i, quad)| {
-        //     println!("{i}. {:#?}", quad);
-        // });
-        // println!("MEM {:#?}", vm.memory);
-        // println!("PROCS {:#?}", vm.data.procedure_table);
         vm.execute();
-
-        // println!("MEM {:#?}", vm.memory);
 
         Inspector {
             target_meta,
@@ -64,8 +54,19 @@ impl Inspector {
         *item == value
     }
 
+    pub fn get_address(&self, id: &str) -> u16 {
+        *self.target_meta.get(id).unwrap()
+    }
+
     pub fn get(&self, id: &str) -> Item {
         let item_address = self.target_meta.get(id).unwrap();
         self.memory.get(item_address).unwrap().clone()
+    }
+
+    pub fn debug(&self) {
+        self.target_meta.iter().for_each(|(key, value)| {
+            let item = self.memory.get(value).unwrap().clone();
+            println!("({}[{}], {:#?})", key, value, item);
+        });
     }
 }

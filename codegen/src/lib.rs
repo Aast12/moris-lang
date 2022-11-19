@@ -1,4 +1,5 @@
 use env::SymbolEntry;
+use function::FunctionEntry;
 use manager::GlobalManager;
 use memory::{
     resolver::{MemAddress, MemoryResolver},
@@ -13,14 +14,16 @@ use parser::{
         operation::Operation,
         Expression, Index,
     },
-    functions::Function,
+    functions::{Function, FunctionParam, FunctionSignature},
     semantics::{ExitStatement, SemanticRules},
     statements::{Block, Program, Statement},
+    try_file,
     types::{Operator, OperatorType, Variable},
 };
 use quadruples::{Quadruple, QuadrupleHold};
-use std::cmp::Ordering;
 use std::iter::zip;
+use std::{cmp::Ordering, path::PathBuf};
+use strum::{Display, EnumString, EnumVariantNames};
 pub mod env;
 pub mod function;
 pub mod manager;
@@ -107,9 +110,8 @@ impl Node for Program {
                         _ => Some(manager.new_global(&func.signature.data_type)),
                     };
 
-                    manager.new_func(&func, 0, return_address); // TODO: improve undefined location
-
-                    manager.get_env_mut().switch(&String::from("global"));
+                    manager.new_func(&func.signature, 0, return_address, false);
+                    // TODO: improve undefined location
                 }
                 _ => break,
             }

@@ -18,3 +18,4 @@ let row: int[10] = matrix[2];
 println("ROW", row[3]);
 row[3] = 77;
 println("MAT", matrix[2][3]);
+

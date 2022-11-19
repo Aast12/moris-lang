@@ -1,7 +1,7 @@
 use memory::{resolver::MemAddress, types::DataType};
 use serde::{Deserialize, Serialize};
 
-use parser::functions::Function;
+use parser::functions::{FunctionSignature};
 
 pub type ParamAddress = (MemAddress, DataType, Option<MemAddress>);
 
@@ -19,12 +19,12 @@ impl FunctionEntry {
         address: usize,
         return_address: Option<MemAddress>,
         params_mapped: Vec<ParamAddress>,
-        fn_definition: &Function,
+        func: &FunctionSignature,
     ) -> FunctionEntry {
         FunctionEntry {
-            id: fn_definition.signature.id.to_owned(),
+            id: func.id.to_owned(),
             procedure_address: address,
-            return_type: fn_definition.signature.data_type.to_owned(),
+            return_type: func.data_type.to_owned(),
             params: params_mapped,
             return_address,
         }

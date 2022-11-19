@@ -17,7 +17,7 @@ use crate::{
 };
 use parser::{
     expressions::constant::Const,
-    functions::{Function, FunctionParam},
+    functions::{Function, FunctionParam, FunctionSignature},
     semantics::ExitStatement,
     types::Variable,
     Dimension,
@@ -96,23 +96,20 @@ impl Manager {
     /// Panics if a function with the same id as func has been declared before
     pub fn new_func(
         &mut self,
-        func: &Function,
+        func: &FunctionSignature,
         location: usize,
         return_address: Option<MemAddress>,
+        switch: bool,
     ) {
-        if self.procedure_table.contains_key(&func.signature.id)
-            || self.get_env_mut().entries.contains_key(&func.signature.id)
+        if self.procedure_table.contains_key(&func.id)
+            || self.get_env_mut().entries.contains_key(&func.id)
         {
-            panic!(
-                "A symbol with id {} has been already defined",
-                func.signature.id
-            )
+            panic!("A symbol with id {} has been already defined", func.id)
         }
 
-        self.get_env_mut().from_function(&func.signature, true);
+        self.get_env_mut().from_function(&func);
 
         let params: Vec<ParamAddress> = func
-            .signature
             .params
             .iter()
             .map(
@@ -133,9 +130,13 @@ impl Manager {
             .collect();
 
         self.procedure_table.insert(
-            func.signature.id.clone(),
+            func.id.clone(),
             FunctionEntry::new(location, return_address, params, func),
         );
+
+        if !switch {
+            self.get_env_mut().switch(&String::from("global"));
+        }
     }
 
     pub fn update_func_position(&mut self, func_id: &String, position: usize) {

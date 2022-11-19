@@ -11,3 +11,4 @@ memory = { version = "0.1.0", path = "../memory" }
 parser = { version = "0.1.0", path = "../parser" }
 serde = "1.0.147"
 serde-pickle = "1.1.1"
+strum = { version = "0.24", features = ["derive"] }

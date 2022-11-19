@@ -134,15 +134,13 @@ impl Environment {
     ///
     /// Panics if an environment with the same name (function id) has
     /// been declared before.
-    pub fn from_function(&mut self, func: &FunctionSignature, switch: bool) {
+    pub fn from_function(&mut self, func: &FunctionSignature) {
         let id = &func.id;
         if let Some(_) = self.entries.get(id) {
             panic!("Environment {} already exist!", id);
         }
 
-        if switch {
-            self.current_env = id.clone();
-        }
+        self.current_env = id.clone();
 
         self.current_scope = MemoryScope::Local;
         self.allocator.reset_locals();
