@@ -333,24 +333,16 @@ impl VirtualMachine {
 
                         match native_func {
                             NativeFunctions::Zeros => {
-                                let array_address = params.get(0).unwrap();
-                                dbg!(array_address);
-                                if let Item::Pointer(array_address) = array_address {
-                                    let mut curr_address = *array_address;
-                                    while true {
-                                        let t = self.memory.safe_resolved_get(curr_address);
+                                let array_pointer = params.get(0).unwrap();
+                                dbg!(array_pointer);
 
-                                        if let Ok(item) = t {
-                                            if item == Item::ArrayEnd {
-                                                break;
-                                            }
-                                            self.memory.update(curr_address, Item::Int(0));
-                                        } else {
-                                            self.memory.update(curr_address, Item::Int(0));
-                                        }
-
-                                        curr_address += 1;
-                                    }
+                                if let Item::Pointer(array_address) = array_pointer {
+                                    self.memory.alter_array(
+                                        array_address,
+                                        |memory, (next_address, _)| {
+                                            memory.update(next_address, Item::Int(0));
+                                        },
+                                    );
                                 }
                             }
                             NativeFunctions::Split => todo!(),

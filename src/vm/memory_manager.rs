@@ -153,7 +153,7 @@ impl MemoryManager {
 
         let params: Vec<Item> = call_params
             .iter()
-            .map(|(value_addr, param_addr)| {
+            .map(|(value_addr, _)| {
                 let value = self.resolved_get(*value_addr);
                 value
             })
@@ -311,6 +311,27 @@ impl MemoryManager {
             return Item::ArrayEnd;
         } else {
             self.safe_get(address).unwrap()
+        }
+    }
+
+    pub fn alter_array<F>(&mut self, start_address: &MemAddress, cb: F)
+    where
+        F: Fn(&mut Self, (MemAddress, Option<Item>)) -> (),
+    {
+        let mut curr_address = *start_address;
+        loop {
+            let current = self.safe_resolved_get(curr_address);
+
+            if let Ok(item) = current {
+                if item == Item::ArrayEnd {
+                    break;
+                }
+                cb(self, (curr_address, Some(item)));
+            } else {
+                cb(self, (curr_address, None));
+            }
+
+            curr_address += 1;
         }
     }
 }
