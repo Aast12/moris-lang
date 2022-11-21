@@ -1,15 +1,9 @@
 use core::panic;
-use lazy_static::lazy_static;
 use memory::{
     resolver::{MemAddress, MemoryScope},
     types::DataType,
 };
-use std::{
-    collections::HashMap,
-    fmt::Debug,
-    fs::File,
-    sync::{Mutex, MutexGuard},
-};
+use std::{collections::HashMap, fmt::Debug, fs::File};
 
 use crate::{
     env::Environment,
@@ -24,10 +18,6 @@ use parser::{
 };
 
 use super::{meta::ProgramMeta, quadruples::Quadruple};
-
-lazy_static! {
-    pub static ref MANAGER: Mutex<Manager> = Mutex::new(Manager::new());
-}
 
 #[derive(Debug)]
 pub struct Manager {
@@ -189,7 +179,7 @@ impl Manager {
             .assign_location(&MemoryScope::Global, data_type, 1)
     }
 
-    pub fn new_temp_address(&mut self, data_type: &DataType) -> MemAddress {
+    pub fn new_temp(&mut self, data_type: &DataType) -> MemAddress {
         self.env
             .allocator
             .assign_location(&self.env.current_scope, data_type, 1)
@@ -212,12 +202,12 @@ impl Manager {
     }
 
     pub fn emit_cast(&mut self, target_dt: &DataType, target: &str) -> String {
-        let new = self.new_temp_address(target_dt).to_string();
+        let new = self.new_temp(target_dt).to_string();
         self.emit(Quadruple::type_cast(target_dt, target, new.as_str()));
         new
     }
 
-    pub fn get_next_id(&self) -> usize {
+    pub fn get_next_pos(&self) -> usize {
         return self.quadruples.len();
     }
 
@@ -226,72 +216,31 @@ impl Manager {
             *local = quad;
         }
     }
-}
 
-pub struct GlobalManager {}
-
-impl GlobalManager {
-    pub fn get() -> MutexGuard<'static, Manager> {
-        if let Ok(manager) = MANAGER.try_lock() {
-            manager
-        } else {
-            panic!("Manager lock could not be acquired!");
-        }
-    }
-
-    pub fn new_temp(data_type: &DataType) -> MemAddress {
-        Self::get().new_temp_address(data_type)
-    }
-
-    pub fn new_constant(data_type: &DataType, value: &Const) -> MemAddress {
-        Self::get().new_constant(data_type, value)
-    }
-
-    pub fn prepare_exit_stmt(stmt_type: &ExitStatement) {
-        let mut instance = Self::get();
-        let stmt_position = instance.get_next_id();
-        instance.emit(Quadruple::new_empty());
-
-        if let Some(context) = instance.unresolved.get_mut(&stmt_type) {
-            context.push(stmt_position);
-        } else {
-            instance.unresolved.insert(*stmt_type, vec![stmt_position]);
-        }
-    }
-
-    pub fn resolve_context(stmt_type: &ExitStatement, quadruple: Quadruple) {
-        let mut instance = Self::get();
-
-        let unresolved = instance
-            .unresolved
-            .get(stmt_type)
-            .unwrap_or(&vec![])
-            .clone();
+    pub fn resolve_context(&mut self, stmt_type: &ExitStatement, quadruple: Quadruple) {
+        let unresolved = self.unresolved.get(stmt_type).unwrap_or(&vec![]).clone();
 
         for ref_quadruple in unresolved {
-            if let Some(to_update) = instance.quadruples.get_mut(ref_quadruple) {
+            if let Some(to_update) = self.quadruples.get_mut(ref_quadruple) {
                 quadruple.clone_into(to_update);
             }
         }
 
-        drop(instance);
-        Self::clean_exit_stmt(stmt_type);
+        self.clean_exit_stmt(stmt_type);
     }
 
-    pub fn clean_exit_stmt(stmt_type: &ExitStatement) {
-        let mut instance = Self::get();
-        instance.unresolved.insert(*stmt_type, vec![]);
+    pub fn clean_exit_stmt(&mut self, stmt_type: &ExitStatement) {
+        self.unresolved.insert(*stmt_type, vec![]);
     }
 
-    pub fn emit(quadruple: Quadruple) {
-        Self::get().emit(quadruple);
-    }
+    pub fn prepare_exit_stmt(&mut self, stmt_type: &ExitStatement) {
+        let stmt_position = self.get_next_pos();
+        self.emit(Quadruple::new_empty());
 
-    pub fn emit_cast(target_dt: &DataType, target: &str) -> String {
-        GlobalManager::get().emit_cast(target_dt, target)
-    }
-
-    pub fn get_next_pos() -> usize {
-        Self::get().get_next_id()
+        if let Some(context) = self.unresolved.get_mut(&stmt_type) {
+            context.push(stmt_position);
+        } else {
+            self.unresolved.insert(*stmt_type, vec![stmt_position]);
+        }
     }
 }

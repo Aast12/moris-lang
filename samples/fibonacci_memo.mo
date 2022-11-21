@@ -20,4 +20,26 @@ fn fib(x: int): int {
     return res;
 }
 
-let y: int = fib(50);
+fn fib_iter(n: int): int {
+    let acc: int = 0;
+    let fst: int = 0;
+    let snd: int = 1;
+
+    for (index in 1:n) {
+        acc = fst + snd;
+        fst = snd;
+        snd = acc;
+    }
+
+    return acc;
+}
+
+let test_n: int = 50;
+
+let recursive_result: int = fib(test_n);
+let iter_result: int = fib_iter(test_n);
+
+println("Test for n = ", test_n);
+println("Iterative fib: ", iter_result);
+println("recursive_result: ", recursive_result);
+

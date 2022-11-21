@@ -7,7 +7,7 @@ use parser::{
 };
 use strum::{Display, EnumIter, EnumProperty, EnumString, EnumVariantNames, IntoEnumIterator};
 
-use crate::{manager::GlobalManager, node::Node, quadruples::Quadruple};
+use crate::{manager::Manager, node::Node, quadruples::Quadruple};
 
 #[derive(Debug, PartialEq, EnumString, EnumVariantNames, Display, EnumIter, EnumProperty)]
 #[strum(serialize_all = "snake_case")]
@@ -25,12 +25,12 @@ pub enum NativeFunctions {
 }
 
 impl NativeFunctions {
-    pub fn data_type(id: &String) -> Option<DataType> {
+    pub fn data_type(id: &String, manager: &mut Manager) -> Option<DataType> {
         if let Ok(function_id) = NativeFunctions::from_str(id.as_str()) {
             if let Some(_) = function_id.get_str("check_params") {
                 Some(DataType::Void)
             } else {
-                Some(GlobalManager::get().get_func(&id).return_type.clone())
+                Some(manager.get_func(&id).return_type.clone())
             }
         } else {
             None
@@ -71,14 +71,14 @@ impl NativeFunctions {
             .collect::<Vec<FunctionSignature>>()
     }
 
-    pub fn call_reduce(ctx: &Call) -> Option<String> {
+    pub fn call_reduce(ctx: &Call, manager: &mut Manager) -> Option<String> {
         let id = ctx.id.as_str();
         if let Ok(function_id) = NativeFunctions::from_str(id) {
             match function_id {
                 NativeFunctions::Print | NativeFunctions::Println => {
                     ctx.params.iter().for_each(|param| {
-                        let value = param.reduce();
-                        GlobalManager::emit(Quadruple::new(
+                        let value = param.reduce(manager);
+                        manager.emit(Quadruple::new(
                             NativeFunctions::Print.to_string().as_str(),
                             "",
                             "",
@@ -86,7 +86,7 @@ impl NativeFunctions {
                         ));
                     });
                     if function_id == NativeFunctions::Println {
-                        GlobalManager::emit(Quadruple::new(
+                        manager.emit(Quadruple::new(
                             NativeFunctions::Print.to_string().as_str(),
                             "",
                             "",
@@ -96,20 +96,20 @@ impl NativeFunctions {
                     Some(String::from("VOID"))
                 }
                 NativeFunctions::Read => {
-                    GlobalManager::emit(Quadruple::era(id));
+                    manager.emit(Quadruple::era(id));
 
                     ctx.params.iter().enumerate().for_each(|(index, param)| {
                         match **param {
                             parser::expressions::Expression::Access(_) => (),
                             _ => panic!("Can only read values from variables"),
                         };
-                        
-                        let value_addr = param.reduce();
 
-                        GlobalManager::emit(Quadruple::param(value_addr.as_str(), index));
+                        let value_addr = param.reduce(manager);
+
+                        manager.emit(Quadruple::param(value_addr.as_str(), index));
                     });
 
-                    GlobalManager::emit(Quadruple::go_sub(id));
+                    manager.emit(Quadruple::go_sub(id));
 
                     Some(String::from("VOID"))
                 }

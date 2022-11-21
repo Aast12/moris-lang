@@ -23,7 +23,7 @@ pub enum Expression {
 
 impl Expression {
     // TODO: optimize data type resolution
-    // pub fn data_type(&self) -> DataType {
+    // pub fn data_type(&self, manager: &mut Manager) -> DataType {
     //     match &self {
     //         Expression::Const(constant) => constant.dtype.clone(),
     //         Expression::Op(operation) => operation.data_type(),

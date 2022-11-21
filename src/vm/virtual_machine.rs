@@ -278,12 +278,9 @@ impl VirtualMachine {
                 }
                 "ver" => {
                     let Quadruple(_, value, _, bound) = curr_instruction;
-                    // let value = self.memory.get(&value);
-                    // let bound = self.memory.get(&bound);
-                    // let (value, bound) = Self::match_ints(value, bound);
+
                     let value = self.memory.get(&value).unwrap_int();
                     let bound: IntType = bound.parse().unwrap();
-
                     if value >= bound {
                         panic!("Index out of bounds!");
                     }

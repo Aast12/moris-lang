@@ -156,21 +156,21 @@ fn test_if() {
 
 #[test]
 fn test_for() {
-    expect_success("for (it in iterable) it = it + 1;");
+    expect_success("for (it in 1:10) it = it + 1;");
     expect_success(
-        "for (it in iterable) {
+        "for (it in 1:20:2) {
         it = it + 1;    
     }",
     );
     expect_success(
-        "for(it in iterable){
+        "for(it in a:b + 2){
         it = it + 1;    
     }",
     );
-    expect_success("for(it in iterable) {}");
+    expect_success("for(it in a + 2 : b + 2 : -1) {}");
 
     expect_fail(
-        "for (it in iterable) {
+        "for (it in 1:-2) {
         let x:int = 2;
     }",
     );

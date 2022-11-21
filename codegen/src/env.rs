@@ -100,7 +100,6 @@ impl Environment {
 
                 // TODO: Store initial counters
                 current_context.symbols.iter().for_each(|(_, entry)| {
-                    let value = counters.get(&entry.data_type).unwrap_or(&0) + 1;
                     if entry.dimension.size > 1 {
                         counters.insert(
                             DataType::Pointer,
@@ -112,7 +111,6 @@ impl Environment {
                                 + entry.dimension.size,
                         );
                     } else {
-                        // counters.insert(entry.data_type.clone(), value);
                         counters.insert(
                             entry.data_type.clone(),
                             counters.get(&entry.data_type.clone()).unwrap_or(&0) + 1,
@@ -146,11 +144,15 @@ impl Environment {
         self.current_scope = MemoryScope::Local;
         self.allocator.reset_locals();
 
-        self.entries
-            .insert(id.clone(), EnvEntry::from_func(func, &mut self.allocator));
+        self.entries.insert(id.clone(), EnvEntry::from_func(func));
 
         for FunctionParam(variable) in func.params.iter() {
-            self.add_var(&variable.id, &variable.data_type, &variable.dimension, false);
+            self.add_var(
+                &variable.id,
+                &variable.data_type,
+                &variable.dimension,
+                false,
+            );
         }
     }
 
@@ -176,7 +178,7 @@ impl Environment {
         id: &String,
         data_type: &DataType,
         dimension: &Dimension,
-        immutable: bool
+        immutable: bool,
     ) -> MemAddress {
         let Dimension {
             dimensions: dim,
@@ -211,7 +213,7 @@ impl Environment {
                 data_type.clone(),
                 address,
                 dimension.clone(),
-                immutable
+                immutable,
             ));
         }
 
@@ -246,40 +248,12 @@ impl EnvEntry {
     }
 
     /// Adds the parameters metadata from a function signature to an environment.
-    pub fn from_func(func: &FunctionSignature, allocator: &mut VirtualAllocator) -> EnvEntry {
-        let mut symbols: HashMap<String, SymbolEntry> = HashMap::new();
-
-        // for FunctionParam(variable) in func.params.iter() {
-        //     let key = variable.id.clone();
-        //     let val: SymbolEntry;
-        //     if variable.dimension.size > 1 {
-        //         val = SymbolEntry::new_var(
-        //             variable.id.clone(),
-        //             variable.data_type.clone(),
-        //             allocator.assign_location(&MemoryScope::Local, &DataType::Pointer, 1),
-        //             variable.dimension.clone(),
-        //         );
-        //     } else {
-        //         val = SymbolEntry::new_var(
-        //             variable.id.clone(),
-        //             variable.data_type.clone(),
-        //             allocator.assign_location(
-        //                 &MemoryScope::Local,
-        //                 &variable.data_type,
-        //                 variable.dimension.size,
-        //             ),
-        //             variable.dimension.clone(),
-        //         );
-        //     }
-
-        //     symbols.insert(key, val);
-        // }
-
+    pub fn from_func(func: &FunctionSignature) -> EnvEntry {
         EnvEntry {
             is_global: false,
             env_id: func.id.clone(),
             return_type: Some(func.data_type.clone()),
-            symbols,
+            symbols: HashMap::new(),
         }
     }
 
@@ -305,7 +279,7 @@ impl SymbolEntry {
         data_type: DataType,
         address: MemAddress,
         dimension: Dimension,
-        immutable: bool
+        immutable: bool,
     ) -> SymbolEntry {
         SymbolEntry {
             id,
@@ -314,7 +288,7 @@ impl SymbolEntry {
             dimension,
             address,
             point_address: None,
-            immutable
+            immutable,
         }
     }
 
@@ -335,7 +309,7 @@ impl SymbolEntry {
             address,
             // size,
             point_address: Some(point_address),
-            immutable: false
+            immutable: false,
         }
     }
 }

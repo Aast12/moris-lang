@@ -9,7 +9,7 @@ use crate::functions::{Function, FunctionParam, FunctionSignature};
 use crate::expressions::{Expression, Index};
 
 
-use crate::expressions::constant::{Const, TypeConst};
+use crate::expressions::constant::{Const};
 
 use crate::expressions::id::{Access, Id};
 use crate::expressions::operation::Operation;
@@ -59,8 +59,6 @@ PBool: Const = {
 }
 
 PStr: Const = <s: STRING> => Const::new(&s[1..s.len() - 1], DataType::String);
-
-// PVectorConst: TypeConst = LBRACKET <PComma<PExpr>> RBRACKET => TypeConst::Vector(<>);
 
 PSimpleConst = {
     PInt,

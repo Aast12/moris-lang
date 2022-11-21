@@ -1,7 +1,7 @@
 use std::{collections::HashMap, path::Path};
 
 use codegen::generate;
-use codegen::manager::GlobalManager;
+use codegen::manager::{Manager};
 
 use memory::resolver::MemAddress;
 
@@ -18,10 +18,11 @@ pub struct Inspector {
 impl Inspector {
     pub fn new(path: &str) -> Inspector {
         let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join(path);
-        generate(&path_buf);
+        let mut manager = Manager::new();
+        generate(&path_buf, &mut manager);
 
         let target_meta: TargetMeta;
-        if let Some(global_env) = GlobalManager::get().env.entries.get("global") {
+        if let Some(global_env) = manager.env.entries.get("global") {
             target_meta = global_env
                 .symbols
                 .iter()
@@ -31,8 +32,8 @@ impl Inspector {
             panic!("Can't parse global environment!")
         }
 
-        GlobalManager::get().dump();
-        GlobalManager::get().reset();
+        manager.dump();
+        manager.reset();
 
         let mut vm = VirtualMachine::load("program.o");
 

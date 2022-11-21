@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use parser::types::Operator;
 
-use super::manager::MANAGER;
+use crate::manager::Manager;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Quadruple(pub String, pub String, pub String, pub String);
@@ -18,6 +18,15 @@ impl Quadruple {
             String::from(snd),
             String::from(thrd),
             String::from(fth),
+        )
+    }
+
+    pub fn free(addr: &str) -> Quadruple {
+        Quadruple(
+            String::from("free"),
+            String::new(),
+            String::new(),
+            String::from(addr),
         )
     }
 
@@ -116,14 +125,9 @@ pub struct QuadrupleHold {
 }
 
 impl QuadrupleHold {
-    pub fn new() -> QuadrupleHold {
-        let position: usize;
-        if let Ok(mut manager) = MANAGER.try_lock() {
-            position = manager.get_next_id();
-            manager.emit(Quadruple::new_empty());
-        } else {
-            panic!("Manager lock could not be acquired!");
-        }
+    pub fn new(manager: &mut Manager) -> QuadrupleHold {
+        let position = manager.get_next_pos();
+        manager.emit(Quadruple::new_empty());
 
         QuadrupleHold {
             position,
@@ -131,12 +135,8 @@ impl QuadrupleHold {
         }
     }
 
-    pub fn release(&mut self, value: Quadruple) {
-        if let Ok(mut manager) = MANAGER.try_lock() {
-            manager.update_instruction(self.position, value);
-            self.released = true;
-        } else {
-            panic!("Manager lock could not be acquired!");
-        }
+    pub fn release(&mut self, manager: &mut Manager, value: Quadruple) {
+        manager.update_instruction(self.position, value);
+        self.released = true;
     }
 }

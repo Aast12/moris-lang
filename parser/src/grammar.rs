@@ -1,12 +1,12 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: ee203c7b743e8a2aaf5dc927dfbd5620fb817a4c2abd0034bc1fc41e44b1d6d3
+// sha3: 60c69d34a75858cb958e238a14323e72158a38eaefdfc01fe8b113f0d30c4e9e
 use std::str::FromStr;
 use crate::{Dimension};
 use crate::types::{Operator, Variable};
 use memory::types::DataType;
 use crate::functions::{Function, FunctionParam, FunctionSignature};
 use crate::expressions::{Expression, Index};
-use crate::expressions::constant::{Const, TypeConst};
+use crate::expressions::constant::{Const};
 use crate::expressions::id::{Access, Id};
 use crate::expressions::operation::Operation;
 use crate::expressions::call::Call;
@@ -28,7 +28,7 @@ mod __parse__PProgram {
     use memory::types::DataType;
     use crate::functions::{Function, FunctionParam, FunctionSignature};
     use crate::expressions::{Expression, Index};
-    use crate::expressions::constant::{Const, TypeConst};
+    use crate::expressions::constant::{Const};
     use crate::expressions::id::{Access, Id};
     use crate::expressions::operation::Operation;
     use crate::expressions::call::Call;
@@ -4794,7 +4794,7 @@ mod __intern_token {
     use memory::types::DataType;
     use crate::functions::{Function, FunctionParam, FunctionSignature};
     use crate::expressions::{Expression, Index};
-    use crate::expressions::constant::{Const, TypeConst};
+    use crate::expressions::constant::{Const};
     use crate::expressions::id::{Access, Id};
     use crate::expressions::operation::Operation;
     use crate::expressions::call::Call;

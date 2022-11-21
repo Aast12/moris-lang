@@ -13,4 +13,4 @@ fn fibonacci(n: int): int {
     return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-let result:int = fibonacci(10);
+let result: int = fibonacci(10);
