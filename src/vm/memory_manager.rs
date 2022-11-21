@@ -23,6 +23,7 @@ pub enum Item {
     // DataFrame(),
     // Series,
     Pointer(MemAddress),
+    ArrayEnd,
 }
 
 impl Item {
@@ -51,6 +52,7 @@ impl Display for Item {
             Item::Bool(item) => write!(fmt, "{}", item),
             Item::String(item) => write!(fmt, "{}", item),
             Item::Pointer(item) => write!(fmt, "prt({})", item),
+            Item::ArrayEnd => write!(fmt, "END"),
         }
     }
 }
@@ -218,7 +220,7 @@ impl MemoryManager {
         if address.starts_with("*") {
             let address = address[1..].parse::<MemAddress>().unwrap();
 
-            let accesed = self._get(address);
+            let accesed = self._get(address).unwrap();
             match accesed {
                 Item::Pointer(addr) => *addr as MemAddress,
                 _ => panic!("Element is not a pointer"),
@@ -237,35 +239,44 @@ impl MemoryManager {
         };
     }
 
-    fn _get(&self, address: MemAddress) -> &Item {
+    fn _get(&self, address: MemAddress) -> Result<&Item, String> {
         if let Some(scope) = MemoryResolver::get_scope_from_address(address) {
             match scope {
                 MemoryScope::Global | MemoryScope::Constant => self._get_global(address),
                 MemoryScope::Local => self._get_local(address),
             }
         } else {
-            panic!("{address} is not a valid address");
+            Err(format!("{address} is not a valid address"))
         }
     }
 
-    fn _get_global(&self, address: MemAddress) -> &Item {
+    fn _get_global(&self, address: MemAddress) -> Result<&Item, String> {
         if let Some(item) = self.globals.get(&address) {
-            item
+            Ok(item)
         } else {
-            panic!("Cant find global address {address}");
+            Err(format!("Cant find global address {address}"))
         }
     }
 
-    fn _get_local(&self, address: MemAddress) -> &Item {
+    fn _get_local(&self, address: MemAddress) -> Result<&Item, String> {
         if let Some(item) = self.curr_locals().get(&address) {
-            item
+            Ok(item)
         } else {
-            panic!("Cant find local address {address}");
+            Err(format!("Cant find local address {address}"))
         }
     }
 
     pub fn resolved_get(&mut self, address: MemAddress) -> Item {
-        self._get(address).clone()
+        self._get(address).unwrap().clone()
+    }
+
+    pub fn safe_resolved_get(&mut self, address: MemAddress) -> Result<Item, String> {
+        let res = self._get(address);
+        if let Ok(item) = res {
+            Ok(item.clone())
+        } else {
+            Err(res.unwrap_err())
+        }
     }
 
     pub fn safe_get(&mut self, address: &String) -> Result<Item, String> {
@@ -296,6 +307,10 @@ impl MemoryManager {
     }
 
     pub fn get(&mut self, address: &String) -> Item {
-        self.safe_get(address).unwrap()
+        if address == "END" {
+            return Item::ArrayEnd;
+        } else {
+            self.safe_get(address).unwrap()
+        }
     }
 }

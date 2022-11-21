@@ -331,6 +331,38 @@ impl VirtualMachine {
                     if let Ok(native_func) = NativeFunctions::from_str(function_id) {
                         let params = self.memory.pop_params();
                         println!("Call func {} with params: {:#?}", native_func, params);
+
+                        match native_func {
+                            NativeFunctions::Zeros => {
+                                let array_address = params.get(0).unwrap();
+                                dbg!(array_address);
+                                if let Item::Pointer(array_address) = array_address {
+                                    let mut curr_address = *array_address;
+                                    while true {
+                                        let t = self.memory.safe_resolved_get(curr_address);
+
+                                        if let Ok(item) = t {
+                                            if item == Item::ArrayEnd {
+                                                println!("ARRAY END");
+                                                break;
+                                            }
+                                            self.memory.update(curr_address, Item::Int(0));
+                                        } else {
+                                            println!("UPDATING {}", curr_address);
+                                            self.memory.update(curr_address, Item::Int(0));
+                                        }
+
+                                        curr_address += 1;
+                                    }
+                                }
+                            }
+                            NativeFunctions::Split => todo!(),
+                            NativeFunctions::ReadCsv => todo!(),
+                            NativeFunctions::Select => todo!(),
+                            NativeFunctions::ToCsv => todo!(),
+                            _ => todo!(),
+                        }
+
                         pre_call_stack.pop_back();
                     } else {
                         call_pointer.push_back(instruction_pointer + 1);

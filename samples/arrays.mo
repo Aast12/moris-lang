@@ -19,3 +19,8 @@ println("ROW", row[3]);
 row[3] = 77;
 println("MAT", matrix[2][3]);
 
+let str_array: str[10];
+
+str_array[2] = "hello";
+str_array[3] = "world";
+println("str array", str_array[2] + " " + str_array[3]);

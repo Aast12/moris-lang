@@ -156,7 +156,7 @@ impl Environment {
     pub fn allocate_array(&mut self, data_type: &DataType, dimension: &Dimension) -> MemAddress {
         let Dimension {
             dimensions: _,
-            shape,
+            shape: _,
             size,
             acc_size: _,
         } = dimension;
@@ -165,7 +165,7 @@ impl Environment {
 
         address = self
             .allocator
-            .assign_location(&self.current_scope, data_type, *size);
+            .assign_location(&self.current_scope, data_type, *size + 1); // Adds an extra space to mark end of array
 
         address
     }

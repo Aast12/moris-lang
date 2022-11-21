@@ -36,6 +36,8 @@ impl Inspector {
 
         let mut vm = VirtualMachine::load("program.o");
 
+        dbg!(&vm.data.quadruples);
+
         vm.execute();
 
         Inspector {

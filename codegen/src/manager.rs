@@ -17,7 +17,7 @@ use crate::{
 };
 use parser::{
     expressions::constant::Const,
-    functions::{Function, FunctionParam, FunctionSignature},
+    functions::{FunctionParam, FunctionSignature},
     semantics::ExitStatement,
     types::Variable,
     Dimension,

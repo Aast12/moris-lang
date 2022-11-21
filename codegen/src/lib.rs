@@ -48,8 +48,8 @@ pub fn generate(path: &PathBuf) {
     let native_functions = vec![
         FunctionSignature {
             id: NativeFunctions::Zeros.to_string(),
-            params: vec![FunctionParam::new_scalar("size", DataType::Int)],
-            data_type: DataType::Pointer,
+            params: vec![FunctionParam::new_scalar("arr", DataType::Pointer)],
+            data_type: DataType::Void,
             is_native: true,
         },
         FunctionSignature {
@@ -122,7 +122,14 @@ impl Node for Variable {
                 format!("&{}", array_address).as_str(),
                 "",
                 format!("{}", var_address).as_str(),
-            ))
+            ));
+
+            manager.emit(Quadruple::operation(
+                Operator::Assign,
+                "END",
+                "",
+                format!("{}", array_address + self.dimension.size as MemAddress).as_str(),
+            ));
         }
 
         drop(manager);
@@ -891,7 +898,7 @@ impl Node for Call {
                     }
                     return String::from("VOID");
                 }
-                _ => todo!(),
+                _ => (),
             }
         }
 
@@ -914,8 +921,16 @@ impl Node for Call {
 
         for (index, param) in self.params.iter().enumerate() {
             let (_, def_param_data_type, _) = param_defintions.get(index).unwrap();
+
+            if def_param_data_type == &DataType::Pointer && param.dimensionality().len() > 0 {
+                let param_address = param.reduce();
+                GlobalManager::emit(Quadruple::param(param_address.as_str(), index));
+                continue;
+            }
+
             let mut param_address = param.reduce();
             let param_data_type = param.data_type();
+            
             assert!(
                 DataType::equivalent(&param_data_type, def_param_data_type).is_ok(),
                 "Data type {:?} cannot be assigned to a variable {:?}.",
