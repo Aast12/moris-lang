@@ -10,14 +10,14 @@ pub mod env;
 pub mod manager;
 pub mod meta;
 pub mod natives;
+pub mod node;
 pub mod quadruples;
 pub mod symbols;
-pub mod node;
 
 /// Generates the code for an input file.
-/// 
+///
 /// All the program metadata and quadruples will be stored in the manager object.
-pub fn generate(path: &PathBuf, manager: &mut Manager) {
+pub fn generate(path: &str, manager: &mut Manager) {
     let native_functions = NativeFunctions::get_function_definitions();
 
     native_functions.iter().for_each(|func| {
@@ -29,7 +29,6 @@ pub fn generate(path: &PathBuf, manager: &mut Manager) {
         manager.new_func(&func, 0, return_address, false);
     });
 
-    let path = path.to_str().unwrap();
     let mut test_program = try_file(path);
     test_program.generate(manager);
 }

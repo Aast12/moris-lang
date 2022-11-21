@@ -1,4 +1,4 @@
-use moris_lang::vm::{memory_manager::Item, test::Inspector};
+use moris_lang::vm::{memory_manager::Item, inspector::Inspector};
 use serial_test::file_serial;
 
 fn test_file(file_name: &str) -> Inspector {

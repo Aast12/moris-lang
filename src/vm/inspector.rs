@@ -1,13 +1,10 @@
-use std::path::PathBuf;
 use std::{collections::HashMap, path::Path};
-
-use codegen::generate;
-use codegen::manager::Manager;
 
 use memory::resolver::MemAddress;
 
+use crate::vm::runner::Runner;
+
 use super::memory_manager::Item;
-use super::virtual_machine::VirtualMachine;
 
 type TargetMeta = HashMap<String, MemAddress>;
 
@@ -19,8 +16,12 @@ pub struct Inspector {
 impl Inspector {
     pub fn new(path: &str) -> Inspector {
         let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join(path);
-        let mut manager = Manager::new();
-        generate(&path_buf, &mut manager);
+
+        let mut runner = Runner::new(path_buf.to_str().unwrap()).unwrap();
+
+        runner.compile();
+
+        let manager = &runner.manager;
 
         let target_meta: TargetMeta;
         if let Some(global_env) = manager.env.entries.get("global") {
@@ -33,14 +34,8 @@ impl Inspector {
             panic!("Can't parse global environment!")
         }
 
-        manager.dump(&PathBuf::from("./program.o"));
-        manager.reset();
-
-        let mut vm = VirtualMachine::load("./program.o");
-
-        dbg!(&vm.data.quadruples);
-
-        vm.execute();
+        runner.clean();
+        let vm = runner.run();
 
         Inspector {
             target_meta,
