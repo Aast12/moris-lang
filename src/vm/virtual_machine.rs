@@ -369,11 +369,51 @@ impl VirtualMachine {
                                                 DataType::Float => memory.update(
                                                     next_address,
                                                     Item::Float(
-                                                        rand::thread_rng().gen_range(min..max) as FloatType,
+                                                        rand::thread_rng().gen_range(min as FloatType..max as FloatType),
                                                     ),
                                                 ),
                                                 _ => panic!("Can't fill array of type {:#?} with random numbers!", array_type),
                                             };
+                                        },
+                                    );
+                                }
+                            }
+                            NativeFunctions::ScalarMul => {
+                                let params = self.memory.pop_params();
+                                let array_pointer = params.get(0).unwrap();
+                                let factor = params.get(1).unwrap().to_owned();
+                                let factor = factor.unwrap_float();
+
+                                if let Item::Pointer(array_address) = array_pointer {
+                                    let array_type =
+                                        MemoryResolver::get_type_from_address(*array_address)
+                                            .unwrap();
+                                    
+                                    println!("ALTERATIRNG {:#?}", array_type);
+
+                                    self.memory.alter_array(
+                                        array_address,
+                                        |memory, (next_address, value)| {
+                                            if let Some(value) = value {
+                                                match array_type {
+                                                    DataType::Int => memory.update(
+                                                        next_address,
+                                                        Item::Int(
+                                                            value.unwrap_int() * factor as IntType,
+                                                        ),
+                                                    ),
+                                                    DataType::Float => memory.update(
+                                                        next_address,
+                                                        Item::Float(
+                                                            value.unwrap_float() * factor,
+                                                        ),
+                                                    ),
+                                                    _ => panic!("Can't fill array of type {:#?} with random numbers!", array_type),
+                                                };
+                                            } else {
+                                                panic!("Undefined element in array multiplication!")
+                                            }
+                                           
                                         },
                                     );
                                 }

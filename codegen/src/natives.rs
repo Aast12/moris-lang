@@ -23,6 +23,7 @@ pub enum NativeFunctions {
     Zeros,
     Random,
     RandomFill,
+    ScalarMul,
     ReadCsv,
     Select,
     ToCsv,
@@ -62,6 +63,13 @@ impl NativeFunctions {
                             FunctionParam::new_scalar("arr", DataType::Pointer),
                             FunctionParam::new_scalar("min", DataType::Int),
                             FunctionParam::new_scalar("max", DataType::Int),
+                        ],
+                    ),
+                    NativeFunctions::ScalarMul => (
+                        DataType::Void,
+                        vec![
+                            FunctionParam::new_scalar("arr", DataType::Pointer),
+                            FunctionParam::new_scalar("factor", DataType::Float),
                         ],
                     ),
                     NativeFunctions::ReadCsv => (
