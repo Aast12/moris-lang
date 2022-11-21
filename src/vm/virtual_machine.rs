@@ -1,5 +1,5 @@
 use core::panic;
-use std::{cmp::Ordering, collections::LinkedList, fs::File, str::FromStr};
+use std::{cmp::Ordering, collections::LinkedList, fs::File, io, iter::zip, str::FromStr};
 
 use codegen::{meta::ProgramMeta, natives::NativeFunctions, quadruples::Quadruple};
 
@@ -327,7 +327,6 @@ impl VirtualMachine {
                             NativeFunctions::Zeros => {
                                 let params = self.memory.pop_params();
                                 let array_pointer = params.get(0).unwrap();
-                                dbg!(array_pointer);
 
                                 if let Item::Pointer(array_address) = array_pointer {
                                     self.memory.alter_array(
@@ -340,7 +339,40 @@ impl VirtualMachine {
                             }
                             NativeFunctions::Read => {
                                 let params = self.memory.pop_params_address();
-                                dbg!(params);
+
+                                let mut in_line = String::new();
+
+                                io::stdin()
+                                    .read_line(&mut in_line)
+                                    .expect("failed to readline");
+
+                                while in_line.ends_with('\n') || in_line.ends_with('\n') {
+                                    in_line.pop();
+                                }
+
+                                let inputs: Vec<&str> = in_line.split(' ').collect();
+
+                                zip(inputs, params).for_each(|(input, param_addr)| {
+                                    let input_type =
+                                        MemoryResolver::get_type_from_address(param_addr).unwrap();
+                                    let item = match input_type {
+                                        DataType::Int => match input.parse::<IntType>() {
+                                            Ok(parsed) => Item::Int(parsed),
+                                            Err(err) => panic!("{:#?}", err),
+                                        },
+                                        DataType::Float => match input.parse::<FloatType>() {
+                                            Ok(parsed) => Item::Float(parsed),
+                                            Err(err) => panic!("{:#?}", err),
+                                        },
+                                        DataType::String => Item::String(input.to_string()),
+                                        _ => panic!(
+                                            "Type {:#?} can't be parsed from a string",
+                                            input_type
+                                        ),
+                                    };
+
+                                    self.memory.update(param_addr, item)
+                                });
                             }
                             NativeFunctions::ReadCsv => todo!(),
                             NativeFunctions::Select => todo!(),

@@ -99,8 +99,14 @@ impl NativeFunctions {
                     GlobalManager::emit(Quadruple::era(id));
 
                     ctx.params.iter().enumerate().for_each(|(index, param)| {
-                        let value = param.reduce();
-                        GlobalManager::emit(Quadruple::param(value.as_str(), index));
+                        match **param {
+                            parser::expressions::Expression::Access(_) => (),
+                            _ => panic!("Can only read values from variables"),
+                        };
+                        
+                        let value_addr = param.reduce();
+
+                        GlobalManager::emit(Quadruple::param(value_addr.as_str(), index));
                     });
 
                     GlobalManager::emit(Quadruple::go_sub(id));
