@@ -12,8 +12,9 @@ use memory::{
     virtual_allocator::VirtualAllocator,
 };
 
-use crate::symbols::{SymbolEntry};
+use crate::symbols::SymbolEntry;
 
+/// Represents an Environment entry to represent call contexts / scopes.
 #[derive(Debug)]
 pub struct EnvEntry {
     pub is_global: bool,
@@ -22,6 +23,11 @@ pub struct EnvEntry {
     pub symbols: HashMap<String, SymbolEntry>,
 }
 
+/// Manager for the current declaration environments.
+///
+/// Keeps track of the current environment and the allocation of
+/// items within it. Also holds the data of multiple environments
+/// and allow switching betweent them.
 #[derive(Debug)]
 pub struct Environment {
     pub current_env: String,
@@ -70,6 +76,8 @@ impl Environment {
         self.entries.remove(id);
     }
 
+    /// Switches the current environment to one with a given id ("global" or a function id).
+    /// New entries will be declared under this new environment.
     pub fn switch(&mut self, id: &String) {
         if let Some(_) = self.entries.get(id) {
             self.current_env = id.clone();
@@ -139,6 +147,7 @@ impl Environment {
         }
     }
 
+    /// Separates the space for an array of a given dimension
     pub fn allocate_array(&mut self, data_type: &DataType, dimension: &Dimension) -> MemAddress {
         let Dimension {
             dimensions: _,
@@ -156,6 +165,7 @@ impl Environment {
         address
     }
 
+    /// Adds a new variable to the current declaration environment.
     pub fn add_var(
         &mut self,
         id: &String,
@@ -203,6 +213,7 @@ impl Environment {
         address
     }
 
+    /// Deletes a variable to the current declaration environment.
     pub fn del_var(&mut self, id: &String) {
         self.current_env_mut().delete(id);
     }
@@ -277,18 +288,15 @@ impl SymbolEntry {
     pub fn new_vec(
         id: String,
         data_type: DataType,
-        // shape: Vec<usize>,
         address: MemAddress,
-        dimension: Dimension, // size: usize,
+        dimension: Dimension,
         point_address: MemAddress,
     ) -> SymbolEntry {
         SymbolEntry {
             id,
             data_type,
             dimension,
-            // shape,
             address,
-            // size,
             point_address: Some(point_address),
             immutable: false,
         }
