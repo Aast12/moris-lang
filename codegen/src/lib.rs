@@ -19,10 +19,11 @@ use parser::{
     statements::{Block, Program, Statement},
     try_file,
     types::{Operator, OperatorType, Variable},
+    Dimension,
 };
 use quadruples::{Quadruple, QuadrupleHold};
-use std::iter::zip;
 use std::{cmp::Ordering, path::PathBuf};
+use std::{iter::zip, os::macos::raw::stat};
 pub mod env;
 pub mod function;
 pub mod manager;
@@ -65,9 +66,10 @@ impl Node for Variable {
     fn generate(&mut self) -> () {
         // Add variable to symbols table
         let mut manager = GlobalManager::get();
-        let var_address = manager
-            .get_env_mut()
-            .add_var(&self.id, &self.data_type, &self.dimension);
+        let var_address =
+            manager
+                .get_env_mut()
+                .add_var(&self.id, &self.data_type, &self.dimension, false);
 
         if self.dimension.size > 1 {
             let array_address = manager
@@ -204,6 +206,10 @@ impl Node for Statement {
                     ))
                 }
 
+                if access.is_immutable() {
+                    panic!("Variable {} can't be mutated", access.id.id);
+                }
+
                 let access = access.reduce();
 
                 GlobalManager::emit(Quadruple::unary(
@@ -259,34 +265,100 @@ impl Node for Statement {
             }
             Statement::For {
                 iterator_id,
-                iterable,
+                range,
                 block,
             } => {
-                // let iterator_temp = GlobalManager::new_temp(iterator_id);
-                // let start_pos = GlobalManager::get_next_pos();
+                let (start, end, step) = range;
+                let start_dt = start.data_type();
+                let end_dt = start.data_type();
+                let step_dt = if let Some(step) = step {
+                    Some(step.data_type())
+                } else {
+                    None
+                };
 
-                // let iterable_item = iterable.reduce();
-                // // Temporal storing condition value
-                // let condition_id = condition.reduce();
+                if DataType::equivalent(&start_dt, &DataType::Int).is_err() {
+                    panic!("For start expression is not numeric");
+                }
+                if DataType::equivalent(&end_dt, &DataType::Int).is_err() {
+                    panic!("For end expression is not numeric");
+                }
+                if let Some(step_dt) = step_dt {
+                    if DataType::equivalent(&step_dt, &DataType::Int).is_err() {
+                        panic!("For step expression is not numeric");
+                    }
+                }
 
-                // // Goto instruction to exit the loop
-                // let mut goto_false_cond = QuadrupleHold::new();
+                let start = start.reduce();
+                let end = end.reduce();
+                let step = if let Some(step) = step {
+                    Some(step.reduce())
+                } else {
+                    None
+                };
 
-                // block.generate();
+                let iterator_address = GlobalManager::get()
+                    .get_env_mut()
+                    .add_var(iterator_id, &DataType::Int, &Dimension::new_scalar(), true)
+                    .to_string();
 
-                // // Emit instruction to return to condition evaluation
-                // let to_start_pos_quadruple = Quadruple::jump("goto", start_pos);
-                // GlobalManager::emit(to_start_pos_quadruple.clone());
+                GlobalManager::emit(Quadruple::unary(
+                    Operator::Assign,
+                    start.as_str(),
+                    iterator_address.as_str(),
+                ));
 
-                // let end_pos = GlobalManager::get_next_pos();
+                let check_tmp = GlobalManager::new_temp(&DataType::Bool).to_string();
 
-                // let to_end_pos_quadruple = Quadruple::jump("goto", end_pos);
+                let return_position = GlobalManager::get_next_pos();
 
-                // // Emit instruction to return to condition evaluation
-                // goto_false_cond.release(Quadruple::jump_check("gotoFalse", &condition_id, end_pos));
+                GlobalManager::emit(Quadruple::operation(
+                    Operator::LessThan,
+                    iterator_address.as_str(),
+                    end.as_str(),
+                    check_tmp.as_str(),
+                ));
 
-                // GlobalManager::resolve_context(&ExitStatement::Continue, to_start_pos_quadruple);
-                // GlobalManager::resolve_context(&ExitStatement::Break, to_end_pos_quadruple);
+                // Quadruple::goto_false(check, position)
+                let mut goto_false_hold = QuadrupleHold::new();
+
+                block.generate();
+
+                if let Some(step) = step {
+                    GlobalManager::emit(Quadruple::operation(
+                        Operator::Add,
+                        iterator_address.as_str(),
+                        step.as_str(),
+                        iterator_address.as_str(),
+                    ));
+                } else {
+                    let increment_tmp = GlobalManager::new_constant(
+                        &DataType::Int,
+                        &Const::new("1", DataType::Int),
+                    )
+                    .to_string();
+
+                    GlobalManager::emit(Quadruple::operation(
+                        Operator::Add,
+                        iterator_address.as_str(),
+                        increment_tmp.as_str(),
+                        iterator_address.as_str(),
+                    ));
+                }
+
+                let to_start_pos_quadruple = Quadruple::goto(return_position);
+                GlobalManager::emit(Quadruple::goto(return_position.clone()));
+
+                let end_pos = GlobalManager::get_next_pos();
+
+                let to_end_pos_quadruple = Quadruple::goto_false(check_tmp.as_str(), end_pos);
+                goto_false_hold.release(to_end_pos_quadruple.clone());
+
+                GlobalManager::resolve_context(&ExitStatement::Continue, to_start_pos_quadruple);
+                GlobalManager::resolve_context(&ExitStatement::Break, to_end_pos_quadruple);
+
+                GlobalManager::get().get_env_mut().del_var(iterator_id);
+                GlobalManager::emit(Quadruple::new("free", "", "", &iterator_address.as_str()));
             }
             Statement::While { condition, block } => {
                 let start_pos = GlobalManager::get_next_pos();
@@ -681,6 +753,27 @@ impl Node for Id {
             return var_entry.address;
         } else {
             panic!("Cannot find id {} in scope", self.id);
+        }
+    }
+}
+
+trait ImmutableVar {
+    fn is_immutable(&self) -> bool {
+        todo!()
+    }
+}
+
+impl ImmutableVar for Access {
+    fn is_immutable(&self) -> bool {
+        let id_var = GlobalManager::get()
+            .get_env_mut()
+            .get_var(&self.id.id)
+            .cloned();
+
+        if let Some(id_var) = id_var {
+            id_var.immutable
+        } else {
+            panic!("Variable {} is not defined", self.id.id);
         }
     }
 }

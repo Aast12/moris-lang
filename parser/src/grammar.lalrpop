@@ -284,10 +284,10 @@ PLoop = {
     PWhileLoop
 }
 
-PForLoop: Statement = FOR <id: ID> IN <iterable: PExpr> RPAREN <block: PBlock> =>
+PForLoop: Statement = FOR <id: ID> IN <start: PExpr> COLON <end: PExpr> <step: (COLON <PExpr>)?>  RPAREN <block: PBlock> =>
     Statement::For {
         iterator_id: String::from(id),
-        iterable: iterable,
+        range: (start, end, step),
         block: block
     };
 

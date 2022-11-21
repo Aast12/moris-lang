@@ -17,7 +17,7 @@ pub enum Statement {
     },
     For {
         iterator_id: String,
-        iterable: Box<Expression>,
+        range: (Box<Expression>, Box<Expression>, Option<Box<Expression>>),
         block: Block,
     },
     While {
@@ -54,12 +54,12 @@ impl Debug for Statement {
             }
             Statement::For {
                 iterator_id,
-                iterable,
+                range,
                 block,
             } => write!(
                 fmt,
                 "FOR ({:#?} IN {:#?}) {{\n {:#?}\n}}",
-                iterator_id, iterable, block
+                iterator_id, range, block
             ),
             Statement::While { condition, block } => {
                 write!(fmt, "WHILE ({:#?}) {{\n {:#?}\n}}", condition, block)

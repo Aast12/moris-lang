@@ -24,6 +24,7 @@ pub struct SymbolEntry {
     pub point_address: Option<MemAddress>,
     pub symbol_type: SymbolType,
     pub data_type: DataType,
+    pub immutable: bool,
     // pub dimension: usize,
     pub dimension: Dimension,
     // pub shape: Vec<usize>,
@@ -149,7 +150,7 @@ impl Environment {
             .insert(id.clone(), EnvEntry::from_func(func, &mut self.allocator));
 
         for FunctionParam(variable) in func.params.iter() {
-            self.add_var(&variable.id, &variable.data_type, &variable.dimension);
+            self.add_var(&variable.id, &variable.data_type, &variable.dimension, false);
         }
     }
 
@@ -175,6 +176,7 @@ impl Environment {
         id: &String,
         data_type: &DataType,
         dimension: &Dimension,
+        immutable: bool
     ) -> MemAddress {
         let Dimension {
             dimensions: dim,
@@ -209,6 +211,7 @@ impl Environment {
                 data_type.clone(),
                 address,
                 dimension.clone(),
+                immutable
             ));
         }
 
@@ -302,6 +305,7 @@ impl SymbolEntry {
         data_type: DataType,
         address: MemAddress,
         dimension: Dimension,
+        immutable: bool
     ) -> SymbolEntry {
         SymbolEntry {
             id,
@@ -310,6 +314,7 @@ impl SymbolEntry {
             dimension,
             address,
             point_address: None,
+            immutable
         }
     }
 
@@ -330,6 +335,7 @@ impl SymbolEntry {
             address,
             // size,
             point_address: Some(point_address),
+            immutable: false
         }
     }
 }

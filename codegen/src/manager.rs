@@ -168,8 +168,15 @@ impl Manager {
         self.get_env_mut().drop_env(func_id);
     }
 
-    pub fn new_variable(&mut self, id: &String, data_type: &DataType, dimension: &Dimension) {
-        self.get_env_mut().add_var(id, data_type, dimension);
+    pub fn new_variable(
+        &mut self,
+        id: &String,
+        data_type: &DataType,
+        dimension: &Dimension,
+        immutable: bool,
+    ) {
+        self.get_env_mut()
+            .add_var(id, data_type, dimension, immutable);
     }
 
     pub fn remove_variable(&mut self, id: &String) {

@@ -1,7 +1,7 @@
 use core::panic;
 use std::{cmp::Ordering, collections::LinkedList, fs::File, str::FromStr};
 
-use codegen::{meta::ProgramMeta, quadruples::Quadruple, natives::NativeFunctions};
+use codegen::{meta::ProgramMeta, natives::NativeFunctions, quadruples::Quadruple};
 
 use memory::{
     resolver::{MemAddress, MemoryResolver},
@@ -403,6 +403,12 @@ impl VirtualMachine {
                     } else {
                         print!("{}", print_target);
                     }
+                }
+                "free" => {
+                    let Quadruple(_, _, _, address) = curr_instruction;
+
+                    let del_address = self.memory.get_address(address);
+                    self.memory.delete(del_address);
                 }
                 _ => panic!(),
             }
