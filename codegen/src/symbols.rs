@@ -1,9 +1,24 @@
 use memory::{resolver::MemAddress, types::DataType};
 use serde::{Deserialize, Serialize};
 
-use parser::{functions::FunctionSignature};
+use parser::{functions::FunctionSignature, Dimension};
 
 pub type ParamAddress = (MemAddress, DataType, Option<MemAddress>);
+
+#[derive(Debug, Clone)]
+pub enum SymbolType {
+    Variable,
+}
+
+#[derive(Debug, Clone)]
+pub struct SymbolEntry {
+    pub id: String,
+    pub address: MemAddress,
+    pub point_address: Option<MemAddress>,
+    pub data_type: DataType,
+    pub immutable: bool,
+    pub dimension: Dimension,
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FunctionEntry {

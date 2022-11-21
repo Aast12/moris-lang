@@ -2,7 +2,7 @@ use memory::resolver::MemAddress;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use super::{function::FunctionEntry, quadruples::Quadruple};
+use super::{symbols::FunctionEntry, quadruples::Quadruple};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ProgramMeta {

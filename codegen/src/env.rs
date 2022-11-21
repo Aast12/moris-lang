@@ -12,24 +12,7 @@ use memory::{
     virtual_allocator::VirtualAllocator,
 };
 
-#[derive(Debug, Clone)]
-pub enum SymbolType {
-    Variable,
-}
-
-#[derive(Debug, Clone)]
-pub struct SymbolEntry {
-    pub id: String,
-    pub address: MemAddress,
-    pub point_address: Option<MemAddress>,
-    pub symbol_type: SymbolType,
-    pub data_type: DataType,
-    pub immutable: bool,
-    // pub dimension: usize,
-    pub dimension: Dimension,
-    // pub shape: Vec<usize>,
-    // pub size: usize,
-}
+use crate::symbols::{SymbolEntry};
 
 #[derive(Debug)]
 pub struct EnvEntry {
@@ -283,7 +266,6 @@ impl SymbolEntry {
     ) -> SymbolEntry {
         SymbolEntry {
             id,
-            symbol_type: SymbolType::Variable,
             data_type,
             dimension,
             address,
@@ -302,7 +284,6 @@ impl SymbolEntry {
     ) -> SymbolEntry {
         SymbolEntry {
             id,
-            symbol_type: SymbolType::Variable,
             data_type,
             dimension,
             // shape,

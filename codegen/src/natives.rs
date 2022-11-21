@@ -7,7 +7,7 @@ use parser::{
 };
 use strum::{Display, EnumIter, EnumProperty, EnumString, EnumVariantNames, IntoEnumIterator};
 
-use crate::{manager::Manager, node::Node, quadruples::Quadruple};
+use crate::{manager::Manager, node::{ExpressionNode}, quadruples::Quadruple};
 
 #[derive(Debug, PartialEq, EnumString, EnumVariantNames, Display, EnumIter, EnumProperty)]
 #[strum(serialize_all = "snake_case")]

@@ -7,7 +7,7 @@ use std::{collections::HashMap, fmt::Debug, fs::File};
 
 use crate::{
     env::Environment,
-    function::{FunctionEntry, ParamAddress},
+    symbols::{FunctionEntry, ParamAddress},
 };
 use parser::{
     expressions::constant::Const,

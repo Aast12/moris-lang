@@ -7,7 +7,7 @@ use std::{
 
 use variantly::Variantly;
 
-use codegen::{function::FunctionEntry, meta::ProgramMeta};
+use codegen::{symbols::FunctionEntry, meta::ProgramMeta};
 
 use memory::{
     resolver::{MemAddress, MemoryResolver, MemoryScope},
