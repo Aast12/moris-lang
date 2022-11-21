@@ -343,6 +343,41 @@ impl VirtualMachine {
                                     );
                                 }
                             }
+                            NativeFunctions::RandomFill => {
+                                let params = self.memory.pop_params();
+                                let array_pointer = params.get(0).unwrap();
+                                let min = params.get(1).unwrap().to_owned();
+                                let min = min.unwrap_int();
+                                let max = params.get(2).unwrap().to_owned();
+                                let max = max.unwrap_int();
+
+                                if let Item::Pointer(array_address) = array_pointer {
+                                    let array_type =
+                                        MemoryResolver::get_type_from_address(*array_address)
+                                            .unwrap();
+
+                                    self.memory.alter_array(
+                                        array_address,
+                                        |memory, (next_address, _)| {
+                                            match array_type {
+                                                DataType::Int => memory.update(
+                                                    next_address,
+                                                    Item::Int(
+                                                        rand::thread_rng().gen_range(min..max),
+                                                    ),
+                                                ),
+                                                DataType::Float => memory.update(
+                                                    next_address,
+                                                    Item::Float(
+                                                        rand::thread_rng().gen_range(min..max) as FloatType,
+                                                    ),
+                                                ),
+                                                _ => panic!("Can't fill array of type {:#?} with random numbers!", array_type),
+                                            };
+                                        },
+                                    );
+                                }
+                            }
                             NativeFunctions::Read => {
                                 let params = self.memory.pop_params_address();
 

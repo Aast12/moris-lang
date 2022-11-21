@@ -33,13 +33,11 @@ fn print_arr(arr: int[10]): void {
     }
 }
 
-let arr: int[10];
+let arr: float[10];
 let arr_size: int = 10;
 let ascending: bool = true;
 
-for (i in 0 : arr_size) {
-    arr[i] = random() * 100;
-}
+random_fill(arr, 0, 100);
 
 println("Unorted:");
 print_arr(arr);
