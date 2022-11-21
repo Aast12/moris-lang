@@ -22,8 +22,8 @@ use parser::{
     Dimension,
 };
 use quadruples::{Quadruple, QuadrupleHold};
+use std::iter::zip;
 use std::{cmp::Ordering, path::PathBuf};
-use std::{iter::zip, os::macos::raw::stat};
 pub mod env;
 pub mod function;
 pub mod manager;
@@ -975,11 +975,6 @@ impl Node for Call {
                 param_address = value_temp.clone();
             }
 
-            // if let Some(_) = param_pointer_addr {
-            //     GlobalManager::emit(Quadruple::param(format!("*{}", param_address).as_str(), index));
-            // } else {
-            //     GlobalManager::emit(Quadruple::param(param_address.as_str(), index));
-            // }
             GlobalManager::emit(Quadruple::param(param_address.as_str(), index));
         }
 

@@ -64,8 +64,14 @@ impl Inspector {
 
     pub fn debug(&self) {
         self.target_meta.iter().for_each(|(key, value)| {
-            let item = self.memory.get(value).unwrap().clone();
-            println!("({}[{}], {:#?})", key, value, item);
+            let item = self.memory.get(value);
+
+            if let Some(item) = item {
+                println!("({}[{}], {:#?})", key, value, item);
+            } else {
+                println!("({}[{}], UNDEFINED)", key, value);
+
+            }
         });
     }
 }

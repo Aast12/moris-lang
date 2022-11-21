@@ -1,7 +1,7 @@
 use memory::{resolver::MemAddress, types::DataType};
 use serde::{Deserialize, Serialize};
 
-use parser::functions::{FunctionSignature};
+use parser::{functions::FunctionSignature};
 
 pub type ParamAddress = (MemAddress, DataType, Option<MemAddress>);
 

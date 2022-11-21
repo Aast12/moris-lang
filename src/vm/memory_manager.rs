@@ -7,7 +7,7 @@ use std::{
 
 use variantly::Variantly;
 
-use codegen::meta::ProgramMeta;
+use codegen::{function::FunctionEntry, meta::ProgramMeta};
 
 use memory::{
     resolver::{MemAddress, MemoryResolver, MemoryScope},
@@ -58,7 +58,7 @@ impl Display for Item {
 }
 
 // (value address, param address)
-type ParamMapping = (MemAddress, MemAddress);
+type ParamMapping = MemAddress;
 
 #[derive(Debug)]
 pub struct CallHold {
@@ -148,12 +148,22 @@ impl MemoryManager {
         self.call_context.back_mut().unwrap().locals.borrow_mut()
     }
 
+    pub fn pop_params_address(&mut self) -> Vec<MemAddress> {
+        let call_params = self.curr_hold().call_params.clone();
+
+        let params: Vec<MemAddress> = call_params.iter().map(|value_addr| *value_addr).collect();
+
+        self.pop_hold();
+
+        params
+    }
+
     pub fn pop_params(&mut self) -> Vec<Item> {
         let call_params = self.curr_hold().call_params.clone();
 
         let params: Vec<Item> = call_params
             .iter()
-            .map(|(value_addr, _)| {
+            .map(|value_addr| {
                 let value = self.resolved_get(*value_addr);
                 value
             })
@@ -164,9 +174,20 @@ impl MemoryManager {
         params
     }
 
-    pub fn push_context(&mut self) {
+    pub fn push_context(&mut self, context: &FunctionEntry) {
         let call_params = self.curr_hold().call_params.clone();
+
         let procedure_id = self.curr_hold().procedure_id.clone();
+
+        let call_params = call_params
+            .iter()
+            .enumerate()
+            .map(|(param_index, value_addr)| {
+                let (param_addr, _, _) = context.params.get(param_index).unwrap();
+
+                (*value_addr, *param_addr)
+            })
+            .collect::<Vec<(MemAddress, MemAddress)>>();
 
         let locals: HashMap<MemAddress, Item> = call_params
             .iter()
@@ -206,10 +227,8 @@ impl MemoryManager {
         };
     }
 
-    pub fn push_param(&mut self, value_address: MemAddress, param_address: MemAddress) {
-        self.curr_hold_mut()
-            .call_params
-            .push((value_address, param_address));
+    pub fn push_param(&mut self, value_address: MemAddress) {
+        self.curr_hold_mut().call_params.push(value_address);
     }
 
     pub fn pop_hold(&mut self) {

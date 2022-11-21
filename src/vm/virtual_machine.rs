@@ -313,26 +313,19 @@ impl VirtualMachine {
                     pre_call_stack.push_back(function_id.clone());
                 }
                 "param" => {
-                    let Quadruple(_, arg_addr, _, param_index) = curr_instruction;
-                    let function_id = pre_call_stack.back().unwrap();
-                    let call_context = self.data.get_func(function_id);
+                    let Quadruple(_, arg_addr, _, _) = curr_instruction;
 
                     let value_addr = self.memory.get_address(arg_addr);
-                    let (param_addr, _, _) = call_context
-                        .params
-                        .get(param_index.parse::<usize>().unwrap())
-                        .unwrap();
 
-                    self.memory.push_param(value_addr, param_addr.clone());
+                    self.memory.push_param(value_addr);
                 }
                 "gosub" => {
                     let Quadruple(_, _, _, function_id) = curr_instruction;
 
                     if let Ok(native_func) = NativeFunctions::from_str(function_id) {
-                        let params = self.memory.pop_params();
-
                         match native_func {
                             NativeFunctions::Zeros => {
+                                let params = self.memory.pop_params();
                                 let array_pointer = params.get(0).unwrap();
                                 dbg!(array_pointer);
 
@@ -345,6 +338,10 @@ impl VirtualMachine {
                                     );
                                 }
                             }
+                            NativeFunctions::Read => {
+                                let params = self.memory.pop_params_address();
+                                dbg!(params);
+                            }
                             NativeFunctions::ReadCsv => todo!(),
                             NativeFunctions::Select => todo!(),
                             NativeFunctions::ToCsv => todo!(),
@@ -356,7 +353,7 @@ impl VirtualMachine {
                         call_pointer.push_back(instruction_pointer + 1);
 
                         let func_meta = self.data.get_func(&function_id);
-                        self.memory.push_context();
+                        self.memory.push_context(func_meta);
                         pre_call_stack.pop_back();
 
                         // Cleanup function return address to catch no-return errors
