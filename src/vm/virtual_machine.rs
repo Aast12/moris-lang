@@ -1,7 +1,7 @@
 use core::panic;
 use std::{cmp::Ordering, collections::LinkedList, fs::File, str::FromStr};
 
-use codegen::{meta::ProgramMeta, quadruples::Quadruple, NativeFunctions};
+use codegen::{meta::ProgramMeta, quadruples::Quadruple, natives::NativeFunctions};
 
 use memory::{
     resolver::{MemAddress, MemoryResolver},
@@ -345,7 +345,6 @@ impl VirtualMachine {
                                     );
                                 }
                             }
-                            NativeFunctions::Split => todo!(),
                             NativeFunctions::ReadCsv => todo!(),
                             NativeFunctions::Select => todo!(),
                             NativeFunctions::ToCsv => todo!(),

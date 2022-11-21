@@ -14,7 +14,8 @@ lazy_static! {
             (DataType::Int, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 2),        // 4,000 - 5,999
             (DataType::String, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 3),     // 6,000 - 7,999
             (DataType::DataFrame, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 4),  // 8,000 - 9,999
-            (DataType::Pointer, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 5),    // 10,000 - 12,000
+            (DataType::Series, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 5),  // 8,000 - 9,999
+            (DataType::Pointer, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 6),    // 10,000 - 12,000
         ])
     };
 
@@ -43,7 +44,7 @@ pub struct MemoryResolver {}
 
 impl MemoryResolver {
     pub const DATA_TYPE_ALLOC_SIZE: MemAddress = 2_000;
-    pub const SEGMENT_SIZE: MemAddress = Self::DATA_TYPE_ALLOC_SIZE * 6; // 6 - Data types count
+    pub const SEGMENT_SIZE: MemAddress = Self::DATA_TYPE_ALLOC_SIZE * 7; // 7 - Data types count
     pub const GLOBAL_OFFSET: MemAddress = Self::SEGMENT_SIZE * 1;
     pub const LOCAL_OFFSET: MemAddress = Self::SEGMENT_SIZE * 2;
     pub const CONSTANT_OFFSET: MemAddress = Self::SEGMENT_SIZE * 3;
@@ -128,14 +129,19 @@ impl MemoryResolver {
 #[cfg(test)]
 mod tests {
 
+    use crate::{
+        resolver::{MemAddress, MemoryScope, SCOPE_OFFSETS, TYPE_OFFSETS},
+        types::DataType,
+    };
+
+    use super::MemoryResolver;
+
     #[test]
     fn test_offsets() {
-        use crate::memory::{
-            resolver::{MemoryScope, SCOPE_OFFSETS, TYPE_OFFSETS},
-            types::DataType,
-        };
-
-        use super::MemoryResolver;
+        assert_eq!(
+            TYPE_OFFSETS.len() as MemAddress,
+            MemoryResolver::SEGMENT_SIZE / MemoryResolver::DATA_TYPE_ALLOC_SIZE
+        );
 
         assert_eq!(
             MemoryResolver::get_offset(
@@ -149,39 +155,6 @@ mod tests {
                 SCOPE_OFFSETS[&MemoryScope::Local] + TYPE_OFFSETS[&DataType::DataFrame] + 7,
             ),
             (MemoryScope::Local, DataType::DataFrame, 7)
-        );
-
-        assert_eq!(
-            MemoryResolver::get_offset(
-                SCOPE_OFFSETS[&MemoryScope::Constant]
-                    + TYPE_OFFSETS[&DataType::String]
-                    + MemoryResolver::DATA_TYPE_ALLOC_SIZE
-                    - 1,
-            ),
-            (
-                MemoryScope::Constant,
-                DataType::String,
-                MemoryResolver::DATA_TYPE_ALLOC_SIZE - 1
-            )
-        );
-
-        assert_eq!(
-            MemoryResolver::get_offset(
-                SCOPE_OFFSETS[&MemoryScope::Constant]
-                    + TYPE_OFFSETS[&DataType::String]
-                    + MemoryResolver::DATA_TYPE_ALLOC_SIZE,
-            ),
-            (MemoryScope::Constant, DataType::DataFrame, 0)
-        );
-
-        assert_eq!(
-            MemoryResolver::get_offset(
-                SCOPE_OFFSETS[&MemoryScope::Local]
-                    + TYPE_OFFSETS[&DataType::DataFrame]
-                    + MemoryResolver::DATA_TYPE_ALLOC_SIZE
-                    + 5,
-            ),
-            (MemoryScope::Local, DataType::Pointer, 5)
         );
     }
 }

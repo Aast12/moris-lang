@@ -1,10 +1,10 @@
 use env::SymbolEntry;
-use function::FunctionEntry;
 use manager::GlobalManager;
 use memory::{
     resolver::{MemAddress, MemoryResolver},
     types::DataType,
 };
+use natives::NativeFunctions;
 use node::Node;
 use parser::{
     expressions::{
@@ -14,69 +14,26 @@ use parser::{
         operation::Operation,
         Expression, Index,
     },
-    functions::{Function, FunctionParam, FunctionSignature},
+    functions::Function,
     semantics::{ExitStatement, SemanticRules},
     statements::{Block, Program, Statement},
     try_file,
     types::{Operator, OperatorType, Variable},
 };
 use quadruples::{Quadruple, QuadrupleHold};
+use std::iter::zip;
 use std::{cmp::Ordering, path::PathBuf};
-use std::{iter::zip, str::FromStr};
-use strum::{Display, EnumString, EnumVariantNames};
 pub mod env;
 pub mod function;
 pub mod manager;
 pub mod meta;
+pub mod natives;
 pub mod quadruples;
 
 pub mod node;
 
-#[derive(Debug, PartialEq, EnumString, EnumVariantNames, Display)]
-#[strum(serialize_all = "snake_case")]
-pub enum NativeFunctions {
-    Print,
-    Println,
-    Zeros,
-    Split,
-    ReadCsv,
-    Select,
-    ToCsv,
-}
-
 pub fn generate(path: &PathBuf) {
-    let native_functions = vec![
-        FunctionSignature {
-            id: NativeFunctions::Zeros.to_string(),
-            params: vec![FunctionParam::new_scalar("arr", DataType::Pointer)],
-            data_type: DataType::Void,
-            is_native: true,
-        },
-        FunctionSignature {
-            id: NativeFunctions::Split.to_string(),
-            params: vec![],
-            data_type: DataType::Pointer,
-            is_native: true,
-        },
-        FunctionSignature {
-            id: NativeFunctions::ReadCsv.to_string(),
-            params: vec![],
-            data_type: DataType::DataFrame,
-            is_native: true,
-        },
-        FunctionSignature {
-            id: NativeFunctions::Select.to_string(),
-            params: vec![],
-            data_type: DataType::DataFrame,
-            is_native: true,
-        },
-        FunctionSignature {
-            id: NativeFunctions::ToCsv.to_string(),
-            params: vec![FunctionParam::new_scalar("df", DataType::DataFrame)],
-            data_type: DataType::Void,
-            is_native: true,
-        },
-    ];
+    let native_functions = NativeFunctions::get_function_definitions();
 
     let mut manager = GlobalManager::get();
 
@@ -860,11 +817,8 @@ impl Node for Access {
 
 impl Node for Call {
     fn data_type(&self) -> DataType {
-        if let Ok(function_id) = NativeFunctions::from_str(self.id.as_str()) {
-            match function_id {
-                NativeFunctions::Print | NativeFunctions::Println => DataType::Void, // Functions with no formal definition e.g. infinite params
-                _ => GlobalManager::get().get_func(&self.id).return_type.clone(),
-            }
+        if let Some(data_type) = NativeFunctions::data_type(&self.id) {
+            data_type
         } else {
             GlobalManager::get().get_func(&self.id).return_type.clone()
         }
@@ -875,31 +829,8 @@ impl Node for Call {
     }
 
     fn reduce(&self) -> String {
-        let id = self.id.as_str();
-        if let Ok(function_id) = NativeFunctions::from_str(id) {
-            match function_id {
-                NativeFunctions::Print | NativeFunctions::Println => {
-                    self.params.iter().for_each(|param| {
-                        let value = param.reduce();
-                        GlobalManager::emit(Quadruple::new(
-                            NativeFunctions::Print.to_string().as_str(),
-                            "",
-                            "",
-                            value.as_str(),
-                        ));
-                    });
-                    if function_id == NativeFunctions::Println {
-                        GlobalManager::emit(Quadruple::new(
-                            NativeFunctions::Print.to_string().as_str(),
-                            "",
-                            "",
-                            "\n",
-                        ));
-                    }
-                    return String::from("VOID");
-                }
-                _ => (),
-            }
+        if let Some(return_value) = NativeFunctions::call_reduce(self) {
+            return return_value;
         }
 
         let man = GlobalManager::get();
@@ -930,7 +861,7 @@ impl Node for Call {
 
             let mut param_address = param.reduce();
             let param_data_type = param.data_type();
-            
+
             assert!(
                 DataType::equivalent(&param_data_type, def_param_data_type).is_ok(),
                 "Data type {:?} cannot be assigned to a variable {:?}.",
