@@ -330,7 +330,6 @@ impl VirtualMachine {
 
                     if let Ok(native_func) = NativeFunctions::from_str(function_id) {
                         let params = self.memory.pop_params();
-                        println!("Call func {} with params: {:#?}", native_func, params);
 
                         match native_func {
                             NativeFunctions::Zeros => {
@@ -343,12 +342,10 @@ impl VirtualMachine {
 
                                         if let Ok(item) = t {
                                             if item == Item::ArrayEnd {
-                                                println!("ARRAY END");
                                                 break;
                                             }
                                             self.memory.update(curr_address, Item::Int(0));
                                         } else {
-                                            println!("UPDATING {}", curr_address);
                                             self.memory.update(curr_address, Item::Int(0));
                                         }
 
