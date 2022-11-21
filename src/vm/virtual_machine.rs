@@ -7,6 +7,7 @@ use memory::{
     resolver::{MemAddress, MemoryResolver},
     types::{DataType, FloatType, IntType},
 };
+use polars::prelude::{CsvReader, SerReader};
 
 use super::memory_manager::{Item, MemoryManager};
 
@@ -214,6 +215,12 @@ impl VirtualMachine {
         }
     }
 
+    pub fn return_value(&mut self, function_id: &String, value: Item) {
+        let func_meta = self.data.get_func(&function_id);
+        let return_addr = func_meta.return_address.unwrap();
+        self.memory.update(return_addr, value);
+    }
+
     pub fn execute(&mut self) {
         let mut instruction_pointer = 0;
         let mut call_pointer: LinkedList<usize> = LinkedList::new();
@@ -371,7 +378,30 @@ impl VirtualMachine {
                                     self.memory.update(param_addr, item)
                                 });
                             }
-                            NativeFunctions::ReadCsv => todo!(),
+                            NativeFunctions::ReadCsv => {
+                                let params = self.memory.pop_params();
+                                let file_path = params.get(0).unwrap();
+
+                                if let Item::String(file_path) = file_path {
+                                    let csv = CsvReader::from_path(file_path.as_str());
+                                    if let Ok(df) = csv {
+                                        let df_result = df.with_ignore_parser_errors(true).finish();
+                                        if let Ok(df) = df_result {
+                                            self.return_value(
+                                                &NativeFunctions::ReadCsv.to_string(),
+                                                Item::DataFrame(df),
+                                            );
+                                        } else {
+                                            panic!(
+                                                "Could not read file {file_path} -> {}",
+                                                df_result.unwrap_err()
+                                            );
+                                        }
+                                    } else {
+                                        panic!("Could not read file {file_path}");
+                                    }
+                                }
+                            }
                             NativeFunctions::Select => todo!(),
                             NativeFunctions::ToCsv => todo!(),
                             _ => todo!(),

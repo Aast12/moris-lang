@@ -7,9 +7,9 @@ use parser::{
 };
 use strum::{Display, EnumIter, EnumProperty, EnumString, EnumVariantNames, IntoEnumIterator};
 
-use crate::{manager::Manager, node::{ExpressionNode}, quadruples::Quadruple};
+use crate::{manager::Manager, node::ExpressionNode, quadruples::Quadruple};
 
-/// Defines all the native functions whose implementation is in the side 
+/// Defines all the native functions whose implementation is in the side
 /// of the virtual machine
 #[derive(Debug, PartialEq, EnumString, EnumVariantNames, Display, EnumIter, EnumProperty)]
 #[strum(serialize_all = "snake_case")]
@@ -54,7 +54,10 @@ impl NativeFunctions {
                         DataType::Void,
                         vec![FunctionParam::new_scalar("arr", DataType::Pointer)],
                     ),
-                    NativeFunctions::ReadCsv => (DataType::DataFrame, vec![]),
+                    NativeFunctions::ReadCsv => (
+                        DataType::DataFrame,
+                        vec![FunctionParam::new_scalar("file_path", DataType::String)],
+                    ),
                     NativeFunctions::Select => (DataType::Series, vec![]),
                     NativeFunctions::ToCsv => (
                         DataType::Void,
