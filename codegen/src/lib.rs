@@ -3,7 +3,6 @@ use memory::types::DataType;
 use natives::NativeFunctions;
 use node::Node;
 use parser::try_file;
-use std::path::PathBuf;
 
 pub mod ast_nodes;
 pub mod env;

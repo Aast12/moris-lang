@@ -99,7 +99,8 @@ impl Environment {
                         counters.insert(
                             entry.data_type.clone(),
                             counters.get(&entry.data_type.clone()).unwrap_or(&0)
-                                + entry.dimension.size,
+                                + entry.dimension.size
+                                + 1,
                         );
                     } else {
                         counters.insert(
