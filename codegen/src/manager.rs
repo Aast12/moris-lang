@@ -60,8 +60,8 @@ impl Manager {
         self.procedure_table = HashMap::new();
     }
 
-    /// Serializeas and dumps the generated program data
-    /// (quadruples, constant and procedure tables) into a object file.
+    /// Serializes and dumps the generated program data
+    /// (quadruples, constant and procedure tables) into an object file.
     pub fn dump(&self, file_path: &PathBuf) {
         let meta = ProgramMeta {
             quadruples: self.quadruples.clone(),

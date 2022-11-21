@@ -11,6 +11,8 @@ use polars::prelude::{CsvReader, SerReader};
 
 use super::memory_manager::{Item, MemoryManager};
 
+use rand::Rng;
+
 macro_rules! match_types {
     ($typ:tt, $left:expr, $right:expr) => {{
         if let Item::$typ(op1) = $left {
@@ -225,7 +227,7 @@ impl VirtualMachine {
         let mut instruction_pointer = 0;
         let mut call_pointer: LinkedList<usize> = LinkedList::new();
         let mut pre_call_stack: LinkedList<String> = LinkedList::new();
-
+        let mut rng = rand::thread_rng();
         let quadruples: Vec<Quadruple> = self.data.quadruples.drain(..).collect();
 
         while instruction_pointer < quadruples.len() {
@@ -401,6 +403,13 @@ impl VirtualMachine {
                                         panic!("Could not read file {file_path}");
                                     }
                                 }
+                            }
+                            NativeFunctions::Random => {
+                                self.memory.pop_params();
+                                self.return_value(
+                                    &NativeFunctions::Random.to_string(),
+                                    Item::Float(rng.gen_range(0.0..1.0)),
+                                );
                             }
                             NativeFunctions::Select => todo!(),
                             NativeFunctions::ToCsv => todo!(),

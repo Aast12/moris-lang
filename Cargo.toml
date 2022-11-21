@@ -11,6 +11,7 @@ lalrpop-util = { version = "^0.19", features = ["lexer"] }
 memory = { version = "0.1.0", path = "memory" }
 parser = { version = "0.1.0", path = "parser" }
 polars = "0.25.1"
+rand = "0.8.5"
 regex = "1"
 serde-pickle = "1.1.1"
 serial_test = { version = "0.9.0", features = ["file_locks"]}

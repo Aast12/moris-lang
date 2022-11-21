@@ -21,6 +21,7 @@ pub enum NativeFunctions {
     #[strum(props(check_params = "false"))]
     Read,
     Zeros,
+    Random,
     ReadCsv,
     Select,
     ToCsv,
@@ -63,6 +64,7 @@ impl NativeFunctions {
                         DataType::Void,
                         vec![FunctionParam::new_scalar("df", DataType::DataFrame)],
                     ),
+                    NativeFunctions::Random => (DataType::Float, vec![]),
                     _ => panic!(),
                 };
 

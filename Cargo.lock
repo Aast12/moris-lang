@@ -908,6 +908,7 @@ dependencies = [
  "memory",
  "parser",
  "polars",
+ "rand",
  "regex",
  "serde-pickle",
  "serial_test",
