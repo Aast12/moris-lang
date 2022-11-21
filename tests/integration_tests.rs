@@ -39,7 +39,8 @@ fn test_fibonacci_memo() {
     println!("STARTING fibonacci_memo");
     let data = test_file("fibonacci_memo.mo");
     assert_eq!(data.get("i"), Item::Int(500));
-    assert_eq!(data.get("y"), Item::Int(12586269025));
+    assert_eq!(data.get("recursive_result"), Item::Int(12586269025));
+    assert_eq!(data.get("iter_result"), Item::Int(12586269025));
 }
 
 #[test]

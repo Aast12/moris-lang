@@ -24,7 +24,7 @@ impl Inspector {
         let target_meta: TargetMeta;
         if let Some(global_env) = manager.env.entries.get("global") {
             target_meta = global_env
-                .3
+                .symbols
                 .iter()
                 .map(|(id, entry)| (id.clone(), entry.address))
                 .collect::<TargetMeta>();
