@@ -3,7 +3,7 @@ use memory::{
     resolver::{MemAddress, MemoryScope},
     types::DataType,
 };
-use std::{collections::HashMap, fmt::Debug, fs::File};
+use std::{collections::HashMap, fmt::Debug, fs::File, path::PathBuf};
 
 use crate::{
     env::Environment,
@@ -19,6 +19,15 @@ use parser::{
 
 use super::{meta::ProgramMeta, quadruples::Quadruple};
 
+/// Object to manage the code generation.
+///
+/// Holds an environment object to track all variable and
+/// function (environments) declarations and their
+/// corresponding memory addresses.
+///
+/// Serves as interface to emit quadruples from external
+/// code generation.
+///
 #[derive(Debug)]
 pub struct Manager {
     pub env: Environment,
@@ -41,6 +50,7 @@ impl Manager {
         }
     }
 
+    /// Resets the manager to a clean state.
     pub fn reset(&mut self) {
         self.instruction_counter = 0;
         self.quadruples = vec![];
@@ -50,7 +60,9 @@ impl Manager {
         self.procedure_table = HashMap::new();
     }
 
-    pub fn dump(&self) {
+    /// Serializeas and dumps the generated program data
+    /// (quadruples, constant and procedure tables) into a object file.
+    pub fn dump(&self, file_path: &PathBuf) {
         let meta = ProgramMeta {
             quadruples: self.quadruples.clone(),
             constant_table: self
@@ -65,7 +77,7 @@ impl Manager {
                 .collect::<HashMap<String, FunctionEntry>>(),
         };
 
-        let mut buffer = File::create("program.o").unwrap();
+        let mut buffer = File::create(file_path.as_os_str()).unwrap();
 
         serde_pickle::to_writer(&mut buffer, &meta, Default::default()).unwrap();
     }
@@ -99,6 +111,7 @@ impl Manager {
 
         self.get_env_mut().from_function(&func);
 
+        // Assigns a local variable address to each of the function parameters
         let params: Vec<ParamAddress> = func
             .params
             .iter()
@@ -129,6 +142,12 @@ impl Manager {
         }
     }
 
+    /// Updates the quadruple start position for a given function.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided function id has not been declared before
+    /// in the procedure table.
     pub fn update_func_position(&mut self, func_id: &String, position: usize) {
         if let Some(func) = self.procedure_table.get_mut(func_id) {
             func.procedure_address = position;
@@ -137,6 +156,16 @@ impl Manager {
         }
     }
 
+    /// Returns the address for the global variable holding a functions
+    /// return value.
+    ///
+    /// The manager assumes every function gets assigned a unique global
+    /// address to store a return value once it has been called.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided function id has not been declared before
+    /// in the procedure table.
     pub fn get_func_return(&self, func_id: &String) -> Option<MemAddress> {
         if let Some(func) = self.procedure_table.get(func_id) {
             func.return_address
@@ -201,6 +230,7 @@ impl Manager {
         self.instruction_counter += 1;
     }
 
+    /// Shortcut to emit a type cast quadruple.
     pub fn emit_cast(&mut self, target_dt: &DataType, target: &str) -> String {
         let new = self.new_temp(target_dt).to_string();
         self.emit(Quadruple::type_cast(target_dt, target, new.as_str()));
@@ -217,6 +247,32 @@ impl Manager {
         }
     }
 
+    /// Prepares a context exit statment.
+    ///
+    /// An exit statement is defined as some statment that breaks out of
+    /// some context, such as breaks and continues in loops and returns in functions.
+    /// 
+    /// This function holds all of these statements so they can be resolved 
+    /// further in the code generation once all the information needed to generate
+    /// them has been figured out. For instance, setting the end position in a 
+    /// break statement once the loop block has generated all its quadruples.
+    ///
+    pub fn prepare_exit_stmt(&mut self, stmt_type: &ExitStatement) {
+        let stmt_position = self.get_next_pos();
+        self.emit(Quadruple::new_empty());
+
+        if let Some(context) = self.unresolved.get_mut(&stmt_type) {
+            context.push(stmt_position);
+        } else {
+            self.unresolved.insert(*stmt_type, vec![stmt_position]);
+        }
+    }
+
+    /// Rsolves a context exit statments.
+    ///
+    /// Replaces all the quadruples matching an exit statement type with the same
+    /// quadruple valuee.
+    ///
     pub fn resolve_context(&mut self, stmt_type: &ExitStatement, quadruple: Quadruple) {
         let unresolved = self.unresolved.get(stmt_type).unwrap_or(&vec![]).clone();
 
@@ -229,18 +285,8 @@ impl Manager {
         self.clean_exit_stmt(stmt_type);
     }
 
+    /// Resets an exit statment state.
     pub fn clean_exit_stmt(&mut self, stmt_type: &ExitStatement) {
         self.unresolved.insert(*stmt_type, vec![]);
-    }
-
-    pub fn prepare_exit_stmt(&mut self, stmt_type: &ExitStatement) {
-        let stmt_position = self.get_next_pos();
-        self.emit(Quadruple::new_empty());
-
-        if let Some(context) = self.unresolved.get_mut(&stmt_type) {
-            context.push(stmt_position);
-        } else {
-            self.unresolved.insert(*stmt_type, vec![stmt_position]);
-        }
     }
 }

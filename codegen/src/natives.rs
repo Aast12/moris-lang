@@ -9,6 +9,8 @@ use strum::{Display, EnumIter, EnumProperty, EnumString, EnumVariantNames, IntoE
 
 use crate::{manager::Manager, node::{ExpressionNode}, quadruples::Quadruple};
 
+/// Defines all the native functions whose implementation is in the side 
+/// of the virtual machine
 #[derive(Debug, PartialEq, EnumString, EnumVariantNames, Display, EnumIter, EnumProperty)]
 #[strum(serialize_all = "snake_case")]
 pub enum NativeFunctions {

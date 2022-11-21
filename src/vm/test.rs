@@ -1,7 +1,8 @@
+use std::path::PathBuf;
 use std::{collections::HashMap, path::Path};
 
 use codegen::generate;
-use codegen::manager::{Manager};
+use codegen::manager::Manager;
 
 use memory::resolver::MemAddress;
 
@@ -32,10 +33,10 @@ impl Inspector {
             panic!("Can't parse global environment!")
         }
 
-        manager.dump();
+        manager.dump(&PathBuf::from("./program.o"));
         manager.reset();
 
-        let mut vm = VirtualMachine::load("program.o");
+        let mut vm = VirtualMachine::load("./program.o");
 
         dbg!(&vm.data.quadruples);
 
@@ -71,7 +72,6 @@ impl Inspector {
                 println!("({}[{}], {:#?})", key, value, item);
             } else {
                 println!("({}[{}], UNDEFINED)", key, value);
-
             }
         });
     }

@@ -119,6 +119,10 @@ impl Debug for Quadruple {
     }
 }
 
+/// Utility to hold an specific quadruple that can be resolved later on.
+/// 
+/// For exaple, an empty quadruple can be generated on a certain position, once 
+/// more information is acquired, this can be replaced with a goto instruction.
 pub struct QuadrupleHold {
     pub position: usize,
     pub released: bool,

@@ -14,6 +14,9 @@ pub mod quadruples;
 pub mod symbols;
 pub mod node;
 
+/// Generates the code for an input file.
+/// 
+/// All the program metadata and quadruples will be stored in the manager object.
 pub fn generate(path: &PathBuf, manager: &mut Manager) {
     let native_functions = NativeFunctions::get_function_definitions();
 

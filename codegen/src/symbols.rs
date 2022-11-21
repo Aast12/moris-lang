@@ -5,11 +5,7 @@ use parser::{functions::FunctionSignature, Dimension};
 
 pub type ParamAddress = (MemAddress, DataType, Option<MemAddress>);
 
-#[derive(Debug, Clone)]
-pub enum SymbolType {
-    Variable,
-}
-
+/// Represents a variable entry
 #[derive(Debug, Clone)]
 pub struct SymbolEntry {
     pub id: String,
@@ -20,6 +16,7 @@ pub struct SymbolEntry {
     pub dimension: Dimension,
 }
 
+/// Represents a function entry
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FunctionEntry {
     pub id: String,
