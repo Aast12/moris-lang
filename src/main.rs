@@ -6,6 +6,6 @@ fn main() {
 
     let path = &args[1];
 
-    let inspector = Inspector::new(format!("samples/{path}").as_str());
+    let inspector = Inspector::new(format!("examples/{path}").as_str());
     inspector.debug();
 }

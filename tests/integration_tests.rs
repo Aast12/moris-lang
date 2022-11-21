@@ -10,7 +10,7 @@ fn test_file(file_name: &str) -> Inspector {
 }
 
 fn build_file_path(file_name: &str) -> String {
-    format!("samples/{file_name}").to_owned()
+    format!("examples/{file_name}").to_owned()
 }
 
 #[test]
