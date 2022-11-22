@@ -14,7 +14,7 @@ lazy_static! {
             (DataType::Int, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 2),        // 4,000 - 5,999
             (DataType::String, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 3),     // 6,000 - 7,999
             (DataType::DataFrame, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 4),  // 8,000 - 9,999
-            (DataType::Series, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 5),  // 8,000 - 9,999
+            (DataType::Series, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 5),   // 8,000 - 9,999
             (DataType::Pointer, MemoryResolver::DATA_TYPE_ALLOC_SIZE * 6),    // 10,000 - 12,000
         ])
     };

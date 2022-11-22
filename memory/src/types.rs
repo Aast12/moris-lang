@@ -24,10 +24,10 @@ impl DataType {
             DataType::Int => 1,
             DataType::Float => 2,
             DataType::String => 3,
-            DataType::DataFrame => 4,
-            DataType::Void => 5,
-            DataType::Function(_) => 6,
-            DataType::Series => todo!(),
+            DataType::Series => 4,
+            DataType::DataFrame => 5,
+            DataType::Void => 6,
+            DataType::Function(_) => 7,
             DataType::Iterable(_) => todo!(),
             _ => todo!(),
         }
@@ -64,9 +64,12 @@ impl DataType {
                 DataType::DataFrame => ok_ret,
                 _ => Err(()),
             },
+            DataType::Series => match right {
+                DataType::Series => ok_ret,
+                _ => Err(()),
+            },
             DataType::Void => Err(()),
             DataType::Function(func) => Self::equivalent(func, right),
-            DataType::Series => todo!(),
             DataType::Iterable(_) => todo!(),
             _ => todo!(),
         }

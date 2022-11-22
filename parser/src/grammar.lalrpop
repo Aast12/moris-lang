@@ -42,6 +42,7 @@ PType: DataType = {
     T_BOOl => DataType::Bool,
     T_STR => DataType::String,
     T_DATAFRAME => DataType::DataFrame,
+    T_SERIES => DataType::Series
 }
 
 PFunctionType: DataType = {
@@ -81,7 +82,6 @@ PId: Expression = ID =>
 // Variables
 
 PIndexing: Index = {
-    <begin:PExpr> COLON <end:PExpr> => Index::Range(begin, end),
     <idx:PExpr> => Index::Simple(idx)
 }
 
@@ -318,6 +318,7 @@ match {
     "bool" => T_BOOl,
     "str" => T_STR,
     "DataFrame" => T_DATAFRAME,
+    "Series" => T_SERIES,
     "void" => T_VOID,
     "let" => LET,
     "true" => TRUE,

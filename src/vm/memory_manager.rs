@@ -5,7 +5,7 @@ use std::{
     fmt::Display,
 };
 
-use polars::prelude::DataFrame;
+use polars::{prelude::DataFrame, series::Series};
 use variantly::Variantly;
 
 use codegen::{symbols::FunctionEntry, meta::ProgramMeta};
@@ -22,7 +22,7 @@ pub enum Item {
     Bool(bool),
     String(String),
     DataFrame(DataFrame),
-    // Series,
+    Series(Series),
     Pointer(MemAddress),
     ArrayEnd,
 }
@@ -54,7 +54,8 @@ impl Display for Item {
             Item::String(item) => write!(fmt, "{}", item),
             Item::Pointer(item) => write!(fmt, "prt({})", item),
             Item::ArrayEnd => write!(fmt, "END"),
-            Item::DataFrame(df) => write!(fmt, "DF {:#?}", df),
+            Item::DataFrame(df) => write!(fmt, "{:#?}", df),
+            Item::Series(item) => write!(fmt, "{:#?}", item),
         }
     }
 }
