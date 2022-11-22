@@ -1,0 +1,131 @@
+
+// Types
+
+Type ::= "int" 
+       | "float"
+       | "bool"
+       | "string"
+       | "DataFrame"
+       | "Series"
+
+// Function return types
+
+FunctionType ::= Type 
+               | "void"
+
+
+Bool ::= "true" | "false"
+
+Const ::= "integer_const" | "float_const" | Bool | "string_const"
+
+
+// Variables
+
+
+Dimension ::= "[" "int_const" "]" ("[" "int_const" "]")?
+
+VarDeclaration ::= "let" "id" ":" Type Dimension? ("=" Expression)? ";"
+
+VarRefIndex ::= "[" Expression "]" ("[" Expression "]")?
+
+VarReference ::= "id" VarRefIndex?
+
+VarAssignment ::= VarReference "=" Expression
+
+
+// Operators
+
+ExprOp ::= "&&" | "||"
+
+LogicOp ::= "<"
+          | ">"
+          | "<="
+          | ">="
+          | "!="
+          | "=="
+
+MathOp ::= "+"
+         | "-"
+
+FactorOp ::= "*"
+           | "/"
+
+PipeOp ::= "|>"
+
+UnaryOP ::= "-"
+          | "!"
+
+
+// Expressions
+
+Expr ::= Expr ExprOp PLogicExpr | PLogicExpr
+
+LogicExpr ::= MathExpr (LogicOp MathExpr)?
+
+MathExpr ::= (PMathExpr MathOp)? Term
+
+Term ::= (Term FactorOp)? Factor
+
+Factor ::= Factor PipeOp "id" | UnaryOP? Item
+
+Item ::= VarReference
+       | Const
+       | "(" Expr ")"
+       | FunctionCall
+
+
+// Functions
+
+FuncParam ::= "id" ":" Type Dimension?
+
+CallParams ::= (Item ",")* Item?
+
+FunctionParams ::= (FuncParam ",")* FuncParam?
+
+FnSignature ::= "fn" "id" "("  PFunctionParams ")" ":" FunctionType
+
+FunctionItem ::= Statement | VarDeclaration
+
+FunctionBlock ::= "{" FunctionItem* "}"
+
+Function ::= FnSignature FunctionBlock
+
+FunctionCall ::= "id" "(" CallParams ")"
+
+// Statements
+
+ReturnStatement ::= "return" Expr ";"
+
+Statement ::= Condition
+            | Loop
+            | ReturnStatement
+            | LineStatement ";"
+
+GlobalStatement ::= Function
+                  | Statement
+                  | VarDeclaration
+
+Block ::= PStatement | PStrictBlock
+
+LineStatement ::= "break"
+                | "continue"
+                | VarAssignment
+                | Expr
+
+// Conditions
+
+ElseBlock ::= Condition | StrictBlock
+
+Condition ::= "if" "(" Expr ")" StrictBlock ("else" ElseBlock)?
+
+StrictBlock ::= "{" Statement* "}"
+
+// Loops
+
+Loop ::= ForLoop | WhileLoo
+
+ForLoop ::= "for" "(" "id" "in" Expr ":" End (":" Expr)? ")" Block
+
+WhileLoop ::= "while" "(" Expr ")" Block
+
+Program ::= GlobalStatement*

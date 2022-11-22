@@ -21,3 +21,7 @@ variantly = "0.2.0"
 
 [build-dependencies]
 lalrpop = "0.19.7"
+
+[[bin]]
+name = "moris"
+path = "src/main.rs"

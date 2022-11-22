@@ -1,0 +1,6 @@
+[book]
+authors = ["Andres Alam Sanchez Torres"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Moris Documentation"
