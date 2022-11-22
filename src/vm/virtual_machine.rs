@@ -7,24 +7,14 @@ use memory::{
     resolver::{MemAddress, MemoryResolver},
     types::{DataType, FloatType, IntType},
 };
-use polars::{prelude::{CsvReader, SerReader}};
+use polars::{prelude::{CsvReader, SerReader, AnyValue}};
 
-use crate::plots::{util::PlotContext, backend::TextDrawingBackend};
+use crate::plots::{context::PlotContext, backend::TextDrawingBackend};
 
-use super::{memory_manager::{Item, MemoryManager}, utils::{unwrap_str_param, unwrap_float_param}};
+use super::{memory_manager::{Item, MemoryManager}, utils::{unwrap_str_param, unwrap_float_param, unwrap_df_param, unwrap_series_param}};
 
 use rand::Rng;
 
-macro_rules! match_types {
-    ($typ:tt, $left:expr, $right:expr) => {{
-        if let Item::$typ(op1) = $left {
-            if let Item::$typ(op2) = $right {
-                return (op1, op2);
-            }
-        }
-        panic!();
-    }};
-}
 
 macro_rules! cast {
     ($op:expr, [ $($x:tt),*], $y:ty  ) =>
@@ -43,19 +33,19 @@ macro_rules! arith_operation {
     ($data_type:expr, $self: expr, $op: tt, $left: expr, $right: expr, $dest: expr) => {
         match $data_type {
             DataType::Int => {
-                let (op1, op2) = Self::match_ints($left, $right);
+                let (op1, op2) = Item::match_ints($left, $right);
                 $self.memory.update($dest, Item::Int(op1 $op op2));
             }
             DataType::Float => {
-                let (op1, op2) = Self::match_floats($left, $right);
+                let (op1, op2) = Item::match_floats($left, $right);
                 $self.memory.update($dest, Item::Float(op1 $op op2));
             }
             DataType::Pointer => {
-                let (op1, op2) = Self::match_pointers($left, $right);
+                let (op1, op2) = Item::match_pointers($left, $right);
                 $self.memory.update($dest, Item::Pointer(op1 $op op2));
             }
             DataType::String => {
-                let (left, right) = Self::match_strings($left, $right);
+                let (left, right) = Item::match_strings($left, $right);
                 $self.memory.update($dest, Item::String(format!("{}{}", left, right)));
             },
             _ => todo!(),
@@ -74,13 +64,13 @@ macro_rules! logic_cmp {
         match $data_type {
             DataType::Int => {
                 let (_, left, right, dest) = $self.unpack_binary($curr_instruction);
-                let (left, right) = Self::match_ints(left, right);
+                let (left, right) = Item::match_ints(left, right);
 
                 $self.memory.update(dest, Item::Bool(left $op right));
             }
             DataType::Float => {
                 let (_, left, right, dest) = $self.unpack_binary($curr_instruction);
-                let (left, right) = Self::match_floats(left, right);
+                let (left, right) = Item::match_floats(left, right);
                 $self.memory.update(dest, Item::Bool(left $op right));
             }
             DataType::Bool => todo!(),
@@ -106,33 +96,7 @@ impl VirtualMachine {
         VirtualMachine { data, memory }
     }
 
-    fn match_ints(left: Item, right: Item) -> (IntType, IntType) {
-        (Item::cast_int(left), Item::cast_int(right))
-    }
-
-    fn match_floats(op1: Item, op2: Item) -> (FloatType, FloatType) {
-        match_types!(Float, op1, op2);
-    }
-
-    fn match_strings(op1: Item, op2: Item) -> (String, String) {
-        match_types!(String, op1, op2);
-    }
-
-    fn match_pointers(op1: Item, op2: Item) -> (MemAddress, MemAddress) {
-        match op1 {
-            Item::Int(op1) => match op2 {
-                Item::Int(op2) => (op1 as MemAddress, op2 as MemAddress),
-                Item::Pointer(op2) => (op1 as MemAddress, op2),
-                _ => panic!(),
-            },
-            Item::Pointer(op1) => match op2 {
-                Item::Int(op2) => (op1, op2 as MemAddress),
-                Item::Pointer(op2) => (op1, op2),
-                _ => panic!(),
-            },
-            _ => panic!(),
-        }
-    }
+   
 
     fn unpack_unary(&mut self, instruction: &Quadruple) -> (Item, MemAddress) {
         let Quadruple(_, op, _, dest) = instruction;
@@ -193,7 +157,7 @@ impl VirtualMachine {
         match data_type {
             DataType::String => {
                 let (_, left, right, dest) = self.unpack_binary(quadruple);
-                let (left, right) = Self::match_strings(left, right);
+                let (left, right) = Item::match_strings(left, right);
                 let cmp = left.cmp(&right);
                 let result: bool = match operator {
                     ">" => cmp == Ordering::Greater,
@@ -501,8 +465,7 @@ impl VirtualMachine {
                             }
                             NativeFunction::PrintNames => {
                                 let params = self.memory.pop_params();
-                                let df = params.get(0).unwrap().to_owned();
-                                let df = df.unwrap_data_frame();
+                                let df = unwrap_df_param(&params, 0);
 
                                 df.get_columns().iter().for_each(|col| {
                                     println!("{:#?} - {:#?}", col.name(), col.dtype());
@@ -549,11 +512,8 @@ impl VirtualMachine {
                             }
                             NativeFunction::Scatter => {
                                 let params = self.memory.pop_params();
-                                let x_series = params.get(0).unwrap().to_owned();
-                                let x_series = x_series.unwrap_series();
-
-                                let y_series = params.get(1).unwrap().to_owned();
-                                let y_series = y_series.unwrap_series();
+                                let x_series = unwrap_series_param(&params, 0);
+                                let y_series = unwrap_series_param(&params, 1);
 
                                 plot_ctx.draw_scatter::<TextDrawingBackend>(&x_series, &y_series).unwrap();
                             }
@@ -563,6 +523,94 @@ impl VirtualMachine {
                                     &NativeFunction::Random.to_string(),
                                     Item::Float(rng.gen_range(0.0..1.0)),
                                 );
+                            }
+                            NativeFunction::Describe => {
+                                let params = self.memory.pop_params();
+                                let df = unwrap_df_param(&params, 0);
+                                println!("{:#?}", df.describe(None));
+                            }
+                            NativeFunction::Sum | NativeFunction::Mean | NativeFunction::Median  | NativeFunction::Std | NativeFunction::Var => {
+                                let params = self.memory.pop_params();
+                                let target = params.first().unwrap();
+                                
+                                let value: FloatType;
+
+                                if target.is_pointer() {
+                                    let start_address = target.clone().unwrap_pointer();
+                                    let start_item = self.memory.resolved_get(start_address.clone());
+                                    let array = self.memory.get_array(&start_address);
+                                    let filtered = array.iter().filter(|item| item.is_some());
+                                    
+                                    let mut items = match start_item {
+                                        Item::Int(_)  => filtered.map(|item| {
+                                            item.clone().unwrap().unwrap_int() as FloatType
+                                         }).collect::<Vec<FloatType>>(),
+                                         Item::Float(_) => filtered.map(|item| {
+                                            item.clone().unwrap().unwrap_float()
+                                         }).collect::<Vec<FloatType>>(),
+                                        _ => panic!("Can't calculate {} of the item type.", native_func),
+                                    };
+
+                                    value = match native_func {
+                                        NativeFunction::Sum => items.iter().sum(),
+                                        NativeFunction::Mean => items.iter().sum::<FloatType>() / items.len() as FloatType,
+                                        NativeFunction::Median => {
+                                            items.sort_by(|a, b| a.partial_cmp(b).unwrap());
+                                            let half = items.len() / 2;
+                                            
+                                            if items.len() % 2 == 0 {
+                                                (*items.get(half - 1).unwrap() + *items.get(half).unwrap()) / 2 as FloatType
+                                            } else {
+                                                *items.get(half + 1).unwrap()
+                                            }
+                                        },
+                                        NativeFunction::Std => {
+                                            let size = items.len() as FloatType;
+                                            let mean: FloatType = items.iter().sum::<FloatType>() / size;
+                                            let sum = items.iter().map(|item| (item - mean).powi(2)).sum::<FloatType>();
+
+                                            (sum / size).sqrt()
+                                        },
+                                        NativeFunction::Var => {
+                                            let size = items.len() as FloatType;
+                                            let mean: FloatType = items.iter().sum::<FloatType>() / size;
+                                            let sum = items.iter().map(|item| (item - mean).powi(2)).sum::<FloatType>();
+
+                                            
+                                            sum / size
+                                        },
+                                        _ => panic!()
+                                    }
+
+                                    
+                                } else {
+                                    let target = target.to_owned().unwrap_series();
+                                    value = match native_func {
+                                        NativeFunction::Sum => target.sum().unwrap(),
+                                        NativeFunction::Mean => target.mean().unwrap(),
+                                        NativeFunction::Median => target.median().unwrap(),
+                                        NativeFunction::Std => {
+                                            if let AnyValue::Float64(item) = target.std_as_series(0).cast(&polars::prelude::DataType::Float64).unwrap().get(0) {
+                                                item
+                                            } else {
+                                                panic!()
+                                            }
+                                        },
+                                        NativeFunction::Var => {
+                                            if let AnyValue::Float64(item) = target.var_as_series(0).cast(&polars::prelude::DataType::Float64).unwrap().get(0) {
+                                                item
+                                            } else {
+                                                panic!()
+                                            }
+                                        },
+                                        _ => panic!()
+                                    }
+                                }
+
+                                self.return_value_native(native_func, Item::Float(value));
+
+                                // if param
+                                println!("MEAN PARAMS {:#?}", params);
                             }
                             NativeFunction::ToCsv => todo!(),
                             _ => todo!(),

@@ -516,11 +516,11 @@ impl ExpressionNode for Call {
 
         manager.emit(Quadruple::go_sub(self.id.as_str()));
 
-        if let Some(address) = manager.get_func_return(&self.id) {
+        if let Some(func_return_address) = manager.get_func_return(&self.id) {
             let return_value = manager.new_temp(&return_type).to_string();
             manager.emit(Quadruple::unary(
                 Operator::Assign,
-                address.to_string().as_str(),
+                func_return_address.to_string().as_str(),
                 return_value.as_str(),
             ));
             return_value

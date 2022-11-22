@@ -60,6 +60,7 @@ impl Runner {
 
     pub fn run(&mut self) -> VirtualMachine {
         let mut vm = VirtualMachine::load(&self.out_path.as_str());
+
         vm.execute();
 
         vm

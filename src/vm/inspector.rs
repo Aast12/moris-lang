@@ -33,10 +33,10 @@ impl Inspector {
         } else {
             panic!("Can't parse global environment!")
         }
-
+        
         runner.clean();
         let vm = runner.run();
-
+        
         Inspector {
             target_meta,
             memory: vm.memory.globals,

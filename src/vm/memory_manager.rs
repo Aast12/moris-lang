@@ -8,12 +8,23 @@ use std::{
 use polars::{prelude::DataFrame, series::Series};
 use variantly::Variantly;
 
-use codegen::{symbols::FunctionEntry, meta::ProgramMeta};
+use codegen::{meta::ProgramMeta, symbols::FunctionEntry};
 
 use memory::{
     resolver::{MemAddress, MemoryResolver, MemoryScope},
     types::{DataType, FloatType, IntType},
 };
+
+macro_rules! match_types {
+    ($typ:tt, $left:expr, $right:expr) => {{
+        if let Item::$typ(op1) = $left {
+            if let Item::$typ(op2) = $right {
+                return (op1, op2);
+            }
+        }
+        panic!();
+    }};
+}
 
 #[derive(Debug, Clone, Variantly, PartialEq)]
 pub enum Item {
@@ -41,6 +52,34 @@ impl Item {
             }
             Item::Pointer(item) => item as IntType,
             _ => panic!("Cant cast {:#?} to int", item),
+        }
+    }
+
+    pub fn match_ints(left: Item, right: Item) -> (IntType, IntType) {
+        (Item::cast_int(left), Item::cast_int(right))
+    }
+
+    pub fn match_floats(op1: Item, op2: Item) -> (FloatType, FloatType) {
+        match_types!(Float, op1, op2);
+    }
+
+    pub fn match_strings(op1: Item, op2: Item) -> (String, String) {
+        match_types!(String, op1, op2);
+    }
+
+    pub fn match_pointers(op1: Item, op2: Item) -> (MemAddress, MemAddress) {
+        match op1 {
+            Item::Int(op1) => match op2 {
+                Item::Int(op2) => (op1 as MemAddress, op2 as MemAddress),
+                Item::Pointer(op2) => (op1 as MemAddress, op2),
+                _ => panic!(),
+            },
+            Item::Pointer(op1) => match op2 {
+                Item::Int(op2) => (op1, op2 as MemAddress),
+                Item::Pointer(op2) => (op1, op2),
+                _ => panic!(),
+            },
+            _ => panic!(),
         }
     }
 }
@@ -334,6 +373,27 @@ impl MemoryManager {
         } else {
             self.safe_get(address).unwrap()
         }
+    }
+
+    pub fn get_array(&mut self, start_address: &MemAddress) -> Vec<Option<Item>> {
+        let mut curr_address = *start_address;
+        let mut items: Vec<Option<Item>> = Vec::new();
+        loop {
+            let current = self.safe_resolved_get(curr_address);
+
+            if let Ok(item) = current {
+                if item == Item::ArrayEnd {
+                    break;
+                }
+                items.push(Some(item));
+            } else {
+                items.push(None);
+            }
+
+            curr_address += 1;
+        }
+
+        items
     }
 
     pub fn alter_array<F>(&mut self, start_address: &MemAddress, cb: F)

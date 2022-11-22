@@ -1,8 +1,6 @@
 let df: DataFrame = read_csv("train.csv");
 
-print_names(df);
-println(df);
-
+describe(df);
 
 set_caption("Year Built vs Lot Area chart");
 set_x_title("YearBuilt");

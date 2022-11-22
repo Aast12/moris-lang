@@ -4,8 +4,11 @@ use memory::types::DataType;
 use parser::{
     expressions::call::Call,
     functions::{FunctionParam, FunctionSignature},
+    types::Operator,
 };
-use strum::{Display, EnumIter, EnumProperty, EnumString, EnumVariantNames, IntoEnumIterator};
+use strum::{
+    Display, EnumIter, EnumProperty, EnumString, EnumVariantNames, IntoEnumIterator, VariantNames,
+};
 
 use crate::{manager::Manager, node::ExpressionNode, quadruples::Quadruple};
 
@@ -35,6 +38,12 @@ pub enum NativeFunction {
     SetXBounds,
     SetYBounds,
     SetPlotOut,
+    Describe,
+    Mean,
+    Median,
+    Std,
+    Sum,
+    Var,
 }
 
 fn ptr_param(name: &str) -> FunctionParam {
@@ -74,6 +83,9 @@ impl NativeFunction {
         }
     }
 
+    /// Returns the function definitions for all native functions.
+    /// This ensures validation of proper argument count and type checking for
+    /// these functions.
     pub fn get_function_definitions() -> Vec<FunctionSignature> {
         NativeFunction::iter()
             .filter(|func| {
@@ -113,7 +125,13 @@ impl NativeFunction {
                     NativeFunction::SetPlotOut => (DataType::Void, vec![str_param("path")]),
                     NativeFunction::PrintNames => (DataType::Void, vec![df_param("df")]),
                     NativeFunction::ToCsv => (DataType::Void, vec![df_param("df")]),
+                    NativeFunction::Describe => (DataType::Void, vec![df_param("df")]),
                     NativeFunction::Random => (DataType::Float, vec![]),
+                    NativeFunction::Mean
+                    | NativeFunction::Median
+                    | NativeFunction::Std
+                    | NativeFunction::Sum
+                    | NativeFunction::Var => (DataType::Float, vec![]), // Params are checked in custom reduce
                     _ => panic!(),
                 };
 
@@ -127,6 +145,9 @@ impl NativeFunction {
             .collect::<Vec<FunctionSignature>>()
     }
 
+    /// Defines custom reduce logic for Call nodes.
+    /// If None is returned, the native function call will be treated as
+    /// every other function.
     pub fn call_reduce(ctx: &Call, manager: &mut Manager) -> Option<String> {
         let id = ctx.id.as_str();
         if let Ok(function_id) = NativeFunction::from_str(id) {
@@ -168,6 +189,46 @@ impl NativeFunction {
                     manager.emit(Quadruple::go_sub(id));
 
                     Some(String::from("VOID"))
+                }
+                NativeFunction::Mean
+                | NativeFunction::Median
+                | NativeFunction::Std
+                | NativeFunction::Var => {
+                    manager.emit(Quadruple::era(id));
+
+                    if ctx.params.len() != 1 {
+                        panic!(
+                            "Function {id} takes one parameter, {} were provided",
+                            ctx.params.len()
+                        );
+                    }
+
+                    let param = ctx.params.get(0).unwrap();
+                    let param_dt = param.data_type(manager);
+
+                    if param_dt != DataType::Series && param.dimensionality(manager).len() == 0 {
+                        panic!("Function {id} does not accept scalar values");
+                    }
+
+                    let param_tmp = param.reduce(manager);
+
+                    manager.emit(Quadruple::param(param_tmp.as_str(), 0));
+
+                    manager.emit(Quadruple::go_sub(id));
+
+                    if let Some(func_return_address) = manager.get_func_return(&String::from(id)) {
+                        let return_value = manager.new_temp(&DataType::Float).to_string();
+
+                        manager.emit(Quadruple::unary(
+                            Operator::Assign,
+                            func_return_address.to_string().as_str(),
+                            return_value.as_str(),
+                        ));
+
+                        Some(return_value)
+                    } else {
+                        None
+                    }
                 }
                 _ => None,
             }
