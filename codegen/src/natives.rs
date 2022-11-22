@@ -13,7 +13,7 @@ use crate::{manager::Manager, node::ExpressionNode, quadruples::Quadruple};
 /// of the virtual machine
 #[derive(Debug, PartialEq, EnumString, EnumVariantNames, Display, EnumIter, EnumProperty)]
 #[strum(serialize_all = "snake_case")]
-pub enum NativeFunctions {
+pub enum NativeFunction {
     #[strum(props(check_params = "false"))]
     Print,
     #[strum(props(check_params = "false"))]
@@ -37,13 +37,33 @@ pub enum NativeFunctions {
     SetPlotOut,
 }
 
+fn ptr_param(name: &str) -> FunctionParam {
+    FunctionParam::new_scalar(name, DataType::Pointer)
+}
+
 fn int_param(name: &str) -> FunctionParam {
     FunctionParam::new_scalar(name, DataType::Int)
 }
 
-impl NativeFunctions {
+fn str_param(name: &str) -> FunctionParam {
+    FunctionParam::new_scalar(name, DataType::String)
+}
+
+fn float_param(name: &str) -> FunctionParam {
+    FunctionParam::new_scalar(name, DataType::Float)
+}
+
+fn df_param(name: &str) -> FunctionParam {
+    FunctionParam::new_scalar(name, DataType::DataFrame)
+}
+
+fn series_param(name: &str) -> FunctionParam {
+    FunctionParam::new_scalar(name, DataType::Series)
+}
+
+impl NativeFunction {
     pub fn data_type(id: &String, manager: &mut Manager) -> Option<DataType> {
-        if let Ok(function_id) = NativeFunctions::from_str(id.as_str()) {
+        if let Ok(function_id) = NativeFunction::from_str(id.as_str()) {
             if let Some(_) = function_id.get_str("check_params") {
                 Some(DataType::Void)
             } else {
@@ -55,7 +75,7 @@ impl NativeFunctions {
     }
 
     pub fn get_function_definitions() -> Vec<FunctionSignature> {
-        NativeFunctions::iter()
+        NativeFunction::iter()
             .filter(|func| {
                 if let Some(_) = func.get_str("check_params") {
                     false
@@ -65,82 +85,35 @@ impl NativeFunctions {
             })
             .map(|func| {
                 let (data_type, params): (DataType, Vec<FunctionParam>) = match func {
-                    NativeFunctions::Zeros => (
+                    NativeFunction::Zeros => (DataType::Void, vec![ptr_param("arr")]),
+                    NativeFunction::RandomFill => (
                         DataType::Void,
-                        vec![FunctionParam::new_scalar("arr", DataType::Pointer)],
+                        vec![ptr_param("arr"), int_param("min"), int_param("max")],
                     ),
-                    NativeFunctions::RandomFill => (
+                    NativeFunction::ScalarMul => (
                         DataType::Void,
-                        vec![
-                            FunctionParam::new_scalar("arr", DataType::Pointer),
-                            FunctionParam::new_scalar("min", DataType::Int),
-                            FunctionParam::new_scalar("max", DataType::Int),
-                        ],
+                        vec![ptr_param("arr"), float_param("factor")],
                     ),
-                    NativeFunctions::ScalarMul => (
-                        DataType::Void,
-                        vec![
-                            FunctionParam::new_scalar("arr", DataType::Pointer),
-                            FunctionParam::new_scalar("factor", DataType::Float),
-                        ],
-                    ),
-                    NativeFunctions::ReadCsv => (
-                        DataType::DataFrame,
-                        vec![FunctionParam::new_scalar("file_path", DataType::String)],
-                    ),
-                    NativeFunctions::Select => (
-                        DataType::Series,
-                        vec![
-                            FunctionParam::new_scalar("df", DataType::DataFrame),
-                            FunctionParam::new_scalar("col", DataType::String),
-                        ],
-                    ),
-                    NativeFunctions::Scatter => (
-                        DataType::Void,
-                        vec![
-                            FunctionParam::new_scalar("x", DataType::Series),
-                            FunctionParam::new_scalar("y", DataType::Series),
-                        ],
-                    ),
-                    NativeFunctions::SetCaption => (
-                        DataType::Void,
-                        vec![FunctionParam::new_scalar("caption", DataType::String)],
-                    ),
-                    NativeFunctions::SetXTitle => (
-                        DataType::Void,
-                        vec![FunctionParam::new_scalar("title", DataType::String)],
-                    ),
-                    NativeFunctions::SetYTitle => (
-                        DataType::Void,
-                        vec![FunctionParam::new_scalar("title", DataType::String)],
-                    ),
-                    NativeFunctions::SetXBounds => (
-                        DataType::Void,
-                        vec![
-                            FunctionParam::new_scalar("min", DataType::Float),
-                            FunctionParam::new_scalar("max", DataType::Float),
-                        ],
-                    ),
-                    NativeFunctions::SetYBounds => (
-                        DataType::Void,
-                        vec![
-                            FunctionParam::new_scalar("min", DataType::Float),
-                            FunctionParam::new_scalar("max", DataType::Float),
-                        ],
-                    ),
-                    NativeFunctions::SetPlotOut => (
-                        DataType::Void,
-                        vec![FunctionParam::new_scalar("path", DataType::String)],
-                    ),
-                    NativeFunctions::PrintNames => (
-                        DataType::Void,
-                        vec![FunctionParam::new_scalar("df", DataType::DataFrame)],
-                    ),
-                    NativeFunctions::ToCsv => (
-                        DataType::Void,
-                        vec![FunctionParam::new_scalar("df", DataType::DataFrame)],
-                    ),
-                    NativeFunctions::Random => (DataType::Float, vec![]),
+                    NativeFunction::ReadCsv => (DataType::DataFrame, vec![str_param("file_path")]),
+                    NativeFunction::Select => {
+                        (DataType::Series, vec![df_param("df"), str_param("col")])
+                    }
+                    NativeFunction::Scatter => {
+                        (DataType::Void, vec![series_param("x"), series_param("y")])
+                    }
+                    NativeFunction::SetCaption => (DataType::Void, vec![str_param("caption")]),
+                    NativeFunction::SetXTitle => (DataType::Void, vec![str_param("title")]),
+                    NativeFunction::SetYTitle => (DataType::Void, vec![str_param("title")]),
+                    NativeFunction::SetXBounds => {
+                        (DataType::Void, vec![float_param("min"), float_param("max")])
+                    }
+                    NativeFunction::SetYBounds => {
+                        (DataType::Void, vec![float_param("min"), float_param("max")])
+                    }
+                    NativeFunction::SetPlotOut => (DataType::Void, vec![str_param("path")]),
+                    NativeFunction::PrintNames => (DataType::Void, vec![df_param("df")]),
+                    NativeFunction::ToCsv => (DataType::Void, vec![df_param("df")]),
+                    NativeFunction::Random => (DataType::Float, vec![]),
                     _ => panic!(),
                 };
 
@@ -156,21 +129,21 @@ impl NativeFunctions {
 
     pub fn call_reduce(ctx: &Call, manager: &mut Manager) -> Option<String> {
         let id = ctx.id.as_str();
-        if let Ok(function_id) = NativeFunctions::from_str(id) {
+        if let Ok(function_id) = NativeFunction::from_str(id) {
             match function_id {
-                NativeFunctions::Print | NativeFunctions::Println => {
+                NativeFunction::Print | NativeFunction::Println => {
                     ctx.params.iter().for_each(|param| {
                         let value = param.reduce(manager);
                         manager.emit(Quadruple::new(
-                            NativeFunctions::Print.to_string().as_str(),
+                            NativeFunction::Print.to_string().as_str(),
                             "",
                             "",
                             value.as_str(),
                         ));
                     });
-                    if function_id == NativeFunctions::Println {
+                    if function_id == NativeFunction::Println {
                         manager.emit(Quadruple::new(
-                            NativeFunctions::Print.to_string().as_str(),
+                            NativeFunction::Print.to_string().as_str(),
                             "",
                             "",
                             "\n",
@@ -178,7 +151,7 @@ impl NativeFunctions {
                     }
                     Some(String::from("VOID"))
                 }
-                NativeFunctions::Read => {
+                NativeFunction::Read => {
                     manager.emit(Quadruple::era(id));
 
                     ctx.params.iter().enumerate().for_each(|(index, param)| {

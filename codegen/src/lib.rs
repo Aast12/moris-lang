@@ -1,6 +1,6 @@
 use manager::Manager;
 use memory::types::DataType;
-use natives::NativeFunctions;
+use natives::NativeFunction;
 use node::Node;
 use parser::try_file;
 
@@ -17,7 +17,7 @@ pub mod symbols;
 ///
 /// All the program metadata and quadruples will be stored in the manager object.
 pub fn generate(path: &str, manager: &mut Manager) {
-    let native_functions = NativeFunctions::get_function_definitions();
+    let native_functions = NativeFunction::get_function_definitions();
 
     native_functions.iter().for_each(|func| {
         let return_address = match func.data_type {

@@ -62,8 +62,8 @@ impl PlotContext {
                 .iter(),
         )
         .filter(|(a, b)| {
-            if let AnyValue::Float64(a) = a {
-                if let AnyValue::Float64(b) = b {
+            if let AnyValue::Float64(_) = a {
+                if let AnyValue::Float64(_) = b {
                     return true;
                 }
             }

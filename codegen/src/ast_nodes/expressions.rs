@@ -6,7 +6,7 @@ use parser::{expressions::{Expression, constant::Const, id::{Id, Access}, operat
 use crate::{
     manager::Manager,
     node::{AccessNode, ExpressionNode, Node},
-    quadruples::Quadruple, symbols::SymbolEntry, natives::NativeFunctions,
+    quadruples::Quadruple, symbols::SymbolEntry, natives::NativeFunction,
 };
 
 impl AccessNode for Expression {}
@@ -450,7 +450,7 @@ impl ExpressionNode for Access {
 
 impl ExpressionNode for Call {
     fn data_type(&self, manager: &mut Manager) -> DataType {
-        if let Some(data_type) = NativeFunctions::data_type(&self.id, manager) {
+        if let Some(data_type) = NativeFunction::data_type(&self.id, manager) {
             data_type
         } else {
             manager.get_func(&self.id).return_type.clone()
@@ -458,7 +458,7 @@ impl ExpressionNode for Call {
     }
 
     fn reduce(&self, manager: &mut Manager) -> String {
-        if let Some(return_value) = NativeFunctions::call_reduce(self, manager) {
+        if let Some(return_value) = NativeFunction::call_reduce(self, manager) {
             return return_value;
         }
 

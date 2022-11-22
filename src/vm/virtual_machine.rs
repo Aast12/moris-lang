@@ -1,7 +1,7 @@
 use core::panic;
 use std::{cmp::Ordering, collections::LinkedList, fs::File, io, iter::zip, str::FromStr};
 
-use codegen::{meta::ProgramMeta, natives::NativeFunctions, quadruples::Quadruple};
+use codegen::{meta::ProgramMeta, natives::NativeFunction, quadruples::Quadruple};
 
 use memory::{
     resolver::{MemAddress, MemoryResolver},
@@ -225,7 +225,7 @@ impl VirtualMachine {
         self.memory.update(return_addr, value);
     }
 
-    pub fn return_value_native(&mut self, function_id: NativeFunctions, value: Item) {
+    pub fn return_value_native(&mut self, function_id: NativeFunction, value: Item) {
         self.return_value(&function_id.to_string(), value)
     }
 
@@ -336,9 +336,9 @@ impl VirtualMachine {
                 "gosub" => {
                     let Quadruple(_, _, _, function_id) = curr_instruction;
 
-                    if let Ok(native_func) = NativeFunctions::from_str(function_id) {
+                    if let Ok(native_func) = NativeFunction::from_str(function_id) {
                         match native_func {
-                            NativeFunctions::Zeros => {
+                            NativeFunction::Zeros => {
                                 let params = self.memory.pop_params();
                                 let array_pointer = params.get(0).unwrap();
 
@@ -351,7 +351,7 @@ impl VirtualMachine {
                                     );
                                 }
                             }
-                            NativeFunctions::RandomFill => {
+                            NativeFunction::RandomFill => {
                                 let params = self.memory.pop_params();
                                 let array_pointer = params.get(0).unwrap();
                                 let min = params.get(1).unwrap().to_owned();
@@ -386,7 +386,7 @@ impl VirtualMachine {
                                     );
                                 }
                             }
-                            NativeFunctions::ScalarMul => {
+                            NativeFunction::ScalarMul => {
                                 let params = self.memory.pop_params();
                                 let array_pointer = params.get(0).unwrap();
                                 let factor = params.get(1).unwrap().to_owned();
@@ -424,7 +424,7 @@ impl VirtualMachine {
                                     );
                                 }
                             }
-                            NativeFunctions::Read => {
+                            NativeFunction::Read => {
                                 let params = self.memory.pop_params_address();
 
                                 let mut in_line = String::new();
@@ -461,7 +461,7 @@ impl VirtualMachine {
                                     self.memory.update(param_addr, item)
                                 });
                             }
-                            NativeFunctions::ReadCsv => {
+                            NativeFunction::ReadCsv => {
                                 let params = self.memory.pop_params();
                                 let file_path = params.get(0).unwrap();
 
@@ -471,7 +471,7 @@ impl VirtualMachine {
                                         let df_result = df.with_ignore_parser_errors(true).finish();
                                         if let Ok(df) = df_result {
                                             self.return_value(
-                                                &NativeFunctions::ReadCsv.to_string(),
+                                                &NativeFunction::ReadCsv.to_string(),
                                                 Item::DataFrame(df),
                                             );
                                         } else {
@@ -485,7 +485,7 @@ impl VirtualMachine {
                                     }
                                 }
                             }
-                            NativeFunctions::Select => {
+                            NativeFunction::Select => {
                                 let params = self.memory.pop_params();
                                 let df = params.get(0).unwrap().to_owned();
                                 let df = df.unwrap_data_frame();
@@ -494,12 +494,12 @@ impl VirtualMachine {
 
                                 let selected = df.column(select_col.as_str());
                                 if let Ok(selected) = selected.cloned() {
-                                    self.return_value_native(NativeFunctions::Select, Item::Series(selected));
+                                    self.return_value_native(NativeFunction::Select, Item::Series(selected));
                                 } else {
                                     panic!("Can't select column {} from DataFrame!", select_col);
                                 }
                             }
-                            NativeFunctions::PrintNames => {
+                            NativeFunction::PrintNames => {
                                 let params = self.memory.pop_params();
                                 let df = params.get(0).unwrap().to_owned();
                                 let df = df.unwrap_data_frame();
@@ -509,45 +509,45 @@ impl VirtualMachine {
                                 })
 
                             }
-                            NativeFunctions::SetPlotOut => {
+                            NativeFunction::SetPlotOut => {
                                 let params = self.memory.pop_params();
                                 let path = unwrap_str_param(&params, 0);
 
                                 plot_ctx.set_output_path(path);
                             }
-                            NativeFunctions::SetCaption => {
+                            NativeFunction::SetCaption => {
                                 let params = self.memory.pop_params();
                                 let caption = unwrap_str_param(&params, 0);
 
                                 plot_ctx.set_caption(caption);
                             }
-                            NativeFunctions::SetXTitle => {
+                            NativeFunction::SetXTitle => {
                                 let params = self.memory.pop_params();
                                 let caption = unwrap_str_param(&params, 0);
 
                                 plot_ctx.set_x_label(caption);
                             }
-                            NativeFunctions::SetYTitle => {
+                            NativeFunction::SetYTitle => {
                                 let params = self.memory.pop_params();
                                 let caption = unwrap_str_param(&params, 0);
 
                                 plot_ctx.set_y_label(caption);
                             }
-                            NativeFunctions::SetXBounds => {
+                            NativeFunction::SetXBounds => {
                                 let params = self.memory.pop_params();
                                 let min = unwrap_float_param(&params, 0);
                                 let max = unwrap_float_param(&params, 1);
 
                                 plot_ctx.set_x_bounds((min, max));
                             }
-                            NativeFunctions::SetYBounds => {
+                            NativeFunction::SetYBounds => {
                                 let params = self.memory.pop_params();
                                 let min = unwrap_float_param(&params, 0);
                                 let max = unwrap_float_param(&params, 1);
 
                                 plot_ctx.set_y_bounds((min, max));
                             }
-                            NativeFunctions::Scatter => {
+                            NativeFunction::Scatter => {
                                 let params = self.memory.pop_params();
                                 let x_series = params.get(0).unwrap().to_owned();
                                 let x_series = x_series.unwrap_series();
@@ -557,14 +557,14 @@ impl VirtualMachine {
 
                                 plot_ctx.draw_scatter::<TextDrawingBackend>(&x_series, &y_series).unwrap();
                             }
-                            NativeFunctions::Random => {
+                            NativeFunction::Random => {
                                 self.memory.pop_params();
                                 self.return_value(
-                                    &NativeFunctions::Random.to_string(),
+                                    &NativeFunction::Random.to_string(),
                                     Item::Float(rng.gen_range(0.0..1.0)),
                                 );
                             }
-                            NativeFunctions::ToCsv => todo!(),
+                            NativeFunction::ToCsv => todo!(),
                             _ => todo!(),
                         }
 
