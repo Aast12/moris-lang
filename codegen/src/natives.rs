@@ -26,6 +26,8 @@ pub enum NativeFunctions {
     ScalarMul,
     ReadCsv,
     Select,
+    PrintNames,
+    Scatter,
     ToCsv,
 }
 
@@ -76,7 +78,24 @@ impl NativeFunctions {
                         DataType::DataFrame,
                         vec![FunctionParam::new_scalar("file_path", DataType::String)],
                     ),
-                    NativeFunctions::Select => (DataType::Series, vec![]),
+                    NativeFunctions::Select => (
+                        DataType::Series,
+                        vec![
+                            FunctionParam::new_scalar("df", DataType::DataFrame),
+                            FunctionParam::new_scalar("col", DataType::String),
+                        ],
+                    ),
+                    NativeFunctions::Scatter => (
+                        DataType::Void,
+                        vec![
+                            FunctionParam::new_scalar("x", DataType::Series),
+                            FunctionParam::new_scalar("y", DataType::Series),
+                        ],
+                    ),
+                    NativeFunctions::PrintNames => (
+                        DataType::Void,
+                        vec![FunctionParam::new_scalar("df", DataType::DataFrame)],
+                    ),
                     NativeFunctions::ToCsv => (
                         DataType::Void,
                         vec![FunctionParam::new_scalar("df", DataType::DataFrame)],

@@ -7,7 +7,9 @@ use memory::{
     resolver::{MemAddress, MemoryResolver},
     types::{DataType, FloatType, IntType},
 };
-use polars::prelude::{CsvReader, SerReader};
+use polars::{prelude::{CsvReader, SerReader}};
+
+use crate::plots::{util::PlotContext, backend::TextDrawingBackend};
 
 use super::memory_manager::{Item, MemoryManager};
 
@@ -223,12 +225,18 @@ impl VirtualMachine {
         self.memory.update(return_addr, value);
     }
 
+    pub fn return_value_native(&mut self, function_id: NativeFunctions, value: Item) {
+        self.return_value(&function_id.to_string(), value)
+    }
+
     pub fn execute(&mut self) {
         let mut instruction_pointer = 0;
         let mut call_pointer: LinkedList<usize> = LinkedList::new();
         let mut pre_call_stack: LinkedList<String> = LinkedList::new();
         let mut rng = rand::thread_rng();
         let quadruples: Vec<Quadruple> = self.data.quadruples.drain(..).collect();
+
+        let drawing_ctx = PlotContext::new();
 
         while instruction_pointer < quadruples.len() {
             let curr_instruction = quadruples.get(instruction_pointer).unwrap();
@@ -389,8 +397,6 @@ impl VirtualMachine {
                                         MemoryResolver::get_type_from_address(*array_address)
                                             .unwrap();
                                     
-                                    println!("ALTERATIRNG {:#?}", array_type);
-
                                     self.memory.alter_array(
                                         array_address,
                                         |memory, (next_address, value)| {
@@ -479,6 +485,40 @@ impl VirtualMachine {
                                     }
                                 }
                             }
+                            NativeFunctions::Select => {
+                                let params = self.memory.pop_params();
+                                let df = params.get(0).unwrap().to_owned();
+                                let df = df.unwrap_data_frame();
+                                let select_col = params.get(1).unwrap().to_owned();
+                                let select_col = select_col.unwrap_string();
+
+                                let selected = df.column(select_col.as_str());
+                                if let Ok(selected) = selected.cloned() {
+                                    self.return_value_native(NativeFunctions::Select, Item::Series(selected));
+                                } else {
+                                    panic!("Can't select column {} from DataFrame!", select_col);
+                                }
+                            }
+                            NativeFunctions::PrintNames => {
+                                let params = self.memory.pop_params();
+                                let df = params.get(0).unwrap().to_owned();
+                                let df = df.unwrap_data_frame();
+
+                                df.get_columns().iter().for_each(|col| {
+                                    println!("{:#?} - {:#?}", col.name(), col.dtype());
+                                })
+
+                            }
+                            NativeFunctions::Scatter => {
+                                let params = self.memory.pop_params();
+                                let x_series = params.get(0).unwrap().to_owned();
+                                let x_series = x_series.unwrap_series();
+
+                                let y_series = params.get(1).unwrap().to_owned();
+                                let y_series = y_series.unwrap_series();
+
+                                drawing_ctx.draw_scatter::<TextDrawingBackend>(&x_series, &y_series).unwrap();
+                            }
                             NativeFunctions::Random => {
                                 self.memory.pop_params();
                                 self.return_value(
@@ -486,7 +526,6 @@ impl VirtualMachine {
                                     Item::Float(rng.gen_range(0.0..1.0)),
                                 );
                             }
-                            NativeFunctions::Select => todo!(),
                             NativeFunctions::ToCsv => todo!(),
                             _ => todo!(),
                         }
