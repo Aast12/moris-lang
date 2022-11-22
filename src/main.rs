@@ -1,5 +1,5 @@
-use std::env;
 use moris_lang::vm::inspector::Inspector;
+use std::env;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
