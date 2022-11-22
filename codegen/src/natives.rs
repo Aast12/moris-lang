@@ -6,9 +6,7 @@ use parser::{
     functions::{FunctionParam, FunctionSignature},
     types::Operator,
 };
-use strum::{
-    Display, EnumIter, EnumProperty, EnumString, EnumVariantNames, IntoEnumIterator, VariantNames,
-};
+use strum::{Display, EnumIter, EnumProperty, EnumString, EnumVariantNames, IntoEnumIterator};
 
 use crate::{manager::Manager, node::ExpressionNode, quadruples::Quadruple};
 

@@ -7,5 +7,5 @@ fn main() {
     let path = &args[1];
 
     let inspector = Inspector::new(format!("examples/{path}").as_str());
-    inspector.debug();
+    // inspector.debug();
 }

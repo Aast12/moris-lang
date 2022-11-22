@@ -1,6 +1,5 @@
 // auto-generated: "lalrpop 0.19.8"
-// sha3: 84798656af16151afa1954574b22a9d5b25b6b5a70c17a6b3a41b9f5ef1714a7
-use std::str::FromStr;
+// sha3: 69df23e55c8e4b54ee85d05e7556d680ce78c6d9d580d2140f96f767958f5433
 use crate::{Dimension};
 use crate::types::{Operator, Variable};
 use memory::types::DataType;
@@ -22,7 +21,6 @@ extern crate alloc;
 mod __parse__PProgram {
     #![allow(non_snake_case, non_camel_case_types, unused_mut, unused_variables, unused_imports, unused_parens, clippy::all)]
 
-    use std::str::FromStr;
     use crate::{Dimension};
     use crate::types::{Operator, Variable};
     use memory::types::DataType;
@@ -4782,7 +4780,6 @@ pub use self::__parse__PProgram::PProgramParser;
 #[cfg_attr(rustfmt, rustfmt_skip)]
 mod __intern_token {
     #![allow(unused_imports)]
-    use std::str::FromStr;
     use crate::{Dimension};
     use crate::types::{Operator, Variable};
     use memory::types::DataType;
