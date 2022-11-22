@@ -20,3 +20,7 @@ let std_v: float = std(arr);
 let var_v: float = var(arr);
 let median_v: float = median(arr);
 
+println("mean: ", mean_v);
+println("std: ", std_v);
+println("var: ", var_v);
+println("median: ", median_v);
