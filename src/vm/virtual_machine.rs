@@ -11,7 +11,7 @@ use polars::{prelude::{CsvReader, SerReader}};
 
 use crate::plots::{util::PlotContext, backend::TextDrawingBackend};
 
-use super::memory_manager::{Item, MemoryManager};
+use super::{memory_manager::{Item, MemoryManager}, utils::{unwrap_str_param, unwrap_float_param}};
 
 use rand::Rng;
 
@@ -236,7 +236,7 @@ impl VirtualMachine {
         let mut rng = rand::thread_rng();
         let quadruples: Vec<Quadruple> = self.data.quadruples.drain(..).collect();
 
-        let drawing_ctx = PlotContext::new();
+        let mut plot_ctx = PlotContext::new();
 
         while instruction_pointer < quadruples.len() {
             let curr_instruction = quadruples.get(instruction_pointer).unwrap();
@@ -509,6 +509,44 @@ impl VirtualMachine {
                                 })
 
                             }
+                            NativeFunctions::SetPlotOut => {
+                                let params = self.memory.pop_params();
+                                let path = unwrap_str_param(&params, 0);
+
+                                plot_ctx.set_output_path(path);
+                            }
+                            NativeFunctions::SetCaption => {
+                                let params = self.memory.pop_params();
+                                let caption = unwrap_str_param(&params, 0);
+
+                                plot_ctx.set_caption(caption);
+                            }
+                            NativeFunctions::SetXTitle => {
+                                let params = self.memory.pop_params();
+                                let caption = unwrap_str_param(&params, 0);
+
+                                plot_ctx.set_x_label(caption);
+                            }
+                            NativeFunctions::SetYTitle => {
+                                let params = self.memory.pop_params();
+                                let caption = unwrap_str_param(&params, 0);
+
+                                plot_ctx.set_y_label(caption);
+                            }
+                            NativeFunctions::SetXBounds => {
+                                let params = self.memory.pop_params();
+                                let min = unwrap_float_param(&params, 0);
+                                let max = unwrap_float_param(&params, 1);
+
+                                plot_ctx.set_x_bounds((min, max));
+                            }
+                            NativeFunctions::SetYBounds => {
+                                let params = self.memory.pop_params();
+                                let min = unwrap_float_param(&params, 0);
+                                let max = unwrap_float_param(&params, 1);
+
+                                plot_ctx.set_y_bounds((min, max));
+                            }
                             NativeFunctions::Scatter => {
                                 let params = self.memory.pop_params();
                                 let x_series = params.get(0).unwrap().to_owned();
@@ -517,7 +555,7 @@ impl VirtualMachine {
                                 let y_series = params.get(1).unwrap().to_owned();
                                 let y_series = y_series.unwrap_series();
 
-                                drawing_ctx.draw_scatter::<TextDrawingBackend>(&x_series, &y_series).unwrap();
+                                plot_ctx.draw_scatter::<TextDrawingBackend>(&x_series, &y_series).unwrap();
                             }
                             NativeFunctions::Random => {
                                 self.memory.pop_params();

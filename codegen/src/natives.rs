@@ -29,6 +29,16 @@ pub enum NativeFunctions {
     PrintNames,
     Scatter,
     ToCsv,
+    SetCaption,
+    SetXTitle,
+    SetYTitle,
+    SetXBounds,
+    SetYBounds,
+    SetPlotOut,
+}
+
+fn int_param(name: &str) -> FunctionParam {
+    FunctionParam::new_scalar(name, DataType::Int)
 }
 
 impl NativeFunctions {
@@ -91,6 +101,36 @@ impl NativeFunctions {
                             FunctionParam::new_scalar("x", DataType::Series),
                             FunctionParam::new_scalar("y", DataType::Series),
                         ],
+                    ),
+                    NativeFunctions::SetCaption => (
+                        DataType::Void,
+                        vec![FunctionParam::new_scalar("caption", DataType::String)],
+                    ),
+                    NativeFunctions::SetXTitle => (
+                        DataType::Void,
+                        vec![FunctionParam::new_scalar("title", DataType::String)],
+                    ),
+                    NativeFunctions::SetYTitle => (
+                        DataType::Void,
+                        vec![FunctionParam::new_scalar("title", DataType::String)],
+                    ),
+                    NativeFunctions::SetXBounds => (
+                        DataType::Void,
+                        vec![
+                            FunctionParam::new_scalar("min", DataType::Float),
+                            FunctionParam::new_scalar("max", DataType::Float),
+                        ],
+                    ),
+                    NativeFunctions::SetYBounds => (
+                        DataType::Void,
+                        vec![
+                            FunctionParam::new_scalar("min", DataType::Float),
+                            FunctionParam::new_scalar("max", DataType::Float),
+                        ],
+                    ),
+                    NativeFunctions::SetPlotOut => (
+                        DataType::Void,
+                        vec![FunctionParam::new_scalar("path", DataType::String)],
                     ),
                     NativeFunctions::PrintNames => (
                         DataType::Void,
