@@ -1,283 +1,166 @@
-# Moris Lang
+# Moris Language
 
-**Autor:** Andrés Alam Sánchez Torres (A00824854)
+## Build from source
 
-## Status
+To build this compiler, you must use rust and cargo to build a binary:
 
-## Noviembre 15, 2022
+1. Produce a release build.
 
-- Ejecución
-  - La máquina virtual ejecuta código para comparaciones lógicas (>, <, >=, <=, !=, ==) con Floats, Ints y Bools.
-  - Se ejecuta código para estatutos if-else,
+  ```bash
+  cargo build -r
+  ```
 
-## Noviembre 14, 2022
+2. Executable will live under target/release.
+3. The executable will receive a file path for a Moris file to execute. e.g.
 
-- Generación de cuadruplos
-  - Arreglos
-    - Genera cuadruplos y asigna memoria para arreglos y matrices.
-- Ejecución
-  - La máquina virtual ejecuta código para operaciones básicas (=, +, -, *, /) con Floats, Ints y Bools.
+```bash
+target/release/moris ./local_program.mo
+```
 
+## User Manual
 
-## Noviembre 7, 2022
+The programming language supports basic procedural language characteristics:
 
-- Generación de cuadruplos
-  - Funciones
-    - Se resetean y asignan locales para cada función distinta.
-    - Se asigna una dirección global para el valor de retorno de cada función.
-    - La firma de cada función se pre-define en las tablas de símbolos antes de generar los cuádruplos (permite referencias a funciones declaradas después de la línea donde se llama).
-    - Antes de generar cuádruplos, el código de las funciones se mueve al final del archivo para permitir la declaración de las variables globales.
+### Data Types
 
-### Ejemplo de cuádruplos Generados
+The language supports `int`, `float`, `str`, `bool`, `DataFrame`, and `Series` types.
+These can be used to assign variables and parameters to functions, as well to their return types.
 
-#### **Input**
+Arrays and matrices can be declares for any of these types, but functions can only return **scalars**.
+
+### Variable declarations
+
+In Moris, a variable declaration requires explicitly setting it's type, using the following notation:
 
 ```moris
-fn fibonacci3(n: int, k: int): int {
-    if (n <= 1 || z == 3) {
-        return n;
-    }
+let var_name: type_id;
+let var_name: type_id = value;
+```
 
-    return fibonacci2(n - 2) + fibonacci3(n - 2, n);
+Declaring variables for each data type will look like:
+
+```moris
+let int_var_und: int;
+let int_var: int = 5;
+
+let float_var: float = 2.5;
+
+let bool_var: bool = false;
+
+let str_var: str = "string";
+```
+
+For other types, they can be declared, but their value should be assigned through special functions. For arrays and matrices, by assigning values to each individual element or through special functions.
+
+### Array indexing
+
+Items of arrays or matrices can be accessed with the following syntax:
+
+```moris
+let int_arr: int[10];
+
+int_arr[0] = 10;
+```
+
+### Expressions
+
+The language supports basic operations and expression evaluation, including the following operators:
+
+| Operator type | operators       |
+| ------------- | --------------- |
+| Arithmetic    | + - * /         |
+| Logic         | ! && \|\|       |
+| Comparison    | > < >= <= != == |
+
+#### **Pipes**
+
+The language has a pipe operator `|>`, that allows the chaining of functions, propagating the return value from a function as the argument to the next one. For example, the following code:
+
+```moris
+result = input |> func1 |> func2 |> func3;
+```
+
+Would be equivalent to:
+
+```moris
+result_0 = func1(input);
+
+result_1 = func2(result_0);
+
+result = func3(result_1);
+```
+
+### Functions
+
+Functions are declared with the following syntax:
+
+```moris
+fn function_id(param_0: type_id_0, param_1: type_id_1, ...) : return_type_id {
+  ... function body ...
 }
+```
 
-let x: int = 7;
-let y: float = 6;
-let z: float = x * y;
+The parameters can be defined just as local and global variables, and they can return any scalar type, or have a `void` return type.
 
+For example, a fibonacci function can be defined like:
+
+```moris
 fn fibonacci(n: int): int {
-    if (n <= 1) {
+    if (n <= 0) {
+        return 0;
+    }
+    if (n <= 2) {
         return n;
     }
 
-    return fibonacci(n - 2) + fibonacci(n - 2);
-}
-
-let q: bool = false;
-
-fn fibonacci2(n: int): int {
-    if (n <= 1) {
-        return n;
-    }
-
-    return fibonacci2(n - 2) + fibonacci(n - 2);
-}
-
-let res: int = fibonacci3(10, 7.2);
-```
-
-#### **Output**
-
-|     |            |       |       |            |
-| --- | ---------- | ----- | ----- | ---------- |
-| 0   | =          | 7     |       | 14003      |
-| 1   | Float      | 6     |       | 12001      |
-| 2   | =          | 12001 |       | 12000      |
-| 3   | *          | 14003 | 12000 | 12003      |
-| 4   | =          | 12003 |       | 12002      |
-| 5   | =          | false |       | 10000      |
-| 6   | era        |       |       | fibonacci3 |
-| 7   | param      | 10    |       | 0          |
-| 8   | Int        | 7.2   |       | 14005      |
-| 9   | param      | 14005 |       | 1          |
-| 10  | gosub      |       |       | fibonacci3 |
-| 11  | =          | 14002 |       | 14004      |
-| 12  | endprogram |       |       |            |
-| 13  | <=         | 24000 | 1     | 20000      |
-| 14  | ==         | 12002 | 3     | 20001      |
-| 15  | \| \|      | 20000 | 20001 | 20002      |
-| 16  | gotoFalse  | 20002 |       | 18         |
-| 17  | return     |       |       | 24000      |
-| 18  | era        |       |       | fibonacci2 |
-| 19  | -          | 24000 | 2     | 24000      |
-| 20  | param      | 24000 |       | 0          |
-| 21  | gosub      |       |       | fibonacci2 |
-| 22  | era        |       |       | fibonacci3 |
-| 23  | -          | 24000 | 2     | 24001      |
-| 24  | param      | 24001 |       | 0          |
-| 25  | param      | 24000 |       | 1          |
-| 26  | gosub      |       |       | fibonacci3 |
-| 27  | +          | 14000 | 14002 | 24002      |
-| 28  | return     |       |       | 24002      |
-| 29  | endfunc    |       |       |            |
-| 30  | <=         | 24000 | 1     | 20000      |
-| 31  | gotoFalse  | 20000 |       | 33         |
-| 32  | return     |       |       | 24000      |
-| 33  | era        |       |       | fibonacci  |
-| 34  | -          | 24000 | 2     | 24000      |
-| 35  | param      | 24000 |       | 0          |
-| 36  | gosub      |       |       | fibonacci  |
-| 37  | era        |       |       | fibonacci  |
-| 38  | -          | 24000 | 2     | 24001      |
-| 39  | param      | 24001 |       | 0          |
-| 40  | gosub      |       |       | fibonacci  |
-| 41  | +          | 14001 | 14001 | 24002      |
-| 42  | return     |       |       | 24002      |
-| 43  | endfunc    |       |       |            |
-| 44  | <=         | 24000 | 1     | 20000      |
-| 45  | gotoFalse  | 20000 |       | 47         |
-| 46  | return     |       |       | 24000      |
-| 47  | era        |       |       | fibonacci2 |
-| 48  | -          | 24000 | 2     | 24000      |
-| 49  | param      | 24000 |       | 0          |
-| 50  | gosub      |       |       | fibonacci2 |
-| 51  | era        |       |       | fibonacci  |
-| 52  | -          | 24000 | 2     | 24001      |
-| 53  | param      | 24001 |       | 0          |
-| 54  | gosub      |       |       | fibonacci  |
-| 55  | +          | 14000 | 14001 | 24002      |
-| 56  | return     |       |       | 24002      |
-| 57  | endfunc    |       |       |            |
-
-## Noviembre 4, 2022
-
-- Mapeo de memoria:
-
-  Se asignan las siguientes direcciones para cada tipo de alcance:
-  
-  | Alcance  | Rango de direcciones |
-  | -------- | -------------------- |
-  | Global   | 10,000 - 19,999      |
-  | Local    | 20,000 - 29,999      |
-  | Constant | 30,000 - 39,999      |
-
-  Para cada alcance, se especifican los siguientes rangos para cada tipo de dato:
-
-  | Tipo      | Rango de direcciones |
-  | --------- | -------------------- |
-  | Bool      | 0 - 1,999            |
-  | Float     | 2,000 - 3,999        |
-  | Int       | 4,000 - 5,999        |
-  | String    | 6,000 - 7,999        |
-  | DataFrame | 8,000 - 9,999        |
-
-- Generación de cuadruplos
-  - loops
-    - Implementación completa con continue y break statement.
-    - *Implementación de for faltante, requiere de la implementación de arreglos.
-
-### Ejemplo de cuádruplos Generados
-
-#### **Input**
-
-```moris
-let x: int = 7;
-let y: float = 6;
-let z: float = x * y;
-
-while (x * 2 + y * y < z) {
-    if (x == 10) {
-        break;
-    }
-
-    x = x + 1;
-    y = y * 2;
+    return fibonacci(n - 1) + fibonacci(n - 2);
 }
 ```
 
-#### **Output**
+### Special Functions
 
-|     |           |       |       |       |
-| --- | --------- | ----- | ----- | ----- |
-| 0   | =         | 7     |       | 14000 |
-| 1   | Float     | 6     |       | 12001 |
-| 2   | =         | 12001 |       | 12000 |
-| 3   | *         | 14000 | 12000 | 12003 |
-| 4   | =         | 12003 |       | 12002 |
-| 5   | *         | 14000 | 2     | 14001 |
-| 6   | *         | 12000 | 12000 | 12004 |
-| 7   | +         | 14001 | 12004 | 12005 |
-| 8   | <         | 12005 | 12002 | 10000 |
-| 9   | gotoFalse | 10000 |       | 18    |
-| 10  | ==        | 14000 | 10    | 10001 |
-| 11  | gotoFalse | 10001 |       | 13    |
-| 12  | goto      |       |       | 18    |
-| 13  | +         | 14000 | 1     | 14002 |
-| 14  | =         | 14002 |       | 14000 |
-| 15  | *         | 12000 | 2     | 12006 |
-| 16  | =         | 12006 |       | 12000 |
-| 17  | goto      |       |       | 5     |
+The language include native functions that serve as utility to deal and explore numeric data and perform I/O operations. 
 
-## Octubre 12, 2022
+#### **I/O**
 
-- Validación de tipos en expresiones y asignaciones de variable
-- Generación de cuadruplos
-  - expresiones
-  - conversiones de tipos en asignación (e.g. asignación de un int a float para asignar a una variable)
-  - condicionales
-
-### Ejemplo de cuádruplos Generados
-
-#### **Input**
-
-```moris
-let x: int = 5;
-let z: int = 7 + 2 / x;
+| Function  | Params                     | Return Type | Description                                                                                                                    |
+| --------- | -------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `read`    | ind. amount of variables   | void        | Reads an input line split by spaces and assigns the value of each splitted element into their corresponding parameter variable |
+| `print`   | ind. amount of expressions | void        | Prints each expression passed as parameter in order                                                                            |
+| `println` | ind. amount of expressions | void        | Prints each expression passed as parameter in order, prints a new line at the end                                              |
 
 
-if (z > 4) {
-    x = 6;
-} else {
-    x = 9;
-    z = 4;
-}
+#### **DataFrames**
 
-let y: bool;
-let w: float = 7 * x + 3 / 2;
+| Function      | Params                  | Return Type | Description                                                  |
+| ------------- | ----------------------- | ----------- | ------------------------------------------------------------ |
+| `read_csv`    | path: str               | DataFrame   | Returns the dataframe read from the local path `path`        |
+| `select`      | df: DataFrame, col: str | Series      | Returns the column `col` from the dataframe `df` as a Series |
+| `print_names` | df: DataFrame           | void        | Prints the column names of the input dataframe               |
+| `describe`    | df: DataFrame           | void        | Prints a description summary of the dataframe's contents     |
 
-if (w == 7) {
-    y = false;
-}
-```
 
-#### **Output**
+#### **Charts**
 
-|     |           |       |      |      |
-| --- | --------- | ----- | ---- | ---- |
-| 0   | =         | 5     |      | x    |
-| 1   | /         | 2     | x    | tmp0 |
-| 2   | +         | 7     | tmp0 | tmp1 |
-| 3   | Int       | tmp1  |      | tmp2 |
-| 4   | =         | tmp2  |      | z    |
-| 5   | >         | z     | 4    | tmp3 |
-| 6   | gotoFalse |       |      | 9    |
-| 7   | =         | 6     |      | x    |
-| 8   | goto      |       |      | 11   |
-| 9   | =         | 9     |      | x    |
-| 10  | =         | 4     |      | z    |
-| 11  | *         | 7     | x    | tmp4 |
-| 12  | /         | 3     | 2    | tmp5 |
-| 13  | +         | tmp4  | tmp5 | tmp6 |
-| 14  | =         | tmp6  |      | w    |
-| 15  | ==        | w     | 7    | tmp7 |
-| 16  | gotoFalse |       |      | 18   |
-| 17  | =         | false |      | y    |
+| Function       | Params                 | Return Type | Description                                                        |
+| -------------- | ---------------------- | ----------- | ------------------------------------------------------------------ |
+| `set_caption`  | title: str             | void        | Sets the title of the next plotted chart.                          |
+| `set_x_title`  | title: str             | void        | Sets the title of the x axis for the next plotted chart.           |
+| `set_y_title`  | title: str             | void        | Sets the title of the y axis for the next plotted chart.           |
+| `set_x_bounds` | min: float, max: float | void        | Prints the column names of the input dataframe                     |
+| `set_y_bounds` | min: float, max: float | void        | Prints the column names of the input dataframe                     |
+| `set_plot_out` | path: str              | void        | Sets the output path of the chart image for the next plotted chart |
+| `scatter`      | x: Series, y: Series   | void        | Plots a scatter plot with the x and y values                       |
 
-### Octubre 10, 2022
 
-- Definición de reglas semánticas. Clase que permite obtener el tipo resultado de todas las operaciones y alertar cuando hay un error de tipo.
+#### **Utils / Random**
 
-### Octubre 3, 2022
+| Function      | Params            | Return Type | Description                              |
+| ------------- | ----------------- | ----------- | ---------------------------------------- |
+| `zeros`       | array of any type | void        | Fills the input array with zeroes        |
+| `random`      |                   | float       | Returns a random number between 0 and 1  |
+| `random_fill` | array of any type | void        | Fills the input array with random values |
 
-- Definición de la gramática del lenguaje
-- Definición de estructuras de datos para almacenar elementos de sintaxis (Ver src/syntax.rs). Los elementos estructurados se extraen durante el parsing del programa:
-  - Enum para tipos de datos
-  - Indexado (notación [])
-  - Declaración de variable
-  - Referencia de variable (id o acceso a arreglo)
-  - Constantes
-  - Operadores
-  - Definición de funciones
-  - Llamadas de funcion
-  - If/Else
-  - For loop
-  - While
-  - Programa
+#### **Statistics**
 
-Por hacer / Siguientes pasos:
-
-- Documentación de sintaxis (diagramas).
-- Mejorar pruebas para la sintaxis, actualmente solo hay pruebas para validar si un programa es válido.
-- Agregar `continue` y `break`.
-- Operador `NOT`.
-- Implementación de acciones en reconocimiento de sintaxis.
+There are also definitions of `mean`, `median`, `std`, `sum`, `var`, which all receive an array or matrix of numeric values and returns their corresponding statistic value.
