@@ -125,41 +125,41 @@ The language include native functions that serve as utility to deal and explore 
 
 | Function  | Params                     | Return Type | Description                                                                                                                    |
 | --------- | -------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `read`    | ind. amount of variables   | void        | Reads an input line split by spaces and assigns the value of each splitted element into their corresponding parameter variable |
-| `print`   | ind. amount of expressions | void        | Prints each expression passed as parameter in order                                                                            |
-| `println` | ind. amount of expressions | void        | Prints each expression passed as parameter in order, prints a new line at the end                                              |
+| `read`    | ind. amount of variables   | `void`        | Reads an input line split by spaces and assigns the value of each splitted element into their corresponding parameter variable |
+| `print`   | ind. amount of expressions | `void`        | Prints each expression passed as parameter in order                                                                            |
+| `println` | ind. amount of expressions | `void`        | Prints each expression passed as parameter in order, prints a new line at the end                                              |
 
 
 #### **DataFrames**
 
-| Function      | Params                  | Return Type | Description                                                  |
-| ------------- | ----------------------- | ----------- | ------------------------------------------------------------ |
-| `read_csv`    | path: str               | DataFrame   | Returns the dataframe read from the local path `path`        |
-| `select`      | df: DataFrame, col: str | Series      | Returns the column `col` from the dataframe `df` as a Series |
-| `print_names` | df: DataFrame           | void        | Prints the column names of the input dataframe               |
-| `describe`    | df: DataFrame           | void        | Prints a description summary of the dataframe's contents     |
+| Function      | Params                      | Return Type | Description                                                  |
+| ------------- | --------------------------- | ----------- | ------------------------------------------------------------ |
+| `read_csv`    | path: `str`                 | DataFrame   | Returns the dataframe read from the local path `path`        |
+| `select`      | df: `DataFrame`, col: `str` | Series      | Returns the column `col` from the dataframe `df` as a Series |
+| `print_names` | df: `DataFrame`             | void        | Prints the column names of the input dataframe               |
+| `describe`    | df: `DataFrame`             | void        | Prints a description summary of the dataframe's contents     |
 
 
 #### **Charts**
 
-| Function       | Params                 | Return Type | Description                                                        |
-| -------------- | ---------------------- | ----------- | ------------------------------------------------------------------ |
-| `set_caption`  | title: str             | void        | Sets the title of the next plotted chart.                          |
-| `set_x_title`  | title: str             | void        | Sets the title of the x axis for the next plotted chart.           |
-| `set_y_title`  | title: str             | void        | Sets the title of the y axis for the next plotted chart.           |
-| `set_x_bounds` | min: float, max: float | void        | Prints the column names of the input dataframe                     |
-| `set_y_bounds` | min: float, max: float | void        | Prints the column names of the input dataframe                     |
-| `set_plot_out` | path: str              | void        | Sets the output path of the chart image for the next plotted chart |
-| `scatter`      | x: Series, y: Series   | void        | Plots a scatter plot with the x and y values                       |
+| Function       | Params                     | Return Type | Description                                                        |
+| -------------- | -------------------------- | ----------- | ------------------------------------------------------------------ |
+| `set_caption`  | title: `str`               | `void`      | Sets the title of the next plotted chart.                          |
+| `set_x_title`  | title: `str`               | `void`      | Sets the title of the x axis for the next plotted chart.           |
+| `set_y_title`  | title: `str`               | `void`      | Sets the title of the y axis for the next plotted chart.           |
+| `set_x_bounds` | min: `float`, max: `float` | `void`      | Prints the column names of the input dataframe                     |
+| `set_y_bounds` | min: `float`, max: `float` | `void`      | Prints the column names of the input dataframe                     |
+| `set_plot_out` | path: `str`                | `void`      | Sets the output path of the chart image for the next plotted chart |
+| `scatter`      | x: `Series`, y: `Series`   | `void`      | Plots a scatter plot with the x and y values                       |
 
 
 #### **Utils / Random**
 
 | Function      | Params            | Return Type | Description                              |
 | ------------- | ----------------- | ----------- | ---------------------------------------- |
-| `zeros`       | array of any type | void        | Fills the input array with zeroes        |
-| `random`      |                   | float       | Returns a random number between 0 and 1  |
-| `random_fill` | array of any type | void        | Fills the input array with random values |
+| `zeros`       | array of any type | `void`      | Fills the input array with zeroes        |
+| `random`      |                   | `float`     | Returns a random number between 0 and 1  |
+| `random_fill` | array of any type | `void`      | Fills the input array with random values |
 
 #### **Statistics**
 
