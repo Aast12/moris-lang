@@ -2,6 +2,9 @@
 name = "moris-lang"
 version = "0.1.0"
 edition = "2021"
+license-file = "LICENSE.md"
+repository = "https://github.com/Aast12/moris-lang"
+readme = "README.md"
 
 build = "build.rs" # LALRPOP preprocessing
 
