@@ -19,6 +19,8 @@ target/release/moris ./local_program.mo
 
 ## User Manual
 
+[Video Demo](https://youtu.be/cAxQNM8lj6c)
+
 The programming language supports basic procedural language characteristics:
 
 ### Data Types
