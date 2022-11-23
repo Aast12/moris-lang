@@ -21,23 +21,7 @@ pub enum Expression {
     Negative(Box<Expression>),
 }
 
-impl Expression {
-    // TODO: optimize data type resolution
-    // pub fn data_type(&self, manager: &mut Manager) -> DataType {
-    //     match &self {
-    //         Expression::Const(constant) => constant.dtype.clone(),
-    //         Expression::Op(operation) => operation.data_type(),
-    //         Expression::Access(access) => access.id.data_type(),
-    //         Expression::Id(id) => id.data_type(),
-    //         Expression::Call(call) => call.data_type(),
-    //         Expression::Not(expr) => expr.data_type(),
-    //         Expression::Negative(expr) => expr.data_type(),
-    //     }
-    // }
-}
-
 #[derive(Debug, Clone)]
 pub enum Index {
     Simple(Box<Expression>),
-    Range(Box<Expression>, Box<Expression>),
 }

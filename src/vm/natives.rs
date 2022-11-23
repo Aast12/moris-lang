@@ -15,10 +15,10 @@ use super::{
 };
 
 pub fn run_native(
+    plot_ctx: &mut PlotContext,
     native_func: NativeFunction,
     memory: &mut MemoryManager,
 ) -> Option<(NativeFunction, Item)> {
-    let mut plot_ctx = PlotContext::new();
     let mut return_value: Option<(NativeFunction, Item)> = None;
     let mut rng = rand::thread_rng();
 
@@ -215,6 +215,8 @@ pub fn run_native(
             plot_ctx
                 .draw_scatter::<TextDrawingBackend>(&x_series, &y_series)
                 .unwrap();
+
+            plot_ctx.reset_context();
         }
         NativeFunction::Random => {
             memory.pop_params();

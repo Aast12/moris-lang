@@ -1,12 +1,27 @@
 use std::iter::zip;
 
-use memory::{resolver::{MemoryResolver, MemAddress}, types::DataType};
-use parser::{expressions::{Expression, constant::Const, id::{Id, Access}, operation::Operation, call::Call, Index}, types::{Operator, OperatorType}, semantics::SemanticRules};
+use memory::{
+    resolver::{MemAddress, MemoryResolver},
+    types::DataType,
+};
+use parser::{
+    expressions::{
+        call::Call,
+        constant::Const,
+        id::{Access, Id},
+        operation::Operation,
+        Expression, Index,
+    },
+    semantics::SemanticRules,
+    types::{Operator, OperatorType},
+};
 
 use crate::{
     manager::Manager,
+    natives::NativeFunction,
     node::{AccessNode, ExpressionNode, Node},
-    quadruples::Quadruple, symbols::SymbolEntry, natives::NativeFunction,
+    quadruples::Quadruple,
+    symbols::SymbolEntry,
 };
 
 impl AccessNode for Expression {}
@@ -95,7 +110,6 @@ impl ExpressionNode for Index {
     fn reduce(&self, manager: &mut Manager) -> String {
         match self {
             Self::Simple(idx) => idx.reduce(manager),
-            Self::Range(_, _) => panic!("Range not supported"), // TODO
         }
     }
 }

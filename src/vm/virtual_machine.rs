@@ -8,6 +8,8 @@ use memory::{
     types::{DataType, FloatType, IntType},
 };
 
+use crate::plots::context::PlotContext;
+
 use super::{
     memory_manager::{Item, MemoryManager},
     natives::run_native,
@@ -192,6 +194,7 @@ impl VirtualMachine {
         let mut instruction_pointer = 0;
         let mut call_pointer: LinkedList<usize> = LinkedList::new();
         let mut pre_call_stack: LinkedList<String> = LinkedList::new();
+        let mut plot_ctx = PlotContext::new();
         let quadruples: Vec<Quadruple> = self.data.quadruples.drain(..).collect();
 
         while instruction_pointer < quadruples.len() {
@@ -293,7 +296,7 @@ impl VirtualMachine {
                     let Quadruple(_, _, _, function_id) = curr_instruction;
 
                     if let Ok(native_func) = NativeFunction::from_str(function_id) {
-                        let return_value = run_native(native_func, &mut self.memory);
+                        let return_value = run_native(&mut plot_ctx, native_func, &mut self.memory);
                         if let Some((func, value)) = return_value {
                             self.return_value_native(func, value);
                         }

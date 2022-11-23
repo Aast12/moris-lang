@@ -13,8 +13,10 @@ pub struct Inspector {
     pub memory: HashMap<MemAddress, Item>,
 }
 
+/// Runner wrapper to inspect the variable values of a program
 impl Inspector {
     pub fn new(path: &str) -> Inspector {
+        // Is coded to use the repository examples
         let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join(path);
 
         let mut runner = Runner::new(path_buf.to_str().unwrap()).unwrap();
@@ -43,6 +45,7 @@ impl Inspector {
         }
     }
 
+    /// Validates a given variable id has a ceratin value at the end of execution
     pub fn validate(&self, id: &str, value: Item) -> bool {
         let item_address = self.target_meta.get(id).unwrap();
         let item = self.memory.get(item_address).unwrap();
@@ -59,6 +62,7 @@ impl Inspector {
         self.memory.get(item_address).unwrap().clone()
     }
 
+    /// Prints all global variables with their end value
     pub fn debug(&self) {
         self.target_meta.iter().for_each(|(key, value)| {
             let item = self.memory.get(value);

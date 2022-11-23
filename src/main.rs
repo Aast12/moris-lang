@@ -1,4 +1,4 @@
-use moris_lang::vm::inspector::Inspector;
+use moris_lang::vm::runner::Runner;
 use std::env;
 
 fn main() {
@@ -6,6 +6,6 @@ fn main() {
 
     let path = &args[1];
 
-    let inspector = Inspector::new(format!("examples/{path}").as_str());
-    // inspector.debug();
+    let mut runner = Runner::new(path).unwrap();
+    runner.compile_and_run();
 }

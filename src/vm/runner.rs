@@ -54,6 +54,12 @@ impl Runner {
         self.manager.dump(&PathBuf::from(self.out_path.as_str()));
     }
 
+    pub fn compile_and_run(&mut self) {
+        self.compile();
+        self.clean();
+        self.run();
+    }
+
     pub fn clean(&mut self) {
         self.manager.reset();
     }
