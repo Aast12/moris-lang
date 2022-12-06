@@ -1,31 +1,19 @@
-fn fibonacci3(n: int, k: int): int {
-    if (n <= 1 || z == 3) {
-        return n;
-    }
+fn test0(n: int, k: int): int {
+    println("Z Value: ", z, " k value: ", k);
 
-    return fibonacci2(n - 2) + fibonacci3(n - 2, n);
+    return test1(n);
 }
 
 let x: int = 7;
 let y: float = 6;
 let z: float = x * y;
 
-fn fibonacci(n: int): int {
-    if (n <= 1) {
-        return n;
-    }
-
-    return fibonacci(n - 2) + fibonacci(n - 2);
+fn test1(n: int): int {
+    return n + y;
 }
 
-let q: bool = false;
+println("x: ", x);
+println("y: ", y);
+println("z: ", z);
 
-fn fibonacci2(n: int): int {
-    if (n <= 1) {
-        return n;
-    }
-
-    return fibonacci2(n - 2) + fibonacci(n - 2);
-}
-
-let res: int = fibonacci3(10, 7.2);
+println(test0(5, 0));

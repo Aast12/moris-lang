@@ -33,7 +33,7 @@ fn print_arr(arr: int[10]): void {
     }
 }
 
-let arr: float[10];
+let arr: int[10];
 let arr_size: int = 10;
 let ascending: bool = true;
 

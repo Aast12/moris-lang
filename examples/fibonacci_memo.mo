@@ -34,7 +34,7 @@ fn fib_iter(n: int): int {
     return acc;
 }
 
-let test_n: int = 50;
+let test_n: int = 20;
 
 let recursive_result: int = fib(test_n);
 let iter_result: int = fib_iter(test_n);

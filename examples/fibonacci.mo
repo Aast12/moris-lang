@@ -14,3 +14,5 @@ fn fibonacci(n: int): int {
 }
 
 let result: int = fibonacci(10);
+
+println(result);
